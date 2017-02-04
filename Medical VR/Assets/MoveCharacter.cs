@@ -11,6 +11,10 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
     {
         startingPosition = transform.localPosition;
         SetGazedAt(false);
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main.GetComponent<MoveCamera>();
+        }
     }
 
     void LateUpdate()

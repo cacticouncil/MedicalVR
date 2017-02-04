@@ -18,6 +18,8 @@ using System.Collections;
 [RequireComponent(typeof(Collider))]
 public class Teleport : MonoBehaviour, IGvrGazeResponder {
   private Vector3 startingPosition;
+    public GameObject cellManager;
+    private int clickCount = 0;
 
   void Start() {
     startingPosition = transform.localPosition;
@@ -59,6 +61,9 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
     direction.y = Mathf.Clamp(direction.y, 0.5f, 1f);
     float distance = 2 * Random.value + 1.5f;
     transform.localPosition = direction * distance;
+        clickCount++;
+        //if (clickCount % 4 == 0)
+            cellManager.GetComponent<CellManagerScript>().TurnUpdate();
   }
 
   #region IGvrGazeResponder implementation
