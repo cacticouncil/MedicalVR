@@ -98,7 +98,7 @@ public class ChangeScene : MonoBehaviour
         switch (index)
         {
             case 0:
-                /*CheckForTutorial();*/ LoadScene("Main");
+                /*CheckForTutorial();*/ LoadScene("Strategy");
                 break;
             case 1:
                 LoadScene("Instructions");
