@@ -63,6 +63,7 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder {
     transform.localPosition = direction * distance;
         clickCount++;
         //if (clickCount % 4 == 0)
+        if (cellManager)
             cellManager.GetComponent<CellManagerScript>().TurnUpdate();
   }
 
