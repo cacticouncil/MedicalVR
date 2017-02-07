@@ -45,7 +45,7 @@ public class ChangeScene : MonoBehaviour
                 LoadScene("Strategy");
                 break;
             case 1:
-                LoadScene("Strategy");
+                LoadScene("Basic Scene");
                 break;
             case 2:
                 LoadScene("Strategy");
