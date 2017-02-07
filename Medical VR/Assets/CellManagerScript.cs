@@ -17,11 +17,6 @@ public class CellManagerScript : MonoBehaviour {
         t.name = "Cell0_0";
         t.GetComponent<CellScript>().enabled = true;
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     public void TurnUpdate()
     {
