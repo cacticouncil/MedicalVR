@@ -88,10 +88,10 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("Strategy");
                 break;
             case 1:
-                LoadScene("Strategy");
+                LoadScene("Basic Scene");
                 break;
             case 2:
-                LoadScene("Basic Scene");
+                LoadScene("FightVirus"); 
                 break;
             case 3:
                 LoadScene("Strategy");
