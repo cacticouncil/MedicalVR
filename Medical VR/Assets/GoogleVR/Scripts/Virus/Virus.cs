@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All rights reserved.
+﻿// Copyright 2014 Google Inc. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Collider))]
-public class Teleport : MonoBehaviour, IGvrGazeResponder
+public class Virus : MonoBehaviour, IGvrGazeResponder
 {
     private Vector3 startingPosition;
     public GameObject cellManager;
-    private int clickCount = 0;
+    public GameObject player;
+    public float speed = .7f;
 
     void Start()
     {
@@ -34,6 +35,15 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder
         if (GvrViewer.Instance.BackButtonPressed)
         {
             Application.Quit();
+        }
+    }
+
+    void Update()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, Camera.main.GetComponent<Camera>().transform.position, speed);
+        if (transform.position == Camera.main.GetComponent<Camera>().transform.position)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -65,16 +75,9 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder
     }
 #endif  //  !UNITY_HAS_GOOGLEVR || UNITY_EDITOR
 
-    public void TeleportRandomly()
+    public void DestroyVirus()
     {
-        Vector3 direction = Random.onUnitSphere;
-        direction.y = Mathf.Clamp(direction.y, 0.5f, 1f);
-        float distance = 2 * Random.value + 1.5f;
-        transform.localPosition = direction * distance;
-        clickCount++;
-        //if (clickCount % 4 == 0)
-        if (cellManager)
-            cellManager.GetComponent<CellManagerScript>().TurnUpdate();
+        Destroy(gameObject);
     }
 
     #region IGvrGazeResponder implementation
@@ -96,7 +99,8 @@ public class Teleport : MonoBehaviour, IGvrGazeResponder
     /// Called when the viewer's trigger is used, between OnGazeEnter and OnGazeExit.
     public void OnGazeTrigger()
     {
-        TeleportRandomly();
+        DestroyVirus();
+        player.GetComponent<Player>().score += 50;
     }
     #endregion
 }
