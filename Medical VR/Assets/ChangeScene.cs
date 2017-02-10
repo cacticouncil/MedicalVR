@@ -61,8 +61,8 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                     }
                 }
                 Vector3 temp = Camera.main.ScreenToWorldPoint(buttons[index].transform.position);
-                float y = temp.y;
-                transform.position = new Vector3(transform.position.x, y, transform.position.z);
+                float z = -temp.z + 10;
+                transform.position = new Vector3(transform.position.x, transform.position.y, z);
             }
 
             change = false;
