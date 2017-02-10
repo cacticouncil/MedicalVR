@@ -3,14 +3,13 @@ using System.Collections;
 
 public class EnemyManager : MonoBehaviour
 {
-    public float SpawnTime = 2.0f;
     public GameObject VirusCube;
     public Transform[] enemies;
 
 	// Use this for initialization
 	void Start ()
     {
-        InvokeRepeating("Spawn", 4.0f, 4.0f);
+        InvokeRepeating("Spawn", 3.5f, 3.5f);
 	}
 	
 	// Update is called once per frame

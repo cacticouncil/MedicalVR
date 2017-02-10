@@ -47,6 +47,18 @@ public class Virus : MonoBehaviour, IGvrGazeResponder
         }
     }
 
+    //void OnTriggerEnter(Collider col)
+    //{
+    //    if (col.tag == "Bullet")
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //    else if (col.tag == "MainCamera")
+    //    {
+
+    //    }
+    //}
+
     public void SetGazedAt(bool gazedAt)
     {
         GetComponent<Renderer>().material.color = gazedAt ? Color.green : Color.red;
@@ -100,7 +112,6 @@ public class Virus : MonoBehaviour, IGvrGazeResponder
     public void OnGazeTrigger()
     {
         DestroyVirus();
-        player.GetComponent<Player>().score += 50;
     }
     #endregion
 }
