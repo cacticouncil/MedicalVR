@@ -16,87 +16,69 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Collider))]
-public class Teleport : MonoBehaviour, IGvrGazeResponder
-{
-    private Vector3 startingPosition;
-    public GameObject cellManager;
-    private int clickCount = 0;
+public class Teleport : MonoBehaviour, IGvrGazeResponder {
+  private Vector3 startingPosition;
 
-    void Start()
-    {
-        startingPosition = transform.localPosition;
-        SetGazedAt(false);
-    }
+  void Start() {
+    startingPosition = transform.localPosition;
+    SetGazedAt(false);
+  }
 
-    void LateUpdate()
-    {
-        GvrViewer.Instance.UpdateState();
-        if (GvrViewer.Instance.BackButtonPressed)
-        {
-            Application.Quit();
-        }
+  void LateUpdate() {
+    GvrViewer.Instance.UpdateState();
+    if (GvrViewer.Instance.BackButtonPressed) {
+      Application.Quit();
     }
+  }
 
-    public void SetGazedAt(bool gazedAt)
-    {
-        GetComponent<Renderer>().material.color = gazedAt ? Color.green : Color.red;
-    }
+  public void SetGazedAt(bool gazedAt) {
+    GetComponent<Renderer>().material.color = gazedAt ? Color.green : Color.red;
+  }
 
-    public void Reset()
-    {
-        transform.localPosition = startingPosition;
-    }
+  public void Reset() {
+    transform.localPosition = startingPosition;
+  }
 
-    public void ToggleVRMode()
-    {
-        GvrViewer.Instance.VRModeEnabled = !GvrViewer.Instance.VRModeEnabled;
-    }
+  public void ToggleVRMode() {
+    GvrViewer.Instance.VRModeEnabled = !GvrViewer.Instance.VRModeEnabled;
+  }
 
-    public void ToggleDistortionCorrection()
-    {
-        GvrViewer.Instance.DistortionCorrectionEnabled =
-          !GvrViewer.Instance.DistortionCorrectionEnabled;
-    }
+  public void ToggleDistortionCorrection() {
+    GvrViewer.Instance.DistortionCorrectionEnabled =
+      !GvrViewer.Instance.DistortionCorrectionEnabled;
+  }
 
 #if !UNITY_HAS_GOOGLEVR || UNITY_EDITOR
-    public void ToggleDirectRender()
-    {
-        GvrViewer.Controller.directRender = !GvrViewer.Controller.directRender;
-    }
+  public void ToggleDirectRender() {
+    GvrViewer.Controller.directRender = !GvrViewer.Controller.directRender;
+  }
 #endif  //  !UNITY_HAS_GOOGLEVR || UNITY_EDITOR
 
-    public void TeleportRandomly()
-    {
-        Vector3 direction = Random.onUnitSphere;
-        direction.y = Mathf.Clamp(direction.y, 0.5f, 1f);
-        float distance = 2 * Random.value + 1.5f;
-        transform.localPosition = direction * distance;
-        clickCount++;
-        //if (clickCount % 4 == 0)
-        if (cellManager)
-            cellManager.GetComponent<CellManagerScript>().TurnUpdate();
-    }
+  public void TeleportRandomly() {
+    Vector3 direction = Random.onUnitSphere;
+    direction.y = Mathf.Clamp(direction.y, 0.5f, 1f);
+    float distance = 2 * Random.value + 1.5f;
+    transform.localPosition = direction * distance;
+  }
 
-    #region IGvrGazeResponder implementation
+  #region IGvrGazeResponder implementation
 
-    /// Called when the user is looking on a GameObject with this script,
-    /// as long as it is set to an appropriate layer (see GvrGaze).
-    public void OnGazeEnter()
-    {
-        SetGazedAt(true);
-    }
+  /// Called when the user is looking on a GameObject with this script,
+  /// as long as it is set to an appropriate layer (see GvrGaze).
+  public void OnGazeEnter() {
+    SetGazedAt(true);
+  }
 
-    /// Called when the user stops looking on the GameObject, after OnGazeEnter
-    /// was already called.
-    public void OnGazeExit()
-    {
-        SetGazedAt(false);
-    }
+  /// Called when the user stops looking on the GameObject, after OnGazeEnter
+  /// was already called.
+  public void OnGazeExit() {
+    SetGazedAt(false);
+  }
 
-    /// Called when the viewer's trigger is used, between OnGazeEnter and OnGazeExit.
-    public void OnGazeTrigger()
-    {
-        TeleportRandomly();
-    }
-    #endregion
+  /// Called when the viewer's trigger is used, between OnGazeEnter and OnGazeExit.
+  public void OnGazeTrigger() {
+    TeleportRandomly();
+  }
+
+  #endregion
 }

@@ -11,7 +11,7 @@ public class MoveCamera : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         position = transform.position;
-        distance = Vector3.Distance(transform.position, position);
+        distance = .001f;
         startTime = Time.time;
 	}
 	
@@ -25,7 +25,7 @@ public class MoveCamera : MonoBehaviour {
     public void SetDestination(Vector3 endpoint)
     {
         position = new Vector3(endpoint.x, transform.position.y, endpoint.z);
-        distance = Vector3.Distance(transform.position, position);
+        distance = Mathf.Clamp(Vector3.Distance(transform.position, position), .001f, float.MaxValue);
         startTime = Time.time;
     }
 }
