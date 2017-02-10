@@ -7,15 +7,13 @@ public class CellScript : MonoBehaviour
     public int reproduction = 1;
     public int defense = 1;
     public int immunity = 1;
-
-    private int repCap = 5, defCap = 5, immCap = 10;
-
     public Text r;
     public Text d;
     public Text i;
-
     public Vector2 key;
+    public bool targeted = false;
 
+    private int repCap = 5, defCap = 5, immCap = 10;
     private int Treproduction = 10;
     private int entered = 0, exited = 0;
     private float timeOut = 0.0f;
@@ -108,7 +106,7 @@ public class CellScript : MonoBehaviour
         if (Treproduction <= 0)
         {
             //reproduce
-            gameObject.GetComponentInParent<CellManagerScript>().SpawnCell(key);
+            gameObject.GetComponentInParent<CellManagerScript>().SelectCellSpawn(key);
             Treproduction = 10 + Treproduction;
         }
     }
