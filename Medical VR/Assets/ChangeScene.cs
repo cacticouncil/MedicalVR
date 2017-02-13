@@ -88,16 +88,16 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("Strategy");
                 break;
             case 1:
-                LoadScene("Basic Scene");
+                LoadScene("MemoryGame");
                 break;
             case 2:
                 LoadScene("FightVirus"); 
                 break;
             case 3:
-                LoadScene("Strategy");
+                LoadScene("DodgeAnitbodies");
                 break;
             case 4:
-                LoadScene("Strategy");
+                LoadScene("MainMenu");
                 break;
             case 5:
                 Exit();
