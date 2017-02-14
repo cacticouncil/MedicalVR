@@ -57,7 +57,7 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
     public void MoveChar()
     {
         mainCamera.SetDestination(transform.position);
-        gameObject.GetComponent<CellScript>().ToggleUI(true);
+        gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
     }
 
     #region IGvrGazeResponder implementation
