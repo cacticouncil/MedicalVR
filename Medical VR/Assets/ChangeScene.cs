@@ -60,9 +60,9 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                         //buttons[i].GetComponent<Animator>().enabled = true;
                     }
                 }
-                Vector3 temp = Camera.main.ScreenToWorldPoint(buttons[index].transform.position);
-                float z = -temp.z + 10;
-                transform.position = new Vector3(transform.position.x, transform.position.y, z);
+                //Vector3 temp = Camera.main.ScreenToWorldPoint(buttons[index].transform.position);
+                //float z = -temp.z + 10;
+                //transform.position = new Vector3(transform.position.x, transform.position.y, z);
             }
 
             change = false;
@@ -88,16 +88,16 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("Strategy");
                 break;
             case 1:
-                LoadScene("Basic Scene");
+                LoadScene("MemoryGame");
                 break;
             case 2:
                 LoadScene("FightVirus"); 
                 break;
             case 3:
-                LoadScene("Strategy");
+                LoadScene("DodgeAnitbodies");
                 break;
             case 4:
-                LoadScene("Strategy");
+                LoadScene("MainMenu");
                 break;
             case 5:
                 Exit();

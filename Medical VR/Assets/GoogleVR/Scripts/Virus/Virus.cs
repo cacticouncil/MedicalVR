@@ -47,17 +47,18 @@ public class Virus : MonoBehaviour, IGvrGazeResponder
         }
     }
 
-    //void OnTriggerEnter(Collider col)
-    //{
-    //    if (col.tag == "Bullet")
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //    else if (col.tag == "MainCamera")
-    //    {
-
-    //    }
-    //}
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.tag == "Bullet")
+        {
+            Destroy(gameObject);
+        }
+        else if (col.tag == "MainCamera")
+        {
+            Debug.Log("HIT");
+            GetComponent<Player>().health -= 10f;
+        }
+    }
 
     public void SetGazedAt(bool gazedAt)
     {

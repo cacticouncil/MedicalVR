@@ -5,6 +5,7 @@ public class BulletScript : MonoBehaviour
 {
     public float LifeSpan;
     public float Speed;
+    public bool PowerUp;
 	// Use this for initialization
 	void Start ()
     {
