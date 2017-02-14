@@ -7,40 +7,51 @@ public class AnitbodySpawnerScript : MonoBehaviour {
     public GameObject redCell;
     public GameObject virus;
     public GameObject refAntiBody;
-    public int xRange, xGap, yRange, yGap, zGap, amount;
-    List<Vector3> randPositions = new List<Vector3>();
+    public int xRange, yRange, zGap, maxZ;
+    List<int> randPositions = new List<int>();
 	// Use this for initialization
 	void Start ()
     {
-        float distance = redCell.transform.position.z - virus.transform.position.z;
-        float cellSpeed = redCell.GetComponent<RedCellScript>().speed;
-        float virusSpeed = virus.GetComponent<MovingCamera>().speed;
-        float tmpSpeed = virusSpeed - cellSpeed;
-        float maxZ = (distance / tmpSpeed);
+        
 
-        for (int z = 200; z < maxZ; z+=zGap)
+        int num = 500;
+        for(int i = 0; i < 5; i++)
         {
-            for(int x = -xRange; x < xRange + 1; x+=xGap)
+            randPositions.Add(num);
+            num = num - 250;
+        }
+        for (int z = 1000; z < maxZ; z+=zGap)
+        {
+            List<int> tmpXList = new List<int>();
+            List<int> tmpYList = new List<int>();
+            for(int n = 0; n < 5; n++)
             {
-                for (int y = -yRange; y < yRange + 1; y += yGap)
-                {
-                    Vector3 tmp = new Vector3(x, y, z);
-                    randPositions.Add(tmp);
-                }
+                tmpXList.Add(randPositions[n]);
+                tmpYList.Add(randPositions[n]);
             }
-           
-        }
-        float antibodyCount = amount;
-        if (amount > randPositions.Count)
-            amount = randPositions.Count;
-    
-        for (int i = 0; i < antibodyCount ; i++)
-        {
-            int randIndex = Random.Range(0, randPositions.Count - i);
-            GameObject tmpAntibody = Instantiate(refAntiBody, randPositions[randIndex], refAntiBody.transform.rotation) as GameObject;
+            for (int j = 0; j < 5; j++)
+            {
+                int xIdx = Random.Range(0, 4-j);
+                int yIdx = Random.Range(0, 4-j);
+                Vector3 tmpPos = new Vector3(tmpXList[xIdx], tmpYList[yIdx], z);
+                tmpXList.Remove(tmpXList[xIdx]);
+                tmpYList.Remove(tmpYList[yIdx]);
+                GameObject tmpAntibody = Instantiate(refAntiBody, tmpPos, refAntiBody.transform.rotation) as GameObject;
+                z += zGap;
+            }
             
-            randPositions.Remove(tmpAntibody.transform.position);
         }
+        //float antibodyCount = amount;
+        //if (amount > randPositions.Count)
+        //    amount = randPositions.Count;
+    
+        //for (int i = 0; i < antibodyCount ; i++)
+        //{
+        //    int randIndex = Random.Range(0, randPositions.Count - i);
+        //    GameObject tmpAntibody = Instantiate(refAntiBody, randPositions[randIndex], refAntiBody.transform.rotation) as GameObject;
+            
+        //    randPositions.Remove(tmpAntibody.transform.position);
+        //}
 	}
 	
 	// Update is called once per frame
