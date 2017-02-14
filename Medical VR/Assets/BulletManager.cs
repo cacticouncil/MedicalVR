@@ -15,6 +15,6 @@ public class BulletManager : MonoBehaviour
 
     void Spawn()
     {
-        Instantiate(Bullet, Reticle.transform.position, Reticle.transform.rotation);
+        Instantiate(Bullet, Reticle.transform.position /*+ new Vector3(20, 0,0)*/, Reticle.transform.rotation);
     }
 }
