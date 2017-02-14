@@ -15,6 +15,12 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
 
     public void HandleTimeInput()
     {
-        GetComponent<Renderer>().material.color = Color.red;
+
+        if (GetComponent<Renderer>().material.color == Color.red)
+            GetComponent<Renderer>().material.color = Color.green;
+        else if (GetComponent<Renderer>().material.color == Color.green)
+            GetComponent<Renderer>().material.color = Color.blue;
+        else
+            GetComponent<Renderer>().material.color = Color.red;
     }
 }

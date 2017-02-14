@@ -60,9 +60,9 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                         //buttons[i].GetComponent<Animator>().enabled = true;
                     }
                 }
-                Vector3 temp = Camera.main.ScreenToWorldPoint(buttons[index].transform.position);
-                float z = -temp.z + 10;
-                transform.position = new Vector3(transform.position.x, transform.position.y, z);
+                //Vector3 temp = Camera.main.ScreenToWorldPoint(buttons[index].transform.position);
+                //float z = -temp.z + 10;
+                //transform.position = new Vector3(transform.position.x, transform.position.y, z);
             }
 
             change = false;
