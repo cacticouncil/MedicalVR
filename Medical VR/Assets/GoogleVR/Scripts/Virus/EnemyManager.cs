@@ -12,11 +12,6 @@ public class EnemyManager : MonoBehaviour
         InvokeRepeating("Spawn", 3.5f, 3.5f);
 	}
 	
-	// Update is called once per frame
-	void Update ()
-    {
-	
-	}
 
     void Spawn()
     {
