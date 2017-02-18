@@ -6,20 +6,13 @@ public class EnemyManager : MonoBehaviour
     public GameObject VirusCube;
     public Transform[] enemies;
 
-	// Use this for initialization
 	void Start ()
     {
         InvokeRepeating("Spawn", 3.5f, 3.5f);
 	}
 	
-
     void Spawn()
     {
-        Vector3 RandomPos;
-        RandomPos.x = Random.Range(-75, 75);
-        RandomPos.y = Random.Range(5, 15);
-        RandomPos.z = Random.Range(-75, 75);
-
-        Instantiate(VirusCube, RandomPos, Quaternion.identity);
+        Instantiate(VirusCube, Camera.main.GetComponent<Camera>().transform.position, Quaternion.identity);
     }
 }

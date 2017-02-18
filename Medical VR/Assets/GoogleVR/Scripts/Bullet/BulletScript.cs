@@ -6,14 +6,13 @@ public class BulletScript : MonoBehaviour
     public float LifeSpan;
     public float Speed;
     public bool PowerUp;
-	// Use this for initialization
+
 	void Start ()
     {
         LifeSpan = 0.0f;
         Speed = 10.0f;
 	}
 	
-	// Update is called once per frame
 	void Update ()
     {
         LifeSpan += Time.deltaTime;
