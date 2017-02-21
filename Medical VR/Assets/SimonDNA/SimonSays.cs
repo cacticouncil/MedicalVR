@@ -79,8 +79,11 @@ public class SimonSays : MonoBehaviour {
     {
         if(waitAsec)
         {
-            if(timer > 1.0)
+            if (timer > 1.0)
+            {
                 sign.GetComponent<MeshRenderer>().enabled = false;
+                TurnOffLights();
+            }
             if (timer > 2.0)
                 waitAsec = false;
         }
@@ -121,6 +124,7 @@ public class SimonSays : MonoBehaviour {
     {
         if (buttonPressed)
         {
+           
             switch (selectedColor)
             {
                 case theColors.YELLOW:
