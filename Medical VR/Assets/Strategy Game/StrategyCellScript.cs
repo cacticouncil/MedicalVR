@@ -11,6 +11,7 @@ public class StrategyCellScript : MonoBehaviour
     public Text r;
     public Text d;
     public Text i;
+    public Text p;
     public Vector2 key;
     public bool targeted = false;
     public bool hosted = false;
@@ -96,6 +97,7 @@ public class StrategyCellScript : MonoBehaviour
             if (immunity == immCap)
             {
                 protein = (proteins)Random.Range(1, 7);
+                p.text = "Protein: " + protein.ToString();
                 Debug.Log("Cell has gained Immunity");
             }
             if (i)
@@ -116,6 +118,7 @@ public class StrategyCellScript : MonoBehaviour
             if (immunity == immCap)
             {
                 protein = (proteins)Random.Range(1, 7);
+                p.text = "Protein: " + protein.ToString();
                 Debug.Log("Cell has gained Immunity");
             }
             if (i)
