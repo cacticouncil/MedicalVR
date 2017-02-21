@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class BulletManager : MonoBehaviour
 {
@@ -7,20 +8,37 @@ public class BulletManager : MonoBehaviour
     public GameObject Reticle;
     public Transform BulletPos;
     public bool PowerUp;
-    // Use this for initialization
+    public bool isTriggered;
+    public float time;
+
     void Start()
     {
-        InvokeRepeating("Spawn", 0.8f, 0.8f);
-        PowerUp = true;
+        isTriggered = true;
+        time = 0;
     }
 
-    void Spawn()
+    void Update()
+    {
+        time += Time.deltaTime;
+        if (isTriggered == true && time >= 1.5f)
+        {
+            time = 0.0f;
+            StartShooting();
+        }
+
+        if (GvrViewer.Instance.Triggered)
+        {
+            isTriggered = !isTriggered;
+        }
+    }
+
+    void StartShooting()
     {
         Instantiate(Bullet, Reticle.transform.position, Reticle.transform.rotation);
-        if (PowerUp == true)
-        {
-            Instantiate(Bullet, new Vector3(Reticle.transform.position.x - .5f, 0, 0), Reticle.transform.rotation);
-            Instantiate(Bullet, new Vector3(Reticle.transform.position.x + .5f, 0, 0), Reticle.transform.rotation);
-        }
+    }
+
+    public void Toggle()
+    {
+        isTriggered = !isTriggered;
     }
 }
