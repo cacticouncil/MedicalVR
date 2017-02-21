@@ -1,4 +1,4 @@
-﻿Shader "Custom/ColorTextureUnlitInstancedShadows"
+﻿Shader "Custom/ColorTextureDirectionalInstanced"
 {
 	Properties
 	{
@@ -8,27 +8,46 @@
 	}
 	SubShader
 	{
+		Tags { "RenderType"="Opaque" }
+		LOD 80
 		Pass
 		{
 			//This will be the base forward rendering pass in which ambient, vertex, and
             //main directional light will be applied. Additional lights will need additional passes
             //using the "ForwardAdd" lightmode.
             //see: http://docs.unity3d.com/Manual/SL-PassTags.html
+			Name "FORWARD"
             Tags { "LightMode" = "ForwardBase" }
 
 			//Include functions
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+			#pragma target 2.0
             #pragma multi_compile_instancing
+			#include "HLSLSupport.cginc"
             #include "UnityCG.cginc"
 
             //This matches the "forward base" of the LightMode tag to ensure the shader compiles
             //properly for the forward bass pass. As with the LightMode tag, for any additional lights
             //this would be changed from _fwdbase to _fwdadd.
             #pragma multi_compile_fwdbase
+			#include "Lighting.cginc"
             //Reference the Unity library that includes all the lighting shadow macros
             #include "AutoLight.cginc"
+
+            inline float3 LightingLambertVS (float3 normal, float3 lightDir)
+			{
+			fixed diff = max (0, dot (normal, lightDir));			
+			return _LightColor0.rgb * diff;
+			}
+
+			//Import properties
+            UNITY_INSTANCING_CBUFFER_START (MyProperties)
+            //List what to instance
+            UNITY_DEFINE_INSTANCED_PROP (float4, _Color)
+            UNITY_INSTANCING_CBUFFER_END
+			sampler2D _MainTex;
 
 			//Make structs
 			struct appdata
@@ -50,13 +69,6 @@
                 //LIGHTING_COORDS(1,2) instead to use TEXCOORD1 and TEXCOORD2.
                 LIGHTING_COORDS(1,2)
 			};
-
-			//Import properties
-            UNITY_INSTANCING_CBUFFER_START (MyProperties)
-            //List what to instance
-            UNITY_DEFINE_INSTANCED_PROP (float4, _Color)
-            UNITY_INSTANCING_CBUFFER_END
-			sampler2D _MainTex;
 			
 			v2f vert (appdata v)
 			{
