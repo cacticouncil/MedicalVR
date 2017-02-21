@@ -7,6 +7,7 @@ public class StrategyCellScript : MonoBehaviour
     public int reproduction = 1;
     public int defense = 1;
     public int immunity = 1;
+    public int repCap = 5, defCap = 5, immCap = 15;
     public Text r;
     public Text d;
     public Text i;
@@ -14,8 +15,18 @@ public class StrategyCellScript : MonoBehaviour
     public bool targeted = false;
     public bool hosted = false;
     public int Treproduction = 10;
+    public enum proteins
+    {
+        None,
+        RNase_L,
+        PKR,
+        TRIM22,
+        IFIT,
+        CH25H,
+        Mx1
+    }
+    public proteins protein = proteins.None;
 
-    private int repCap = 5, defCap = 5, immCap = 10;
     private int entered = 0, exited = 0;
     private float timeOut = 0.0f;
 
@@ -47,7 +58,7 @@ public class StrategyCellScript : MonoBehaviour
 
     public void IncreaseReproduction()
     {
-        if (!hosted || immunity >= 10)
+        if (!hosted || immunity >= immCap)
             if (reproduction < repCap)
             {
                 reproduction++;
@@ -63,7 +74,7 @@ public class StrategyCellScript : MonoBehaviour
 
     public void IncreaseDefense()
     {
-        if (!hosted || immunity >= 10)
+        if (!hosted || immunity >= immCap)
             if (defense < defCap)
             {
                 defense++;
@@ -79,18 +90,22 @@ public class StrategyCellScript : MonoBehaviour
     //Called from cell's UI
     public void IncreaseImmunity()
     {
-        if (!hosted || immunity >= 10)
-            if (immunity < immCap)
+        if (!hosted && immunity < immCap)
+        {
+            immunity++;
+            if (immunity == immCap)
             {
-                immunity++;
-                if (i)
-                    i.text = "Immunity: " + immunity;
-                else
-                {
-                    Debug.Log("Error! Immunity Text not instantiated. Key: " + key.x + "_" + key.y);
-                }
-                gameObject.GetComponentInParent<StrategyCellManagerScript>().ActionPreformed();
+                protein = (proteins)Random.Range(1, 7);
+                Debug.Log("Cell has gained Immunity");
             }
+            if (i)
+                i.text = "Immunity: " + immunity;
+            else
+            {
+                Debug.Log("Error! Immunity Text not instantiated. Key: " + key.x + "_" + key.y);
+            }
+            gameObject.GetComponentInParent<StrategyCellManagerScript>().ActionPreformed();
+        }
     }
     //Called from cell manager
     public void AddImmunity()
@@ -98,6 +113,11 @@ public class StrategyCellScript : MonoBehaviour
         if (immunity < immCap)
         {
             immunity++;
+            if (immunity == immCap)
+            {
+                protein = (proteins)Random.Range(1, 7);
+                Debug.Log("Cell has gained Immunity");
+            }
             if (i)
                 i.text = "Immunity: " + immunity;
             else
@@ -109,7 +129,7 @@ public class StrategyCellScript : MonoBehaviour
 
     public void TurnUpdate()
     {
-        if (!hosted || immunity >= 10)
+        if (!hosted || immunity >= immCap)
         {
             Treproduction -= reproduction;
             if (Treproduction <= 0)
@@ -131,21 +151,21 @@ public class StrategyCellScript : MonoBehaviour
 
         if (hosted)
         {
-            transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.red;
+            GetComponent<Renderer>().material.color = Color.red;
         }
         else if (targeted)
         {
-            transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.green;
+            GetComponent<Renderer>().material.color = Color.green;
         }
         else
         {
-            transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
+			GetComponent<Renderer>().material.color = Color.white;
         }
     }
 
     public void ToggleUI(bool b)
     {
-        transform.GetChild(0).GetChild(0).gameObject.SetActive(b);
+        transform.GetChild(0).gameObject.SetActive(b);
         timeOut = 0.0f;
     }
 

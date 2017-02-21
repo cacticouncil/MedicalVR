@@ -10,7 +10,6 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
     void Start()
     {
         startingPosition = transform.localPosition;
-        SetGazedAt(false);
         if (mainCamera == null)
         {
             mainCamera = Camera.main.GetComponent<MoveCamera>();
@@ -24,11 +23,6 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
         {
             Application.Quit();
         }
-    }
-
-    public void SetGazedAt(bool gazedAt)
-    {
-        GetComponent<Renderer>().material.color = gazedAt ? Color.green : Color.red;
     }
 
     public void Reset()
@@ -66,14 +60,12 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
     // as long as it is set to an appropriate layer (see GvrGaze).
     public void OnGazeEnter()
     {
-        SetGazedAt(true);
     }
 
     //Called when the user stops looking on the GameObject, after OnGazeEnter
     // was already called.
     public void OnGazeExit()
     {
-        SetGazedAt(false);
     }
 
     //Called when the viewer's trigger is used, between OnGazeEnter and OnGazeExit.
