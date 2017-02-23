@@ -26,6 +26,7 @@ public class BulletManager : MonoBehaviour
             StartShooting();
         }
 
+        //Checking for button input
         if (GvrViewer.Instance.Triggered)
         {
             isTriggered = !isTriggered;
