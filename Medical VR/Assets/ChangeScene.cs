@@ -50,6 +50,18 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
             case 8:
                 Exit();
                 break;
+            case 9:
+                LoadScene("MinigameMenu");
+                break;
+            case 10:
+                LoadScene("TrophyRoom");
+                break;
+            case 11:
+                LoadScene("Credits");
+                break;
+            case 12:
+                LoadScene("OptionsMenu");
+                break;
         }
     }
 

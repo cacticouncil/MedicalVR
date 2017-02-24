@@ -77,10 +77,10 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
              gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
             transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = true;
         }
-        else if (transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats && transform.GetComponentInParent<StrategyCellManagerScript>().selected != transform.GetComponent<StrategyCellScript>().key)
+        else if (!transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats)// && transform.GetComponentInParent<StrategyCellManagerScript>().selected != transform.GetComponent<StrategyCellScript>().key)
         {
             mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + yOffset, transform.position.z));
-            gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
+            //gameObject.GetComponent<StrategyCellScript>().ToggleUI(false);
             transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
             transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = false;
         }
@@ -89,7 +89,7 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
     public void Back()
     {
         mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + yOffset, transform.position.z));
-        gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
+        //gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
         transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
         transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = false;
     }

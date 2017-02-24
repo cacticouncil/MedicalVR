@@ -10,13 +10,13 @@ public class BulletScript : MonoBehaviour
 	void Start ()
     {
         LifeSpan = 0.0f;
-        Speed = 10.0f;
+        Speed = 1.0f;
 	}
 	
 	void Update ()
     {
         LifeSpan += Time.deltaTime;
-        if (LifeSpan >= 2.0f)
+        if (LifeSpan >= 3.0f)
         {
             Destroy(gameObject);
         }
@@ -24,6 +24,12 @@ public class BulletScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        float RandomX = Random.Range(-.01f, 0.1f);
+        float RandomY = Random.Range(-.01f, 0.1f);
+        float RandomZ = Random.Range(-.01f, 0.1f);
+
+        transform.position += transform.up * Random.Range(-.01f, .01f);
+        //transform.Rotate(RandomX, RandomY, 0);
         GetComponent<Rigidbody>().velocity = transform.forward * Speed;
     }
 
