@@ -28,9 +28,6 @@ public class StrategyCellScript : MonoBehaviour
     }
     public proteins protein = proteins.None;
 
-    private int entered = 0, exited = 0;
-    private float timeOut = 0.0f;
-
     void Awake()
     {
         if (!r || !d || !i)
@@ -42,19 +39,6 @@ public class StrategyCellScript : MonoBehaviour
 
             Debug.Log("Text Set");
         }
-    }
-
-    void Update()
-    {
-        if (!hosted)
-        {
-            if (entered == exited)
-                timeOut += Time.deltaTime;
-            if (timeOut > 5.0f)
-                ToggleUI(false);
-        }
-        else
-            ToggleUI(false);
     }
 
     public void IncreaseReproduction()
@@ -169,22 +153,5 @@ public class StrategyCellScript : MonoBehaviour
     public void ToggleUI(bool b)
     {
         transform.GetChild(0).gameObject.SetActive(b);
-        timeOut = 0.0f;
-    }
-
-    public void Enter()
-    {
-        entered++;
-        ResetTimeout();
-    }
-
-    public void Exit()
-    {
-        exited++;
-    }
-
-    public void ResetTimeout()
-    {
-        timeOut = 0.0f;
     }
 }

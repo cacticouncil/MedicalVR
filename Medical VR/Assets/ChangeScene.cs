@@ -5,12 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ChangeScene : MonoBehaviour, TimedInputHandler
 {
-
-   public int index = 0;
-
-
-
-    bool locked = false;
+    public int index = 0;
 
     public void LoadScene(string scene)
     {
@@ -24,7 +19,7 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
         Application.Quit();
     }
 
-   public void EnterEvent()
+    public void EnterEvent()
     {
         switch (index)
         {
@@ -35,7 +30,7 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("MemoryGame");
                 break;
             case 2:
-                LoadScene("FightVirus"); 
+                LoadScene("FightVirus");
                 break;
             case 3:
                 LoadScene("DodgeAnitbodies");

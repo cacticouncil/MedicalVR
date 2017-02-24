@@ -22,7 +22,7 @@ public class StrategyVirusScript : MonoBehaviour
             transform.LookAt(target.transform);
             startingPosition = prevPosition = nextPosition = transform.position;
             distance = Vector3.Distance(startingPosition, target.transform.position);
-            Mathf.Clamp(distance, .001f, float.MaxValue);
+            Mathf.Max(distance, .001f);
         }
         else
         {
