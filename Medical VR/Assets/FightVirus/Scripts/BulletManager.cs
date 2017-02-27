@@ -20,7 +20,7 @@ public class BulletManager : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime;
-        if (isTriggered == true && time >= 1.5f)
+        if (isTriggered == true && time >= .7f)
         {
             time = 0.0f;
             StartShooting();
