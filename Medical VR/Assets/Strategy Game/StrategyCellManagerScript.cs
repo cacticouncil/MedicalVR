@@ -16,10 +16,15 @@ public class StrategyCellManagerScript : MonoBehaviour
     public int turnNumber = 0;
     public int cellNum = 1;
     public int virNum = 0;
+    public Vector2 selected = new Vector2(0.0f, 0.0f);
+    public bool viewingStats = false;
+    public float randomRange = .5f;
 
     private GameObject virusPrefab;
-    private float xOffset = 1.0f;
-    private float yOffset = 1.0f;
+    //private float xOffset = 1.0f;
+    //private float yOffset = 1.0f;
+    public float xOffset = 2.0f;
+    public float yOffset = 2.0f;
 
     // Use this for initialization
     void Start()
@@ -30,7 +35,13 @@ public class StrategyCellManagerScript : MonoBehaviour
         AddToDictionary(t);
         t.name = "Cell0_0";
         t.GetComponent<StrategyCellScript>().enabled = true;
-        t.GetComponent<StrategyCellScript>().ToggleUI(true);
+        //t.GetComponent<StrategyCellScript>().ToggleUI(true);
+    }
+
+    public void SetSelected(Vector2 k)
+    {
+        tiles[selected].GetComponent<StrategyCellScript>().ToggleUI(false);
+        selected = k;
     }
 
     public void ActionPreformed()
@@ -47,7 +58,7 @@ public class StrategyCellManagerScript : MonoBehaviour
 
     public void TurnUpdate()
     {
-        Debug.Log("Turn Updated");
+        Debug.Log("Turn Updating");
         turnNumber++;
 
         foreach (StrategyCellScript child in gameObject.GetComponentsInChildren<StrategyCellScript>())
@@ -55,15 +66,21 @@ public class StrategyCellManagerScript : MonoBehaviour
             child.TurnUpdate();
         }
 
+        Debug.Log("Cells Updated");
+
         foreach (StrategyVirusScript child in gameObject.GetComponentsInChildren<StrategyVirusScript>())
         {
             child.TurnUpdate();
         }
 
+        Debug.Log("Viruses Updated");
+
         foreach (StrategyCellScript child in gameObject.GetComponentsInChildren<StrategyCellScript>())
         {
             child.DelayedTurnUpdate();
         }
+
+        Debug.Log("Cells Late Updated");
 
         if (turnNumber % 4 == 0)
         {
@@ -86,6 +103,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
 
         screenUI.text = "Actions Left: " + actionsLeft + "\nTurn Number: " + turnNumber + "\nCells Alive: " + cellNum + "\nViruses Alive: " + virNum;
+        Debug.Log("Turn Updated");
     }
 
     public void AddToDictionary(GameObject cell)
@@ -165,9 +183,79 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
     }
 
+    float CalculateY(Vector2 k)
+    {
+        float avg = 0.0f;
+        int total = 0;
+
+        //Top Right (0, +1)
+        Vector2 check = k;
+        check.y += 1;
+        if (tiles.ContainsKey(check))
+        {
+            avg += tiles[check].transform.position.y;
+            total++;
+        }
+
+        //Right (+1, 0)
+        check = k;
+        check.x += 1;
+        if (tiles.ContainsKey(check))
+        {
+            avg += tiles[check].transform.position.y;
+            total++;
+        }
+
+        //Bottom Right (0, -1)
+        check = k;
+        check.y -= 1;
+        if (tiles.ContainsKey(check))
+        {
+            avg += tiles[check].transform.position.y;
+            total++;
+        }
+
+        //Bottom Left (-1, -1)
+        check = k;
+        check.x -= 1;
+        check.y -= 1;
+        if (tiles.ContainsKey(check))
+        {
+            avg += tiles[check].transform.position.y;
+            total++;
+        }
+
+        //Left (-1, 0)
+        check = k;
+        check.x -= 1;
+        if (tiles.ContainsKey(check))
+        {
+            avg += tiles[check].transform.position.y;
+            total++;
+        }
+
+        //Top Left (-1, +1)
+        check = k;
+        check.x -= 1;
+        check.y += 1;
+        if (tiles.ContainsKey(check))
+        {
+            avg += tiles[check].transform.position.y;
+            total++;
+        }
+
+        avg /= total;
+        if (avg == float.NaN)
+        {
+            avg = 0.0f;
+        }
+
+        return Mathf.Clamp(Random.Range(-randomRange, randomRange) + avg, -4.0f, 4.0f);
+    }
+
     void SpawnCell(Vector2 k)
     {
-        GameObject t = Instantiate(cellPrefab, new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 0, k.y * yOffset), Quaternion.identity, transform) as GameObject;
+        GameObject t = Instantiate(cellPrefab, new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, CalculateY(k), k.y * yOffset), Quaternion.identity, transform) as GameObject;
         t.GetComponent<StrategyCellScript>().key = k;
         AddToDictionary(t);
         t.name = "Cell" + k.x + "_" + k.y;
@@ -181,14 +269,17 @@ public class StrategyCellManagerScript : MonoBehaviour
         Destroy(instance);
     }
 
-    public void SpreadImmunity(Vector2 starting)
+    public int SpreadImmunity(Vector2 starting)
     {
+        int immunitySpread = 0;
+
         //Top Right (0, +1)
         Vector2 check = starting;
         check.y += 1;
         if (tiles.ContainsKey(check))
         {
-            tiles[check].GetComponent<StrategyCellScript>().AddImmunity();
+            if (tiles[check].GetComponent<StrategyCellScript>().AddImmunity())
+                immunitySpread++;
         }
 
         //Right (+1, 0)
@@ -196,7 +287,8 @@ public class StrategyCellManagerScript : MonoBehaviour
         check.x += 1;
         if (tiles.ContainsKey(check))
         {
-            tiles[check].GetComponent<StrategyCellScript>().AddImmunity();
+            if (tiles[check].GetComponent<StrategyCellScript>().AddImmunity())
+                immunitySpread++;
         }
 
         //Bottom Right (0, -1)
@@ -204,7 +296,8 @@ public class StrategyCellManagerScript : MonoBehaviour
         check.y -= 1;
         if (tiles.ContainsKey(check))
         {
-            tiles[check].GetComponent<StrategyCellScript>().AddImmunity();
+            if (tiles[check].GetComponent<StrategyCellScript>().AddImmunity())
+                immunitySpread++;
         }
 
         //Bottom Left (-1, -1)
@@ -213,7 +306,8 @@ public class StrategyCellManagerScript : MonoBehaviour
         check.y -= 1;
         if (tiles.ContainsKey(check))
         {
-            tiles[check].GetComponent<StrategyCellScript>().AddImmunity();
+            if (tiles[check].GetComponent<StrategyCellScript>().AddImmunity())
+                immunitySpread++;
         }
 
         //Left (-1, 0)
@@ -221,7 +315,8 @@ public class StrategyCellManagerScript : MonoBehaviour
         check.x -= 1;
         if (tiles.ContainsKey(check))
         {
-            tiles[check].GetComponent<StrategyCellScript>().AddImmunity();
+            if (tiles[check].GetComponent<StrategyCellScript>().AddImmunity())
+                immunitySpread++;
         }
 
         //Top Left (-1, +1)
@@ -230,8 +325,11 @@ public class StrategyCellManagerScript : MonoBehaviour
         check.y += 1;
         if (tiles.ContainsKey(check))
         {
-            tiles[check].GetComponent<StrategyCellScript>().AddImmunity();
+            if (tiles[check].GetComponent<StrategyCellScript>().AddImmunity())
+                immunitySpread++;
         }
+
+        return immunitySpread;
     }
 
     public void SpawnVirus()
