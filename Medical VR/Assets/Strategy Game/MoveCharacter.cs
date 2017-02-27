@@ -6,6 +6,7 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
 {
     private Vector3 startingPosition;
     public MoveCamera mainCamera;
+    public float yOffset = 2.0f;
 
     void Start()
     {
@@ -48,10 +49,49 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
     }
 #endif  //  !UNITY_HAS_GOOGLEVR || UNITY_EDITOR
 
-    public void MoveChar()
+    public void MoveTo()
     {
-        mainCamera.SetDestination(transform.position);
-        gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
+        if ((transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats && transform.GetComponentInParent<StrategyCellManagerScript>().selected != transform.GetComponent<StrategyCellScript>().key) || (!transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats && transform.GetComponentInParent<StrategyCellManagerScript>().selected == transform.GetComponent<StrategyCellScript>().key))
+        {
+            //Get the direction of the player from the cell
+            Vector3 heading = mainCamera.transform.position - transform.position;
+            //Don't change y value
+            heading.y = 0;
+            //Find normalized direction
+            float distance = Mathf.Max(heading.magnitude, .001f);
+            Vector3 direction = heading / distance;
+            if (direction.magnitude < 1.0f)
+            {
+                direction = new Vector3(0.0f, 0.0f, 1.0f);
+            }
+            //Scale it to 1.5
+            direction *= 1.5f;
+
+            Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
+
+            transform.GetChild(0).transform.LookAt(finalPos);
+
+            //This is the new target position
+            mainCamera.SetDestination(finalPos);
+            transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
+             gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
+            transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = true;
+        }
+        else if (!transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats)// && transform.GetComponentInParent<StrategyCellManagerScript>().selected != transform.GetComponent<StrategyCellScript>().key)
+        {
+            mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + yOffset, transform.position.z));
+            //gameObject.GetComponent<StrategyCellScript>().ToggleUI(false);
+            transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
+            transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = false;
+        }
+    }
+
+    public void Back()
+    {
+        mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + yOffset, transform.position.z));
+        //gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
+        transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
+        transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = false;
     }
 
     #region IGvrGazeResponder implementation
@@ -71,7 +111,7 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
     //Called when the viewer's trigger is used, between OnGazeEnter and OnGazeExit.
     public void OnGazeTrigger()
     {
-        MoveChar();
+        MoveTo();
     }
 
     #endregion

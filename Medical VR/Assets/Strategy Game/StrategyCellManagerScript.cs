@@ -16,10 +16,14 @@ public class StrategyCellManagerScript : MonoBehaviour
     public int turnNumber = 0;
     public int cellNum = 1;
     public int virNum = 0;
+    public Vector2 selected = new Vector2(0.0f, 0.0f);
+    public bool viewingStats = false;
 
     private GameObject virusPrefab;
-    private float xOffset = 1.0f;
-    private float yOffset = 1.0f;
+    //private float xOffset = 1.0f;
+    //private float yOffset = 1.0f;
+    public float xOffset = 2.0f;
+    public float yOffset = 2.0f;
 
     // Use this for initialization
     void Start()
@@ -30,7 +34,13 @@ public class StrategyCellManagerScript : MonoBehaviour
         AddToDictionary(t);
         t.name = "Cell0_0";
         t.GetComponent<StrategyCellScript>().enabled = true;
-        t.GetComponent<StrategyCellScript>().ToggleUI(true);
+        //t.GetComponent<StrategyCellScript>().ToggleUI(true);
+    }
+
+    public void SetSelected(Vector2 k)
+    {
+        tiles[selected].GetComponent<StrategyCellScript>().ToggleUI(false);
+        selected = k;
     }
 
     public void ActionPreformed()
