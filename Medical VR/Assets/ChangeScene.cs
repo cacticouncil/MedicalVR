@@ -73,6 +73,9 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
     public void Highlight(int anything)
     {
         index = anything;
+        Vector3 temp = Camera.main.ScreenToWorldPoint(transform.position);
+        float y = temp.y;
+        transform.position = new Vector3(transform.position.x, y, transform.position.z);
     }
 
     public void HandleTimeInput()

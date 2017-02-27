@@ -5,11 +5,12 @@ public class DDObject : MonoBehaviour, DragDropHandler {
 
     private bool isHeld;
     private GameObject Recticle;
+    private Color store;  
 	// Use this for initialization
 	void Start ()
     {
         isHeld = false;
-        GetComponent<Renderer>().material.color = Color.yellow;
+        store = GetComponent<Renderer>().material.color;
         Recticle = GameObject.Find("DDReticle");
 	}
 	
@@ -32,6 +33,6 @@ public class DDObject : MonoBehaviour, DragDropHandler {
     void DragDropHandler.HandleGazeTriggerEnd()
     {
         isHeld = false;
-        GetComponent<Renderer>().material.color = Color.yellow;
+        GetComponent<Renderer>().material.color = store;
     }
 }
