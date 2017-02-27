@@ -24,8 +24,9 @@ public class MoveCamera : MonoBehaviour {
 
     public void SetDestination(Vector3 endpoint)
     {
-        position = new Vector3(endpoint.x, transform.position.y, endpoint.z);
-        distance = Mathf.Clamp(Vector3.Distance(transform.position, position), .001f, float.MaxValue);
+        //position = new Vector3(endpoint.x, transform.position.y, endpoint.z);
+        position = endpoint;
+        distance = Mathf.Max(Vector3.Distance(transform.position, endpoint), .001f);
         startTime = Time.time;
     }
 }
