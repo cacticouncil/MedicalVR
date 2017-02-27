@@ -6,7 +6,7 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
 {
     private Vector3 startingPosition;
     public MoveCamera mainCamera;
-    public float yOffset = 2.0f;
+    public float camOffset = 2.0f;
 
     void Start()
     {
@@ -60,12 +60,12 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
             //Find normalized direction
             float distance = Mathf.Max(heading.magnitude, .001f);
             Vector3 direction = heading / distance;
-            if (direction.magnitude < 1.0f)
+            if (direction.magnitude < 0.01f)
             {
                 direction = new Vector3(0.0f, 0.0f, 1.0f);
             }
             //Scale it to 1.5
-            direction *= 1.5f;
+            direction *= 1.3f;
 
             Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
 
@@ -79,7 +79,7 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
         }
         else if (!transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats)// && transform.GetComponentInParent<StrategyCellManagerScript>().selected != transform.GetComponent<StrategyCellScript>().key)
         {
-            mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + yOffset, transform.position.z));
+            mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
             //gameObject.GetComponent<StrategyCellScript>().ToggleUI(false);
             transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
             transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = false;
@@ -88,7 +88,7 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
 
     public void Back()
     {
-        mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + yOffset, transform.position.z));
+        mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
         //gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
         transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
         transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = false;
