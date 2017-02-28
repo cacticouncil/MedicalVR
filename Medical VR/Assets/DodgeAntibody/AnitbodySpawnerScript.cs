@@ -7,36 +7,27 @@ public class AnitbodySpawnerScript : MonoBehaviour {
     public GameObject redCell;
     public GameObject virus;
     public GameObject refAntiBody;
-    public int xRange, yRange, zGap, maxZ;
+    public List<GameObject> Obstacles = new List<GameObject>();
+    public int  zGap, maxZ;
     List<int> randPositions = new List<int>();
 	// Use this for initialization
 	void Start ()
     {
-        
-
-        int num = 500;
-        for(int i = 0; i < 5; i++)
-        {
-            randPositions.Add(num);
-            num = num - 250;
-        }
+       
         for (int z = 1000; z < maxZ; z+=zGap)
         {
-            List<int> tmpXList = new List<int>();
-            List<int> tmpYList = new List<int>();
-            for(int n = 0; n < 5; n++)
+            List<GameObject> tmpNum = new List<GameObject>();
+          
+           for(int i = 0; i < Obstacles.Count; i++)
             {
-                tmpXList.Add(randPositions[n]);
-                tmpYList.Add(randPositions[n]);
+                tmpNum.Add(Obstacles[i]);
             }
-            for (int j = 0; j < 5; j++)
+            for (int j = 0; j < Obstacles.Count; j++)
             {
-                int xIdx = Random.Range(0, 4-j);
-                int yIdx = Random.Range(0, 4-j);
-                Vector3 tmpPos = new Vector3(tmpXList[xIdx], tmpYList[yIdx], z);
-                tmpXList.Remove(tmpXList[xIdx]);
-                tmpYList.Remove(tmpYList[yIdx]);
-                GameObject tmpAntibody = Instantiate(refAntiBody, tmpPos, refAntiBody.transform.rotation) as GameObject;
+                int obNum = Random.Range(0, Obstacles.Count - 1 - j);
+                Vector3 tmpPos = new Vector3(tmpNum[obNum].transform.position.x, tmpNum[obNum].transform.position.y, z);
+                tmpNum.Remove(tmpNum[obNum]);
+                Instantiate(refAntiBody, tmpPos, refAntiBody.transform.rotation);
                 z += zGap;
             }
             
