@@ -5,12 +5,16 @@ public class Randomsphere : MonoBehaviour {
 
     public GameObject[]  Spheres = new GameObject[5];
 
-    private int i = Random.Range(0, 4);
-    private int j = Random.Range(0, 4);
-    private int k = Random.Range(0, 4);
+    
 
     // Use this for initialization
     void Start () {
+
+       int i = Random.Range(0, 4);
+     int j = Random.Range(0, 4);
+     int k = Random.Range(0, 4);
+
+
         Instantiate(Spheres[i], new Vector3(-35,26,30), Spheres[0].transform.rotation);
 
         while (j == 3 || j == i)

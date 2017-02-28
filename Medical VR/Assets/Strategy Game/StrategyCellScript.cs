@@ -16,6 +16,10 @@ public class StrategyCellScript : MonoBehaviour
     public bool targeted = false;
     public bool hosted = false;
     public int Treproduction = 10;
+
+    public int turnSpawned = 0;
+    public int childrenSpawned = 0;
+    public int immunitySpread = 0;
     public enum proteins
     {
         None,
@@ -41,36 +45,39 @@ public class StrategyCellScript : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        turnSpawned = transform.parent.GetComponent<StrategyCellManagerScript>().turnNumber;
+    }
+
     public void IncreaseReproduction()
     {
-        if (!hosted || immunity >= immCap)
-            if (reproduction < repCap)
+        if (!hosted && reproduction < repCap)
+        {
+            reproduction++;
+            if (r)
+                r.text = "Reproduction: " + reproduction;
+            else
             {
-                reproduction++;
-                if (r)
-                    r.text = "Reproduction: " + reproduction;
-                else
-                {
-                    Debug.Log("Error! Reproduction Text not instantiated. Key: " + key.x + "_" + key.y);
-                }
-                gameObject.GetComponentInParent<StrategyCellManagerScript>().ActionPreformed();
+                Debug.Log("Error! Reproduction Text not instantiated. Key: " + key.x + "_" + key.y);
             }
+            gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().ActionPreformed();
+        }
     }
 
     public void IncreaseDefense()
     {
-        if (!hosted || immunity >= immCap)
-            if (defense < defCap)
+        if (!hosted && defense < defCap)
+        {
+            defense++;
+            if (d)
+                d.text = "Defense: " + defense;
+            else
             {
-                defense++;
-                if (d)
-                    d.text = "Defense: " + defense;
-                else
-                {
-                    Debug.Log("Error! Defense Text not instantiated. Key: " + key.x + "_" + key.y);
-                }
-                gameObject.GetComponentInParent<StrategyCellManagerScript>().ActionPreformed();
+                Debug.Log("Error! Defense Text not instantiated. Key: " + key.x + "_" + key.y);
             }
+            gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().ActionPreformed();
+        }
     }
     //Called from cell's UI
     public void IncreaseImmunity()
@@ -82,7 +89,7 @@ public class StrategyCellScript : MonoBehaviour
             {
                 protein = (proteins)Random.Range(1, 7);
                 p.text = "Protein: " + protein.ToString();
-                Debug.Log("Cell has gained Immunity");
+                Debug.Log("Cell gained protein " + protein.ToString());
             }
             if (i)
                 i.text = "Immunity: " + immunity;
@@ -90,20 +97,22 @@ public class StrategyCellScript : MonoBehaviour
             {
                 Debug.Log("Error! Immunity Text not instantiated. Key: " + key.x + "_" + key.y);
             }
-            gameObject.GetComponentInParent<StrategyCellManagerScript>().ActionPreformed();
+            gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().ActionPreformed();
         }
     }
     //Called from cell manager
-    public void AddImmunity()
+    public bool AddImmunity()
     {
+        bool ret = false;
         if (immunity < immCap)
         {
             immunity++;
+            ret = true;
             if (immunity == immCap)
             {
                 protein = (proteins)Random.Range(1, 7);
                 p.text = "Protein: " + protein.ToString();
-                Debug.Log("Cell has gained Immunity");
+                Debug.Log("Cell gained protein " + protein.ToString());
             }
             if (i)
                 i.text = "Immunity: " + immunity;
@@ -112,17 +121,19 @@ public class StrategyCellScript : MonoBehaviour
                 Debug.Log("Error! Immunity Text not instantiated. Key: " + key.x + "_" + key.y);
             }
         }
+        return ret;
     }
 
     public void TurnUpdate()
     {
-        if (!hosted || immunity >= immCap)
+        if (!hosted)
         {
             Treproduction -= reproduction;
             if (Treproduction <= 0)
             {
                 //reproduce
-                gameObject.GetComponentInParent<StrategyCellManagerScript>().SelectCellSpawn(key);
+                gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().SelectCellSpawn(key);
+                childrenSpawned++;
                 Treproduction = 10 + Treproduction;
             }
         }
@@ -133,7 +144,7 @@ public class StrategyCellScript : MonoBehaviour
         if (immunity >= immCap)
         {
             //spread immunity
-            gameObject.GetComponentInParent<StrategyCellManagerScript>().SpreadImmunity(key);
+            immunitySpread += gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().SpreadImmunity(key);
         }
 
         if (hosted)
@@ -146,7 +157,7 @@ public class StrategyCellScript : MonoBehaviour
         }
         else
         {
-			GetComponent<Renderer>().material.color = Color.white;
+            GetComponent<Renderer>().material.color = Color.white;
         }
     }
 

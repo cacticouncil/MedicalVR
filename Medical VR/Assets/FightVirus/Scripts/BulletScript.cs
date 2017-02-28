@@ -10,7 +10,7 @@ public class BulletScript : MonoBehaviour
 	void Start ()
     {
         LifeSpan = 0.0f;
-        Speed = 1.0f;
+        Speed = 2.5f;
 	}
 	
 	void Update ()

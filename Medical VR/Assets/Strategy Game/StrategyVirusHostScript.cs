@@ -14,7 +14,7 @@ public class StrategyVirusHostScript : StrategyVirusScript
             if (target.GetComponent<StrategyCellScript>().Treproduction <= 0)
             {
                 //reproduce
-                GetComponentInParent<StrategyCellManagerScript>().SpawnVirusSingleAdjacent(target.GetComponent<StrategyCellScript>().key);
+                transform.parent.GetComponent<StrategyCellManagerScript>().SpawnVirusSingleAdjacent(target.GetComponent<StrategyCellScript>().key);
                 target.GetComponent<StrategyCellScript>().Treproduction = 10 + target.GetComponent<StrategyCellScript>().Treproduction;
             }
         }
@@ -26,7 +26,7 @@ public class StrategyVirusHostScript : StrategyVirusScript
         {
             if (target.GetComponent<StrategyCellScript>().protein != StrategyCellScript.proteins.IFIT || 
                 (target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
-                GetComponentInParent<StrategyCellManagerScript>().KillCell(target.GetComponent<StrategyCellScript>().key);
+                transform.parent.GetComponent<StrategyCellManagerScript>().KillCell(target.GetComponent<StrategyCellScript>().key);
             Destroy(gameObject);
         }
     }
