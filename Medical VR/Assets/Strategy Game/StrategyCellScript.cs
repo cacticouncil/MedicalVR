@@ -8,10 +8,10 @@ public class StrategyCellScript : MonoBehaviour
     public int defense = 1;
     public int immunity = 1;
     public int repCap = 5, defCap = 5, immCap = 15;
-    public Text r;
-    public Text d;
-    public Text i;
-    public Text p;
+    public TextMesh r;
+    public TextMesh d;
+    public TextMesh i;
+    public TextMesh p;
     public Vector2 key;
     public bool targeted = false;
     public bool hosted = false;
@@ -36,12 +36,12 @@ public class StrategyCellScript : MonoBehaviour
     {
         if (!r || !d || !i)
         {
-            Text[] arr = GetComponentsInChildren<Text>(true);
+            TextMesh[] arr = GetComponentsInChildren<TextMesh>(true);
             r = arr[3];
             d = arr[4];
             i = arr[5];
 
-            Debug.Log("Text Set");
+            Debug.Log("TextMesh Set");
         }
     }
 
@@ -59,7 +59,7 @@ public class StrategyCellScript : MonoBehaviour
                 r.text = "Reproduction: " + reproduction;
             else
             {
-                Debug.Log("Error! Reproduction Text not instantiated. Key: " + key.x + "_" + key.y);
+                Debug.Log("Error! Reproduction TextMesh not instantiated. Key: " + key.x + "_" + key.y);
             }
             gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().ActionPreformed();
         }
@@ -74,7 +74,7 @@ public class StrategyCellScript : MonoBehaviour
                 d.text = "Defense: " + defense;
             else
             {
-                Debug.Log("Error! Defense Text not instantiated. Key: " + key.x + "_" + key.y);
+                Debug.Log("Error! Defense TextMesh not instantiated. Key: " + key.x + "_" + key.y);
             }
             gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().ActionPreformed();
         }
@@ -95,7 +95,7 @@ public class StrategyCellScript : MonoBehaviour
                 i.text = "Immunity: " + immunity;
             else
             {
-                Debug.Log("Error! Immunity Text not instantiated. Key: " + key.x + "_" + key.y);
+                Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
             }
             gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().ActionPreformed();
         }
@@ -118,7 +118,7 @@ public class StrategyCellScript : MonoBehaviour
                 i.text = "Immunity: " + immunity;
             else
             {
-                Debug.Log("Error! Immunity Text not instantiated. Key: " + key.x + "_" + key.y);
+                Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
             }
         }
         return ret;

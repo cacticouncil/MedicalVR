@@ -24,10 +24,6 @@ public class BulletScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        float RandomX = Random.Range(-.01f, 0.1f);
-        float RandomY = Random.Range(-.01f, 0.1f);
-        float RandomZ = Random.Range(-.01f, 0.1f);
-
         transform.position += transform.up * Random.Range(-.01f, .01f);
         //transform.Rotate(RandomX, RandomY, 0);
         GetComponent<Rigidbody>().velocity = transform.forward * Speed;

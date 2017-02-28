@@ -5,7 +5,7 @@ using System.Collections;
 public class DetailsText : MonoBehaviour {
 
     public StrategyCellScript cell;
-    private Text t;
+    public TextMesh t;
 
     int turnSpawned = 0;
     int turnsToReproduce = 0;
@@ -16,7 +16,7 @@ public class DetailsText : MonoBehaviour {
     void Update ()
     {
         if (t == null)
-            t = GetComponent<Text>();
+            t = GetComponent<TextMesh>();
 
         turnSpawned = cell.turnSpawned;
         turnsToReproduce = cell.Treproduction / cell.reproduction;
