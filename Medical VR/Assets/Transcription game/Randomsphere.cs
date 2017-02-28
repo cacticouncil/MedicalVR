@@ -96,11 +96,11 @@ public class Randomsphere : MonoBehaviour {
                 break;
         }
 
-        clonei = (GameObject)Instantiate(Spheres[i], new Vector3(-35,26,30), Spheres[0].transform.rotation);
+        clonei = (GameObject)Instantiate(Spheres[i], new Vector3(-20,26,30), Spheres[0].transform.rotation);
 
-         clonej = (GameObject)Instantiate(Spheres[j], new Vector3(-20, 26, 30), Spheres[0].transform.rotation);
+         clonej = (GameObject)Instantiate(Spheres[j], new Vector3(-5, 26, 30), Spheres[0].transform.rotation);
 
-         clonek = (GameObject)Instantiate(Spheres[k], new Vector3(-5, 26, 30), Spheres[0].transform.rotation);
+         clonek = (GameObject)Instantiate(Spheres[k], new Vector3(10, 26, 30), Spheres[0].transform.rotation);
 
 
     }
@@ -193,11 +193,11 @@ public class Randomsphere : MonoBehaviour {
                     break;
             }
 
-            clonei = (GameObject)Instantiate(Spheres[i], new Vector3(-35, 26, 30), Spheres[0].transform.rotation);
+            clonei = (GameObject)Instantiate(Spheres[i], new Vector3(-20, 26, 30), Spheres[0].transform.rotation);
 
-            clonej = (GameObject)Instantiate(Spheres[j], new Vector3(-20, 26, 30), Spheres[0].transform.rotation);
+            clonej = (GameObject)Instantiate(Spheres[j], new Vector3(-5, 26, 30), Spheres[0].transform.rotation);
 
-            clonek = (GameObject)Instantiate(Spheres[k], new Vector3(-5, 26, 30), Spheres[0].transform.rotation);
+            clonek = (GameObject)Instantiate(Spheres[k], new Vector3(-10, 26, 30), Spheres[0].transform.rotation);
 
         }
     }
