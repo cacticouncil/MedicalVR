@@ -12,7 +12,7 @@ public class Virus : MonoBehaviour
     GameObject CellManager;
     GameObject Cell;
 
-    public float speed = .5f;
+    public float speed = .2f;
     int RandomCell;
 
     void Start()
@@ -66,7 +66,6 @@ public class Virus : MonoBehaviour
     void Duplicate()
     {
         VirusManager.GetComponent<EnemyManager>().VirusList.Add(Instantiate(VirusManager.GetComponent<EnemyManager>().VirusCube, transform.position, Quaternion.identity, transform) as GameObject);
-        //transform.position = -Vector3.MoveTowards(transform.position, RandomPos, speed);
     }
 
     void OnTriggerEnter(Collider col)
@@ -86,6 +85,7 @@ public class Virus : MonoBehaviour
 
     void OnDestroy()
     {
+        //If cell is alive but virus dies then add it back to the list
         if (Cell && !Cell.GetComponent<Cell>().isDead)
         {
             CellManager.GetComponent<CellManager>().CellList.Add(Cell);

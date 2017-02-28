@@ -9,4 +9,9 @@ public class Cell : MonoBehaviour
     {
         isDead = false;
     }
+
+    void Update()
+    {
+        
+    }
 }
