@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-enum VirusBehavior { LeaveCell = 0, AttackProtein = 1, AdvancedAI = 2 }
+using System;
 
-public class Virus : MonoBehaviour
+enum VirusBehavior { LeaveCell = 0, AttackProtein = 1, LeaveCellFast = 2 }
+
+public class Virus : MonoBehaviour, TimedInputHandler
 {
     VirusBehavior VB;
     Vector3 RandomPos;
@@ -11,26 +13,29 @@ public class Virus : MonoBehaviour
     GameObject VirusManager;
     GameObject CellManager;
     GameObject Cell;
+    GameObject Player;
 
-    public float speed = .2f;
+    public float speed;
     int RandomCell;
 
     void Start()
     {
-        RandomPos = Random.onUnitSphere;
+        RandomPos = UnityEngine.Random.onUnitSphere;
         RandomPos *= 50.0f;
 
-        int RandomBehavior = Random.Range(0, 2);
+        int RandomBehavior = UnityEngine.Random.Range(0, 3);
         VB = (VirusBehavior)RandomBehavior;
+        //VB = (VirusBehavior)1;
 
         VirusManager = GameObject.Find("VirusSpawn");
         CellManager = GameObject.Find("CellSpawn");
+        Player = GameObject.Find("Main Camera");
 
         if (VB == VirusBehavior.AttackProtein)
         {
             if (CellManager.GetComponent<CellManager>().CellList.Count != 0)
             {
-                RandomCell = Random.Range(0, CellManager.GetComponent<CellManager>().CellList.Count);
+                RandomCell = UnityEngine.Random.Range(0, CellManager.GetComponent<CellManager>().CellList.Count);
                 Cell = CellManager.GetComponent<CellManager>().CellList[RandomCell];
                 CellManager.GetComponent<CellManager>().CellList.Remove(Cell);
             }
@@ -53,8 +58,8 @@ public class Virus : MonoBehaviour
                 transform.position = Vector3.MoveTowards(transform.position, Cell.transform.position, speed);
                 break;
 
-            case VirusBehavior.AdvancedAI:
-                //transform.position = Vector3.MoveTowards(transform.position, , speed);
+            case VirusBehavior.LeaveCellFast:
+                transform.position = Vector3.MoveTowards(transform.position, RandomPos, speed + .02f);
                 break;
 
             default:
@@ -65,7 +70,7 @@ public class Virus : MonoBehaviour
 
     void Duplicate()
     {
-        VirusManager.GetComponent<EnemyManager>().VirusList.Add(Instantiate(VirusManager.GetComponent<EnemyManager>().VirusCube, transform.position, Quaternion.identity, transform) as GameObject);
+        VirusManager.GetComponent<EnemyManager>().VirusList.Add(Instantiate(VirusManager.GetComponent<EnemyManager>().VirusCube, transform.position, Quaternion.identity) as GameObject);
     }
 
     void OnTriggerEnter(Collider col)
@@ -73,6 +78,7 @@ public class Virus : MonoBehaviour
         if (col.tag == "Bullet")
         {
             Destroy(gameObject);
+            Player.GetComponent<Player>().Score += 100;
         }
 
         else if (col.tag == "Cell")
@@ -90,5 +96,10 @@ public class Virus : MonoBehaviour
         {
             CellManager.GetComponent<CellManager>().CellList.Add(Cell);
         }
+    }
+
+    public void HandleTimeInput()
+    {
+        throw new NotImplementedException();
     }
 }

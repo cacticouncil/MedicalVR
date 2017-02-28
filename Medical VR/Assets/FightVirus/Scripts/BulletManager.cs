@@ -6,23 +6,23 @@ public class BulletManager : MonoBehaviour
 {
     public GameObject Bullet;
     public GameObject Reticle;
-    public Transform BulletPos;
     public bool PowerUp;
     public bool isTriggered;
-    public float time;
+    public float Time;
 
     void Start()
     {
         isTriggered = true;
-        time = 0;
+        Time = 0;
     }
 
     void Update()
     {
-        time += Time.deltaTime;
-        if (isTriggered == true && time >= .7f)
+        //Bullet Delay
+        Time += UnityEngine.Time.deltaTime;
+        if (isTriggered == true && Time >= .2f)
         {
-            time = 0.0f;
+            Time = 0.0f;
             StartShooting();
         }
 
@@ -36,10 +36,5 @@ public class BulletManager : MonoBehaviour
     void StartShooting()
     {
         Instantiate(Bullet, Reticle.transform.position, Reticle.transform.rotation);
-    }
-
-    public void Toggle()
-    {
-        isTriggered = !isTriggered;
     }
 }
