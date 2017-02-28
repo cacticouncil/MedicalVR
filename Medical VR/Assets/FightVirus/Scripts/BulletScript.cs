@@ -10,7 +10,7 @@ public class BulletScript : MonoBehaviour
 	void Start ()
     {
         LifeSpan = 0.0f;
-        Speed = 2.5f;
+        Speed = 3.2f;
 	}
 	
 	void Update ()
@@ -25,7 +25,6 @@ public class BulletScript : MonoBehaviour
     void FixedUpdate()
     {
         transform.position += transform.up * Random.Range(-.01f, .01f);
-        //transform.Rotate(RandomX, RandomY, 0);
         GetComponent<Rigidbody>().velocity = transform.forward * Speed;
     }
 

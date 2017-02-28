@@ -5,8 +5,8 @@ public class RedCellScript : MonoBehaviour {
 
     // Use this for initialization
     public float speed;
-    Vector3 oringPos;
     public GameObject virus, spawner;
+    Vector3 oringPos;
 	void Start ()
     {
         oringPos = transform.position;
@@ -20,7 +20,7 @@ public class RedCellScript : MonoBehaviour {
     {
         if (other.tag == "virus")
         {
-            virus.GetComponent<MovingCamera>().resetPos();
+            virus.GetComponent<MovingCamera>().WinresetPos();
             virus.GetComponent<MovingCamera>().speed++;
             spawner.GetComponent<AnitbodySpawnerScript>().GenerateObstacles();
         }
