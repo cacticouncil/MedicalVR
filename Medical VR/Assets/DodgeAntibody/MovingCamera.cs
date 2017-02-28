@@ -5,7 +5,9 @@ public class MovingCamera : MonoBehaviour {
 
     public GameObject redCell;
     public float speed;
+    public GameObject theScore;
     // Use this for initialization
+    float score = 0;
     Vector3 originPos;
     Vector3 redOrPos;
    public void resetPos()
@@ -27,17 +29,16 @@ public class MovingCamera : MonoBehaviour {
     void FixedUpdate()
     {
         transform.position += transform.forward * speed;
-        //AvoidBack();
+        score+= Time.smoothDeltaTime;
+        int tmp = (int)score;
+        theScore.GetComponent<TextMesh>().text = "Score: " + tmp.ToString();
     }
 
     void AvoidBack()
     {
  
-
-        
         if (transform.rotation.eulerAngles.y > 90)
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, 90, transform.rotation.eulerAngles.z);
-
       
         if (transform.rotation.eulerAngles.y < -90)
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, -90, transform.rotation.eulerAngles.z);
