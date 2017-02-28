@@ -11,7 +11,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     public GameObject virusPrefab1;
     public GameObject virusPrefab2;
     public GameObject virusPrefab3;
-    public Text screenUI;
+    public TextMesh screenUI;
     public int actionsLeft = 4;
     public int turnNumber = 0;
     public int cellNum = 1;
