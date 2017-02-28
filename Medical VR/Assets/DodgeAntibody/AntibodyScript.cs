@@ -18,7 +18,7 @@ public class AntibodyScript : MonoBehaviour {
     {
        if(other.tag == "virus")
         {
-            other.GetComponent<MovingCamera>().resetPos();
+            other.GetComponent<MovingCamera>().LoseresetPos();
         }
     }
 }

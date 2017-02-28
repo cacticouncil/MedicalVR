@@ -7,6 +7,7 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
     private Vector3 startingPosition;
     public MoveCamera mainCamera;
     public float camOffset = 2.0f;
+    public float scaledDistance = 1.5f;
 
     void Start()
     {
@@ -65,7 +66,7 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
                 direction = new Vector3(0.0f, 0.0f, 1.0f);
             }
             //Scale it to 1.5
-            direction *= 1.3f;
+            direction *= scaledDistance;
 
             Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
 
