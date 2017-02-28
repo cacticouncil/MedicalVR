@@ -8,17 +8,28 @@ public class AnitbodySpawnerScript : MonoBehaviour {
     public GameObject virus;
     public GameObject refAntiBody;
     public List<GameObject> Obstacles = new List<GameObject>();
-    public int  zGap, maxZ;
+    public int  zGap, maxZ, levelNum;
+    public GameObject theLevel;
     List<GameObject> randPositions = new List<GameObject>();
+
+
 	// Use this for initialization
 	void Start ()
     {
+        levelNum = 0;
         GenerateObstacles();
 	}
-	
+	public void Restart()
+    {
+        levelNum = 0;
+        theLevel.GetComponent<TextMesh>().text = "LEVEL: " + levelNum.ToString();
+        GenerateObstacles();
+    }
 	public void GenerateObstacles()
     {
-        if(randPositions.Count != 0)
+        levelNum++;
+        theLevel.GetComponent<TextMesh>().text = "LEVEL: " + levelNum.ToString();
+        if (randPositions.Count != 0)
         {
             for (int i = 0; i < randPositions.Count; i++)
             {

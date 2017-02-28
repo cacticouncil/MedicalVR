@@ -19,7 +19,7 @@ public class BloodVesselScript : MonoBehaviour {
         if (other.tag == "virus")
         {
             if(enter.GetComponent<VesselOpening>().shouldCollide == true && exit.GetComponent<VesselOpening>().shouldCollide == true)
-            other.GetComponent<MovingCamera>().resetPos();
+            other.GetComponent<MovingCamera>().LoseresetPos();
         }
     }
 }
