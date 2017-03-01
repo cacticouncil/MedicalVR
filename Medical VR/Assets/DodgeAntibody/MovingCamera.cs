@@ -1,37 +1,89 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class MovingCamera : MonoBehaviour {
+public class MovingCamera : MonoBehaviour, TimedInputHandler
+{
 
     public GameObject redCell;
     public float speed;
+    public GameObject theScore, theLives, scoreBoard, UI;
     // Use this for initialization
-    Vector3 originPos;
-    Vector3 redOrPos;
-   public void resetPos()
+    float score = 0;
+    Vector3 originPos, redOrPos;
+    int lives = 3;
+    float orgSpeed; 
+   public void LoseresetPos()
+    {
+        lives--;
+        theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+        transform.position = originPos;
+        
+    }
+    public void WinresetPos()
     {
         transform.position = originPos;
-        redCell.transform.position = redOrPos;
     }
-	void Start ()
+    void ShowScore()
     {
+        UI.SetActive(false);
+        transform.position = originPos;
+        speed = 0;
+        scoreBoard.SetActive(true);
+        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
+    }
+   public void RestartGame()
+    {
+        UI.SetActive(true);
+        scoreBoard.SetActive(false);
+        lives = 3;
+        score = 0;
+        speed = orgSpeed;
+        theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+        //theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+    }
+    void Start ()
+    {
+        theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
         originPos = transform.position;
         redOrPos = redCell.transform.position;
+        orgSpeed = speed;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        //float x = (transform.position.x + transform.forward.x) * speed; 
-        //float y = (transform.position.y + transform.forward.y) * speed; 
-        //float z = (transform.position.z + transform.forward.z) * speed;
-        ////GetComponent<Rigidbody>().AddForce(transform.forward * speed);
-        //Vector3 newPos = new Vector3(x,y,z);
-        //GetComponent<Rigidbody>().MovePosition(newPos);
-
+      
     }
     void FixedUpdate()
     {
-        transform.position += transform.forward * speed;
+        if(lives < 1)
+        {
+            ShowScore();
+        }
+        else
+        {
+            transform.position += transform.forward * speed;
+            score += Time.smoothDeltaTime;
+            int tmp = (int)score;
+            theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+        }
+       
+    }
+
+    void AvoidBack()
+    {
+ 
+        if (transform.rotation.eulerAngles.y > 90)
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, 90, transform.rotation.eulerAngles.z);
+      
+        if (transform.rotation.eulerAngles.y < -90)
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, -90, transform.rotation.eulerAngles.z);
+     
+    }
+
+    public void HandleTimeInput()
+    {
+        RestartGame();
     }
 }

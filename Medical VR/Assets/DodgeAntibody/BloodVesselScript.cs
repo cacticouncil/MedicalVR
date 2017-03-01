@@ -3,7 +3,8 @@ using System.Collections;
 
 public class BloodVesselScript : MonoBehaviour {
 
-   
+    public GameObject enter;
+    public GameObject exit;
 	// Use this for initialization
 	void Start () {
 	
@@ -17,7 +18,8 @@ public class BloodVesselScript : MonoBehaviour {
     {
         if (other.tag == "virus")
         {
-            other.GetComponent<MovingCamera>().resetPos();
+            if(enter.GetComponent<VesselOpening>().shouldCollide == true && exit.GetComponent<VesselOpening>().shouldCollide == true)
+            other.GetComponent<MovingCamera>().LoseresetPos();
         }
     }
 }
