@@ -11,6 +11,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     public GameObject virusPrefab1;
     public GameObject virusPrefab2;
     public GameObject virusPrefab3;
+    public SimulateSun light;
     public TextMesh screenUI;
     public int actionsLeft = 4;
     public int turnNumber = 0;
@@ -35,7 +36,6 @@ public class StrategyCellManagerScript : MonoBehaviour
         AddToDictionary(t);
         t.name = "Cell0_0";
         t.GetComponent<StrategyCellScript>().enabled = true;
-        //t.GetComponent<StrategyCellScript>().ToggleUI(true);
     }
 
     public void SetSelected(Vector2 k)
@@ -101,6 +101,8 @@ public class StrategyCellManagerScript : MonoBehaviour
             Debug.Log("Viruses Have Mutated");
             virusPrefab = virusPrefab3;
         }
+
+        light.TurnUpdate();
 
         screenUI.text = "Actions Left: " + actionsLeft + "\nTurn Number: " + turnNumber + "\nCells Alive: " + cellNum + "\nViruses Alive: " + virNum;
         Debug.Log("Turn Updated");
