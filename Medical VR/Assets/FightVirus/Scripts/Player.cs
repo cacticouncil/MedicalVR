@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
             DisplayRules = false;
 
         if (DisplayRules)
-            RulesObj.GetComponent<TextMesh>().text = "Defeat the Virus" + "\n" + "Protect the Cells";
+            RulesObj.GetComponent<TextMesh>().text = "Defeat the Virus";
         else
             RulesObj.GetComponent<TextMesh>().text = "";
 

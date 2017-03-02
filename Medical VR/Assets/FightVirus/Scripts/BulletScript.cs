@@ -10,13 +10,13 @@ public class BulletScript : MonoBehaviour
 	void Start ()
     {
         LifeSpan = 0.0f;
-        Speed = 3.2f;
+        Speed = 5.5f;
 	}
 	
 	void Update ()
     {
         LifeSpan += Time.deltaTime;
-        if (LifeSpan >= 3.0f)
+        if (LifeSpan >= 5.0f)
         {
             Destroy(gameObject);
         }
