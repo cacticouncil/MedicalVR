@@ -31,7 +31,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     void Start()
     {
         virusPrefab = virusPrefab1;
-        GameObject t = Instantiate(cellPrefab, new Vector3(.5f, 0, 0), Quaternion.identity, transform) as GameObject;
+        GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), Quaternion.identity, transform) as GameObject;
         t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
         AddToDictionary(t);
         t.name = "Cell0_0";
