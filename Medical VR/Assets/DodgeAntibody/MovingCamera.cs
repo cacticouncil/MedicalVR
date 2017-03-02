@@ -9,10 +9,12 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     public float speed;
     public GameObject theScore, theLives, scoreBoard, UI;
     // Use this for initialization
-    float score = 0;
+    public float score = 0;
     Vector3 originPos, redOrPos;
     int lives = 3;
-    float orgSpeed; 
+    float orgSpeed;
+    bool stopMoving = false;
+    
    public void LoseresetPos()
     {
         lives--;
@@ -31,6 +33,8 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         speed = 0;
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
+        scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
+        lives = 3;
     }
    public void RestartGame()
     {
@@ -57,11 +61,12 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     }
     void FixedUpdate()
     {
-        if(lives < 1)
+        AvoidBack();
+        if(lives < 3)
         {
             ShowScore();
         }
-        else
+        else if(stopMoving == false)
         {
             transform.position += transform.forward * speed;
             score += Time.smoothDeltaTime;
@@ -73,13 +78,11 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
 
     void AvoidBack()
     {
- 
-        if (transform.rotation.eulerAngles.y > 90)
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, 90, transform.rotation.eulerAngles.z);
-      
-        if (transform.rotation.eulerAngles.y < -90)
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, -90, transform.rotation.eulerAngles.z);
-     
+        if (transform.rotation.eulerAngles.y > 90 && transform.rotation.eulerAngles.y < 270)
+            stopMoving = true;
+
+        else
+            stopMoving = false; 
     }
 
     public void HandleTimeInput()
