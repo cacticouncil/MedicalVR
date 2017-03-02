@@ -34,12 +34,13 @@ public class StrategyCellScript : MonoBehaviour
 
     void Awake()
     {
-        if (!r || !d || !i)
+        if (!r || !d || !i || !p)
         {
             TextMesh[] arr = GetComponentsInChildren<TextMesh>(true);
             r = arr[3];
             d = arr[4];
             i = arr[5];
+            p = arr[6];
 
             Debug.Log("TextMesh Set");
         }
