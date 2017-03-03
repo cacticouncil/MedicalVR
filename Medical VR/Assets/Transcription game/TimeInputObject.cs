@@ -24,21 +24,8 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
 	
 	}
 
-
-    void OnTriggerEnter(Collider col)
-    {
-            //col.transform.position = transform.position + new Vector3(20, 0, 0);
-    }
-
     public void HandleTimeInput()
     {
-
-        //if(transform.position != new Vector3(-20, -10, 30))
-        //transform.position = new Vector3(-20, -10, 30);
-        //else if (transform.position == new Vector3(-20, 0, 30))
-        //    transform.position = new Vector3(-5, -10, 30);
-        //else if(transform.position == new Vector3(-5, -10, 30))
-        //    transform.position = new Vector3(10, -10, 30);
 
         if ((sphere.GetComponent<Randomsphere>().clonei.tag == "A" && gameObject.tag == "U") || (sphere.GetComponent<Randomsphere>().clonei.tag == "G" && gameObject.tag == "C") || (sphere.GetComponent<Randomsphere>().clonei.tag == "C" && gameObject.tag == "G") || (sphere.GetComponent<Randomsphere>().clonei.tag == "T" && gameObject.tag == "A"))
         {
@@ -58,26 +45,29 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
         else
             IsCorrectj= false;
 
-        if ((sphere.GetComponent<Randomsphere>().clonek.tag == "C" && gameObject.tag == "G") || (sphere.GetComponent<Randomsphere>().clonek.tag == "T" && gameObject.tag == "A"))
+        if ((sphere.GetComponent<Randomsphere>().clonek.tag == "C" && gameObject.tag == "G") || (sphere.GetComponent<Randomsphere>().clonek.tag == "T2" && gameObject.tag == "A2"))
         {
-            transform.position = new Vector3(10, -10, 30);
-            memoryui.GetComponent<MemoryUI>().score += 10;
+                transform.position = new Vector3(10, -10, 30);
+
+            memoryui.GetComponent<MemoryUI>().score += 100;
             IsCorrectk = true;
         }
         else
             IsCorrectk= false;
 
-        if (IsCorrecti == true || IsCorrectj == true || IsCorrectk)
+        if (IsCorrecti == true || IsCorrectj == true || IsCorrectk == true)
             IsCorrect = true;
         else
             IsCorrect = false;
 
         if (IsCorrect)
         {
+            memoryui.GetComponent<MemoryUI>().score += 100;
             GetComponent<Renderer>().material.color = Color.green;
         }
         else
         {
+            memoryui.GetComponent<MemoryUI>().Level += 1;
             GetComponent<Renderer>().material.color = Color.red;
             memoryui.GetComponent<MemoryUI>().LoseresetPos();
             transform.position = pos;
