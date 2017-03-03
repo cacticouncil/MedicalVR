@@ -15,25 +15,6 @@ public class SphereCollide : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.tag == "A")
-        {
-            Destroy(gameObject);
-        }
-        if (col.tag == "C")
-        {
-            Destroy(gameObject);
-        }
-        if (col.tag == "G")
-        {
-            Destroy(gameObject);
-        }
-        if (col.tag == "T")
-        {
-            Destroy(gameObject);
-        }
-        if (col.tag == "U")
-        {
-            Destroy(gameObject);
-        }
+        transform.position = col.transform.position + new Vector3(20, 0, 0);
     }
 }
