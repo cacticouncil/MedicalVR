@@ -18,9 +18,9 @@ public class Randomsphere : MonoBehaviour {
     private int j;
     private int k;
 
-    private GameObject clonei;
-    private GameObject clonej;
-    private GameObject clonek;
+    public GameObject clonei;
+    public GameObject clonej;
+    public GameObject clonek;
 
     private GNE Genes;
     // Use this for initialization
