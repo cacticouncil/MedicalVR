@@ -11,7 +11,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     public GameObject virusPrefab1;
     public GameObject virusPrefab2;
     public GameObject virusPrefab3;
-    public SimulateSun light;
+    public SimulateSun sun;
     public TextMesh screenUI;
     public int actionsLeft = 4;
     public int turnNumber = 0;
@@ -102,7 +102,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             virusPrefab = virusPrefab3;
         }
 
-        light.TurnUpdate();
+        sun.TurnUpdate();
 
         screenUI.text = "Actions Left: " + actionsLeft + "\nTurn Number: " + turnNumber + "\nCells Alive: " + cellNum + "\nViruses Alive: " + virNum;
         Debug.Log("Turn Updated");
