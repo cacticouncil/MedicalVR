@@ -4,8 +4,8 @@ using System.Collections;
 public class ScoreBoardScript : MonoBehaviour {
 
     public GameObject score1, score2, score3, score4, score5, currentScore, EnterName;
-    public GameObject virus;
-    public string currName;
+    public GameObject objectWithScore;
+    public string currName, minigameTag;
     int[] topScores = new int[5] { 0, 0, 0, 0, 0 };
     string[] topNames = new string[5] { "AAA", "AAA", "AAA", "AAA", "AAA" };
 
@@ -18,8 +18,16 @@ public class ScoreBoardScript : MonoBehaviour {
 	}
 	public void GenerateScore()
     {
+        switch (minigameTag)
+        {
+            case "Dodge":
+                score = (int)objectWithScore.GetComponent<MovingCamera>().score;
+                break;
+
+            default:
+                break;
+        }
         
-        score = (int)virus.GetComponent<MovingCamera>().score;
         LoadScore();
         SortScore();
           
@@ -75,16 +83,16 @@ public class ScoreBoardScript : MonoBehaviour {
     {
         for(int i = 0; i < 5; i++)
         {
-            PlayerPrefs.SetInt("Dodge_Score" + i.ToString(), topScores[i]);
-            PlayerPrefs.SetString("Dodge_Name"+i.ToString(), topNames[i]);
+            PlayerPrefs.SetInt(minigameTag+"_Score" + i.ToString(), topScores[i]);
+            PlayerPrefs.SetString(minigameTag+"_Name"+i.ToString(), topNames[i]);
         }    
     }
     void LoadScore()
     {
         for (int i = 0; i < 5; i++)
         {
-            topScores[i] = PlayerPrefs.GetInt("Dodge_Score" + i.ToString());
-            topNames[i] = PlayerPrefs.GetString("Dodge_Name" + i.ToString());
+            topScores[i] = PlayerPrefs.GetInt(minigameTag + "_Score" + i.ToString());
+            topNames[i] = PlayerPrefs.GetString(minigameTag + "_Name" + i.ToString());
         }
     }
     void DisplayScore()
