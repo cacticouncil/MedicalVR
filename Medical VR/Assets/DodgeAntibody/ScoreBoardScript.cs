@@ -23,7 +23,9 @@ public class ScoreBoardScript : MonoBehaviour {
             case "Dodge":
                 score = (int)objectWithScore.GetComponent<MovingCamera>().score;
                 break;
-
+            case "Simon":
+                score = (int)objectWithScore.GetComponent<SimonSays>().score;
+                break;
             default:
                 break;
         }
