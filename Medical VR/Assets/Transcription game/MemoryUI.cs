@@ -51,9 +51,10 @@ public class MemoryUI : MonoBehaviour {
         }
         else
         {
-            score += Time.smoothDeltaTime;
+            //score += Time.smoothDeltaTime;
             int tmp = (int)score;
             theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+            theLevels.GetComponent<TextMesh>().text = "LEVEL: " + Level.ToString();
         }
 
     }
