@@ -11,7 +11,7 @@ enum GNE
 }
 
 public class Randomsphere : MonoBehaviour {
-
+    public GameObject memoryui;
     public GameObject[]  Spheres = new GameObject[6];
     public GameObject[] Spheres2 = new GameObject[6];
     private  List<GameObject> testSpheres = new List<GameObject>();
@@ -162,6 +162,8 @@ public class Randomsphere : MonoBehaviour {
         if (correct == 3)
         {
             Reset();
+
+            memoryui.GetComponent<MemoryUI>().Level += 1;
 
             testSpheres.Clear();
             for (int x = 0; x < Spheres2.Length; x++)

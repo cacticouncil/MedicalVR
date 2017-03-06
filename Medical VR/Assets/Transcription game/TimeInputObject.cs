@@ -65,7 +65,6 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
 
         if (IsCorrect)
         {
-            memoryui.GetComponent<MemoryUI>().Level += 1;
             memoryui.GetComponent<MemoryUI>().score += 150;
         }
         else

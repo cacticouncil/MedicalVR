@@ -7,7 +7,7 @@ public class MemoryUI : MonoBehaviour {
     // Use this for initialization
     public float score = 0;
     int lives = 3;
-    public int Level = 0;
+    public int Level = 1;
     public void LoseresetPos()
     {
        
