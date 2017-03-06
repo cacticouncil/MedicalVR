@@ -31,7 +31,6 @@ public class VirusLocations : MonoBehaviour
         VirusLocationList.Add(S2);
         VirusLocationList.Add(S3);
         VirusLocationList.Add(S4);
-
     }
 }
 

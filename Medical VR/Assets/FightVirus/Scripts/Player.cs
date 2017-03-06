@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     bool DisplayRules;
     GameObject ScoreObj;
     GameObject RulesObj;
+
     void Start()
     {
         Score = 0.0f;
