@@ -152,7 +152,7 @@ public class Randomsphere : MonoBehaviour {
         {
             if (testSpheres[i].GetComponent<TimeInputObject>().IsCorrect == true)
             {
-                //testSpheres[i].GetComponent<TimeInputObject>().IsCorrect = false;
+                testSpheres[i].GetComponent<TimeInputObject>().IsCorrect = false;
                 testSpheres.Remove(testSpheres[i]);
                 correct += 1;
             }
