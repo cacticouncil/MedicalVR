@@ -43,9 +43,13 @@ public class MoveCamera : MonoBehaviour
         float disCovered = (Time.time - startTime) * speed;
         float fracJourney = disCovered / distance;
         if (fracJourney <= 1.0f)
+        {
             GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(startPosition, endPosition, fracJourney));
+        }
         else
+        {
             GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        }
     }
 
     public void SetDestination(Vector3 endpoint)

@@ -4,29 +4,29 @@ using System.Collections;
 [RequireComponent(typeof(Light))]
 public class SimulateSun : MonoBehaviour
 {
-    bool x, y, z, w;
+    public bool x, y, z;
     public float degrees;
     public float transitionTime;
 
     private float startingTime;
-    private Quaternion startingRotation, targetRotation;
+    private Vector3 startingRotation, targetRotation;
 
     // Use this for initialization
     void Start()
     {
-        startingRotation = targetRotation = transform.rotation;
+        startingRotation = targetRotation = transform.rotation.eulerAngles;
     }
 
     void Update()
     {
-        if (transform.rotation != targetRotation)
-            transform.rotation = Quaternion.Lerp(startingRotation, targetRotation, Time.time - startingTime / transitionTime);
+        if (transform.rotation.eulerAngles != targetRotation)
+            transform.eulerAngles = Vector3.Lerp(startingRotation, targetRotation, (Time.time - startingTime) / transitionTime);
     }
 
     // Update is called once per frame
     public void TurnUpdate()
     {
-        startingRotation = transform.rotation;
+        startingRotation = transform.rotation.eulerAngles;
         if (x)
         {
             targetRotation.x += degrees;
@@ -38,10 +38,6 @@ public class SimulateSun : MonoBehaviour
         if (z)
         {
             targetRotation.z += degrees;
-        }
-        if (w)
-        {
-            targetRotation.w += degrees;
         }
         startingTime = Time.time;
     }
