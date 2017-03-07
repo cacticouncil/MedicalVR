@@ -7,7 +7,7 @@ public class MemoryUI : MonoBehaviour {
     // Use this for initialization
     public float score = 0;
     int lives = 3;
-    public int Level = 0;
+    public int Level = 1;
     public void LoseresetPos()
     {
        
@@ -51,9 +51,10 @@ public class MemoryUI : MonoBehaviour {
         }
         else
         {
-            score += Time.smoothDeltaTime;
+            //score += Time.smoothDeltaTime;
             int tmp = (int)score;
             theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+            theLevels.GetComponent<TextMesh>().text = "LEVEL: " + Level.ToString();
         }
 
     }
