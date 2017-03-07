@@ -22,13 +22,13 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         //InvokeRepeating("Spawn", 2.5f, 2.5f);
-        Wave1 = true;
+        Wave1 = false;
         Wave2 = false;
         Wave3 = false;
-        Wave4 = false;
+        Wave4 = true;
         doWave = false;
 
-        CreateWave(10);
+        CreateWave(1);
     }
 
     void Update()
@@ -42,7 +42,7 @@ public class EnemyManager : MonoBehaviour
 
         if (Wave2 == true && doWave == true)
         {
-            CreateWave(2);
+            CreateWave(1);
             doWave = false;
         }
 
@@ -55,7 +55,7 @@ public class EnemyManager : MonoBehaviour
 
         if (Wave3 == true && doWave == true)
         {
-            CreateWave(3);
+            CreateWave(1);
             doWave = false;
         }
 

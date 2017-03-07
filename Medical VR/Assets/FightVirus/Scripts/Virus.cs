@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 
-public class Virus : MonoBehaviour, TimedInputHandler
+public class Virus : MonoBehaviour
 {
     GameObject VirusManager;
     GameObject Player;
@@ -12,6 +12,7 @@ public class Virus : MonoBehaviour, TimedInputHandler
 
     public float Speed;
     public int Health;
+    bool BossCanTakeDamage;
     int RandomVirusLocation;
 
     void Start()
@@ -49,27 +50,46 @@ public class Virus : MonoBehaviour, TimedInputHandler
 
     void Update()
     {
-        //Virus form up at special postion
-        transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
-
-        //Check List Count
-        for (int i = 0; i < GoTo.GetComponent<VirusLocations>().VirusLocationList.Count; i++)
+        if (transform.tag != "Boss")
         {
-            for (int j = 0; j < GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count; j++)
+            //Virus form up at special postion
+            transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
+
+            //Check List Count
+            for (int i = 0; i < GoTo.GetComponent<VirusLocations>().VirusLocationList.Count; i++)
             {
-                if (GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count == 5)
+                for (int j = 0; j < GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count; j++)
                 {
-                    CreateBigVirus(GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos);
-                    GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Clear();
+                    if (GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count == 5)
+                    {
+                        CreateBigVirus(GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos);
+                        GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Clear();
+                    }
                 }
             }
         }
 
-        if (transform.name == "Boss")
+        //For Boss 
+        if (transform.tag == "Boss")
         {
-            if (Vector3.Distance(transform.position, Player.transform.position) != 5.0f)
+            float dis1 = Vector3.Distance(transform.position, Player.transform.position);
+            if (dis1 >= 4.5f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
+                float dis2 = Vector3.Distance(transform.position, Player.transform.position);
+                //So the boss follows the player
+                //Vector3 forward;
+                //forward = Player.transform.forward;
+                //transform.position = forward * dis2;
+
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position), .5f * Time.deltaTime);
+
+                //float dis3 = Vector3.Distance(transform.position, Player.transform.position);
+                BossCanTakeDamage = false;
+            }
+            else
+            {
+                BossCanTakeDamage = true;
             }
         }
     }
@@ -83,13 +103,31 @@ public class Virus : MonoBehaviour, TimedInputHandler
     {
         if (col.tag == "Bullet")
         {
-            Health -= col.GetComponent<BulletScript>().Damage;
-
-            if (Health == 0)
+            if (transform.tag != "Boss")
             {
-                VirusManager.GetComponent<EnemyManager>().VirusList.Remove(gameObject);
-                Destroy(gameObject);
-                Player.GetComponent<Player>().Score += 100;
+                Health -= col.GetComponent<BulletScript>().Damage;
+
+                if (Health == 0)
+                {
+                    VirusManager.GetComponent<EnemyManager>().VirusList.Remove(gameObject);
+                    Destroy(gameObject);
+                    Player.GetComponent<Player>().Score += 100;
+                }
+            }
+
+            else if (transform.tag == "Boss")
+            {
+                if (BossCanTakeDamage == true)
+                {
+                    Health -= col.GetComponent<BulletScript>().Damage;
+
+                    if (Health == 0)
+                    {
+                        VirusManager.GetComponent<EnemyManager>().VirusList.Remove(gameObject);
+                        Destroy(gameObject);
+                        Player.GetComponent<Player>().Score += 100;
+                    }
+                }
             }
         }
 
@@ -133,10 +171,5 @@ public class Virus : MonoBehaviour, TimedInputHandler
         {
             GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
         }
-    }
-
-    public void HandleTimeInput()
-    {
-        throw new NotImplementedException();
     }
 }
