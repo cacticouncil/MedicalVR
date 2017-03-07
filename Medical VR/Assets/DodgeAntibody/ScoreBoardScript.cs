@@ -26,6 +26,9 @@ public class ScoreBoardScript : MonoBehaviour {
             case "Transcription":
                 score = (int)objectWithScore.GetComponent<MemoryUI>().score;
                 break;
+            case "Simon":
+                score = (int)objectWithScore.GetComponent<SimonSays>().score;
+                break;
             default:
                 break;
         }

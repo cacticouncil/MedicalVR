@@ -9,14 +9,16 @@ public class SimonSays : MonoBehaviour {
     public GameObject red;
     public GameObject blue;
     public GameObject green;
-    public GameObject sign;
+    public GameObject sign, UI, scoreBoard, theScore, theLives;
 
+    public int score = 0;
     Color cY, cR, cB, cG;
 
-    int round = 1, inputed = 0, shownSign = 0;
+    int round = 1, inputed = 0, shownSign = 0, lives = 3;
 
     float timer = 3;
 
+    Vector3 orgPos;
     bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false;
     enum theColors
     {
@@ -32,50 +34,56 @@ public class SimonSays : MonoBehaviour {
     List<theColors> inputedColors = new List<theColors>();
     void Start ()
     {
-       
+        orgPos = transform.position;
         cY = yellow.GetComponent<Renderer>().material.color;
         cR = red.GetComponent<Renderer>().material.color;
         cB = blue.GetComponent<Renderer>().material.color;
         cG = green.GetComponent<Renderer>().material.color;
         selectedColor = (theColors)5;
+        theScore.GetComponent<TextMesh>().text = "Score: " + score.ToString();
+        theLives.GetComponent<TextMesh>().text = "Lives: " + lives.ToString();
     }
 	
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        timer += Time.deltaTime;
-        WaitForTime();
-       
-        if(waitAsec == false)
+        if(lives > 0)
         {
-            if (showStuff == false && makeInput == false)
+            timer += Time.deltaTime;
+            WaitForTime();
+
+            if (waitAsec == false)
             {
-                ResetStuff();
-                GeneratePattern();
-                showStuff = true;
+                if (showStuff == false && makeInput == false)
+                {
+                    ResetStuff();
+                    GeneratePattern();
+                    showStuff = true;
+                }
+                if (makeInput)
+                {
+                    sign.GetComponent<MeshRenderer>().enabled = false;
+                    TakeInput();
+                }
+                if (showStuff)
+                {
+                    ShowPattern();
+                    timer = 0;
+                    waitAsec = true;
+                }
             }
-            if (makeInput)
+
+            if (shownSign == theList.Count && showStuff)
             {
-                sign.GetComponent<MeshRenderer>().enabled = false;
-                TakeInput();
+                makeInput = true;
+                showStuff = false;
             }
-            if (showStuff)
-            {
-                ShowPattern();
-                timer = 0;
-                waitAsec = true;
-            }
+            else
+                return;
         }
         
-        if (shownSign == theList.Count && showStuff)
-        {
-            makeInput = true;
-            showStuff = false;
-        }
-        else
-            return;
     }
-   void WaitForTime()
+    void WaitForTime()
     {
         if(waitAsec)
         {
@@ -184,7 +192,16 @@ public class SimonSays : MonoBehaviour {
             makeInput = false;
         }
     }
-
+    void ShowScore()
+    {
+        UI.SetActive(false);
+       
+        scoreBoard.SetActive(true);
+        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
+        scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
+        transform.position = new Vector3(transform.position.x, transform.position.y, 10000);
+        round = 1;
+    }
     void ResetStuff()
     {
         theList.Clear();
@@ -194,12 +211,25 @@ public class SimonSays : MonoBehaviour {
         shownSign = 0;
         TurnOffLights();
     }
+   public void ResetGame()
+    {
+        ResetStuff();
+        UI.SetActive(true);
+        scoreBoard.SetActive(false);
+        transform.position = orgPos;
+        lives = 3;
+        score = 0;
+    }
     void SignalIncorrect()
     {
         yellow.GetComponent<Renderer>().material.color = Color.black;
         red.GetComponent<Renderer>().material.color = Color.black;
         blue.GetComponent<Renderer>().material.color = Color.black;
         green.GetComponent<Renderer>().material.color = Color.black;
+        lives--;
+        theLives.GetComponent<TextMesh>().text = "Lives: " + lives.ToString();
+        if (lives < 1)
+            ShowScore();
     }
     void TurnOnLights()
     {
@@ -207,6 +237,8 @@ public class SimonSays : MonoBehaviour {
         red.GetComponent<Renderer>().material.color = Color.red;
         blue.GetComponent<Renderer>().material.color = Color.blue;
         green.GetComponent<Renderer>().material.color = Color.green;
+        score++;
+        theScore.GetComponent<TextMesh>().text = "Score: " + score.ToString();
     }
     void TurnOffLights()
     {
@@ -214,6 +246,7 @@ public class SimonSays : MonoBehaviour {
         red.GetComponent<Renderer>().material.color = cR;
         blue.GetComponent<Renderer>().material.color = cB;
         green.GetComponent<Renderer>().material.color = cG;
+       
     }
    public void selectYellow()
     {   if(makeInput)
