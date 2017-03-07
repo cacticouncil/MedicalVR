@@ -14,7 +14,7 @@ public class ScoreBoardScript : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-       
+        
 	}
 	public void GenerateScore()
     {
@@ -23,7 +23,9 @@ public class ScoreBoardScript : MonoBehaviour {
             case "Dodge":
                 score = (int)objectWithScore.GetComponent<MovingCamera>().score;
                 break;
-
+            case "Transcription":
+                score = (int)objectWithScore.GetComponent<MemoryUI>().score;
+                break;
             default:
                 break;
         }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MemoryUI : MonoBehaviour {
 
-    public GameObject theScore, theLives, theLevels, scoreBoard, UI;
+    public GameObject theScore, theLives, theLevels, scoreBoard, UI, Spheres;
     // Use this for initialization
     public float score = 0;
     int lives = 3;
@@ -15,14 +15,15 @@ public class MemoryUI : MonoBehaviour {
         theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
 
     }
-    public void WinresetPos()
-    {
-    }
+
     void ShowScore()
     {
+        lives = 3;
         UI.SetActive(false);
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
+        scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
+
     }
     public void RestartGame()
     {
@@ -30,8 +31,9 @@ public class MemoryUI : MonoBehaviour {
         scoreBoard.SetActive(false);
         lives = 3;
         score = 0;
+        Level = 0;
         theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
-        //theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+        Spheres.GetComponent<Randomsphere>().Reset();
     }
     void Start()
     {
