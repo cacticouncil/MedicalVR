@@ -56,9 +56,9 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         originPos = transform.position;
         
         orgSpeed = speed;
-        RenderSettings.fog = true;
-        RenderSettings.fogColor = fogColor;
-        RenderSettings.fogDensity = 0.001f;
+        //RenderSettings.fog = true;
+        //RenderSettings.fogColor = fogColor;
+        //RenderSettings.fogDensity = 0.001f;
     }
 	
 	// Update is called once per frame
