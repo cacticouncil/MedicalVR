@@ -15,21 +15,21 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Text))]
+[RequireComponent(typeof(TextMesh))]
 public class GvrFPS : MonoBehaviour
 {
     private const string DISPLAY_TEXT_FORMAT = "{0} msf\n({1} FPS)";
     private const string MSF_FORMAT = "#.#";
     private const float MS_PER_SEC = 1000f;
 
-    private Text textField;
+    private TextMesh textField;
     private float fps = 60;
 
     public Camera cam;
 
     void Awake()
     {
-        textField = GetComponent<Text>();
+        textField = GetComponent<TextMesh>();
     }
 
     void Start()

@@ -5,26 +5,26 @@ enum Letters
 {C, G, U, A, T, A2
 };
 
-enum GNE
+public enum GNE
 {
     GAC, ACT, GAC2, TCT, CGT, TAC, TCT2, GAC3, CAT
 }
 
 public class Randomsphere : MonoBehaviour {
     public GameObject memoryui;
-    public GameObject[]  Spheres = new GameObject[6];
-    public GameObject[] Spheres2 = new GameObject[6];
-    private  List<GameObject> testSpheres = new List<GameObject>();
-
+    public GameObject[] Spheres;
+    public GameObject[] Spheres2;
+    private List<GameObject> testSpheres;
+    public List<string> ans;
     private int i;
     private int j;
     private int k;
 
     int correct;
 
-    public GameObject clonei;
-    public GameObject clonej;
-    public GameObject clonek;
+    private GameObject clonei;
+    private GameObject clonej;
+    private GameObject clonek;
 
     private Color C1color;
     private Color G1color;
@@ -40,10 +40,13 @@ public class Randomsphere : MonoBehaviour {
     private Vector3 T1position;
     private Vector3 A2position;
 
-    private GNE Genes;
+    public GNE Genes;
 
     // Use this for initialization
     void Start () {
+
+        testSpheres = new List<GameObject>();
+        ans = new List<string>();
 
         correct = 0;
 
@@ -164,13 +167,6 @@ public class Randomsphere : MonoBehaviour {
             Reset();
 
             memoryui.GetComponent<MemoryUI>().Level += 1;
-
-            testSpheres.Clear();
-            for (int x = 0; x < Spheres2.Length; x++)
-            {
-                testSpheres.Add(Spheres2[x]);
-            }
-            correct = 0;
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -179,12 +175,13 @@ public class Randomsphere : MonoBehaviour {
         }
     }
 
-    private void Reset()
+    public void Reset()
     {
         Destroy(clonei);
         Destroy(clonej);
         Destroy(clonek);
 
+        ans.Clear();
         GNE temp = Genes;
 
         Genes = (GNE)Random.Range(0, 9);
@@ -283,5 +280,45 @@ public class Randomsphere : MonoBehaviour {
         Spheres2[(int)Letters.T].GetComponent<Renderer>().sharedMaterial.color = T1color;
         Spheres2[(int)Letters.A2].GetComponent<Renderer>().sharedMaterial.color = A2color;
 
+
+
+        testSpheres.Clear();
+        for (int x = 0; x < Spheres2.Length; x++)
+        {
+            testSpheres.Add(Spheres2[x]);
+        }
+        correct = 0;
+    }
+
+
+    public GameObject Getclonei()
+    {
+        if (clonei)
+            return clonei;
+        else
+        {
+            Debug.Log("Unable to return clonei");
+            return null;
+        }
+    }
+    public GameObject Getclonej()
+    {
+        if (clonej)
+            return clonej;
+        else
+        {
+            Debug.Log("Unable to return clonej");
+            return null;
+        }
+    }
+    public GameObject Getclonek()
+    {
+        if (clonek)
+            return clonek;
+        else
+        {
+            Debug.Log("Unable to return clonek");
+            return null;
+        }
     }
 }
