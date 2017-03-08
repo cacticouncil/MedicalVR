@@ -10,7 +10,7 @@ public class StrategyVirusExplosionScript : StrategyVirusScript
         if (target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.proteins.None || target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.proteins.CH25H || target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.proteins.Mx1)
         {
             spawned = true;
-            transform.parent.GetComponent<StrategyCellManagerScript>().SpawnVirusAllAdjacent(target.GetComponent<StrategyCellScript>().key);
+            transform.parent.GetComponent<StrategyCellManagerScript>().SpawnVirusAllAdjacent(target.GetComponent<StrategyCellScript>().key, transform.position);
         }
         if (spawned ||
             target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.proteins.RNase_L ||
