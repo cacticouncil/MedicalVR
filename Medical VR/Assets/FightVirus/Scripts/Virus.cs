@@ -3,103 +3,173 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-enum VirusBehavior { LeaveCell = 0, AttackProtein = 1, LeaveCellFast = 2 }
 
-public class Virus : MonoBehaviour, TimedInputHandler
+public class Virus : MonoBehaviour
 {
-    VirusBehavior VB;
-    Vector3 RandomPos;
-
     GameObject VirusManager;
-    GameObject CellManager;
-    GameObject Cell;
     GameObject Player;
+    GameObject GoTo;
 
-    public float speed;
-    int RandomCell;
+    public float Speed;
+    public int Health;
+    bool BossCanTakeDamage;
+    int RandomVirusLocation;
 
     void Start()
     {
-        RandomPos = UnityEngine.Random.onUnitSphere;
-        RandomPos *= 50.0f;
+        VirusManager = gameObject.transform.parent.gameObject;
+        Player = VirusManager.GetComponent<EnemyManager>().Player;
+        GoTo = VirusManager.GetComponent<EnemyManager>().VirusLocations;
 
-        int RandomBehavior = UnityEngine.Random.Range(0, 3);
-        VB = (VirusBehavior)RandomBehavior;
-        //VB = (VirusBehavior)1;
+        RandomVirusLocation = UnityEngine.Random.Range(0, 0);
 
-        VirusManager = GameObject.Find("VirusSpawn");
-        CellManager = GameObject.Find("CellSpawn");
-        Player = GameObject.Find("Main Camera");
-
-        if (VB == VirusBehavior.AttackProtein)
+        if (VirusManager.GetComponent<EnemyManager>().Wave1 == true)
         {
-            if (CellManager.GetComponent<CellManager>().CellList.Count != 0)
-            {
-                RandomCell = UnityEngine.Random.Range(0, CellManager.GetComponent<CellManager>().CellList.Count);
-                Cell = CellManager.GetComponent<CellManager>().CellList[RandomCell];
-                CellManager.GetComponent<CellManager>().CellList.Remove(Cell);
-            }
-            else
-            {
-                VB = VirusBehavior.LeaveCell;
-            }
+            Speed = 0.005f;
+            Health = 10;
+        }
+
+        if (VirusManager.GetComponent<EnemyManager>().Wave2 == true)
+        {
+            Speed = 0.009f;
+            Health = 30;
+        }
+
+        if (VirusManager.GetComponent<EnemyManager>().Wave3 == true)
+        {
+            Speed = 0.01f;
+            Health = 50;
+        }
+
+        if (VirusManager.GetComponent<EnemyManager>().Wave4 == true)
+        {
+            Speed = 0.05f;
+            Health = 100;
         }
     }
 
     void Update()
     {
-        switch (VB)
+        if (transform.tag != "Boss")
         {
-            case VirusBehavior.LeaveCell:
-                transform.position = Vector3.MoveTowards(transform.position, RandomPos, speed);
-                break;
+            //Virus form up at special postion
+            transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
 
-            case VirusBehavior.AttackProtein:
-                transform.position = Vector3.MoveTowards(transform.position, Cell.transform.position, speed);
-                break;
+            //Check List Count
+            for (int i = 0; i < GoTo.GetComponent<VirusLocations>().VirusLocationList.Count; i++)
+            {
+                for (int j = 0; j < GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count; j++)
+                {
+                    if (GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count == 5)
+                    {
+                        CreateBigVirus(GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos);
+                        GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Clear();
+                    }
+                }
+            }
+        }
 
-            case VirusBehavior.LeaveCellFast:
-                transform.position = Vector3.MoveTowards(transform.position, RandomPos, speed + .02f);
-                break;
+        //For Boss 
+        if (transform.tag == "Boss")
+        {
+            float dis1 = Vector3.Distance(transform.position, Player.transform.position);
+            if (dis1 >= 4.5f)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
+                float dis2 = Vector3.Distance(transform.position, Player.transform.position);
+                //So the boss follows the player
+                //Vector3 forward;
+                //forward = Player.transform.forward;
+                //transform.position = forward * dis2;
 
-            default:
-                transform.position = Vector3.MoveTowards(transform.position, RandomPos, speed);
-                break;
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position), .5f * Time.deltaTime);
+
+                //float dis3 = Vector3.Distance(transform.position, Player.transform.position);
+                BossCanTakeDamage = false;
+            }
+            else
+            {
+                BossCanTakeDamage = true;
+            }
         }
     }
 
-    void Duplicate()
+    void CreateBigVirus(GameObject pos)
     {
-        VirusManager.GetComponent<EnemyManager>().VirusList.Add(Instantiate(VirusManager.GetComponent<EnemyManager>().VirusCube, transform.position, Quaternion.identity) as GameObject);
+        VirusManager.GetComponent<EnemyManager>().VirusList.Add(Instantiate(VirusManager.GetComponent<EnemyManager>().BigVirusCube, pos.transform.position, Quaternion.identity) as GameObject);
     }
 
     void OnTriggerEnter(Collider col)
     {
         if (col.tag == "Bullet")
         {
-            Destroy(gameObject);
-            Player.GetComponent<Player>().Score += 100;
+            if (transform.tag != "Boss")
+            {
+                Health -= col.GetComponent<BulletScript>().Damage;
+
+                if (Health == 0)
+                {
+                    VirusManager.GetComponent<EnemyManager>().VirusList.Remove(gameObject);
+                    Destroy(gameObject);
+                    Player.GetComponent<Player>().Score += 100;
+                }
+            }
+
+            else if (transform.tag == "Boss")
+            {
+                if (BossCanTakeDamage == true)
+                {
+                    Health -= col.GetComponent<BulletScript>().Damage;
+
+                    if (Health == 0)
+                    {
+                        VirusManager.GetComponent<EnemyManager>().VirusList.Remove(gameObject);
+                        Destroy(gameObject);
+                        Player.GetComponent<Player>().Score += 100;
+                    }
+                }
+            }
         }
 
-        else if (col.tag == "Cell")
+        else if (col.name == "1VirusGoTo")
         {
-            Duplicate();
-            Destroy(Cell);
-            VB = VirusBehavior.LeaveCell;
+            GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Add(transform.gameObject);
+        }
+
+        else if (col.name == "2VirusGoTo")
+        {
+            GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Add(transform.gameObject);
+        }
+        else if (col.name == "3VirusGoTo")
+        {
+            GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Add(transform.gameObject);
+        }
+        else if (col.name == "4VirusGoTo")
+        {
+            GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Add(transform.gameObject);
         }
     }
 
     void OnDestroy()
     {
-        //If cell is alive but virus dies then add it back to the list
-        if (Cell && !Cell.GetComponent<Cell>().isDead)
+        if (GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Contains(transform.gameObject))
         {
-            CellManager.GetComponent<CellManager>().CellList.Add(Cell);
+            GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Remove(transform.gameObject);
         }
-    }
 
-    public void HandleTimeInput()
-    {
-        throw new NotImplementedException();
+        else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Contains(transform.gameObject))
+        {
+            GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Remove(transform.gameObject);
+        }
+
+        else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Contains(transform.gameObject))
+        {
+            GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Remove(transform.gameObject);
+        }
+
+        else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Contains(transform.gameObject))
+        {
+            GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
+        }
     }
 }

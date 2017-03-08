@@ -13,7 +13,7 @@ public class CellManager : MonoBehaviour
         CellCount = 15;
         for (int i = 0; i < CellCount; i++)
         {
-            SpawnRandomCell = Random.onUnitSphere * 8.0f;
+            SpawnRandomCell = Random.onUnitSphere * 5.0f;
             if (SpawnRandomCell.y < 0)
             {
                 SpawnRandomCell.y = Random.Range(0, 7);
@@ -25,14 +25,14 @@ public class CellManager : MonoBehaviour
     void Update()
     {
         //Remove Cell if it's Dead
-        for (int i = 0; i < CellList.Count; i++)
-        {
-            if (CellList[i] == null || CellList[i].GetComponent<Cell>().isDead == true)
-            {
-                CellCount -= 1;
-                CellList.Remove(CellList[i]);
-                i--;
-            }
-        }
+        //for (int i = 0; i < CellList.Count; i++)
+        //{
+        //    if (CellList[i] == null || CellList[i].GetComponent<Cell>().isDead == true)
+        //    {
+        //        CellCount -= 1;
+        //        CellList.Remove(CellList[i]);
+        //        i--;
+        //    }
+        //}
     }
 }
