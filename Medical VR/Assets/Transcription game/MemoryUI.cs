@@ -8,7 +8,7 @@ public class MemoryUI : MonoBehaviour {
     public float score = 0;
     int lives = 3;
     public int Level = 1;
-    public float startTime;
+    public float startTime = 60.0f;
     public bool finnished = false;
     public float timeRemaining = 60.0f;
     public void LoseresetPos()
@@ -35,9 +35,10 @@ public class MemoryUI : MonoBehaviour {
         lives = 3;
         score = 0;
         Level = 0;
-        timeRemaining = 60.0f;
         theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
         Spheres.GetComponent<Randomsphere>().Reset();
+        startTime = 60.0f;
+        timeRemaining = 60.0f;
     }
 
     // Update is called once per frame

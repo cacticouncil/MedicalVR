@@ -14,7 +14,7 @@ public class SimonSays : MonoBehaviour {
     public int score = 0;
     Color cY, cR, cB, cG;
 
-    int round = 1, inputed = 0, shownSign = 0, lives = 3;
+    int round = 1, inputed = 0, shownSign = 0;
 
     float timer = 3;
 
@@ -29,7 +29,8 @@ public class SimonSays : MonoBehaviour {
     }
 
    public theColors selectedColor;
-
+    public bool makeNuclei = false;
+    public int lives = 3;
     List<theColors> theList = new List<theColors>();
     List<theColors> inputedColors = new List<theColors>();
     void Start ()
@@ -154,6 +155,7 @@ public class SimonSays : MonoBehaviour {
             inputedColors.Add(selectedColor);
             buttonPressed = false;
             inputed++;
+            makeNuclei = true;
             CheckInput();
         }          
     }
@@ -239,6 +241,7 @@ public class SimonSays : MonoBehaviour {
         green.GetComponent<Renderer>().material.color = Color.green;
         score++;
         theScore.GetComponent<TextMesh>().text = "Score: " + score.ToString();
+        
     }
     void TurnOffLights()
     {
