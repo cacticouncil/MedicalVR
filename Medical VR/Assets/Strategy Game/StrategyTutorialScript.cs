@@ -15,8 +15,8 @@ public class StrategyTutorialScript : MonoBehaviour
     public void Back()
     {
         cellManager.SetActive(true);
-        gameObject.SetActive(false);
         screenUI.SetActive(true);
+        Destroy(gameObject);
     }
 
     public void Next()

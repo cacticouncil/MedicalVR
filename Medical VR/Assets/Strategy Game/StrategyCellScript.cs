@@ -48,7 +48,7 @@ public class StrategyCellScript : MonoBehaviour
 
     void Start()
     {
-        turnSpawned = transform.parent.GetComponent<StrategyCellManagerScript>().turnNumber;
+        turnSpawned = transform.GetComponentInParent<StrategyCellManagerScript>().turnNumber;
     }
 
     public void IncreaseReproduction()
