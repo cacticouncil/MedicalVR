@@ -20,7 +20,7 @@ public class SimonSays : MonoBehaviour {
 
     Vector3 orgPos;
     bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false;
-    enum theColors
+    public enum theColors
     {
         YELLOW,
         RED,
@@ -28,7 +28,7 @@ public class SimonSays : MonoBehaviour {
         GREEN
     }
 
-    theColors selectedColor;
+   public theColors selectedColor;
 
     List<theColors> theList = new List<theColors>();
     List<theColors> inputedColors = new List<theColors>();

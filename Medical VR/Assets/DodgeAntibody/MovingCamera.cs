@@ -11,7 +11,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     // Use this for initialization
     public float score = 0;
     public Color fogColor;
-    Vector3 originPos, redOrPos;
+    Vector3 originPos;
     int lives = 3;
     float orgSpeed;
     bool stopMoving = false;
@@ -54,7 +54,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     {
         theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
         originPos = transform.position;
-        redOrPos = redCell.transform.position;
+        
         orgSpeed = speed;
         RenderSettings.fog = true;
         RenderSettings.fogColor = fogColor;

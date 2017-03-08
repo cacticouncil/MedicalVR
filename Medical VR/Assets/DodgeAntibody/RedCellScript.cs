@@ -6,10 +6,10 @@ public class RedCellScript : MonoBehaviour {
     // Use this for initialization
     public float speed;
     public GameObject virus, spawner;
-    Vector3 oringPos;
+
 	void Start ()
     {
-        oringPos = transform.position;
+        
 	}
 	
 	// Update is called once per frame
