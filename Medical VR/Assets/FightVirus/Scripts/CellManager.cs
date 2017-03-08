@@ -10,7 +10,7 @@ public class CellManager : MonoBehaviour
 
     void Start()
     {
-        CellCount = 15;
+        CellCount = 17;
         for (int i = 0; i < CellCount; i++)
         {
             SpawnRandomCell = Random.onUnitSphere * 5.0f;
