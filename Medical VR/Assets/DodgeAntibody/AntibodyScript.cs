@@ -21,4 +21,11 @@ public class AntibodyScript : MonoBehaviour {
             other.GetComponent<MovingCamera>().LoseresetPos();
         }
     }
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "virus")
+        {
+            collision.gameObject.GetComponent<MovingCamera>().LoseresetPos();
+        }
+    }
 }
