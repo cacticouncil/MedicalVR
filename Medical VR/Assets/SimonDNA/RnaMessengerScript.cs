@@ -5,28 +5,53 @@ using System.Collections.Generic;
 public class RnaMessengerScript : MonoBehaviour {
 
     public GameObject Refpolynuclei, simon;
-    List<GameObject> chain = new List<GameObject>();
+    Stack<GameObject> chain = new Stack<GameObject>();
+    Stack<GameObject> wrongChain = new Stack<GameObject>();
     List<Vector3> prevPos = new List<Vector3>();
-    int tmpScore = 0;
+    int wrongs = 0, tmpScore, tmpLives;
     Vector3 target;
+    bool changeMove = false;
     // Use this for initialization
     void Start ()
     {
-       tmpScore = simon.GetComponent<SimonSays>().score;
+        tmpScore = simon.GetComponent<SimonSays>().score;
+        tmpLives = simon.GetComponent<SimonSays>().lives;
+        changeMove = false;
     }
 	// Update is called once per frame
 	void Update ()
     {
-	    if(tmpScore!= simon.GetComponent<SimonSays>().score)
-        {
-           tmpScore = simon.GetComponent<SimonSays>().score;
-           AddNuclei();
-        }
         BreakAnimation();
+        if (tmpLives != simon.GetComponent<SimonSays>().lives)
+        {
+            tmpLives = simon.GetComponent<SimonSays>().lives;
+            if (wrongs > 0)
+            {
+                RemoveNuclei();
+               
+            }
+            simon.GetComponent<SimonSays>().makeNuclei = false;
+            wrongs = 0;
+        }
+       else if (simon.GetComponent<SimonSays>().makeNuclei == true)
+        {
+            simon.GetComponent<SimonSays>().makeNuclei = false;
+            AddNuclei();
+            
+        }
+        
         MoveNuclei();
+        
+       
+        if (tmpScore != simon.GetComponent<SimonSays>().score)
+        {
+            tmpScore = simon.GetComponent<SimonSays>().score;
+            wrongs = 0;
+        }
     }
     void AddNuclei()
     {
+        wrongs++;
         GameObject nuclei = Instantiate(Refpolynuclei, Refpolynuclei.transform.position, Refpolynuclei.transform.rotation) as GameObject;
         switch (simon.GetComponent<SimonSays>().selectedColor)
         {
@@ -45,35 +70,58 @@ public class RnaMessengerScript : MonoBehaviour {
             default:
                 break;
         }
-        chain.Add(nuclei);
-        prevPos.Clear();
-        target = new Vector3(chain[0].transform.position.x - 1, chain[0].transform.position.y, chain[0].transform.position.z);
-        for (int i = 0; i < chain.Count; i++)
+        chain.Push(nuclei);
+       
+        target = new Vector3((float)(4.2 + prevPos.Count*-1), -1.49f, 3.733f);
+        if (prevPos.Count < chain.Count)
+            prevPos.Add(target);
+    }
+    void RemoveNuclei()
+    {
+        for (int i = 0; i < wrongs; i++)
         {
-            prevPos.Add(chain[i].transform.position);
+            wrongChain.Push(chain.Pop());   
+        }
+
+        foreach (GameObject i in wrongChain)
+        {
+           i.GetComponent<Animator>().enabled = true;
+           i.GetComponent<Animator>().SetBool("DestroyNucle", true);
         }
     }
     void MoveNuclei()
     {
         if (chain.Count > 0 && prevPos.Count > 0)
         {
-            for (int i = 0; i < chain.Count; i++)
+            int idx = 0;
+            foreach (GameObject i in chain)
             {
-                if(i == 0)
-                  chain[i].transform.position = Vector3.MoveTowards(chain[i].transform.position, target, Time.deltaTime);
-                else
-                {
-                    chain[i].transform.position = Vector3.MoveTowards(chain[i].transform.position, prevPos[i-1], Time.deltaTime);
-                }
+                i.transform.position = Vector3.MoveTowards(i.transform.position, prevPos[idx], Time.deltaTime);
+                idx++;
             }
+            
+               
         }
     }
+    
     void BreakAnimation()
     {
-        if(chain.Count > 1)
+        foreach (GameObject i in chain)
         {
-            Destroy(chain[chain.Count - 2].GetComponent<Animator>());
+            if (!i.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Polynuclei"))
+            {
+                i.GetComponent<Animator>().enabled= false;
+            }
+           
         }
-        
+        foreach (GameObject i in wrongChain)
+        {
+            if (!i.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("DestroyNuclei"))
+            {
+                Destroy(i);
+            }
+
+        }
+        wrongChain.Clear();
     }
 }

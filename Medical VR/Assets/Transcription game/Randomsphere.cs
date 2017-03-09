@@ -295,8 +295,8 @@ public class Randomsphere : MonoBehaviour {
         correct = 0;
 
         memoryui.GetComponent<MemoryUI>().finnished = false;
-        memoryui.GetComponent<MemoryUI>().startTime = Time.time;
-
+        memoryui.GetComponent<MemoryUI>().startTime -= 10;
+        memoryui.GetComponent<MemoryUI>().timeRemaining = memoryui.GetComponent<MemoryUI>().startTime;
     }
 
 
