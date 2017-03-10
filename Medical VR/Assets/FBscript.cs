@@ -16,7 +16,7 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
 
     void Awake()
     {
-        FB.Init(SetInit, OnHideUnity);
+        FacebookManager.Instance.InitFB();
     }
     void SetInit()
     {
@@ -49,7 +49,11 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
         else
         {
             if (FB.IsLoggedIn)
+            {
+                FacebookManager.Instance.IsLoggedIn = true;
+                FacebookManager.Instance.GetProfile();
                 Debug.Log("FB is Logged in");
+            }
             else
                 Debug.Log("FB is Not Logged in");
 
@@ -64,9 +68,25 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
             DialogLoggedIn.SetActive(true);
             DialogLoggedOut.SetActive(false);
 
-            FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
-            FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
+            if(FacebookManager.Instance.ProfileName != null)
+            {
+                Text UserName = DialogUsername.GetComponent<Text>();
+                UserName.text = "Hi, " + FacebookManager.Instance.ProfileName;
+            }
+            else
+            {
+                StartCoroutine("WaitForProfileName");
+            }
 
+            if (FacebookManager.Instance.ProfilePic != null)
+            {
+                Image ProfilePic = DialogProfilePic.GetComponent<Image>();
+                ProfilePic.sprite = FacebookManager.Instance.ProfilePic;
+            }
+            else
+            {
+                StartCoroutine("WaitForProfilePic");
+            }
         }
         else
         {
@@ -75,28 +95,25 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
         }
     }
 
-    void DisplayUsername(IResult result)
+    IEnumerator WaitForProfileName()
     {
-       Text Username = DialogUsername.GetComponent<Text>();
-
-        if(result.Error == null)
+        while(FacebookManager.Instance.ProfileName == null)
         {
-            Username.text = "Hi there, " + result.ResultDictionary["first_name"];
+          yield return null;
         }
-        else
-            Debug.Log(result.Error);
+
+        DealWithFBMenus(FacebookManager.Instance.IsLoggedIn);
+
     }
 
-    void DisplayProfilePic(IGraphResult result)
+    IEnumerator WaitForProfilePic()
     {
-        if (result.Error == null)
+        while (FacebookManager.Instance.ProfilePic == null)
         {
-            Image ProfilePic = DialogProfilePic.GetComponent<Image>();
-            ProfilePic.sprite = Sprite.Create(result.Texture, new Rect(0, 0, 128, 128), new Vector2());
+            yield return null;
         }
-        else
-        {
-            Debug.Log(result.Error);
-        }
+
+        DealWithFBMenus(FacebookManager.Instance.IsLoggedIn);
+
     }
 }
