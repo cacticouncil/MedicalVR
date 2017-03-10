@@ -10,13 +10,13 @@ public class RnaMessengerScript : MonoBehaviour {
     List<Vector3> prevPos = new List<Vector3>();
     int wrongs = 0, tmpScore, tmpLives;
     Vector3 target;
-    bool changeMove = false;
+
     // Use this for initialization
     void Start ()
     {
         tmpScore = simon.GetComponent<SimonSays>().score;
         tmpLives = simon.GetComponent<SimonSays>().lives;
-        changeMove = false;
+       
     }
 	// Update is called once per frame
 	void Update ()
@@ -123,5 +123,22 @@ public class RnaMessengerScript : MonoBehaviour {
 
         }
         wrongChain.Clear();
+    }
+    public void ResetRNA()
+    {
+        foreach (GameObject i in chain)
+        {
+            Destroy(i);
+        }
+        chain.Clear();
+        foreach(GameObject i in wrongChain)
+        {
+            Destroy(i);
+        }
+        wrongChain.Clear();
+        prevPos.Clear();
+        tmpScore = simon.GetComponent<SimonSays>().score;
+        tmpLives = simon.GetComponent<SimonSays>().lives;
+        
     }
 }
