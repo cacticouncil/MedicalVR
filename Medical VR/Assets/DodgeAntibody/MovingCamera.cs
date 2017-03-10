@@ -11,6 +11,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     // Use this for initialization
     public float score = 0;
     public Color fogColor;
+    public bool arcadeMode;
     Vector3 originPos;
     int lives = 3;
     float orgSpeed;
@@ -18,8 +19,11 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     
    public void LoseresetPos()
     {
-        lives--;
-        theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+        if(arcadeMode == true)
+        {
+            lives--;
+            theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+        }
         transform.position = originPos;
         MenuButton.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 100);
 
@@ -56,9 +60,10 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         originPos = transform.position;
         
         orgSpeed = speed;
-        //RenderSettings.fog = true;
-        //RenderSettings.fogColor = fogColor;
-        //RenderSettings.fogDensity = 0.001f;
+        if(arcadeMode == false)
+        {
+            UI.SetActive(false);
+        }
     }
 	
 	// Update is called once per frame
@@ -76,9 +81,13 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         else if(stopMoving == false)
         {
             transform.position += transform.forward * speed;
-            score += Time.smoothDeltaTime;
-            int tmp = (int)score;
-            theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+            if(arcadeMode == true)
+            {
+                score += Time.smoothDeltaTime;
+                int tmp = (int)score;
+                theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+            }
+           
         }
        
     }
