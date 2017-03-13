@@ -3,14 +3,19 @@ using System.Collections;
 
 public class PedestalScript : MonoBehaviour {
 
-    public GameObject theCamera, station, camPos;
+    public GameObject theCamera, station, camPos, selectedTrophy, descButton;
     public int speed;
-    bool inMove = false;
+    public bool inUse;
+    bool inMove = false, isSoundPlaying;
     Vector3 target;
+    Color orgButtonColor;
 	// Use this for initialization
 	void Start ()
     {
-	
+        orgButtonColor = descButton.GetComponent<Renderer>().material.color;
+        isSoundPlaying = false;
+        inUse = false;
+        descButton.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -22,7 +27,28 @@ public class PedestalScript : MonoBehaviour {
              if(theCamera.transform.position == target)
              {
                 inMove = false;
+                inUse = true;
              }
+        }
+        if (theCamera.transform.position != target)
+        {
+            isSoundPlaying = false;
+            descButton.GetComponent<Renderer>().material.color = orgButtonColor;
+            if(selectedTrophy != null)
+            {
+                selectedTrophy.GetComponent<AudioSource>().Stop();
+                selectedTrophy.GetComponent<TrophyScript>().BringToPedestal();
+            }
+            inUse = false;
+          
+        }
+        if(isSoundPlaying && inUse)
+        {
+            if(selectedTrophy.GetComponent<AudioSource>().isPlaying == false)
+            {
+                isSoundPlaying = false;
+                descButton.GetComponent<Renderer>().material.color = orgButtonColor;
+            }
         }
     }
 
@@ -40,7 +66,15 @@ public class PedestalScript : MonoBehaviour {
             default:
                 break;
         }
-       
+    }
+    public void DoButtonAction()
+    {
+        if(isSoundPlaying == false)
+        {
+            selectedTrophy.GetComponent<TrophyScript>().PlayDescription();
+            descButton.GetComponent<Renderer>().material.color = Color.green;
+            isSoundPlaying = true;
+        }
 
     }
 }
