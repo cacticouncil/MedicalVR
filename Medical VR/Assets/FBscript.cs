@@ -17,6 +17,7 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
     void Awake()
     {
         FacebookManager.Instance.InitFB();
+        DealWithFBMenus(FB.IsLoggedIn);
     }
     void SetInit()
     {
@@ -113,7 +114,22 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
             yield return null;
         }
 
-        DealWithFBMenus(FacebookManager.Instance.IsLoggedIn);
+        DealWithFBMenus(FB.IsLoggedIn);
 
+    }
+
+    public void Share()
+    {
+        FacebookManager.Instance.Share();
+    }
+
+    public void Invite()
+    {
+        FacebookManager.Instance.Invite();
+    }
+
+    public void ShareWithUsers()
+    {
+        FacebookManager.Instance.ShareWithUsers();
     }
 }
