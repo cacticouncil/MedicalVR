@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class RedCellScript : MonoBehaviour {
 
@@ -20,9 +21,17 @@ public class RedCellScript : MonoBehaviour {
     {
         if (other.tag == "virus")
         {
-            virus.GetComponent<MovingCamera>().WinresetPos();
-            virus.GetComponent<MovingCamera>().speed++;
-            spawner.GetComponent<AnitbodySpawnerScript>().GenerateObstacles();
+            if(virus.GetComponent<MovingCamera>().arcadeMode == true)
+            {
+                virus.GetComponent<MovingCamera>().WinresetPos();
+                virus.GetComponent<MovingCamera>().speed++;
+                spawner.GetComponent<AnitbodySpawnerScript>().GenerateObstacles();
+            }
+            else
+            {
+                SceneManager.LoadScene("Credits"); 
+            }
+           
         }
     }
 }

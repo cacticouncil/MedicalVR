@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class SimonSays : MonoBehaviour {
 
@@ -9,17 +10,17 @@ public class SimonSays : MonoBehaviour {
     public GameObject red;
     public GameObject blue;
     public GameObject green;
-    public GameObject sign, UI, scoreBoard, theScore, theLives;
+    public GameObject sign, UI, scoreBoard, theScore, theLives, polyLeft, GO;
 
     public int score = 0;
     Color cY, cR, cB, cG;
 
-    int round = 1, inputed = 0, shownSign = 0;
+    int round = 1, inputed = 0, shownSign = 0, scoreCombo = 1, polys = 0, polysDone;
 
     float timer = 3;
 
     Vector3 orgPos;
-    bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false;
+    bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false, arcadeMode = true;
     public enum theColors
     {
         YELLOW,
@@ -28,7 +29,7 @@ public class SimonSays : MonoBehaviour {
         GREEN
     }
 
-   public theColors selectedColor;
+    public theColors selectedColor;
     public bool makeNuclei = false;
     public int lives = 3;
     List<theColors> theList = new List<theColors>();
@@ -43,12 +44,20 @@ public class SimonSays : MonoBehaviour {
         selectedColor = (theColors)5;
         theScore.GetComponent<TextMesh>().text = "Score: " + score.ToString();
         theLives.GetComponent<TextMesh>().text = "Lives: " + lives.ToString();
+        polys = 36;
+        polysDone = 0;
+        if(arcadeMode == false)
+        {
+            polyLeft.SetActive(true);
+            polyLeft.GetComponent<TextMesh>().text = "Nucleids Done: " + polysDone.ToString();
+            theScore.GetComponent<TextMesh>().text = "Goal: " + polys.ToString();
+        }
     }
 	
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        if(lives > 0)
+        if (lives > 0)
         {
             timer += Time.deltaTime;
             WaitForTime();
@@ -78,10 +87,15 @@ public class SimonSays : MonoBehaviour {
             {
                 makeInput = true;
                 showStuff = false;
+                GO.SetActive(true);
             }
             else
                 return;
         }
+
+    }
+    void ArcadeMode()
+    {
         
     }
     void WaitForTime()
@@ -102,7 +116,7 @@ public class SimonSays : MonoBehaviour {
         for (int i = 0; i < round; i++)
         {
             theColors tmpColor = new theColors();
-            tmpColor = (theColors)Random.Range(0, 3);
+            tmpColor = (theColors)Random.Range(0, 4);
             theList.Add(tmpColor);
         }
     }
@@ -133,7 +147,7 @@ public class SimonSays : MonoBehaviour {
     {
         if (buttonPressed)
         {
-           
+            GO.SetActive(false);
             switch (selectedColor)
             {
                 case theColors.YELLOW:
@@ -229,9 +243,20 @@ public class SimonSays : MonoBehaviour {
         blue.GetComponent<Renderer>().material.color = Color.black;
         green.GetComponent<Renderer>().material.color = Color.black;
         lives--;
+        scoreCombo = 1;
         theLives.GetComponent<TextMesh>().text = "Lives: " + lives.ToString();
         if (lives < 1)
-            ShowScore();
+        {
+            if (arcadeMode == true)
+            {
+                ShowScore();
+            }
+            else
+            {
+                SceneManager.LoadScene("SimonDNA");
+            }
+            
+        }
     }
     void TurnOnLights()
     {
@@ -239,9 +264,22 @@ public class SimonSays : MonoBehaviour {
         red.GetComponent<Renderer>().material.color = Color.red;
         blue.GetComponent<Renderer>().material.color = Color.blue;
         green.GetComponent<Renderer>().material.color = Color.green;
-        score++;
-        theScore.GetComponent<TextMesh>().text = "Score: " + score.ToString();
-        
+        score += round * scoreCombo;
+        if (arcadeMode == true)
+        {
+            score += round * scoreCombo;
+            scoreCombo++;
+            theScore.GetComponent<TextMesh>().text = "Score: " + score.ToString();
+        }
+        else
+        {
+            polysDone = polysDone + round;
+            polyLeft.GetComponent<TextMesh>().text = "Nucleids Done: " + polysDone.ToString();
+            if (polysDone == polys)
+            {
+                SceneManager.LoadScene("Credits");
+            }
+        }
     }
     void TurnOffLights()
     {
