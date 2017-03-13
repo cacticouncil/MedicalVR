@@ -177,11 +177,16 @@ public class Randomsphere : MonoBehaviour {
 
     public void Reset()
     {
+        memoryui.GetComponent<MemoryUI>().Finish();
+
         Destroy(clonei);
         Destroy(clonej);
         Destroy(clonek);
 
         ans.Clear();
+
+        
+
         GNE temp = Genes;
 
         Genes = (GNE)Random.Range(0, 9);
@@ -288,6 +293,10 @@ public class Randomsphere : MonoBehaviour {
             testSpheres.Add(Spheres2[x]);
         }
         correct = 0;
+
+        memoryui.GetComponent<MemoryUI>().finnished = false;
+        memoryui.GetComponent<MemoryUI>().startTime -= 10;
+        memoryui.GetComponent<MemoryUI>().timeRemaining = memoryui.GetComponent<MemoryUI>().startTime;
     }
 
 

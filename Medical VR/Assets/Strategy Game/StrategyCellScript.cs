@@ -17,6 +17,9 @@ public class StrategyCellScript : MonoBehaviour
     public bool hosted = false;
     public int Treproduction = 10;
 
+    public bool[] powerups = new bool[5];
+    public short[] powerupDurations = new short[5];
+
     public int turnSpawned = 0;
     public int childrenSpawned = 0;
     public int immunitySpread = 0;
@@ -48,7 +51,7 @@ public class StrategyCellScript : MonoBehaviour
 
     void Start()
     {
-        turnSpawned = transform.parent.GetComponent<StrategyCellManagerScript>().turnNumber;
+        turnSpawned = transform.GetComponentInParent<StrategyCellManagerScript>().turnNumber;
     }
 
     public void IncreaseReproduction()
@@ -80,6 +83,18 @@ public class StrategyCellScript : MonoBehaviour
             gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().ActionPreformed();
         }
     }
+
+    public void IncreaseDefenseToMax()
+    {
+        defense = defCap;
+        if (d)
+            d.text = "Defense: " + defense;
+        else
+        {
+            Debug.Log("Error! Defense TextMesh not instantiated. Key: " + key.x + "_" + key.y);
+        }
+    }
+
     //Called from cell's UI
     public void IncreaseImmunity()
     {
@@ -125,11 +140,54 @@ public class StrategyCellScript : MonoBehaviour
         return ret;
     }
 
+    public void UsePowerup(byte index, short duration)
+    {
+        switch (index)
+        {
+            case 0:
+                {
+                    //check for item
+                    powerups[index] = true;
+                    powerupDurations[index] += duration;
+                }
+                break;
+            case 2:
+                {
+                    //check for item
+                    powerups[index] = true;
+                    powerupDurations[index] += duration;
+                }
+                break;
+            case 3:
+                {
+                    if (defense != defCap) //and have item)
+                        IncreaseDefenseToMax();
+                }
+                break;
+            case 4:
+                {
+                    //check for item
+                    powerups[index] = true;
+                    powerupDurations[index] += duration;
+                }
+                break;
+            case 5:
+                {
+                    //check for item
+                    powerups[index] = true;
+                    powerupDurations[index] += duration;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     public void TurnUpdate()
     {
         if (!hosted)
         {
-            Treproduction -= reproduction;
+            Treproduction -= powerups[0] ? reproduction + 5 : reproduction;
             if (Treproduction <= 0)
             {
                 //reproduce
@@ -146,6 +204,8 @@ public class StrategyCellScript : MonoBehaviour
         {
             //spread immunity
             immunitySpread += gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().SpreadImmunity(key);
+            if (powerups[5])
+                immunitySpread += gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().SpreadImmunity(key);
         }
 
         if (hosted)
@@ -159,6 +219,18 @@ public class StrategyCellScript : MonoBehaviour
         else
         {
             GetComponent<Renderer>().material.color = Color.white;
+        }
+
+        for (int i = 0; i < powerupDurations.Length; i++)
+        {
+            if (powerupDurations[i] > 0)
+            {
+                powerupDurations[i]--;
+                if (powerupDurations[i] == 0)
+                {
+                    powerups[i] = false;
+                }
+            }
         }
     }
 

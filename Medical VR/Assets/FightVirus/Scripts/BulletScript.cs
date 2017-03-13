@@ -17,7 +17,7 @@ public class BulletScript : MonoBehaviour
 	void Update ()
     {
         LifeSpan += Time.deltaTime;
-        if (LifeSpan >= 2.5f)
+        if (LifeSpan >= 2.2f)
         {
             Destroy(gameObject);
         }

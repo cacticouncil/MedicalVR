@@ -43,14 +43,14 @@ public class Virus : MonoBehaviour
 
         if (VirusManager.GetComponent<EnemyManager>().Wave4 == true)
         {
-            Speed = 0.05f;
+            Speed = 0.08f;
             Health = 100;
         }
     }
 
     void Update()
     {
-        if (transform.tag != "Boss")
+        if (transform.tag == "Virus")
         {
             //Virus form up at special postion
             transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
@@ -58,33 +58,40 @@ public class Virus : MonoBehaviour
             //Check List Count
             for (int i = 0; i < GoTo.GetComponent<VirusLocations>().VirusLocationList.Count; i++)
             {
-                for (int j = 0; j < GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count; j++)
+                if (GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count == 5)
                 {
-                    if (GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count == 5)
+                    CreateBigVirus(GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos);
+
+                    //Delete from original VirusList
+                    for (int j = 0; j < GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count; j++)
                     {
-                        CreateBigVirus(GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos);
-                        GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Clear();
+                        //VirusManager.GetComponent<EnemyManager>().VirusList.Remove();
                     }
+
+                    GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Clear();
                 }
             }
         }
 
-        //For Boss 
-        if (transform.tag == "Boss")
+        else if (transform.tag == "BigVirus")
         {
-            float dis1 = Vector3.Distance(transform.position, Player.transform.position);
-            if (dis1 >= 4.5f)
+
+        }
+
+        //For Boss 
+        else if (transform.tag == "Boss")
+        {
+            float Distance1 = Vector3.Distance(transform.position, Player.transform.position);
+            if (Distance1 >= 4.5f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
-                float dis2 = Vector3.Distance(transform.position, Player.transform.position);
+                float Distance2 = Vector3.Distance(transform.position, Player.transform.position);
+
                 //So the boss follows the player
-                //Vector3 forward;
-                //forward = Player.transform.forward;
-                //transform.position = forward * dis2;
+                Vector3 forward;
+                forward = Player.transform.forward;
+                transform.position = forward * Distance2;
 
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position), .5f * Time.deltaTime);
-
-                //float dis3 = Vector3.Distance(transform.position, Player.transform.position);
                 BossCanTakeDamage = false;
             }
             else

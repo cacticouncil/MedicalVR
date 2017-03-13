@@ -3,17 +3,19 @@ using System.Collections;
 
 public class MemoryUI : MonoBehaviour {
 
-    public GameObject theScore, theLives, theLevels, scoreBoard, UI, Spheres;
+    public GameObject theScore, theLives, theLevels, scoreBoard, UI, Spheres, Timer;
     // Use this for initialization
     public float score = 0;
     int lives = 3;
     public int Level = 1;
+    public float startTime = 60.0f;
+    public bool finnished = false;
+    public float timeRemaining = 60.0f;
     public void LoseresetPos()
     {
        
         lives--;
         theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
-
     }
 
     void ShowScore()
@@ -27,6 +29,7 @@ public class MemoryUI : MonoBehaviour {
     }
     public void RestartGame()
     {
+        finnished = false;
         UI.SetActive(true);
         scoreBoard.SetActive(false);
         lives = 3;
@@ -34,20 +37,36 @@ public class MemoryUI : MonoBehaviour {
         Level = 0;
         theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
         Spheres.GetComponent<Randomsphere>().Reset();
-    }
-    void Start()
-    {
-        theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+        startTime = 60.0f;
+        timeRemaining = 60.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         AvoidBack();
+
+        if (finnished)
+            return;
+
+         timeRemaining -= Time.deltaTime;
+        string minutes = ((int)timeRemaining / 60).ToString();
+        string seconds = (timeRemaining % 60).ToString("f2");
+        Timer.GetComponent<TextMesh>().text = "Timer: " + minutes + ":" + seconds;
+
+        
     }
+
+    public void Finish()
+    {
+        finnished = true;
+    }
+
+    
     void FixedUpdate()
     {
-        if (lives < 1)
+
+        if (lives < 1 || timeRemaining < 0)
         {
             ShowScore();
         }

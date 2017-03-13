@@ -22,13 +22,13 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         //InvokeRepeating("Spawn", 2.5f, 2.5f);
-        Wave1 = false;
+        Wave1 = true;
         Wave2 = false;
         Wave3 = false;
-        Wave4 = true;
+        Wave4 = false;
         doWave = false;
 
-        CreateWave(1);
+        CreateWave(5);
     }
 
     void Update()

@@ -14,7 +14,7 @@ public class StrategyVirusHostScript : StrategyVirusScript
             if (target.GetComponent<StrategyCellScript>().Treproduction <= 0)
             {
                 //reproduce
-                transform.parent.GetComponent<StrategyCellManagerScript>().SpawnVirusSingleAdjacent(target.GetComponent<StrategyCellScript>().key);
+                transform.parent.GetComponent<StrategyCellManagerScript>().SpawnVirusSingleAdjacent(target.GetComponent<StrategyCellScript>().key, transform.position);
                 target.GetComponent<StrategyCellScript>().Treproduction = 10 + target.GetComponent<StrategyCellScript>().Treproduction;
             }
         }
