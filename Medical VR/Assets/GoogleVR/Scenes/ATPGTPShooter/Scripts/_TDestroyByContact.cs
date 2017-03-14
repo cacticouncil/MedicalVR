@@ -31,6 +31,6 @@ public class _TDestroyByContact : MonoBehaviour
         
         //gameController.AddScore(scoreValue);
         Destroy(other.gameObject);
-        Destroy(gameObject);
+ //       Destroy(gameObject);
     }
 }
