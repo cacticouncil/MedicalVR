@@ -1,18 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class ProteinScript : MonoBehaviour 
+public class ProteinScript : MonoBehaviour, TimedInputHandler
 {
-    float Speed;
-
-	void Start ()
+    GameObject ProteinManager;
+    GameObject Player;
+    void Start()
     {
-        Speed = .1f;
-	}
-	
+        ProteinManager = gameObject.transform.parent.gameObject;
+        Player = ProteinManager.GetComponent<ProteinSpawn>().Player;
+    }
 
-	void Update ()
+    public void OnGazeEnter(bool enter)
     {
-        transform.Translate(Vector3.up * Speed * Time.deltaTime, Space.Self);
+        if (enter)
+            Player.GetComponent<VirusPlayer>().Speed = 0;
+        
+        else
+            Player.GetComponent<VirusPlayer>().Speed = .01f;
+    }
+
+    public void HandleTimeInput()
+    {
+        Destroy(transform.gameObject);
+    }
+
+    void OnDestroy()
+    {
+        Player.GetComponent<VirusPlayer>().Speed = .01f;
+        ProteinManager.GetComponent<ProteinSpawn>().ProteinList.Remove(transform.gameObject);
     }
 }
