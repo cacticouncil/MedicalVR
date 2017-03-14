@@ -3,14 +3,15 @@ using System.Collections;
 
 public class TrophyScript : MonoBehaviour {
 
-    public GameObject pedestal, trophyPos, selectPos;
+    public GameObject pedestal, trophyPos, selectPos, trophyName;
     Vector3 orgPos, target, pedestalTarget;
     public float speed, rotationSpeed;
     bool moveForward, inPedestal;
-
+    Quaternion orgRotation;
 	// Use this for initialization
 	void Start ()
     {
+        orgRotation = transform.rotation;
         moveForward = false;
         inPedestal = false;
         orgPos = transform.position;
@@ -57,6 +58,30 @@ public class TrophyScript : MonoBehaviour {
     }
     public void BringToPedestal()
     {
-        inPedestal = !inPedestal;
+        if(pedestal.GetComponent<PedestalScript>().inUse == true)
+        {
+            if (inPedestal == false && pedestal.GetComponent<PedestalScript>().selectedTrophy == null || inPedestal == true)
+            {
+                inPedestal = !inPedestal;
+                if (inPedestal == true)
+                {
+                    pedestal.GetComponent<PedestalScript>().selectedTrophy = this.gameObject;
+                    pedestal.GetComponent<PedestalScript>().descButton.SetActive(true);
+                    trophyName.SetActive(false);
+                }
+                if (inPedestal == false)
+                {
+                    transform.rotation = orgRotation;
+                    pedestal.GetComponent<PedestalScript>().descButton.SetActive(false);
+                    pedestal.GetComponent<PedestalScript>().selectedTrophy = null;
+                    GetComponent<AudioSource>().Stop();
+                    trophyName.SetActive(true);
+                }
+            }
+        }
+    }
+    public void PlayDescription()
+    {
+        GetComponent<AudioSource>().Play();
     }
 }
