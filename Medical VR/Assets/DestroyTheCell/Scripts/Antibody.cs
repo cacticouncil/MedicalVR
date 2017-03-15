@@ -1,82 +1,112 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-enum Movements { XLeft = 0, XRight = 1, YUp = 2, YDown = 3, ZForward = 4, ZBackward = 5}
+enum Movements { XAxis = 0, YAxis = 1, XYAxis = 2, NXAxis = 3, NYAxis = 4, NXNYAxis = 5, XNYAxis = 6, NXYAxis = 7}
 public class Antibody : MonoBehaviour
 {
     GameObject AntibodyManager;
     GameObject Player;
-    Vector3 Temp = Vector3.zero;
     Movements M;
     bool AlwaysChasePlayer;
-    bool FlashScreen; 
-    float MovementTimer;
-    float Speed;
-    void Start ()
+    bool FlashScreen;
+    bool isRotating;
+    float RotateTimer;
+    float MoveTimer;
+    public float Speed;
+
+    void Start()
     {
         AntibodyManager = gameObject.transform.parent.gameObject;
         Player = AntibodyManager.GetComponent<AntibodyManager>().Player;
+        M = (Movements)Random.Range(0, 7);
         AlwaysChasePlayer = false;
         FlashScreen = false;
-        M = (Movements)Random.Range(0, 6);
-        //M = (Movements)4;
-        MovementTimer = 0.0f;
-        Speed = 2.0f;
+        isRotating = false;
+        RotateTimer = 0.0f;
+        MoveTimer = 0.0f;
+        Speed = .005f;
     }
-	
-	void Update ()
+
+    void Update()
     {
         if (AlwaysChasePlayer == false)
         {
-            MovementTimer += Time.deltaTime;
-            if (MovementTimer >= 4.5f)
+            if (isRotating)
             {
-                M = (Movements)Random.Range(0, 6);
-                //M = (Movements)4;
-                MovementTimer = 0.0f;
+                RotateTimer += Time.deltaTime;
+
+                //Give it random rotate behavior
+                switch (M)
+                {
+                    case Movements.XAxis:
+                        transform.Rotate(.5f, 0, 0);
+                        break;
+
+                    case Movements.YAxis:
+                        transform.Rotate(0, .5f, 0);
+                        break;
+
+                    case Movements.XYAxis:
+                        transform.Rotate(.5f, .5f, 0);
+                        break;
+
+                    case Movements.NXAxis:
+                        transform.Rotate(-.5f, 0, 0);
+                        break;
+
+                    case Movements.NYAxis:
+                        transform.Rotate(0, -.5f, 0);
+                        break;
+
+                    case Movements.NXNYAxis:
+                        transform.Rotate(-.5f, -.5f, 0);
+                        break;
+
+                    case Movements.XNYAxis:
+                        transform.Rotate(.5f, -.5f, 0);
+                        break;
+
+                    case Movements.NXYAxis:
+                        transform.Rotate(-.5f, .5f, 0);
+                        break;
+                    default:
+                        break;
+                }
+
+                if (RotateTimer >= 4.0f)
+                {
+                    M = (Movements)Random.Range(0, 7);
+                    RotateTimer = 0.0f;
+                    isRotating = false;
+                }
             }
 
-            //Give it random movement behavior
-            switch (M)
+            //After rotate timer then move in that direction
+            else if (isRotating == false)
             {
-                case Movements.XLeft:
-                    transform.position = new Vector3(transform.position.x - .01f, transform.position.y, transform.position.z);
-                    break;
+                MoveTimer += Time.deltaTime;
 
-                case Movements.XRight:
-                    transform.position = new Vector3(transform.position.x + .01f, transform.position.y, transform.position.z);
-                    break;
+                transform.position += transform.forward * Speed;
+                GetComponent<Rigidbody>().velocity *= Speed;
 
-                case Movements.YUp:
-                    transform.position = new Vector3(transform.position.x, transform.position.y + .01f, transform.position.z);
-                    break;
-
-                case Movements.YDown:
-                    transform.position = new Vector3(transform.position.x, transform.position.y - .01f, transform.position.z);
-                    break;
-
-                case Movements.ZForward:
-                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + .01f);
-                    break;
-
-                case Movements.ZBackward:
-                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - .01f);
-                    break;
-                default:
-                    break;
+                if (MoveTimer >= 5.5f)
+                {
+                    MoveTimer = 0.0f;
+                    isRotating = true;
+                }
             }
-
-            //GetComponent<Rigidbody>().velocity *= Speed;
         }
 
         else if (AlwaysChasePlayer == true)
         {
             //Chase the player
             transform.LookAt(Player.GetComponent<VirusPlayer>().transform.position);
-            transform.position = Vector3.SmoothDamp(transform.position, Player.GetComponent<VirusPlayer>().transform.position, ref Temp, Speed);
-            //GetComponent<Rigidbody>().velocity *= Speed;
+            transform.position += transform.forward * Speed;
+            //transform.position += Player.GetComponent<VirusPlayer>().transform.position * Speed;
+            //transform.position = Vector3.SmoothDamp(transform.position, Player.GetComponent<VirusPlayer>().transform.position, ref Temp, Speed);
+            GetComponent<Rigidbody>().velocity *= Speed;
         }
-    } 
+    }
 
     public bool CheckFOV()
     {
@@ -88,5 +118,20 @@ public class Antibody : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    void OnCollisionEnter(Collision c)
+    {
+        if (c.gameObject.tag == "MainCamera" && AlwaysChasePlayer == true)
+        {
+            Destroy(gameObject);
+            Player.GetComponent<VirusPlayer>().Lives -= 1;
+            Player.GetComponent<VirusPlayer>().Respawn();
+        }
+
+        else
+        {
+
+        }
     }
 }

@@ -6,9 +6,10 @@ using System;
 public class VirusPlayer : MonoBehaviour
 {
     public GameObject TimerText;
+    public GameObject Spawn;
     public float TimeLeft;
     public float Speed;
-
+    public int Lives;
     public Image Screen;
     Color OriginalColor;
     Color FlashColor;
@@ -16,6 +17,8 @@ public class VirusPlayer : MonoBehaviour
     {
         TimeLeft = 60.0f;
         Speed = .01f;
+        //Speed = 0.0f;
+        Lives = 3;
 
         OriginalColor = Screen.color;
         FlashColor = new Color(1, 1, 1, .2f);
@@ -49,6 +52,12 @@ public class VirusPlayer : MonoBehaviour
                 }
             }
         }
+
+        if (Lives == 0)
+        {
+            //Gameover
+
+        }
     }
 
     void FixedUpdate()
@@ -60,8 +69,13 @@ public class VirusPlayer : MonoBehaviour
     IEnumerator FlashScreen()
     {
         Screen.color = FlashColor;
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(.5f);
         Screen.color = OriginalColor;
+    }
+
+    public void Respawn()
+    {
+        transform.position = Spawn.transform.position;
     }
 }
 

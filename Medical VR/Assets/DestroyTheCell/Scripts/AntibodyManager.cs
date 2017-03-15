@@ -12,10 +12,10 @@ public class AntibodyManager : MonoBehaviour
 
     void Start()
     {
-        AntiBodyCount = 1;
+        AntiBodyCount = 3;
         for (int i = 0; i < AntiBodyCount; i++)
         {
-            AntiBodyLocation = Random.insideUnitSphere * 6.0f;
+            AntiBodyLocation = Random.insideUnitSphere * 6.5f;
             AntiBodyList.Add(Instantiate(AntiBody, AntiBodyLocation, Quaternion.identity, transform) as GameObject);
         }
     }
