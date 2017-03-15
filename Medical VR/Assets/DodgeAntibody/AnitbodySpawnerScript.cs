@@ -9,8 +9,8 @@ public class AnitbodySpawnerScript : MonoBehaviour {
     public GameObject refAntiBody;
     public GameObject refPoint;
     public List<GameObject> Obstacles = new List<GameObject>();
-    public int  zGap, maxZ, levelNum;
-    public GameObject theLevel;
+    public int  zGap, levelNum;
+    public GameObject theLevel, obsStart, obsEnd;
     List<GameObject> randPositions = new List<GameObject>();
     List<GameObject> points = new List<GameObject>();
 
@@ -48,7 +48,7 @@ public class AnitbodySpawnerScript : MonoBehaviour {
             points.Clear();
         }
 
-        for (int z = 1000; z < maxZ; z += zGap)
+        for (int z =(int) obsStart.transform.position.z; z < obsEnd.transform.position.z; z += zGap)
         {
             List<GameObject> tmpNum = new List<GameObject>();
             List<GameObject> tmpPoints = new List<GameObject>();

@@ -16,8 +16,8 @@ public class _TRaycastTarget : MonoBehaviour
     {
         if (!gun)
             Debug.Log("failed to load Gun");
-        if (!oldReticle)
-            Debug.Log("failed to load Reticle");
+//        if (!oldReticle)
+//            Debug.Log("failed to load Reticle");
     }
 
     // Update is called once per frame
@@ -33,7 +33,7 @@ public class _TRaycastTarget : MonoBehaviour
         {            
             if(info.collider.CompareTag("Virus"))
             {
-                print("There is a virus in front of the object!");
+  //              print("There is a virus in front of the object!");
             }
         }       
     }
