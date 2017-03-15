@@ -26,6 +26,12 @@ public class FacebookManager : MonoBehaviour {
 
     public string AppLinkURL { get; set; }
 
+
+    //private List<object> scoresList = null;
+
+    //public GameObject ScoreEntryPanel { get; set; }
+    //public GameObject ScoreScrollList { get; set; }
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -166,5 +172,14 @@ public class FacebookManager : MonoBehaviour {
     void ShareWithUsersCallback(IAppRequestResult result)
     {
         Debug.Log(result.RawResult);
+    }
+
+    public void SetScore()
+    {
+        //var scoreData = new Dictionary<string, string>();
+        //scoreData["score"] = UnityEngine.Random.Range(10, 200).ToString();
+        //FB.API("/me/scores", HttpMethod.POST, delegate (IGraphResult result) {
+        //    Debug.Log("Score submit result: " + result.RawResult);
+        //}, scoreData);
     }
 }
