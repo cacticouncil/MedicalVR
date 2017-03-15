@@ -62,6 +62,9 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
             case 12:
                 LoadScene("OptionsMenu");
                 break;
+            case 13:
+                LoadScene("DestroyTheCell");
+                break;
         }
     }
 
