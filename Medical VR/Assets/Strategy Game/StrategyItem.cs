@@ -6,7 +6,7 @@ public class StrategyItem
 {
     public enum StrategyItems
     {
-        Steroids,
+        R,
         R2,
         D,
         I,

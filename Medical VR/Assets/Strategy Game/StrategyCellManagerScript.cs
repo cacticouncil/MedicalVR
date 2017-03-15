@@ -12,6 +12,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     public GameObject virusPrefab2;
     public GameObject virusPrefab3;
     public GameObject transporter;
+    public StrategyBox mysteryBox;
     public SimulateSun sun;
     public TextMesh screenUI;
     public int actionsLeft = 4;
@@ -22,7 +23,11 @@ public class StrategyCellManagerScript : MonoBehaviour
     public bool viewingStats = false;
     public float randomRange = .5f;
 
+    [System.NonSerialized]
+    public List<StrategyItem> inventory;
+
     private GameObject virusPrefab;
+    private Vector4 spawnCellStats;
     //private float xOffset = 1.0f;
     //private float yOffset = 1.0f;
     public float xOffset = 2.0f;
@@ -38,12 +43,23 @@ public class StrategyCellManagerScript : MonoBehaviour
         t.name = "Cell0_0";
         t.GetComponent<StrategyCellScript>().enabled = true;
         t.GetComponent<BoxCollider>().enabled = true;
+
+        inventory = mysteryBox.items;
     }
 
     public void SetSelected(Vector2 k)
     {
-        tiles[selected].GetComponent<StrategyCellScript>().ToggleUI(false);
+        if (tiles.ContainsKey(selected))
+            tiles[selected].GetComponent<StrategyCellScript>().ToggleUI(false);
         selected = k;
+    }
+
+    public void Unselect()
+    {
+        if (tiles.ContainsKey(selected))
+            tiles[selected].GetComponent<StrategyCellScript>().ToggleUI(false);
+        selected = new Vector2(-100, -100);
+        viewingStats = false;
     }
 
     public void ActionPreformed()
@@ -113,6 +129,28 @@ public class StrategyCellManagerScript : MonoBehaviour
     public void AddToDictionary(GameObject cell)
     {
         tiles.Add(cell.GetComponent<StrategyCellScript>().key, cell);
+    }
+
+    void SpawnCell(Vector2 k, Vector2 p)
+    {
+        Vector3 spawnLocation = tiles[p].transform.position;
+        Vector3 desination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, CalculateY(k), k.y * yOffset);
+        GameObject t = Instantiate(transporter, spawnLocation, Quaternion.identity, transform) as GameObject;
+        t.GetComponent<StrategyTransporter>().destination = desination;
+        GameObject c = Instantiate(cellPrefab, spawnLocation, Quaternion.identity, t.transform) as GameObject;
+        c.GetComponent<StrategyCellScript>().key = k;
+        AddToDictionary(c);
+        c.name = "Cell" + k.x + "_" + k.y;
+        if (spawnCellStats != Vector4.zero)
+        {
+            c.GetComponent<StrategyCellScript>().reproduction = (int)spawnCellStats.x;
+            c.GetComponent<StrategyCellScript>().defense = (int)spawnCellStats.y;
+            c.GetComponent<StrategyCellScript>().immunity = (int)spawnCellStats.z;
+            c.GetComponent<StrategyCellScript>().protein = (StrategyCellScript.Proteins)((int)spawnCellStats.w);
+            spawnCellStats = Vector4.zero;
+        }
+        t.GetComponent<StrategyTransporter>().enabled = true;
+        c.GetComponent<StrategyCellScript>().enabled = true;
     }
 
     public void SelectCellSpawn(Vector2 starting)
@@ -195,6 +233,12 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
     }
 
+    public void DuplicateCell(Vector2 k, Vector4 stats)
+    {
+        spawnCellStats = stats;
+        SelectCellSpawn(k);
+    }
+
     float CalculateY(Vector2 k)
     {
         float avg = 0.0f;
@@ -263,20 +307,6 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
 
         return Mathf.Clamp(Random.Range(-randomRange, randomRange) + avg, -4.0f, 4.0f);
-    }
-
-    void SpawnCell(Vector2 k, Vector2 p)
-    {
-        Vector3 spawnLocation = tiles[p].transform.position;
-        Vector3 desination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, CalculateY(k), k.y * yOffset);
-        GameObject t = Instantiate(transporter, spawnLocation, Quaternion.identity, transform) as GameObject;
-        t.GetComponent<StrategyTransporter>().destination = desination;
-        GameObject c = Instantiate(cellPrefab, spawnLocation, Quaternion.identity, t.transform) as GameObject;
-        c.GetComponent<StrategyCellScript>().key = k;
-        AddToDictionary(c);
-        c.name = "Cell" + k.x + "_" + k.y;
-        t.GetComponent<StrategyTransporter>().enabled = true;
-        c.GetComponent<StrategyCellScript>().enabled = true;
     }
 
     public void KillCell(Vector2 k)
@@ -371,7 +401,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         if (tiles.ContainsKey(check) && !tiles[check].GetComponent<StrategyCellScript>().targeted)
         {
             GameObject t = Instantiate(transporter, p, Quaternion.identity, transform) as GameObject;
-            t.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 1, k.y* yOffset +yOffset * .5f);
+            t.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 1, k.y * yOffset + yOffset * .5f);
             tiles[check].GetComponent<StrategyCellScript>().targeted = true;
             GameObject v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
             v.GetComponent<StrategyVirusScript>().target = tiles[check];
@@ -462,7 +492,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             v.GetComponent<StrategyVirusScript>().enabled = true;
             return;
         }
-        
+
         GameObject tra = Instantiate(transporter, p, Quaternion.identity, transform) as GameObject;
         tra.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 2, k.y * yOffset);
         GameObject vir = Instantiate(virusPrefab, p, Quaternion.identity, tra.transform) as GameObject;
@@ -480,7 +510,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         Vector2 check = k;
         check.y += 1;
         GameObject t = Instantiate(transporter, p, Quaternion.identity, transform) as GameObject;
-        t.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 1, k.y* yOffset +yOffset * .5f);
+        t.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 1, k.y * yOffset + yOffset * .5f);
         GameObject v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
         if (tiles.ContainsKey(check) && !tiles[check].GetComponent<StrategyCellScript>().targeted)
         {

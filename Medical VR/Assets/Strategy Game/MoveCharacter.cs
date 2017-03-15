@@ -75,7 +75,7 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
             //This is the new target position
             mainCamera.SetDestination(finalPos);
             transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
-             gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
+            gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
             transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = true;
         }
         else if (!transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats)// && transform.GetComponentInParent<StrategyCellManagerScript>().selected != transform.GetComponent<StrategyCellScript>().key)
