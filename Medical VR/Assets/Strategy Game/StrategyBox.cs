@@ -55,23 +55,7 @@ public class StrategyBox : MonoBehaviour
 
     public void MoveTo()
     {
-        //Get the direction of the player from the cell
-        Vector3 heading = mainCamera.transform.position - transform.position;
-        //Don't change y value
-        heading.y = 0;
-        //Find normalized direction
-        float distance = Mathf.Max(heading.magnitude, .001f);
-        Vector3 direction = heading / distance;
-        if (direction.magnitude < 0.01f)
-        {
-            direction = new Vector3(0.0f, 0.0f, 1.0f);
-        }
-        //Scale it to 1.5
-        direction *= scaledDistance;
-
-        Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
-
-        transform.GetChild(0).transform.LookAt(finalPos);
+        Vector3 finalPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
 
         //This is the new target position
         mainCamera.SetDestination(finalPos);
@@ -81,5 +65,10 @@ public class StrategyBox : MonoBehaviour
     public void Back()
     {
         mainCamera.SetDestination(new Vector3(1, 5, 0));
+    }
+
+    public void ToggleUI()
+    {
+
     }
 }
