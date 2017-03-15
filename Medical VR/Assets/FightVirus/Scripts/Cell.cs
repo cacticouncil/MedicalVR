@@ -1,33 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-enum CellMovement { MoveRight = 0, MoveLeft = 1, MoveUp = 2, MoveDown = 3 }
+enum OrganelleMovement { MoveRight = 0, MoveLeft = 1, MoveUp = 2, MoveDown = 3 }
 public class Cell : MonoBehaviour
 {
     public bool isDead;
-    CellMovement CM;
+    OrganelleMovement CM;
     Vector3 StartPos;
     void Start()
     {
         isDead = false;
         StartPos = transform.position;
-        CM = (CellMovement)Random.Range(0, 4);
+        CM = (OrganelleMovement)Random.Range(0, 4);
     }
 
     void Update()
     {
         switch (CM)
         {
-            case CellMovement.MoveRight:
+            case OrganelleMovement.MoveRight:
                 transform.position = new Vector3(StartPos.x + Mathf.Sin(Time.time), StartPos.y, StartPos.z);
                 break;
-            case CellMovement.MoveLeft:
+            case OrganelleMovement.MoveLeft:
                 transform.position = new Vector3(StartPos.x - Mathf.Sin(Time.time), StartPos.y, StartPos.z);
                 break;
-            case CellMovement.MoveUp:
+            case OrganelleMovement.MoveUp:
                 transform.position = new Vector3(StartPos.x, StartPos.y + Mathf.Sin(Time.time), StartPos.z);
                 break;
-            case CellMovement.MoveDown:
+            case OrganelleMovement.MoveDown:
                 transform.position = new Vector3(StartPos.x, StartPos.y - Mathf.Sin(Time.time), StartPos.z);
                 break;
 
