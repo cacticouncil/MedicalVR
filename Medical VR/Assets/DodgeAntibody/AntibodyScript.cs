@@ -3,6 +3,7 @@ using System.Collections;
 
 public class AntibodyScript : MonoBehaviour {
 
+    public GameObject Cam;
 	// Use this for initialization
 	void Start () {
 	
@@ -11,7 +12,14 @@ public class AntibodyScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        //transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z -2);
+        if(Vector3.Distance(transform.position, Cam.transform.position) < 3000)
+        {
+            GetComponent<Renderer>().enabled = true;
+        }
+        else
+        {
+            GetComponent<Renderer>().enabled = false;
+        }
     }
 
     void OnTriggerEnter(Collider other)
