@@ -4,7 +4,8 @@ using System.Collections;
 public class StrategyVirusScript : MonoBehaviour
 {
     public GameObject target;
-    public float speed = 1.0f;
+    public float movementSpeed = 1.0f;
+    public float turnSpeed = .25f;
     public int attackValue = 1;
     public int attackDuration = 0;
     public float percentTraveled = 0.0f;
@@ -36,7 +37,7 @@ public class StrategyVirusScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float disCovered = (Time.time - startTime) * speed;
+        float disCovered = (Time.time - startTime) * movementSpeed;
         float fracJourney = disCovered / distance;
         if (fracJourney >= 1.0f || !target)
         {
@@ -58,7 +59,7 @@ public class StrategyVirusScript : MonoBehaviour
             {
                 if (percentTraveled < .75f)
                 {
-                    percentTraveled += .25f;
+                    percentTraveled += turnSpeed;
                 }
                 else if (percentTraveled > .75f)
                 {
@@ -94,7 +95,7 @@ public class StrategyVirusScript : MonoBehaviour
         }
 
 
-        percentTraveled += .25f;
+        percentTraveled += turnSpeed;
         nextPosition = Vector3.Lerp(startingPosition, target.transform.position, percentTraveled);
         prevPosition = transform.position;
         startTime = Time.time;

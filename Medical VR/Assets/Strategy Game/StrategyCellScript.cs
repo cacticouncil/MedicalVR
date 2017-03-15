@@ -16,7 +16,7 @@ public class StrategyCellScript : MonoBehaviour
     public bool targeted = false;
     public bool hosted = false;
     public int Treproduction = 10;
-    
+
 
     [System.NonSerialized]
     public GameObject virus;
@@ -186,24 +186,22 @@ public class StrategyCellScript : MonoBehaviour
     public void UseD()
     {
         //check for item
-        if (defense != defCap)
-            if (transform.parent.GetComponent<StrategyCellManagerScript>().inventory[2].count > 0)
-            {
-                transform.parent.GetComponent<StrategyCellManagerScript>().inventory[2].count--;
-                IncreaseDefenseToMax();
-                transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
-            }
+        if (defense != defCap && transform.parent.GetComponent<StrategyCellManagerScript>().inventory[2].count > 0)
+        {
+            transform.parent.GetComponent<StrategyCellManagerScript>().inventory[2].count--;
+            IncreaseDefenseToMax();
+            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+        }
     }
     public void UseI()
     {
         //check for item
-        if (immunity != immCap)
-            if (transform.parent.GetComponent<StrategyCellManagerScript>().inventory[3].count > 0)
-            {
-                transform.parent.GetComponent<StrategyCellManagerScript>().inventory[3].count--;
-                IncreaseImmunityToMax();
-                transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
-            }
+        if (immunity != immCap && transform.parent.GetComponent<StrategyCellManagerScript>().inventory[3].count > 0)
+        {
+            transform.parent.GetComponent<StrategyCellManagerScript>().inventory[3].count--;
+            IncreaseImmunityToMax();
+            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+        }
     }
     public void UseI2()
     {
@@ -215,16 +213,29 @@ public class StrategyCellScript : MonoBehaviour
             transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
         }
     }
+    public void UseP()
+    {
+        //check for item
+        if (protein != Proteins.None && transform.parent.GetComponent<StrategyCellManagerScript>().inventory[5].count > 0)
+        {
+            transform.parent.GetComponent<StrategyCellManagerScript>().inventory[5].count--;
+            Proteins prev = protein;
+            while (protein == prev)
+                protein = (Proteins)Random.Range(1, 7);
+            p.text = "Protein: " + protein.ToString();
+            Debug.Log("Cell gained protein " + protein.ToString());
+            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+        }
+    }
     public void UseV()
     {
         //check for item
-        if (hosted)
-            if (transform.parent.GetComponent<StrategyCellManagerScript>().inventory[5].count > 0)
-            {
-                transform.parent.GetComponent<StrategyCellManagerScript>().inventory[5].count--;
-                Destroy(virus);
-                transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
-            }
+        if (hosted && transform.parent.GetComponent<StrategyCellManagerScript>().inventory[6].count > 0)
+        {
+            transform.parent.GetComponent<StrategyCellManagerScript>().inventory[6].count--;
+            Destroy(virus);
+            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+        }
     }
 
     public void TurnUpdate()
@@ -272,7 +283,7 @@ public class StrategyCellScript : MonoBehaviour
         {
             GetComponent<Renderer>().material.color = Color.white;
         }
-    
+
         if (transform.GetChild(0).gameObject.activeSelf)
             transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
     }
