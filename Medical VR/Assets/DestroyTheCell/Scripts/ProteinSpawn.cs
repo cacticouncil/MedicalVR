@@ -13,16 +13,11 @@ public class ProteinSpawn : MonoBehaviour
 
     void Start()
     {
-        ProteinCount = 0;
+        ProteinCount = 1;
         for (int i = 0; i < ProteinCount; i++)
         {
-            ProteinLocation = Random.onUnitSphere * 6.3f;
+            ProteinLocation = Random.onUnitSphere * 6.5f;
             ProteinList.Add(Instantiate(Protein, ProteinLocation, Quaternion.identity, transform) as GameObject);
         }
     }
-
-    void Update ()
-    {
-
-	}
 }
