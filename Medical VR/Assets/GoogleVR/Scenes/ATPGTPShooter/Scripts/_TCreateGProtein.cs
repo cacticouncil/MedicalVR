@@ -22,7 +22,7 @@ public class _TCreateGProtein : MonoBehaviour
         {
             Debug.Log("failed to load GProtein");
         }
-
+        StartCoroutine(SpawnWaves());
     }
 
     void Update()
@@ -38,8 +38,12 @@ public class _TCreateGProtein : MonoBehaviour
             for (int i = 0; i < adenylylCyclase.Length; ++i)
             {
                 Vector3 spawnPosition = shotSpawner.GetComponent<Transform>().position;
-                Quaternion spawnRotation = Quaternion.identity;
-                Instantiate(GProtein, spawnPosition, spawnRotation);
+                Quaternion spawnRotation = shotSpawner.GetComponent<Transform>().rotation; //Quaternion.identity;
+                GameObject proteinClone = (GameObject) Instantiate(GProtein, spawnPosition, spawnRotation);
+                proteinClone.GetComponent<_TGProteinController>().SetTarget(adenylylCyclase[i].transform);
+
+        //        proteinClone.GetComponent;
+                //    proteinClone.
                 yield return new WaitForSeconds(spawnWait);
             }
             yield return new WaitForSeconds(waveWait);
