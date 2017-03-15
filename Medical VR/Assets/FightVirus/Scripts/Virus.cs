@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-
 public class Virus : MonoBehaviour
 {
     GameObject VirusManager;
@@ -63,10 +62,10 @@ public class Virus : MonoBehaviour
                     CreateBigVirus(GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos);
 
                     //Delete from original VirusList
-                    for (int j = 0; j < GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count; j++)
-                    {
-                        //VirusManager.GetComponent<EnemyManager>().VirusList.Remove();
-                    }
+                    //if (GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos.transform.position == transform.position)
+                    //{
+                    //    VirusManager.GetComponent<EnemyManager>().VirusList.Remove(transform.gameObject);
+                    //}
 
                     GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Clear();
                 }

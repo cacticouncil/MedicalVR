@@ -135,10 +135,10 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
 
     public void QueryScore()
     {
-        FB.API("/app/scores?fields=score,user.limit(30)", HttpMethod.GET, ScoresCallback);
+        FB.API("/app/scores?fields=score,user.limit(30)", HttpMethod.GET, getScoresCallback);
     }
 
-    private void ScoresCallback(IResult result)
+    private void getScoresCallback(IResult result)
     {
 
         IDictionary<string, object> data = result.ResultDictionary;
@@ -151,7 +151,7 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
 
             Debug.Log(user["name"].ToString() + " , " + entry["score"].ToString());
 
-            ScoreDebug.text = user["name"].ToString() + " , " + entry["score"].ToString();
+            ScoreDebug.text = result.RawResult;
 
         }
         //Debug.Log("Scores callback: " + result.RawResult);
@@ -211,6 +211,12 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
 
     public void SetScore()
     {
-        FacebookManager.Instance.SetScore();
+        var ScoreData = new Dictionary<string, string>();
+
+        ScoreData["score"] = UnityEngine.Random.Range(0, 250).ToString();
+
+        FB.API("me/scores", HttpMethod.POST, delegate (IGraphResult result)
+            {Debug.Log("Score Submitted successfully" + result.RawResult);},
+            ScoreData);
     }
 }
