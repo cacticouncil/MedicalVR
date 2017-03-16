@@ -63,6 +63,11 @@ public class StrategyCellScript : MonoBehaviour
         p.text = "Protein: " + protein.ToString();
     }
 
+    //void FixedUpdate()
+    //{
+    //    transform.Rotate(new Vector3(.1f, .1f, .1f));
+    //}
+
     public void IncreaseReproduction()
     {
         if (!hosted && reproduction < repCap)

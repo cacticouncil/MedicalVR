@@ -18,12 +18,10 @@ public class StrategyBox : MonoBehaviour
     public TextMesh animationText;
 
     public MoveCamera mainCamera;
-    public Vector3 startingPosition;
-    public float scaledDistance = 1.5f;
 
+    private Vector2 key = new Vector2(-100, -100);
     void Start()
     {
-        startingPosition = transform.position;
         if (mainCamera == null)
         {
             mainCamera = Camera.main.GetComponent<MoveCamera>();
@@ -55,20 +53,15 @@ public class StrategyBox : MonoBehaviour
 
     public void MoveTo()
     {
-        Vector3 finalPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1);
+        transform.GetChild(0).gameObject.SetActive(true);
 
         //This is the new target position
-        mainCamera.SetDestination(finalPos);
-        cellmanager.Unselect();
-    }
-
-    public void Back()
-    {
-        mainCamera.SetDestination(new Vector3(1, 5, 0));
+        mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1.5f));
+        cellmanager.SetSelected(key);
     }
 
     public void ToggleUI()
     {
-
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 }

@@ -42,7 +42,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         AddToDictionary(t);
         t.name = "Cell0_0";
         t.GetComponent<StrategyCellScript>().enabled = true;
-        t.GetComponent<BoxCollider>().enabled = true;
+        t.GetComponent<Collider>().enabled = true;
 
         inventory = mysteryBox.items;
     }
@@ -51,6 +51,10 @@ public class StrategyCellManagerScript : MonoBehaviour
     {
         if (tiles.ContainsKey(selected))
             tiles[selected].GetComponent<StrategyCellScript>().ToggleUI(false);
+        else if (selected == new Vector2(-100, -100))
+            mysteryBox.ToggleUI();
+        else if (!tiles.ContainsKey(k))
+            Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 5, k.y * yOffset));
         selected = k;
     }
 
