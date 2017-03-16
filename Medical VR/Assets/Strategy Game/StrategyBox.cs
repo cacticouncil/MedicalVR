@@ -18,12 +18,10 @@ public class StrategyBox : MonoBehaviour
     public TextMesh animationText;
 
     public MoveCamera mainCamera;
-    public Vector3 startingPosition;
-    public float scaledDistance = 1.5f;
 
+    private Vector2 key = new Vector2(-100, -100);
     void Start()
     {
-        startingPosition = transform.position;
         if (mainCamera == null)
         {
             mainCamera = Camera.main.GetComponent<MoveCamera>();
@@ -55,31 +53,15 @@ public class StrategyBox : MonoBehaviour
 
     public void MoveTo()
     {
-        //Get the direction of the player from the cell
-        Vector3 heading = mainCamera.transform.position - transform.position;
-        //Don't change y value
-        heading.y = 0;
-        //Find normalized direction
-        float distance = Mathf.Max(heading.magnitude, .001f);
-        Vector3 direction = heading / distance;
-        if (direction.magnitude < 0.01f)
-        {
-            direction = new Vector3(0.0f, 0.0f, 1.0f);
-        }
-        //Scale it to 1.5
-        direction *= scaledDistance;
-
-        Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
-
-        transform.GetChild(0).transform.LookAt(finalPos);
+        transform.GetChild(0).gameObject.SetActive(true);
 
         //This is the new target position
-        mainCamera.SetDestination(finalPos);
-        cellmanager.Unselect();
+        mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1.5f));
+        cellmanager.SetSelected(key);
     }
 
-    public void Back()
+    public void ToggleUI()
     {
-        mainCamera.SetDestination(new Vector3(1, 5, 0));
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 }

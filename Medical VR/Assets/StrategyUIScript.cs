@@ -4,14 +4,12 @@ using System.Collections.Generic;
 
 public class StrategyUIScript : MonoBehaviour
 {
-    [SerializeField]
-    GameObject[] items = new GameObject[6];
+    public GameObject[] items;
     [SerializeField]
     List<StrategyItem> inventory;
 
     void Awake()
     {
-        Debug.Log("Awake called");
         inventory = transform.parent.transform.parent.GetComponent<StrategyCellManagerScript>().inventory;
     }
 
@@ -24,59 +22,33 @@ public class StrategyUIScript : MonoBehaviour
     {
         if (transform.parent.GetComponent<StrategyCellScript>().hosted)
         {
-            if (inventory[5].count > 0)
+            if (inventory[inventory.Count - 1].count > 0)
             {
-                items[5].SetActive(true);
-                items[5].GetComponentInChildren<TextMesh>().text = inventory[5].count.ToString();
+                items[inventory.Count - 1].SetActive(true);
+                items[inventory.Count - 1].GetComponentInChildren<TextMesh>().text = inventory[inventory.Count - 1].count.ToString();
             }
             else
             {
-                items[5].SetActive(false);
+                items[inventory.Count - 1].SetActive(false);
             }
-            items[0].SetActive(false);
-            items[1].SetActive(false);
-            items[2].SetActive(false);
-            items[3].SetActive(false);
-            items[4].SetActive(false);
+            for (int i = 0; i < items.Length - 2; i++)
+            {
+                items[i].SetActive(false);
+            }
         }
         else
         {
-            items[5].SetActive(false);
-            if (inventory[0].count > 0)
+            for (int i = 0; i < items.Length - 1; i++)
             {
-                items[0].SetActive(true);
-                items[0].GetComponentInChildren<TextMesh>().text = inventory[0].count.ToString();
+                if (inventory[i].count > 0)
+                {
+                    items[i].SetActive(true);
+                    items[i].GetComponentInChildren<TextMesh>().text = inventory[i].count.ToString();
+                }
+                else
+                    items[i].SetActive(false);
             }
-            else
-                items[0].SetActive(false);
-            if (inventory[1].count > 0)
-            {
-                items[1].SetActive(true);
-                items[1].GetComponentInChildren<TextMesh>().text = inventory[1].count.ToString();
-            }
-            else
-                items[1].SetActive(false);
-            if (inventory[2].count > 0)
-            {
-                items[2].SetActive(true);
-                items[2].GetComponentInChildren<TextMesh>().text = inventory[2].count.ToString();
-            }
-            else
-                items[2].SetActive(false);
-            if (inventory[3].count > 0)
-            {
-                items[3].SetActive(true);
-                items[3].GetComponentInChildren<TextMesh>().text = inventory[3].count.ToString();
-            }
-            else
-                items[3].SetActive(false);
-            if (inventory[4].count > 0)
-            {
-                items[4].SetActive(true);
-                items[4].GetComponentInChildren<TextMesh>().text = inventory[4].count.ToString();
-            }
-            else
-                items[4].SetActive(false);
+            items[inventory.Count - 1].SetActive(false);
         }
     }
 }

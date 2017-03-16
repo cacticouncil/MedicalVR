@@ -37,12 +37,12 @@ public class StrategyCellManagerScript : MonoBehaviour
     void Start()
     {
         virusPrefab = virusPrefab1;
-        GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), Quaternion.identity, transform) as GameObject;
+        GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
         t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
         AddToDictionary(t);
         t.name = "Cell0_0";
         t.GetComponent<StrategyCellScript>().enabled = true;
-        t.GetComponent<BoxCollider>().enabled = true;
+        t.GetComponent<Collider>().enabled = true;
 
         inventory = mysteryBox.items;
     }
@@ -51,6 +51,10 @@ public class StrategyCellManagerScript : MonoBehaviour
     {
         if (tiles.ContainsKey(selected))
             tiles[selected].GetComponent<StrategyCellScript>().ToggleUI(false);
+        else if (selected == new Vector2(-100, -100))
+            mysteryBox.ToggleUI();
+        else if (!tiles.ContainsKey(k))
+            Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 5, k.y * yOffset));
         selected = k;
     }
 
@@ -137,7 +141,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         Vector3 desination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, CalculateY(k), k.y * yOffset);
         GameObject t = Instantiate(transporter, spawnLocation, Quaternion.identity, transform) as GameObject;
         t.GetComponent<StrategyTransporter>().destination = desination;
-        GameObject c = Instantiate(cellPrefab, spawnLocation, Quaternion.identity, t.transform) as GameObject;
+        GameObject c = Instantiate(cellPrefab, spawnLocation, cellPrefab.transform.rotation, t.transform) as GameObject;
         c.GetComponent<StrategyCellScript>().key = k;
         AddToDictionary(c);
         c.name = "Cell" + k.x + "_" + k.y;
