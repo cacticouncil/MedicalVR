@@ -97,7 +97,7 @@ public class FacebookManager : MonoBehaviour {
         }
         else
         {
-            AppLinkURL = "http://google.com";
+            AppLinkURL = new Uri("http://www.google.com").ToString();
         }
     }
 
