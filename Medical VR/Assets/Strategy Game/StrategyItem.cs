@@ -6,11 +6,12 @@ public class StrategyItem
 {
     public enum StrategyItems
     {
-        R,
+        R = 0,
         R2,
         D,
         I,
         I2,
+        P,
         V
     }
     public StrategyItems type;
