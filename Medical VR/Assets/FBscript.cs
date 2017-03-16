@@ -11,7 +11,7 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
   public  GameObject DialogLoggedOut;
   public GameObject DialogUsername;
   public GameObject DialogProfilePic;
-
+    public Text ScoreDebug;
 
 
     void Awake()
@@ -131,5 +131,92 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
     public void ShareWithUsers()
     {
         FacebookManager.Instance.ShareWithUsers();
+    }
+
+    public void QueryScore()
+    {
+        FB.API("/app/scores?fields=score,user.limit(30)", HttpMethod.GET, getScoresCallback);
+    }
+
+    private void getScoresCallback(IResult result)
+    {
+
+        IDictionary<string, object> data = result.ResultDictionary;
+        List<object> scoreList = (List<object>)data["data"];
+
+        foreach(object obj in scoreList)
+        {
+            var entry = (Dictionary<string, object>)obj;
+            var user = (Dictionary<string, object>)entry["user"];
+
+            Debug.Log(user["name"].ToString() + " , " + entry["score"].ToString());
+
+            ScoreDebug.text = result.RawResult;
+
+        }
+        //Debug.Log("Scores callback: " + result.RawResult);
+
+
+        ////scoresList =  Util.DeserializeScores(result.RawResult);
+
+        //foreach (Transform child in ScoreScrollList.transform)
+        //{
+        //    GameObject.Destroy(child.gameObject);
+        //}
+
+        //foreach (object score in scoresList)
+        //{
+
+        //    var entry = (Dictionary<string, object>)score;
+        //    var user = (Dictionary<string, object>)entry["user"];
+
+
+
+
+        //    GameObject ScorePanel;
+        //    ScorePanel = Instantiate(ScoreEntryPanel) as GameObject;
+        //    ScorePanel.transform.parent = ScoreScrollList.transform;
+
+        //    Transform ThisScoreName = ScorePanel.transform.Find("FriendName");
+        //    Transform ThisScoreScore = ScorePanel.transform.Find("FriendScore");
+        //    Text ScoreName = ThisScoreName.GetComponent<Text>();
+        //    Text ScoreScore = ThisScoreScore.GetComponent<Text>();
+
+        //    ScoreName.text = user["name"].ToString();
+        //    ScoreScore.text = entry["score"].ToString();
+
+        //    Transform TheUserAvatar = ScorePanel.transform.Find("FriendAvatar");
+        //    Image UserAvatar = TheUserAvatar.GetComponent<Image>();
+
+
+        //    FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, delegate (IGraphResult pictureResult) {
+
+        //        if (pictureResult.Error != null) // if there was an error
+        //        {
+        //            Debug.Log(pictureResult.Error);
+        //        }
+        //        else // if everything was fine
+        //        {
+        //            UserAvatar.sprite = Sprite.Create(pictureResult.Texture, new Rect(0, 0, 128, 128), new Vector2(0, 0));
+        //        }
+
+        //    });
+
+
+
+        //}
+
+
+    }
+
+    public void SetScore()
+    {
+        var ScoreData = new Dictionary<string, string>();
+
+        ScoreData["score"] = UnityEngine.Random.Range(0, 250).ToString();
+
+        FB.API("me/scores", HttpMethod.POST, delegate (IGraphResult result)
+            {Debug.Log("Score Submitted successfully" + result.RawResult);},
+            ScoreData);
     }
 }
