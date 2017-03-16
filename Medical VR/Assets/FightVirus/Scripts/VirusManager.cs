@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemyManager : MonoBehaviour
+public class VirusManager : MonoBehaviour
 {
     public GameObject VirusCube;
     public GameObject BigVirusCube;

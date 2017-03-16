@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
 
 
         //Display Wave
-        if (EnemyManger.GetComponent<EnemyManager>().Wave1 == true && DisplayRules == false)
+        if (EnemyManger.GetComponent<VirusManager>().Wave1 == true && DisplayRules == false)
         {
             if (Wave1Timer <= 2.0f)
             {
@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
             Wave1Timer += Time.deltaTime;
         }
 
-        if (EnemyManger.GetComponent<EnemyManager>().Wave2 == true)
+        if (EnemyManger.GetComponent<VirusManager>().Wave2 == true)
         {
             if (Wave2Timer <= 2.0f)
             {
@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
             Wave2Timer += Time.deltaTime;
         }
 
-        if (EnemyManger.GetComponent<EnemyManager>().Wave3 == true)
+        if (EnemyManger.GetComponent<VirusManager>().Wave3 == true)
         {
             if (Wave3Timer <= 2.0f)
             {
@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
             Wave3Timer += Time.deltaTime;
         }
 
-        if (EnemyManger.GetComponent<EnemyManager>().Wave4 == true)
+        if (EnemyManger.GetComponent<VirusManager>().Wave4 == true)
         {
             if (Wave4Timer <= 2.0f)
             {
