@@ -46,15 +46,26 @@ public class TrophyScript : MonoBehaviour {
     void InSelection()
     {
         if (transform.position == pedestalTarget)
-            transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+        {
+            if (transform.rotation.eulerAngles.z == 0)
+            {
+                transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+            }
+            else if (transform.rotation.eulerAngles.z == 90)
+            {
+                transform.Rotate(rotationSpeed * Time.deltaTime, 0, 0);
+            }
+        }
     }
     public void GazedOn()
     {
+        if(pedestal.GetComponent<PedestalScript>().inUse == true)
         moveForward = true;
     }
     public void GazeOff()
     {
-        moveForward = false;
+        if(pedestal.GetComponent<PedestalScript>().inUse == true)
+            moveForward = false;
     }
     public void BringToPedestal()
     {
