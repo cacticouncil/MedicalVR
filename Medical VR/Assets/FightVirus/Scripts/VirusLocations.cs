@@ -7,13 +7,11 @@ public struct Spawn
 {
     public GameObject Pos;
     public List<GameObject> VirusList;
-    public int ListCount;
 
     public Spawn(GameObject go)
     {
         Pos = go;
         VirusList = new List<GameObject>();
-        ListCount = 0;
     }
 }
 

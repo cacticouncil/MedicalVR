@@ -12,7 +12,7 @@ public class AntibodyManager : MonoBehaviour
 
     void Start()
     {
-        AntiBodyCount = 3;
+        AntiBodyCount = 5;
         for (int i = 0; i < AntiBodyCount; i++)
         {
             AntiBodyLocation = Random.insideUnitSphere * 6.5f;

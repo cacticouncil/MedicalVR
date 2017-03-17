@@ -31,4 +31,8 @@ public class ProteinScript : MonoBehaviour, TimedInputHandler
         Player.GetComponent<VirusPlayer>().Speed = .01f;
         ProteinManager.GetComponent<ProteinSpawn>().ProteinList.Remove(transform.gameObject);
     }
+    public void test()
+    {
+
+    }
 }

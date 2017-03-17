@@ -6,7 +6,6 @@ public class BulletManager : MonoBehaviour
 {
     public GameObject Bullet;
     public GameObject Reticle;
-    public bool PowerUp;
     public bool isTriggered;
     public float Time;
 

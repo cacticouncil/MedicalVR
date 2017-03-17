@@ -13,7 +13,7 @@ public class ProteinSpawn : MonoBehaviour
 
     void Start()
     {
-        ProteinCount = 1;
+        ProteinCount = 10;
         for (int i = 0; i < ProteinCount; i++)
         {
             ProteinLocation = Random.onUnitSphere * 6.5f;
