@@ -7,7 +7,7 @@ public class PedestalScript : MonoBehaviour {
     public int speed;
     public bool inUse;
     bool inMove = false, isSoundPlaying;
-    Vector3 target;
+    //Vector3 target;
     Color orgButtonColor;
 	// Use this for initialization
 	void Start ()
@@ -55,17 +55,17 @@ public class PedestalScript : MonoBehaviour {
     public void MoveToPedestal()
     {
         inMove = true;
-        switch ((int)station.transform.rotation.eulerAngles.y)
-        {
-            case 0:
-                target = new Vector3(transform.position.x + 1, theCamera.transform.position.y, transform.position.z);
-                break;
-            case 180:
-                target = new Vector3(transform.position.x - 1, theCamera.transform.position.y, transform.position.z);
-                break;
-            default:
-                break;
-        }
+        //switch ((int)station.transform.rotation.eulerAngles.y)
+        //{
+        //    case 0:
+        //        target = new Vector3(transform.position.x + 1, theCamera.transform.position.y, transform.position.z);
+        //        break;
+        //    case 180:
+        //        target = new Vector3(transform.position.x - 1, theCamera.transform.position.y, transform.position.z);
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
     public void DoButtonAction()
     {
