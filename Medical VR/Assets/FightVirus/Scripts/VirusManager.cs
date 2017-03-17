@@ -21,14 +21,13 @@ public class VirusManager : MonoBehaviour
     bool doWave;
     void Start()
     {
-        //InvokeRepeating("Spawn", 2.5f, 2.5f);
         Wave1 = true;
         Wave2 = false;
         Wave3 = false;
         Wave4 = false;
         doWave = false;
 
-        CreateWave(5);
+        CreateWave(6);
     }
 
     void Update()
@@ -71,12 +70,19 @@ public class VirusManager : MonoBehaviour
             CreateWave(1);
             doWave = false;
         }
+
+        for (int i = 0; i < VirusList.Count; i++)
+        {
+            if (VirusList[i].gameObject == null)
+            {
+                VirusList.Remove(VirusList[i]);
+            }
+        }
     }
 
     void CreateWave(int Count)
     {
         VirusList = new List<GameObject>();
-
 
         if (Wave1 == true || Wave2 == true || Wave3 == true)
         {
@@ -93,9 +99,8 @@ public class VirusManager : MonoBehaviour
         }
     }
 
-    //void Spawn()
-    //{
-    //    SpawnRandomVirus = Random.onUnitSphere * 13.0f;
-    //    VirusList.Add(Instantiate(VirusCube, SpawnRandomVirus, Quaternion.identity, transform) as GameObject);
-    //}
+    public void CreateBigVirus(GameObject pos)
+    {
+        VirusList.Add(Instantiate(BigVirusCube, pos.transform.position, Quaternion.identity, transform) as GameObject);
+    }
 }

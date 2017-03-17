@@ -22,11 +22,13 @@ public class Virus : MonoBehaviour
         GoTo = VirusManager.GetComponent<VirusManager>().VirusLocations;
         EnteredZone = false;
 
-        RandomVirusLocation = UnityEngine.Random.Range(0, 0);
+        //RandomVirusLocation = UnityEngine.Random.Range(0, 0);
+        RandomVirusLocation = 1;
 
         if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
         {
-            Speed = 0.005f;
+            //Speed = 0.005f;
+            Speed = 1.0f;
             Health = 10;
         }
 
@@ -55,23 +57,6 @@ public class Virus : MonoBehaviour
         {
             //Virus form up at special postion
             transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
-
-            //Check List Count
-            for (int i = 0; i < GoTo.GetComponent<VirusLocations>().VirusLocationList.Count; i++)
-            {
-                if (GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count == 5)
-                {
-                    CreateBigVirus(GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos);
-
-                    //Delete from original VirusList
-                    //if (GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos.transform.position == transform.position)
-                    //{
-                    //    VirusManager.GetComponent<EnemyManager>().VirusList.Remove(transform.gameObject);
-                    //}
-
-                    GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Clear();
-                }
-            }
         }
 
         else if (transform.tag == "BigVirus")
@@ -100,11 +85,6 @@ public class Virus : MonoBehaviour
                 BossCanTakeDamage = true;
             }
         }
-    }
-
-    void CreateBigVirus(GameObject pos)
-    {
-        VirusManager.GetComponent<VirusManager>().VirusList.Add(Instantiate(VirusManager.GetComponent<VirusManager>().BigVirusCube, pos.transform.position, Quaternion.identity) as GameObject);
     }
 
     void OnTriggerEnter(Collider col)
