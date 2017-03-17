@@ -22,13 +22,12 @@ public class Virus : MonoBehaviour
         GoTo = VirusManager.GetComponent<VirusManager>().VirusLocations;
         EnteredZone = false;
 
-        //RandomVirusLocation = UnityEngine.Random.Range(0, 0);
-        RandomVirusLocation = 1;
+        RandomVirusLocation = UnityEngine.Random.Range(0, 4);
 
         if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
         {
-            //Speed = 0.005f;
-            Speed = 1.0f;
+            Speed = 0.005f;
+            //Speed = 1.0f;
             Health = 10;
         }
 

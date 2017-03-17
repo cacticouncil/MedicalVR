@@ -19,6 +19,7 @@ public class VirusManager : MonoBehaviour
     public bool Wave4;
 
     bool doWave;
+    bool StartCheckingWaves;
     void Start()
     {
         Wave1 = true;
@@ -26,49 +27,55 @@ public class VirusManager : MonoBehaviour
         Wave3 = false;
         Wave4 = false;
         doWave = false;
-
-        CreateWave(6);
+        StartCheckingWaves = false;
+        StartCoroutine(CreateWave(6));
     }
 
     void Update()
     {
-        if (VirusList.Count == 0 && Wave1 == true)
+        if (StartCheckingWaves == true)
         {
-            Wave1 = false;
-            Wave2 = true;
-            doWave = true;
-        }
+            if (VirusList.Count == 0 && Wave1 == true)
+            {
+                Wave1 = false;
+                Wave2 = true;
+                doWave = true;
+            }
 
-        if (Wave2 == true && doWave == true)
-        {
-            CreateWave(1);
-            doWave = false;
-        }
+            if (Wave2 == true && doWave == true)
+            {
+                CreateWave(1);
+                StartCheckingWaves = false;
+                doWave = false;
+            }
 
-        if (VirusList.Count == 0 && Wave2 == true)
-        {
-            Wave2 = false;
-            Wave3 = true;
-            doWave = true;
-        }
+            if (VirusList.Count == 0 && Wave2 == true)
+            {
+                Wave2 = false;
+                Wave3 = true;
+                doWave = true;
+            }
 
-        if (Wave3 == true && doWave == true)
-        {
-            CreateWave(1);
-            doWave = false;
-        }
+            if (Wave3 == true && doWave == true)
+            {
+                CreateWave(1);
+                StartCheckingWaves = false;
+                doWave = false;
+            }
 
-        if (VirusList.Count == 0 && Wave3 == true)
-        {
-            Wave3 = false;
-            Wave4 = true;
-            doWave = true;
-        }
+            if (VirusList.Count == 0 && Wave3 == true)
+            {
+                Wave3 = false;
+                Wave4 = true;
+                doWave = true;
+            }
 
-        if (Wave4 == true && doWave == true)
-        {
-            CreateWave(1);
-            doWave = false;
+            if (Wave4 == true && doWave == true)
+            {
+                CreateWave(1);
+                StartCheckingWaves = false;
+                doWave = false;
+            }
         }
 
         for (int i = 0; i < VirusList.Count; i++)
@@ -80,12 +87,14 @@ public class VirusManager : MonoBehaviour
         }
     }
 
-    void CreateWave(int Count)
+
+    IEnumerator CreateWave(int Count)
     {
         VirusList = new List<GameObject>();
 
         if (Wave1 == true || Wave2 == true || Wave3 == true)
         {
+            yield return new WaitForSeconds(5.0f);
             for (int i = 0; i < Count; i++)
             {
                 SpawnRandomVirus = Random.onUnitSphere * 7.0f;
@@ -95,8 +104,11 @@ public class VirusManager : MonoBehaviour
 
         else if (Wave4 == true)
         {
+            yield return new WaitForSeconds(5.0f);
             VirusList.Add(Instantiate(BossCube, BossSpawn.transform.position, Quaternion.identity, transform) as GameObject);
         }
+
+        StartCheckingWaves = true;
     }
 
     public void CreateBigVirus(GameObject pos)
