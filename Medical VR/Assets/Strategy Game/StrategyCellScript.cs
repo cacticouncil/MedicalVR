@@ -12,6 +12,7 @@ public class StrategyCellScript : MonoBehaviour
     public TextMesh d;
     public TextMesh i;
     public TextMesh p;
+    public Renderer render;
     public Vector2 key;
     public bool targeted = false;
     public bool hosted = false;
@@ -62,11 +63,6 @@ public class StrategyCellScript : MonoBehaviour
         i.text = "Immunity: " + immunity;
         p.text = "Protein: " + protein.ToString();
     }
-
-    //void FixedUpdate()
-    //{
-    //    transform.Rotate(new Vector3(.1f, .1f, .1f));
-    //}
 
     public void IncreaseReproduction()
     {
@@ -278,15 +274,15 @@ public class StrategyCellScript : MonoBehaviour
 
         if (hosted)
         {
-            GetComponent<Renderer>().material.color = Color.red;
+            render.material.color = Color.red;
         }
         else if (targeted)
         {
-            GetComponent<Renderer>().material.color = Color.green;
+            render.material.color = Color.green;
         }
         else
         {
-            GetComponent<Renderer>().material.color = Color.white;
+            render.material.color = Color.white;
         }
 
         if (transform.GetChild(0).gameObject.activeSelf)

@@ -24,13 +24,13 @@ public class PedestalScript : MonoBehaviour {
         if(inMove)
         {
              theCamera.transform.position = Vector3.MoveTowards(theCamera.transform.position, camPos.transform.position, speed*Time.deltaTime);
-             if(theCamera.transform.position == target)
+             if(theCamera.transform.position == camPos.transform.position)
              {
                 inMove = false;
                 inUse = true;
              }
         }
-        if (theCamera.transform.position != target)
+        if (theCamera.transform.position != camPos.transform.position)
         {
             isSoundPlaying = false;
             descButton.GetComponent<Renderer>().material.color = orgButtonColor;
