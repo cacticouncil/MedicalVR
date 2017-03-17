@@ -144,15 +144,16 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
         IDictionary<string, object> data = result.ResultDictionary;
         List<object> scoreList = (List<object>)data["data"];
 
-        foreach(object obj in scoreList)
+        foreach (Transform child in ScrollScoreList.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        foreach (object obj in scoreList)
         {
             var entry = (Dictionary<string, object>)obj;
             var user = (Dictionary<string, object>)entry["user"];
 
-            foreach (Transform child in ScrollScoreList.transform)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
             Debug.Log(user["name"].ToString() + " , " + entry["score"].ToString());
 
             GameObject ScorePanel;
@@ -183,36 +184,14 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
             });
 
         }
-        
-
-        //    FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, delegate (IGraphResult pictureResult) {
-
-        //        if (pictureResult.Error != null) // if there was an error
-        //        {
-        //            Debug.Log(pictureResult.Error);
-        //        }
-        //        else // if everything was fine
-        //        {
-        //            UserAvatar.sprite = Sprite.Create(pictureResult.Texture, new Rect(0, 0, 128, 128), new Vector2(0, 0));
-        //        }
-
-        //    });
-
-
-
-        //}
-
-
     }
 
     public void SetScore()
     {
         var ScoreData = new Dictionary<string, string>();
 
-        ScoreData["score"] = UnityEngine.Random.Range(0, 250).ToString();
+        ScoreData["score"] = UnityEngine.Random.Range(10, 200).ToString();
 
-        FB.API("me/scores", HttpMethod.POST, delegate (IGraphResult result)
-            {Debug.Log("Score Submitted successfully" + result.RawResult);},
-            ScoreData);
+        FB.API("/me/scores", HttpMethod.POST, delegate(IGraphResult result) {Debug.Log("Score Submitted successfully" + result.RawResult);}, ScoreData);
     }
 }

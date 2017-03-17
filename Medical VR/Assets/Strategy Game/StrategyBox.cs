@@ -53,11 +53,14 @@ public class StrategyBox : MonoBehaviour
 
     public void MoveTo()
     {
-        transform.GetChild(0).gameObject.SetActive(true);
+        if (key != cellmanager.selected)
+        {
+            transform.GetChild(0).gameObject.SetActive(true);
 
-        //This is the new target position
-        mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1.5f));
-        cellmanager.SetSelected(key);
+            //This is the new target position
+            mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1.5f));
+            cellmanager.SetSelected(key);
+        }
     }
 
     public void ToggleUI()
