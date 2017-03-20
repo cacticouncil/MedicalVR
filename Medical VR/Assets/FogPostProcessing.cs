@@ -1,5 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 namespace UnityStandardAssets.ImageEffects
 {
@@ -13,21 +13,22 @@ namespace UnityStandardAssets.ImageEffects
 
         private Material m_Material;
 
-        protected virtual void Start()
+        void Start()
         {
-            // Disable if we don't support image effects
-            if (!SystemInfo.supportsImageEffects)
-            {
-                enabled = false;
-                return;
-            }
+        //    // Disable if we don't support image effects
+        //    if (!SystemInfo.supportsImageEffects)
+        //    {
+        //        enabled = false;
+        //        return;
+        //    }
 
-            // Disable the image effect if the shader can't
-            // run on the users graphics card
-            if (!shader || !shader.isSupported)
-                enabled = false;
+        //    // Disable the image effect if the shader can't
+        //    // run on the users graphics card
+        //    if (!shader || !shader.isSupported)
+        //        enabled = false;
 
             GetComponent<Camera>().depthTextureMode = DepthTextureMode.Depth;
+            StartCoroutine(EnableDepth());
         }
 
         void OnRenderImage(RenderTexture sourceTexture, RenderTexture destTexture)
@@ -42,6 +43,7 @@ namespace UnityStandardAssets.ImageEffects
                 DestroyImmediate(m_Material);
             }
         }
+
         protected virtual void OnEnable()
         {
             if (m_Material == null)
@@ -49,6 +51,15 @@ namespace UnityStandardAssets.ImageEffects
                 m_Material = new Material(shader);
                 m_Material.hideFlags = HideFlags.HideAndDontSave;
             }
+            GetComponent<Camera>().depthTextureMode = DepthTextureMode.Depth;
+        }
+
+        public IEnumerator EnableDepth()
+        {
+            GetComponent<Camera>().depthTextureMode = DepthTextureMode.Depth;
+            yield return new WaitForEndOfFrame();
+            GetComponent<Camera>().depthTextureMode = DepthTextureMode.Depth;
+            //yield return new WaitForEndOfFrame();
         }
     }
 }
