@@ -18,6 +18,7 @@ public class Virus : MonoBehaviour
     bool BossCanTakeDamage;
     bool BossMadeLocation;
     float BossMovementTimer;
+    
     void Start()
     {
         VirusManager = gameObject.transform.parent.gameObject;
@@ -33,8 +34,8 @@ public class Virus : MonoBehaviour
 
         if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
         {
-            Speed = 0.005f;
-            //Speed = 1.0f;
+            //Speed = 0.005f;
+            Speed = 1.0f;
             Health = 10;
         }
 
@@ -62,15 +63,16 @@ public class Virus : MonoBehaviour
         if (transform.tag == "Virus")
         {
             //Virus form up at special postion
-            transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
+            transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[0].Pos.transform.position, Speed);
         }
 
         else if (transform.tag == "BigVirus")
         {
-            switch (switch_on)
-            {
-                default:
-            }
+            //Temporaily Fixed
+            Speed = 0.01f;
+            transform.LookAt(Player.transform.position);
+            transform.Rotate(0, 180, 0);
+            transform.position += transform.forward * Speed;
         }
 
         //For Boss 
