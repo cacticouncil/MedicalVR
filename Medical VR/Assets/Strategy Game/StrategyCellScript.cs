@@ -8,10 +8,10 @@ public class StrategyCellScript : MonoBehaviour
     public int defense = 1;
     public int immunity = 1;
     public int repCap = 5, defCap = 5, immCap = 15;
-    public TextMesh r;
-    public TextMesh d;
-    public TextMesh i;
-    public TextMesh p;
+    public TMPro.TextMeshPro r;
+    public TMPro.TextMeshPro d;
+    public TMPro.TextMeshPro i;
+    public TMPro.TextMeshPro p;
     public Renderer render;
     public Vector2 key;
     public bool targeted = false;
@@ -45,7 +45,7 @@ public class StrategyCellScript : MonoBehaviour
     {
         if (!r || !d || !i || !p)
         {
-            TextMesh[] arr = GetComponentsInChildren<TextMesh>(true);
+            TMPro.TextMeshPro[] arr = GetComponentsInChildren<TMPro.TextMeshPro>(true);
             r = arr[3];
             d = arr[4];
             i = arr[5];
@@ -58,6 +58,7 @@ public class StrategyCellScript : MonoBehaviour
     void Start()
     {
         turnSpawned = transform.GetComponentInParent<StrategyCellManagerScript>().turnNumber;
+        transform.GetComponentInParent<StrategyCellManagerScript>().cells.Add(this);
         r.text = "Reproduction: " + reproduction;
         d.text = "Defense: " + defense;
         i.text = "Immunity: " + immunity;
@@ -171,6 +172,7 @@ public class StrategyCellScript : MonoBehaviour
         {
             transform.parent.GetComponent<StrategyCellManagerScript>().inventory[0].count--;
             RDur = 5;
+            r.color = Color.blue;
             transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
         }
     }
@@ -211,6 +213,7 @@ public class StrategyCellScript : MonoBehaviour
         {
             transform.parent.GetComponent<StrategyCellManagerScript>().inventory[4].count--;
             I2Dur = 5;
+            i.color = Color.red;
             transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
         }
     }
@@ -247,6 +250,10 @@ public class StrategyCellScript : MonoBehaviour
             {
                 Treproduction -= 5;
                 RDur--;
+                if (RDur == 0)
+                {
+                    r.color = Color.white;
+                }
             }
             Treproduction -= reproduction;
             if (Treproduction <= 0)
@@ -269,6 +276,10 @@ public class StrategyCellScript : MonoBehaviour
             {
                 immunitySpread += gameObject.transform.parent.GetComponent<StrategyCellManagerScript>().SpreadImmunity(key);
                 I2Dur--;
+                if (I2Dur == 0)
+                {
+                    i.color = Color.white;
+                }
             }
         }
 

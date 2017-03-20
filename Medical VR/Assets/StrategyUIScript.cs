@@ -25,7 +25,7 @@ public class StrategyUIScript : MonoBehaviour
             if (inventory[inventory.Count - 1].count > 0)
             {
                 items[inventory.Count - 1].SetActive(true);
-                items[inventory.Count - 1].GetComponentInChildren<TextMesh>().text = inventory[inventory.Count - 1].count.ToString();
+                items[inventory.Count - 1].GetComponentInChildren<TMPro.TextMeshPro>().text = inventory[inventory.Count - 1].count.ToString();
             }
             else
             {
@@ -43,7 +43,7 @@ public class StrategyUIScript : MonoBehaviour
                 if (inventory[i].count > 0)
                 {
                     items[i].SetActive(true);
-                    items[i].GetComponentInChildren<TextMesh>().text = inventory[i].count.ToString();
+                    items[i].GetComponentInChildren<TMPro.TextMeshPro>().text = inventory[i].count.ToString();
                 }
                 else
                     items[i].SetActive(false);
