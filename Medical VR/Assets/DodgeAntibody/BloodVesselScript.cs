@@ -5,8 +5,9 @@ public class BloodVesselScript : MonoBehaviour {
 
     public GameObject enter;
     public GameObject exit;
-	// Use this for initialization
-	void Start () {
+    public GameObject Effects;
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
@@ -18,8 +19,12 @@ public class BloodVesselScript : MonoBehaviour {
     {
         if (other.tag == "virus")
         {
-            if(enter.GetComponent<VesselOpening>().shouldCollide == true && exit.GetComponent<VesselOpening>().shouldCollide == true)
-            other.GetComponent<MovingCamera>().LoseresetPos();
+            if (enter.GetComponent<VesselOpening>().shouldCollide == true && exit.GetComponent<VesselOpening>().shouldCollide == true)
+            {
+                other.GetComponent<MovingCamera>().LoseresetPos();
+                Effects.GetComponent<ParticleSystem>().Stop();
+                Effects.GetComponent<ParticleSystem>().Play();
+            }
         }
     }
 }
