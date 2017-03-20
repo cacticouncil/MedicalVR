@@ -18,6 +18,7 @@ public struct Spawn
 public class VirusLocations : MonoBehaviour
 {
     public List<Spawn> VirusLocationList = new List<Spawn>();
+    public GameObject VirusManager;
     void Start()
     {
         Spawn S1 = new Spawn(GameObject.Find("1VirusGoTo"));
@@ -29,6 +30,23 @@ public class VirusLocations : MonoBehaviour
         VirusLocationList.Add(S2);
         VirusLocationList.Add(S3);
         VirusLocationList.Add(S4);
+    }
+
+    void Update()
+    {
+        for (int i = 0; i < VirusLocationList.Count; i++)
+        {
+            if (VirusLocationList[i].VirusList.Count >= 5)
+            {
+                for (int j = 0; j < VirusManager.GetComponent<VirusManager>().VirusList.Count; j++)
+                {
+                    if (VirusLocationList[i].VirusList.Contains(VirusManager.GetComponent<VirusManager>().VirusList[j]))
+                        Destroy(VirusManager.GetComponent<VirusManager>().VirusList[j]);
+                }
+
+                VirusManager.GetComponent<VirusManager>().CreateBigVirus(VirusLocationList[i].Pos);
+            }
+        }
     }
 }
 
