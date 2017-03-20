@@ -31,6 +31,7 @@ public class StrategyVirusScript : MonoBehaviour
             distance = .001f;
             standby = true;
         }
+        transform.GetComponentInParent<StrategyCellManagerScript>().viruses.Add(this);
         startTime = Time.time;
     }
 
