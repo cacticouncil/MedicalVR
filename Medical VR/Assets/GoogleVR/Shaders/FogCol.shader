@@ -38,7 +38,8 @@
 			color.rgb = lerp(unity_FogColor.rgb, color.rgb, IN.fogFactor);
 		}
 
-		void surf (Input IN, inout SurfaceOutput o) {
+		void surf (Input IN, inout SurfaceOutput o) 
+		{
 			half4 c = _Color;
 			o.Albedo = c.rgb;
 			o.Alpha = c.a;

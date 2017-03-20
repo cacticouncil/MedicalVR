@@ -37,19 +37,17 @@
 			v2f o;
 			o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
 			o.scrPos = ComputeScreenPos(o.pos);
-			o.scrPos.y = 1 - o.scrPos.y;
+			//o.scrPos.y = 1 - o.scrPos.y;
 			return o;
 		}
 
 		float4 frag (v2f i) : COLOR
 		{
-			//return tex2D(_MainTex, i.scrPos);
-
 			float depthValue = Linear01Depth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos)).r);
-			float cameraVertDist = saturate((_ProjectionParams.z - _ProjectionParams.y) * depthValue + _ProjectionParams.y);
+			float cameraVertDist = (_ProjectionParams.z - _ProjectionParams.y) * depthValue + _ProjectionParams.y;
 			float f = cameraVertDist * unity_FogDensity;
 			float fogFactor = saturate(1 / pow(2.71828, f * f));
-			half4 color = tex2Dproj(_MainTex, i.scrPos);
+			float4 color = tex2Dproj(_MainTex, i.scrPos);
 			color.rgb = lerp(unity_FogColor.rgb, color.rgb, fogFactor);
 			return color;
 		}

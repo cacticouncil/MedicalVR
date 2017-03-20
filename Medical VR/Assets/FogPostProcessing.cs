@@ -24,8 +24,8 @@ namespace UnityStandardAssets.ImageEffects
 
             // Disable the image effect if the shader can't
             // run on the users graphics card
-            //if (!shader || !shader.isSupported)
-            //    enabled = false;
+            if (!shader || !shader.isSupported)
+                enabled = false;
 
             GetComponent<Camera>().depthTextureMode = DepthTextureMode.Depth;
         }
