@@ -9,6 +9,6 @@ public class Rotate : MonoBehaviour
     void Update()
     {
         transform.Rotate(new Vector3(Time.deltaTime * rotation.x, Time.deltaTime * rotation.y, Time.deltaTime * rotation.z));
-		GetComponent<Renderer> ().material.color = col;
+		//GetComponent<Renderer> ().material.color = col;
     }
 }
