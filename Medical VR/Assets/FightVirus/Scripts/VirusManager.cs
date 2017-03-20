@@ -74,7 +74,7 @@ public class VirusManager : MonoBehaviour
 
         if (Wave1 == true || Wave2 == true || Wave3 == true)
         {
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 10; i++)
             {
                 SpawnRandomVirus = Random.onUnitSphere * 7.0f;
                 VirusList.Add(Instantiate(VirusCube, SpawnRandomVirus, Quaternion.identity, transform) as GameObject);

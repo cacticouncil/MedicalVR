@@ -34,8 +34,8 @@ public class Virus : MonoBehaviour
 
         if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
         {
-            //Speed = 0.005f;
-            Speed = 1.0f;
+            Speed = 0.005f;
+            //Speed = 1.0f;
             Health = 10;
         }
 
@@ -63,7 +63,7 @@ public class Virus : MonoBehaviour
         if (transform.tag == "Virus")
         {
             //Virus form up at special postion
-            transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[0].Pos.transform.position, Speed);
+            transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
         }
 
         else if (transform.tag == "BigVirus")
