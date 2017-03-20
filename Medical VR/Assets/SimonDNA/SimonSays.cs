@@ -10,14 +10,14 @@ public class SimonSays : MonoBehaviour {
     public GameObject red;
     public GameObject blue;
     public GameObject green;
-    public GameObject sign, UI, scoreBoard, theScore, theLives, polyLeft, GO;
+    public GameObject sign, UI, scoreBoard, theScore, theLives, polyLeft, GO, gameTimer;
 
     public int score = 0;
     Color cY, cR, cB, cG;
 
-    int round = 1, inputed = 0, shownSign = 0, scoreCombo = 1, polys = 0, polysDone;
+    int round = 1, inputed = 0, shownSign = 0, scoreCombo = 1, polys = 0, polysDone; 
 
-    float timer = 3;
+    float timer = 3, theTimer;
 
     Vector3 orgPos;
     public bool arcadeMode = true;
@@ -45,6 +45,8 @@ public class SimonSays : MonoBehaviour {
         selectedColor = (theColors)5;
         theScore.GetComponent<TextMesh>().text = "Score: " + score.ToString();
         theLives.GetComponent<TextMesh>().text = "Lives: " + lives.ToString();
+        gameTimer.GetComponent<TextMesh>().text = "TIMER " + theTimer.ToString();
+        theTimer = 30;
         polys = 36;
         polysDone = 0;
         if(arcadeMode == false)
@@ -61,6 +63,21 @@ public class SimonSays : MonoBehaviour {
         if (lives > 0)
         {
             timer += Time.deltaTime;
+            if(makeInput == true)
+            {
+                theTimer -= Time.deltaTime;
+                int tmp = (int)theTimer;
+                gameTimer.GetComponent<TextMesh>().text = "TIMER: " + tmp.ToString();
+                if (tmp < 1)
+                {
+                    SignalIncorrect();
+                    // ResetStuff();
+                    waitAsec = true;
+                    timer = 0;
+                    showStuff = false;
+                    makeInput = false;
+                }
+            }
             WaitForTime();
 
             if (waitAsec == false)
@@ -74,6 +91,7 @@ public class SimonSays : MonoBehaviour {
                 if (makeInput)
                 {
                     sign.GetComponent<MeshRenderer>().enabled = false;
+                    sign.GetComponentInChildren<TextMesh>().text = " ";
                     TakeInput();
                 }
                 if (showStuff)
@@ -106,6 +124,7 @@ public class SimonSays : MonoBehaviour {
             if (timer > 1.0)
             {
                 sign.GetComponent<MeshRenderer>().enabled = false;
+                sign.GetComponentInChildren<TextMesh>().text = " ";
                 TurnOffLights();
             }
             if (timer > 2.0)
@@ -114,6 +133,8 @@ public class SimonSays : MonoBehaviour {
     }
     void GeneratePattern()
     {
+        theTimer = 30;
+        gameTimer.GetComponent<TextMesh>().text = "TIMER: " + theTimer.ToString();
         for (int i = 0; i < round; i++)
         {
             theColors tmpColor = new theColors();
@@ -128,15 +149,19 @@ public class SimonSays : MonoBehaviour {
         {
             case theColors.YELLOW:
                 sign.GetComponent<Renderer>().material.color = Color.yellow;
+                sign.GetComponentInChildren<TextMesh>().text = "C";
                 break;
             case theColors.RED:
                 sign.GetComponent<Renderer>().material.color = Color.red;
+                sign.GetComponentInChildren<TextMesh>().text = "A";
                 break;
             case theColors.BLUE:
                 sign.GetComponent<Renderer>().material.color = Color.blue;
+                sign.GetComponentInChildren<TextMesh>().text = "U";
                 break;
             case theColors.GREEN:
                 sign.GetComponent<Renderer>().material.color = Color.green;
+                sign.GetComponentInChildren<TextMesh>().text = "G";
                 break;
             default:
                 break;

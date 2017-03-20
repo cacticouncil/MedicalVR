@@ -57,15 +57,19 @@ public class RnaMessengerScript : MonoBehaviour {
         {
             case SimonSays.theColors.YELLOW:
                 nuclei.GetComponent<Renderer>().material.color = Color.yellow;
+                nuclei.GetComponentInChildren<TextMesh>().text = "C";
                 break;
             case SimonSays.theColors.RED:
                 nuclei.GetComponent<Renderer>().material.color = Color.red;
+                nuclei.GetComponentInChildren<TextMesh>().text = "A";
                 break;
             case SimonSays.theColors.BLUE:
                 nuclei.GetComponent<Renderer>().material.color = Color.blue;
+                nuclei.GetComponentInChildren<TextMesh>().text = "U";
                 break;
             case SimonSays.theColors.GREEN:
                 nuclei.GetComponent<Renderer>().material.color = Color.green;
+                nuclei.GetComponentInChildren<TextMesh>().text = "G";
                 break;
             default:
                 break;

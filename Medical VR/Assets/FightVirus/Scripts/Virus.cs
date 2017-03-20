@@ -11,10 +11,14 @@ public class Virus : MonoBehaviour
 
     public float Speed;
     public int Health;
-    bool BossCanTakeDamage;
     bool EnteredZone;
     int RandomVirusLocation;
 
+    Vector3 SavedLocation;
+    bool BossCanTakeDamage;
+    bool BossMadeLocation;
+    float BossMovementTimer;
+    
     void Start()
     {
         VirusManager = gameObject.transform.parent.gameObject;
@@ -22,11 +26,16 @@ public class Virus : MonoBehaviour
         GoTo = VirusManager.GetComponent<VirusManager>().VirusLocations;
         EnteredZone = false;
 
-        RandomVirusLocation = UnityEngine.Random.Range(0, 0);
+        BossCanTakeDamage = false;
+        BossMadeLocation = false;
+        BossMovementTimer = 0.0f;
+
+        RandomVirusLocation = UnityEngine.Random.Range(0, 4);
 
         if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
         {
             Speed = 0.005f;
+            //Speed = 1.0f;
             Health = 10;
         }
 
@@ -55,56 +64,53 @@ public class Virus : MonoBehaviour
         {
             //Virus form up at special postion
             transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
-
-            //Check List Count
-            for (int i = 0; i < GoTo.GetComponent<VirusLocations>().VirusLocationList.Count; i++)
-            {
-                if (GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Count == 5)
-                {
-                    CreateBigVirus(GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos);
-
-                    //Delete from original VirusList
-                    //if (GoTo.GetComponent<VirusLocations>().VirusLocationList[i].Pos.transform.position == transform.position)
-                    //{
-                    //    VirusManager.GetComponent<EnemyManager>().VirusList.Remove(transform.gameObject);
-                    //}
-
-                    GoTo.GetComponent<VirusLocations>().VirusLocationList[i].VirusList.Clear();
-                }
-            }
         }
 
         else if (transform.tag == "BigVirus")
         {
-
+            //Temporaily Fixed
+            Speed = 0.01f;
+            transform.LookAt(Player.transform.position);
+            transform.Rotate(0, 180, 0);
+            transform.position += transform.forward * Speed;
         }
 
         //For Boss 
         else if (transform.tag == "Boss")
         {
-            float Distance1 = Vector3.Distance(transform.position, Player.transform.position);
-            if (Distance1 >= 4.5f)
+            if (BossMadeLocation == false)
             {
-                transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
-                float Distance2 = Vector3.Distance(transform.position, Player.transform.position);
+                float Distance1 = Vector3.Distance(transform.position, Player.transform.position);
+                if (Distance1 >= 4.5f)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
+                    float Distance2 = Vector3.Distance(transform.position, Player.transform.position);
 
-                //So the boss follows the player
-                Vector3 forward;
-                forward = Player.transform.forward;
-                transform.position = forward * Distance2;
+                    //So the boss follows the player
+                    Vector3 forward;
+                    forward = Player.transform.forward;
+                    transform.position = forward * Distance2;
+                }
 
-                BossCanTakeDamage = false;
+                else
+                {
+                    //Basically the Boss made it to its destination
+                    SavedLocation = transform.position;
+                    BossMadeLocation = true;
+                    BossCanTakeDamage = true;
+                }
             }
+
             else
             {
-                BossCanTakeDamage = true;
+                transform.position = new Vector3(SavedLocation.x + Mathf.Sin(Time.time), SavedLocation.y, SavedLocation.z);
+                BossMovementTimer += Time.deltaTime;
+                if (BossMovementTimer >= 3.0f)
+                {
+                    transform.position = new Vector3(SavedLocation.x - Mathf.Sin(Time.time), SavedLocation.y, SavedLocation.z);
+                }
             }
         }
-    }
-
-    void CreateBigVirus(GameObject pos)
-    {
-        VirusManager.GetComponent<VirusManager>().VirusList.Add(Instantiate(VirusManager.GetComponent<VirusManager>().BigVirusCube, pos.transform.position, Quaternion.identity) as GameObject);
     }
 
     void OnTriggerEnter(Collider col)

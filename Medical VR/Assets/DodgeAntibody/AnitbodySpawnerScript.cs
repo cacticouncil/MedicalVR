@@ -62,8 +62,17 @@ public class AnitbodySpawnerScript : MonoBehaviour {
             {
                 int obNum = Random.Range(0, Obstacles.Count - 1 - j);
                 Vector3 tmpPos = new Vector3(tmpNum[obNum].transform.position.x, tmpNum[obNum].transform.position.y, z);
+                int sz = Random.Range(0, 3);
+                if (sz == 0)
+                    sz = 0;
+                else if (sz == 1)
+                    sz = 100;
+                else if (sz == 2)
+                    sz = -100;
+               
                 tmpNum.Remove(tmpNum[obNum]);
                 GameObject tmp = Instantiate(refAntiBody, tmpPos, refAntiBody.transform.rotation) as GameObject;
+                tmp.transform.localScale = new Vector3(tmp.transform.localScale.x + sz, tmp.transform.localScale.y + sz, tmp.transform.localScale.z + sz);
                 randPositions.Add(tmp);
 
                 if(j%2 == 0 && virus.GetComponent<MovingCamera>().arcadeMode == true)
@@ -76,7 +85,8 @@ public class AnitbodySpawnerScript : MonoBehaviour {
                 }
                
 
-                z += zGap;
+                if(j%4 == 3)
+                    z += zGap;
             }
         }
     }

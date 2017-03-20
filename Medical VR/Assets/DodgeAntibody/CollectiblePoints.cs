@@ -4,7 +4,7 @@ using System.Collections;
 public class CollectiblePoints : MonoBehaviour {
 
     public int score;
-    public GameObject Cam;
+    public GameObject Cam, pointEffect;
     // Use this for initialization
     void Start () {
 	
@@ -26,7 +26,9 @@ public class CollectiblePoints : MonoBehaviour {
     {
         if (other.tag == "virus")
         {
+            pointEffect.GetComponent<ParticleSystem>().Stop();
             other.GetComponent<MovingCamera>().score += score;
+            pointEffect.GetComponent<ParticleSystem>().Play();
             Destroy(gameObject);
         }
     }

@@ -7,6 +7,10 @@ using System.Collections.Generic;
 public class StrategyCellManagerScript : MonoBehaviour
 {
     public Dictionary<Vector2, GameObject> tiles = new Dictionary<Vector2, GameObject>(new Vector2Comparer());
+    [HideInInspector]
+    public List<StrategyCellScript> cells = new List<StrategyCellScript>();
+    [HideInInspector]
+    public List<StrategyVirusScript> viruses = new List<StrategyVirusScript>();
     public GameObject cellPrefab;
     public GameObject virusPrefab1;
     public GameObject virusPrefab2;
@@ -72,34 +76,37 @@ public class StrategyCellManagerScript : MonoBehaviour
         if (actionsLeft == 0)
         {
             actionsLeft = 4;
-            TurnUpdate();
+            StartCoroutine(TurnUpdate());
         }
 
         screenUI.text = "Actions Left: " + actionsLeft + "\nTurn Number: " + turnNumber + "\nCells Alive: " + cellNum + "\nViruses Alive: " + virNum;
     }
 
-    public void TurnUpdate()
+    IEnumerator TurnUpdate()
     {
         Debug.Log("Turn Updating");
         turnNumber++;
 
-        foreach (StrategyCellScript child in gameObject.GetComponentsInChildren<StrategyCellScript>())
+        foreach (StrategyCellScript child in cells)
         {
             child.TurnUpdate();
+            yield return new WaitForEndOfFrame();
         }
 
         Debug.Log("Cells Updated");
 
-        foreach (StrategyVirusScript child in gameObject.GetComponentsInChildren<StrategyVirusScript>())
+        foreach (StrategyVirusScript child in viruses)
         {
             child.TurnUpdate();
+            yield return new WaitForEndOfFrame();
         }
 
         Debug.Log("Viruses Updated");
 
-        foreach (StrategyCellScript child in gameObject.GetComponentsInChildren<StrategyCellScript>())
+        foreach (StrategyCellScript child in cells)
         {
             child.DelayedTurnUpdate();
+            yield return new WaitForEndOfFrame();
         }
 
         Debug.Log("Cells Late Updated");
@@ -109,8 +116,8 @@ public class StrategyCellManagerScript : MonoBehaviour
             SpawnVirus();
         }
 
-        cellNum = gameObject.GetComponentsInChildren<StrategyCellScript>().Length;
-        virNum = gameObject.GetComponentsInChildren<StrategyVirusScript>().Length;
+        cellNum = cells.Count;
+        virNum = viruses.Count;
 
         if (cellNum > 10 && virusPrefab == virusPrefab1)
         {
