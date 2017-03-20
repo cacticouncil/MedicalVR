@@ -8,6 +8,7 @@
 	{
 	Pass
 	{
+		Tags{ "Queue" = "Overlay+500"}
 		ZTest Always Cull Off ZWrite Off
 		Fog{ Mode  Off }
 		//LOD 200

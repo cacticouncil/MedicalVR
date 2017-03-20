@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AntibodyScript : MonoBehaviour {
 
-    public GameObject Cam;
+    public GameObject Cam, Effects;
 	// Use this for initialization
 	void Start () {
 	
@@ -27,6 +27,8 @@ public class AntibodyScript : MonoBehaviour {
        if(other.tag == "virus")
         {
             other.GetComponent<MovingCamera>().LoseresetPos();
+            Effects.GetComponent<ParticleSystem>().Stop();
+            Effects.GetComponent<ParticleSystem>().Play();
         }
     }
     void OnCollisionEnter(Collision collision)
