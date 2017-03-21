@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TrophyScript : MonoBehaviour {
 
-    public GameObject pedestal, trophyPos, selectPos, trophyName;
-    Vector3 orgPos, target, pedestalTarget;
+    public GameObject pedestal, trophyPos, selectPos, trophyName, sub;
     public float speed, rotationSpeed;
+    public List<SubstitlesScript.Subtitle> subtitle = new List<SubstitlesScript.Subtitle>();
     bool moveForward, inPedestal;
+    Vector3 orgPos, target, pedestalTarget;
     Quaternion orgRotation;
 	// Use this for initialization
 	void Start ()
@@ -86,6 +88,8 @@ public class TrophyScript : MonoBehaviour {
                     pedestal.GetComponent<PedestalScript>().descButton.SetActive(false);
                     pedestal.GetComponent<PedestalScript>().selectedTrophy = null;
                     GetComponent<AudioSource>().Stop();
+                    sub.GetComponent<SubstitlesScript>().Stop();
+                    pedestal.GetComponent<PedestalScript>().RevertButtonAction();
                     trophyName.SetActive(true);
                 }
             }
@@ -94,5 +98,7 @@ public class TrophyScript : MonoBehaviour {
     public void PlayDescription()
     {
         GetComponent<AudioSource>().Play();
+        sub.GetComponent<SubstitlesScript>().theSubtitles = subtitle;
+        sub.GetComponent<SubstitlesScript>().Replay();
     }
 }

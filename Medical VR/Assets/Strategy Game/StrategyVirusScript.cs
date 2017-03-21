@@ -3,15 +3,19 @@ using System.Collections;
 
 public class StrategyVirusScript : MonoBehaviour
 {
-    public GameObject target;
-    public float movementSpeed = 1.0f;
-    public float turnSpeed = .25f;
-    public int attackValue = 1;
-    public int attackDuration = 0;
+    public StrategyCellScript target;
+    public float movementSpeed = 10.0f;
+    public float turnSpeed = .1f;
+    public float attackValue = .5f;
+    public float attackDuration = 0;
+    public float health = 15.0f;
     public float percentTraveled = 0.0f;
     public bool standby = false;
 
     public Vector3 startingPosition, prevPosition, nextPosition;
+
+    public StrategyCellManagerScript parent;
+
     private float distance = .1f;
     private float startTime = 0.0f;
 
@@ -31,7 +35,7 @@ public class StrategyVirusScript : MonoBehaviour
             distance = .001f;
             standby = true;
         }
-        transform.GetComponentInParent<StrategyCellManagerScript>().viruses.Add(this);
+        parent.viruses.Add(this);
         startTime = Time.time;
     }
 
@@ -55,19 +59,19 @@ public class StrategyVirusScript : MonoBehaviour
     {
         if (standby)
         {
-            target = transform.parent.GetComponent<StrategyCellManagerScript>().FindVirusNewTarget(gameObject);
+            target = parent.FindVirusNewTarget(gameObject);
             if (standby)
             {
-                if (percentTraveled < .75f)
+                if (percentTraveled < 1f - turnSpeed)
                 {
                     percentTraveled += turnSpeed;
                 }
-                else if (percentTraveled > .75f)
+                else
                 {
-                    percentTraveled = .75f;
+                    percentTraveled = 1f - turnSpeed;
                 }
 
-                nextPosition = Vector3.Lerp(prevPosition, transform.parent.GetComponent<StrategyCellManagerScript>().RandomPositionAboveHex(), 1);
+                nextPosition = Vector3.Lerp(prevPosition, parent.RandomPositionAboveHex(), 1);
                 prevPosition = transform.position;
                 startTime = Time.time;
                 return;
@@ -79,7 +83,7 @@ public class StrategyVirusScript : MonoBehaviour
         if (target == null)
         {
             Debug.Log("Target Lost");
-            target = transform.parent.GetComponent<StrategyCellManagerScript>().FindVirusNewTarget(gameObject);
+            target = parent.FindVirusNewTarget(gameObject);
             transform.LookAt(target.transform);
             if (percentTraveled >= 1.0f)
             {
@@ -101,28 +105,37 @@ public class StrategyVirusScript : MonoBehaviour
         prevPosition = transform.position;
         startTime = Time.time;
 
-        if (percentTraveled >= 1.0f && !target.GetComponent<StrategyCellScript>().hosted)
+        if (percentTraveled >= 1.0f && !target.hosted)
         {
-            if (target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.CH25H)
+            if (target.protein == StrategyCellScript.Proteins.CH25H)
             {
                 if (Random.Range(0.0f, 100.0f) < 90)
                 {
-                    target.GetComponent<StrategyCellScript>().targeted = false;
-                    target = transform.parent.GetComponent<StrategyCellManagerScript>().FindVirusNewTarget(gameObject);
+                    target.targeted = false;
+                    target = parent.FindVirusNewTarget(gameObject);
                     return;
                 }
             }
-            target.GetComponent<StrategyCellScript>().hosted = true;
-            target.GetComponent<StrategyCellScript>().virus = gameObject;
+            target.hosted = true;
+            target.virus = gameObject;
         }
 
         if (percentTraveled > 1.0f)
         {
-            if (target.GetComponent<StrategyCellScript>().protein != StrategyCellScript.Proteins.Mx1 || (target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.Mx1 && Random.Range(0.0f, 100.0f) <= 50))
+            if (target.protein != StrategyCellScript.Proteins.Mx1 || (target.protein == StrategyCellScript.Proteins.Mx1 && Random.Range(0.0f, 100.0f) <= 50))
             {
                 attackDuration += attackValue;
-                if (attackDuration >= target.GetComponent<StrategyCellScript>().defense)
+                if (attackDuration >= target.defense)
                 {
+                    float t = health;
+                    health -= target.immunity;
+                    target.immunity -= t;
+                    target.immunity = Mathf.Max(0.0f, target.immunity);
+                    if (health <= 0)
+                    {
+                        Destroy(gameObject);
+                        return;
+                    }
                     Attack();
                 }
             }
@@ -133,18 +146,18 @@ public class StrategyVirusScript : MonoBehaviour
     public virtual void Attack()
     {
         bool spawned = false;
-        if (target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.None || target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.CH25H || target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.Mx1)
+        if (target.protein == StrategyCellScript.Proteins.None || target.protein == StrategyCellScript.Proteins.CH25H || target.protein == StrategyCellScript.Proteins.Mx1)
         {
             spawned = true;
-            transform.parent.GetComponent<StrategyCellManagerScript>().SpawnVirusSingleAdjacent(target.GetComponent<StrategyCellScript>().key, transform.position);
-            transform.parent.GetComponent<StrategyCellManagerScript>().SpawnVirusSingleAdjacent(target.GetComponent<StrategyCellScript>().key, transform.position);
+            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
+            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
         }
         if (spawned ||
-            target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.RNase_L ||
-            target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.PKR || 
-            target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.TRIM22 || 
-            (target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
-            transform.parent.GetComponent<StrategyCellManagerScript>().KillCell(target.GetComponent<StrategyCellScript>().key);
+            target.protein == StrategyCellScript.Proteins.RNase_L ||
+            target.protein == StrategyCellScript.Proteins.PKR ||
+            target.protein == StrategyCellScript.Proteins.TRIM22 ||
+            (target.protein == StrategyCellScript.Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
+            parent.KillCell(target.key);
         Destroy(gameObject);
     }
 
@@ -152,8 +165,9 @@ public class StrategyVirusScript : MonoBehaviour
     {
         if (target)
         {
-            target.GetComponent<StrategyCellScript>().hosted = false;
-            target.GetComponent<StrategyCellScript>().targeted = false;
+            target.hosted = false;
+            target.targeted = false;
         }
+        parent.viruses.Remove(this);
     }
 }
