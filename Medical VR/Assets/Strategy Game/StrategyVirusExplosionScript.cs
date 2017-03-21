@@ -7,17 +7,17 @@ public class StrategyVirusExplosionScript : StrategyVirusScript
     public override void Attack()
     {
         bool spawned = false;
-        if (target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.None || target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.CH25H || target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.Mx1)
+        if (target.protein == StrategyCellScript.Proteins.None || target.protein == StrategyCellScript.Proteins.CH25H || target.protein == StrategyCellScript.Proteins.Mx1)
         {
             spawned = true;
-            transform.parent.GetComponent<StrategyCellManagerScript>().SpawnVirusAllAdjacent(target.GetComponent<StrategyCellScript>().key, transform.position);
+            parent.SpawnVirusAllAdjacent(target.key, transform.position);
         }
         if (spawned ||
-            target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.RNase_L ||
-            target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.PKR ||
-            target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.TRIM22 ||
-            (target.GetComponent<StrategyCellScript>().protein == StrategyCellScript.Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
-            transform.parent.GetComponent<StrategyCellManagerScript>().KillCell(target.GetComponent<StrategyCellScript>().key);
+            target.protein == StrategyCellScript.Proteins.RNase_L ||
+            target.protein == StrategyCellScript.Proteins.PKR ||
+            target.protein == StrategyCellScript.Proteins.TRIM22 ||
+            (target.protein == StrategyCellScript.Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
+            parent.KillCell(target.key);
         Destroy(gameObject);
     }
 }
