@@ -9,18 +9,19 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
 
     public void LoadScene(string scene)
     {
-        //SoundManager.PlaySFX("MenuEnter");
+        SoundManager.PlaySFX("MenuEnter");
         SceneManager.LoadScene(scene);
     }
 
     public void Exit()
     {
-        //SoundManager.PlaySFX("MenuEnter");
+        SoundManager.PlaySFX("MenuEnter");
         Application.Quit();
     }
 
     public void EnterEvent()
     {
+        SoundManager.PlaySFX("MenuEnter");
         switch (index)
         {
             case 0:
