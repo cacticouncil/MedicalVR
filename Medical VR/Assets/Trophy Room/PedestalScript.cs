@@ -5,8 +5,8 @@ public class PedestalScript : MonoBehaviour {
 
     public GameObject theCamera, station, camPos, selectedTrophy, descButton;
     public int speed;
-    public bool inUse;
-    bool inMove = false, isSoundPlaying;
+    public bool inUse, isSoundPlaying;
+    bool inMove = false;
     //Vector3 target;
     Color orgButtonColor;
 	// Use this for initialization
@@ -76,5 +76,10 @@ public class PedestalScript : MonoBehaviour {
             isSoundPlaying = true;
         }
 
+    }
+    public void RevertButtonAction()
+    {
+        isSoundPlaying = false;
+        descButton.GetComponent<Renderer>().material.color = orgButtonColor;
     }
 }
