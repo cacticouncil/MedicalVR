@@ -4,10 +4,10 @@ using System.Collections;
 
 public class StrategyCellScript : MonoBehaviour
 {
-    public int reproduction = 1;
-    public int defense = 1;
-    public int immunity = 1;
-    public int repCap = 5, defCap = 5, immCap = 15;
+    public float reproduction = 0;
+    public int defense = 0;
+    public float immunity = 0;
+    public int defCap = 5;
     public TMPro.TextMeshPro r;
     public TMPro.TextMeshPro d;
     public TMPro.TextMeshPro i;
@@ -16,9 +16,9 @@ public class StrategyCellScript : MonoBehaviour
     public Vector2 key;
     public bool targeted = false;
     public bool hosted = false;
-    public int Treproduction = 10;
+    public float Treproduction = 10;
     public int reproductionReset = 50;
-    public int rBonus = 5;
+    public float rBonus = 15, dBonus = 5, iBonus = 10;
     public int powerupDuration = 25;
 
     [System.NonSerialized]
@@ -26,12 +26,14 @@ public class StrategyCellScript : MonoBehaviour
 
     public int turnSpawned = 0;
     public int childrenSpawned = 0;
-    public int immunitySpread = 0;
+    public float immunitySpread = 0;
 
     public int RDur = 0;
     public int I2Dur = 0;
 
-    private StrategyCellManagerScript parent;
+    public StrategyCellManagerScript parent;
+
+    private float tImmunity;
     public enum Proteins
     {
         None,
@@ -60,26 +62,26 @@ public class StrategyCellScript : MonoBehaviour
 
     void Start()
     {
-        parent = transform.parent.GetComponent<StrategyCellManagerScript>();
         turnSpawned = parent.turnNumber;
         parent.cells.Add(this);
         r.text = "Reproduction: " + reproduction;
         d.text = "Defense: " + defense;
-        i.text = "Immunity: " + immunity;
+        i.text = "Immunity: " + (int)immunity;
         p.text = "Protein: " + protein.ToString();
+        tImmunity = immunity;
     }
 
     public void IncreaseReproduction()
     {
-        if (!hosted && reproduction < repCap)
+        if (!hosted)
         {
             reproduction++;
             if (r)
             {
                 if (RDur > 0)
                 {
-                    r.text = "Reproduction: " + reproduction + rBonus;
-}
+                    r.text = "Reproduction: " + (reproduction + rBonus);
+                }
                 else
                 {
                     r.text = "Reproduction: " + reproduction;
@@ -122,17 +124,20 @@ public class StrategyCellScript : MonoBehaviour
     //Called from cell's UI
     public void IncreaseImmunity()
     {
-        if (!hosted && immunity < immCap)
+        if (!hosted)
         {
             immunity++;
-            if (immunity == immCap)
+            tImmunity++;
+            if (protein == Proteins.None && immunity >= 10f)
             {
                 protein = (Proteins)Random.Range(1, 7);
                 p.text = "Protein: " + protein.ToString();
                 Debug.Log("Cell gained protein " + protein.ToString());
             }
             if (i)
-                i.text = "Immunity: " + immunity;
+            {
+                i.text = "Immunity: " + (int)immunity;
+            }
             else
             {
                 Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
@@ -141,37 +146,36 @@ public class StrategyCellScript : MonoBehaviour
         }
     }
     //Called from cell manager
-    public bool AddImmunity()
+    public void AddImmunity(float imm)
     {
-        bool ret = false;
-        if (immunity < immCap)
+        immunity += imm;
+        if (protein == Proteins.None && immunity >= 10f)
         {
-            immunity++;
-            ret = true;
-            if (immunity == immCap)
-            {
-                protein = (Proteins)Random.Range(1, 7);
-                p.text = "Protein: " + protein.ToString();
-                Debug.Log("Cell gained protein " + protein.ToString());
-            }
-            if (i)
-                i.text = "Immunity: " + immunity;
-            else
-            {
-                Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
-            }
+            protein = (Proteins)Random.Range(1, 7);
+            p.text = "Protein: " + protein.ToString();
+            Debug.Log("Cell gained protein " + protein.ToString());
         }
-        return ret;
+        if (i)
+            i.text = "Immunity: " + (int)immunity;
+        else
+        {
+            Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
+        }
     }
 
-    public void IncreaseImmunityToMax()
+    public void IncreaseImmunityGreatly()
     {
-        immunity = immCap;
-        protein = (Proteins)Random.Range(1, 7);
-        p.text = "Protein: " + protein.ToString();
+        immunity += iBonus;
+        tImmunity += iBonus;
+        if (protein == Proteins.None && immunity >= 10f)
+        {
+            protein = (Proteins)Random.Range(1, 7);
+            p.text = "Protein: " + protein.ToString();
+            Debug.Log("Cell gained protein " + protein.ToString());
+        }
         Debug.Log("Cell gained protein " + protein.ToString());
         if (i)
-            i.text = "Immunity: " + immunity;
+            i.text = "Immunity: " + (int)immunity;
         else
         {
             Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
@@ -186,6 +190,7 @@ public class StrategyCellScript : MonoBehaviour
             parent.inventory[0].count--;
             RDur += powerupDuration;
             r.color = Color.blue;
+            r.text = "Reproduction: " + (reproduction + rBonus);
             transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
         }
     }
@@ -212,10 +217,10 @@ public class StrategyCellScript : MonoBehaviour
     public void UseI()
     {
         //check for item
-        if (immunity != immCap && parent.inventory[3].count > 0)
+        if (parent.inventory[3].count > 0)
         {
             parent.inventory[3].count--;
-            IncreaseImmunityToMax();
+            IncreaseImmunityGreatly();
             transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
         }
     }
@@ -238,7 +243,9 @@ public class StrategyCellScript : MonoBehaviour
             parent.inventory[5].count--;
             Proteins prev = protein;
             while (protein == prev)
+            {
                 protein = (Proteins)Random.Range(1, 7);
+            }
             p.text = "Protein: " + protein.ToString();
             Debug.Log("Cell gained protein " + protein.ToString());
             transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
@@ -268,8 +275,8 @@ public class StrategyCellScript : MonoBehaviour
                     r.color = Color.white;
                 }
             }
-            Treproduction -= reproduction;
-            if (Treproduction <= 0)
+            Treproduction -= Mathf.Sqrt(reproduction * 10 + 1);
+            while (Treproduction <= 0)
             {
                 //reproduce
                 parent.SelectCellSpawn(key);
@@ -281,18 +288,22 @@ public class StrategyCellScript : MonoBehaviour
 
     public void DelayedTurnUpdate()
     {
-        if (immunity >= immCap)
+        //spread immunity
+        float im = Mathf.Sqrt((tImmunity - .99f) * .01f);
+        if (!float.IsNaN(im))
         {
-            //spread immunity
-            immunitySpread += parent.SpreadImmunity(key);
             if (I2Dur > 0)
             {
-                immunitySpread += parent.SpreadImmunity(key);
+                immunitySpread += parent.SpreadImmunity(key, im * 2.0f);
                 I2Dur--;
                 if (I2Dur == 0)
                 {
                     i.color = Color.white;
                 }
+            }
+            else
+            {
+                immunitySpread += parent.SpreadImmunity(key, im);
             }
         }
 
@@ -311,6 +322,7 @@ public class StrategyCellScript : MonoBehaviour
 
         if (transform.GetChild(0).gameObject.activeSelf)
             transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+        tImmunity = immunity;
     }
 
     public void ToggleUI(bool b)

@@ -44,6 +44,10 @@ public class StrategyCellManagerScript : MonoBehaviour
         t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
         AddToDictionary(t.GetComponent<StrategyCellScript>());
         t.name = "Cell0_0";
+        t.GetComponent<StrategyCellScript>().parent = this;
+        t.GetComponent<StrategyCellScript>().reproduction = 1;
+        t.GetComponent<StrategyCellScript>().defense = 1;
+        t.GetComponent<StrategyCellScript>().immunity = 1;
         t.GetComponent<StrategyCellScript>().enabled = true;
         t.GetComponent<Collider>().enabled = true;
 
@@ -72,7 +76,8 @@ public class StrategyCellManagerScript : MonoBehaviour
     public void ActionPreformed()
     {
         StartCoroutine(TurnUpdate());
-        screenUI.text = "Turn Number: " + turnNumber + "\nCells Alive: " + cellNum + "\nViruses Alive: " + virNum;
+        if (screenUI)
+            screenUI.text = "Turn Number: " + turnNumber + "\nCells Alive: " + cellNum + "\nViruses Alive: " + virNum;
     }
 
     IEnumerator TurnUpdate()
@@ -142,6 +147,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         c.GetComponent<StrategyCellScript>().key = k;
         AddToDictionary(c.GetComponent<StrategyCellScript>());
         c.name = "Cell" + k.x + "_" + k.y;
+        c.GetComponent<StrategyCellScript>().parent = this;
         if (spawnCellStats != Vector4.zero)
         {
             c.GetComponent<StrategyCellScript>().reproduction = (int)spawnCellStats.x;
@@ -317,17 +323,17 @@ public class StrategyCellManagerScript : MonoBehaviour
         Destroy(instance.gameObject);
     }
 
-    public int SpreadImmunity(Vector2 starting)
+    public float SpreadImmunity(Vector2 starting, float imm)
     {
-        int immunitySpread = 0;
+        float immunitySpread = 0;
 
         //Top Right (0, +1)
         Vector2 check = starting;
         check.y += 1;
         if (tiles.ContainsKey(check))
         {
-            if (tiles[check].AddImmunity())
-                immunitySpread++;
+            tiles[check].AddImmunity(imm);
+            immunitySpread += imm;
         }
 
         //Right (+1, 0)
@@ -335,8 +341,8 @@ public class StrategyCellManagerScript : MonoBehaviour
         check.x += 1;
         if (tiles.ContainsKey(check))
         {
-            if (tiles[check].AddImmunity())
-                immunitySpread++;
+            tiles[check].AddImmunity(imm);
+            immunitySpread += imm;
         }
 
         //Bottom Right (0, -1)
@@ -344,8 +350,8 @@ public class StrategyCellManagerScript : MonoBehaviour
         check.y -= 1;
         if (tiles.ContainsKey(check))
         {
-            if (tiles[check].AddImmunity())
-                immunitySpread++;
+            tiles[check].AddImmunity(imm);
+            immunitySpread += imm;
         }
 
         //Bottom Left (-1, -1)
@@ -354,8 +360,8 @@ public class StrategyCellManagerScript : MonoBehaviour
         check.y -= 1;
         if (tiles.ContainsKey(check))
         {
-            if (tiles[check].AddImmunity())
-                immunitySpread++;
+            tiles[check].AddImmunity(imm);
+            immunitySpread += imm;
         }
 
         //Left (-1, 0)
@@ -363,8 +369,8 @@ public class StrategyCellManagerScript : MonoBehaviour
         check.x -= 1;
         if (tiles.ContainsKey(check))
         {
-            if (tiles[check].AddImmunity())
-                immunitySpread++;
+            tiles[check].AddImmunity(imm);
+            immunitySpread += imm;
         }
 
         //Top Left (-1, +1)
@@ -373,8 +379,8 @@ public class StrategyCellManagerScript : MonoBehaviour
         check.y += 1;
         if (tiles.ContainsKey(check))
         {
-            if (tiles[check].AddImmunity())
-                immunitySpread++;
+            tiles[check].AddImmunity(imm);
+            immunitySpread += imm;
         }
 
         return immunitySpread;
@@ -388,6 +394,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         Vector3 position = direction * distance;
         GameObject v = Instantiate(virusPrefab, position, Quaternion.identity, transform) as GameObject;
         v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
+        v.GetComponent<StrategyVirusScript>().parent = this;
         v.GetComponent<Collider>().enabled = true;
         v.GetComponent<StrategyVirusScript>().enabled = true;
     }
@@ -407,6 +414,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             GameObject v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
             v.GetComponent<StrategyVirusScript>().target = tiles[check];
             v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
+            v.GetComponent<StrategyVirusScript>().parent = this;
             t.GetComponent<StrategyTransporter>().enabled = true;
             v.GetComponent<StrategyVirusScript>().enabled = true;
             return;
@@ -423,6 +431,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             GameObject v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
             v.GetComponent<StrategyVirusScript>().target = tiles[check];
             v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
+            v.GetComponent<StrategyVirusScript>().parent = this;
             t.GetComponent<StrategyTransporter>().enabled = true;
             v.GetComponent<StrategyVirusScript>().enabled = true;
             return;
@@ -439,6 +448,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             GameObject v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
             v.GetComponent<StrategyVirusScript>().target = tiles[check];
             v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
+            v.GetComponent<StrategyVirusScript>().parent = this;
             t.GetComponent<StrategyTransporter>().enabled = true;
             v.GetComponent<StrategyVirusScript>().enabled = true;
             return;
@@ -456,6 +466,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             GameObject v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
             v.GetComponent<StrategyVirusScript>().target = tiles[check];
             v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
+            v.GetComponent<StrategyVirusScript>().parent = this;
             t.GetComponent<StrategyTransporter>().enabled = true;
             v.GetComponent<StrategyVirusScript>().enabled = true;
             return;
@@ -472,6 +483,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             GameObject v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
             v.GetComponent<StrategyVirusScript>().target = tiles[check];
             v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
+            v.GetComponent<StrategyVirusScript>().parent = this;
             t.GetComponent<StrategyTransporter>().enabled = true;
             v.GetComponent<StrategyVirusScript>().enabled = true;
             return;
@@ -489,6 +501,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             GameObject v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
             v.GetComponent<StrategyVirusScript>().target = tiles[check];
             v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
+            v.GetComponent<StrategyVirusScript>().parent = this;
             t.GetComponent<StrategyTransporter>().enabled = true;
             v.GetComponent<StrategyVirusScript>().enabled = true;
             return;
@@ -499,6 +512,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         GameObject vir = Instantiate(virusPrefab, p, Quaternion.identity, tra.transform) as GameObject;
         vir.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(vir);
         vir.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
+        vir.GetComponent<StrategyVirusScript>().parent = this;
         tra.GetComponent<StrategyTransporter>().enabled = true;
         vir.GetComponent<StrategyVirusScript>().enabled = true;
     }
@@ -513,6 +527,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         GameObject t = Instantiate(transporter, p, Quaternion.identity, transform) as GameObject;
         t.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 1, k.y * yOffset + yOffset * .5f);
         GameObject v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
+        v.GetComponent<StrategyVirusScript>().parent = this;
         if (tiles.ContainsKey(check) && !tiles[check].targeted)
         {
             tiles[check].targeted = true;
@@ -535,6 +550,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         t = Instantiate(transporter, p, Quaternion.identity, transform) as GameObject;
         t.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset : k.x * xOffset + xOffset * .5f, 1, k.y * yOffset);
         v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
+        v.GetComponent<StrategyVirusScript>().parent = this;
         if (tiles.ContainsKey(check) && !tiles[check].targeted)
         {
             tiles[check].targeted = true;
@@ -557,6 +573,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         t = Instantiate(transporter, p, Quaternion.identity, transform) as GameObject;
         t.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 1, k.y * yOffset - yOffset * .5f);
         v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
+        v.GetComponent<StrategyVirusScript>().parent = this;
         if (tiles.ContainsKey(check) && !tiles[check].targeted)
         {
             tiles[check].targeted = true;
@@ -580,6 +597,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         t = Instantiate(transporter, p, Quaternion.identity, transform) as GameObject;
         t.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset - xOffset : k.x * xOffset - xOffset * .5f, 1, k.y * yOffset - yOffset * .5f);
         v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
+        v.GetComponent<StrategyVirusScript>().parent = this;
         if (tiles.ContainsKey(check) && !tiles[check].targeted)
         {
             tiles[check].targeted = true;
@@ -602,6 +620,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         t = Instantiate(transporter, p, Quaternion.identity, transform) as GameObject;
         t.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset - xOffset : k.x * xOffset - xOffset * .5f, 1, k.y * yOffset);
         v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
+        v.GetComponent<StrategyVirusScript>().parent = this;
         if (tiles.ContainsKey(check) && !tiles[check].targeted)
         {
             tiles[check].targeted = true;
@@ -625,6 +644,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         t = Instantiate(transporter, p, Quaternion.identity, transform) as GameObject;
         t.GetComponent<StrategyTransporter>().destination = new Vector3(k.y % 2 == 0 ? k.x * xOffset - xOffset : k.x * xOffset - xOffset * .5f, 1, k.y * yOffset + yOffset * .5f);
         v = Instantiate(virusPrefab, p, Quaternion.identity, t.transform) as GameObject;
+        v.GetComponent<StrategyVirusScript>().parent = this;
         if (tiles.ContainsKey(check) && !tiles[check].targeted)
         {
             tiles[check].targeted = true;

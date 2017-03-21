@@ -11,16 +11,24 @@ public class Virus : MonoBehaviour
 
     public float Speed;
     public int Health;
-    bool BossCanTakeDamage;
     bool EnteredZone;
     int RandomVirusLocation;
 
+    Vector3 SavedLocation;
+    bool BossCanTakeDamage;
+    bool BossMadeLocation;
+    float BossMovementTimer;
+    
     void Start()
     {
         VirusManager = gameObject.transform.parent.gameObject;
         Player = VirusManager.GetComponent<VirusManager>().Player;
         GoTo = VirusManager.GetComponent<VirusManager>().VirusLocations;
         EnteredZone = false;
+
+        BossCanTakeDamage = false;
+        BossMadeLocation = false;
+        BossMovementTimer = 0.0f;
 
         RandomVirusLocation = UnityEngine.Random.Range(0, 4);
 
@@ -60,28 +68,47 @@ public class Virus : MonoBehaviour
 
         else if (transform.tag == "BigVirus")
         {
-
+            //Temporaily Fixed
+            Speed = 0.01f;
+            transform.LookAt(Player.transform.position);
+            transform.Rotate(0, 180, 0);
+            transform.position += transform.forward * Speed;
         }
 
         //For Boss 
         else if (transform.tag == "Boss")
         {
-            float Distance1 = Vector3.Distance(transform.position, Player.transform.position);
-            if (Distance1 >= 4.5f)
+            if (BossMadeLocation == false)
             {
-                transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
-                float Distance2 = Vector3.Distance(transform.position, Player.transform.position);
+                float Distance1 = Vector3.Distance(transform.position, Player.transform.position);
+                if (Distance1 >= 4.5f)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
+                    float Distance2 = Vector3.Distance(transform.position, Player.transform.position);
 
-                //So the boss follows the player
-                Vector3 forward;
-                forward = Player.transform.forward;
-                transform.position = forward * Distance2;
+                    //So the boss follows the player
+                    Vector3 forward;
+                    forward = Player.transform.forward;
+                    transform.position = forward * Distance2;
+                }
 
-                BossCanTakeDamage = false;
+                else
+                {
+                    //Basically the Boss made it to its destination
+                    SavedLocation = transform.position;
+                    BossMadeLocation = true;
+                    BossCanTakeDamage = true;
+                }
             }
+
             else
             {
-                BossCanTakeDamage = true;
+                transform.position = new Vector3(SavedLocation.x + Mathf.Sin(Time.time), SavedLocation.y, SavedLocation.z);
+                BossMovementTimer += Time.deltaTime;
+                if (BossMovementTimer >= 3.0f)
+                {
+                    transform.position = new Vector3(SavedLocation.x - Mathf.Sin(Time.time), SavedLocation.y, SavedLocation.z);
+                }
             }
         }
     }

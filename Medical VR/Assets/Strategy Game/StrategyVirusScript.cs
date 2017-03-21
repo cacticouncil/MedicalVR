@@ -8,12 +8,13 @@ public class StrategyVirusScript : MonoBehaviour
     public float turnSpeed = .1f;
     public float attackValue = .5f;
     public float attackDuration = 0;
+    public float health = 15.0f;
     public float percentTraveled = 0.0f;
     public bool standby = false;
 
     public Vector3 startingPosition, prevPosition, nextPosition;
 
-    protected StrategyCellManagerScript parent;
+    public StrategyCellManagerScript parent;
 
     private float distance = .1f;
     private float startTime = 0.0f;
@@ -34,7 +35,6 @@ public class StrategyVirusScript : MonoBehaviour
             distance = .001f;
             standby = true;
         }
-        parent = transform.parent.GetComponent<StrategyCellManagerScript>();
         parent.viruses.Add(this);
         startTime = Time.time;
     }
@@ -127,6 +127,15 @@ public class StrategyVirusScript : MonoBehaviour
                 attackDuration += attackValue;
                 if (attackDuration >= target.defense)
                 {
+                    float t = health;
+                    health -= target.immunity;
+                    target.immunity -= t;
+                    target.immunity = Mathf.Max(0.0f, target.immunity);
+                    if (health <= 0)
+                    {
+                        Destroy(gameObject);
+                        return;
+                    }
                     Attack();
                 }
             }
@@ -145,8 +154,8 @@ public class StrategyVirusScript : MonoBehaviour
         }
         if (spawned ||
             target.protein == StrategyCellScript.Proteins.RNase_L ||
-            target.protein == StrategyCellScript.Proteins.PKR || 
-            target.protein == StrategyCellScript.Proteins.TRIM22 || 
+            target.protein == StrategyCellScript.Proteins.PKR ||
+            target.protein == StrategyCellScript.Proteins.TRIM22 ||
             (target.protein == StrategyCellScript.Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
             parent.KillCell(target.key);
         Destroy(gameObject);
