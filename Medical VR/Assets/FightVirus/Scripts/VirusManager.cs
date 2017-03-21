@@ -17,16 +17,16 @@ public class VirusManager : MonoBehaviour
     public bool Wave2;
     public bool Wave3;
     public bool Wave4;
-
+    int EnemyCount;
     bool CheckCount;
     void Start()
     {
-        Wave1 = true;
+        Wave1 = false;
         Wave2 = false;
         Wave3 = false;
-        Wave4 = false;
+        Wave4 = true;
         CheckCount = false;
-
+        EnemyCount = 10;
         Invoke("CreateWave", 5);
     }
 
@@ -39,6 +39,7 @@ public class VirusManager : MonoBehaviour
                 Wave1 = false;
                 Wave2 = true;
                 CheckCount = false;
+                EnemyCount = 13;
                 Invoke("CreateWave", 5);
             }
 
@@ -47,6 +48,7 @@ public class VirusManager : MonoBehaviour
                 Wave2 = false;
                 Wave3 = true;
                 CheckCount = false;
+                EnemyCount = 15;
                 Invoke("CreateWave", 5);
             }
 
@@ -74,7 +76,7 @@ public class VirusManager : MonoBehaviour
 
         if (Wave1 == true || Wave2 == true || Wave3 == true)
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < EnemyCount; i++)
             {
                 SpawnRandomVirus = Random.onUnitSphere * 7.0f;
                 VirusList.Add(Instantiate(VirusCube, SpawnRandomVirus, Quaternion.identity, transform) as GameObject);
