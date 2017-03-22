@@ -1,24 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 
+enum VirusMovement { A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7 }
 public class Virus : MonoBehaviour
 {
     GameObject VirusManager;
     GameObject Player;
     GameObject GoTo;
 
+    VirusMovement VM;
+    int RandomVirusLocation;
     public float Speed;
     public int Health;
     bool EnteredZone;
-    int RandomVirusLocation;
 
-    Vector3 SavedLocation;
     bool BossCanTakeDamage;
     bool BossMadeLocation;
     float BossMovementTimer;
-    
+
+    Vector3 SavedLocation;
+    float AngleSpeed;
     void Start()
     {
         VirusManager = gameObject.transform.parent.gameObject;
@@ -26,35 +28,38 @@ public class Virus : MonoBehaviour
         GoTo = VirusManager.GetComponent<VirusManager>().VirusLocations;
         EnteredZone = false;
 
+        RandomVirusLocation = Random.Range(0, 4);
+        VM = (VirusMovement)Random.Range(0, 8);
+
         BossCanTakeDamage = false;
         BossMadeLocation = false;
         BossMovementTimer = 0.0f;
 
-        RandomVirusLocation = UnityEngine.Random.Range(0, 4);
+        AngleSpeed = 20.0f;
 
         if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
         {
-            Speed = 0.005f;
             //Speed = 1.0f;
-            Health = 10;
+            Speed = 0.006f;
+            Health = 20;
         }
 
-        if (VirusManager.GetComponent<VirusManager>().Wave2 == true)
+        else if (VirusManager.GetComponent<VirusManager>().Wave2 == true)
         {
             Speed = 0.009f;
-            Health = 30;
+            Health = 40;
         }
 
-        if (VirusManager.GetComponent<VirusManager>().Wave3 == true)
+        else if (VirusManager.GetComponent<VirusManager>().Wave3 == true)
         {
             Speed = 0.01f;
-            Health = 50;
+            Health = 60;
         }
 
-        if (VirusManager.GetComponent<VirusManager>().Wave4 == true)
+        else if (VirusManager.GetComponent<VirusManager>().Wave4 == true)
         {
             Speed = 0.08f;
-            Health = 100;
+            Health = 2000;
         }
     }
 
@@ -83,13 +88,16 @@ public class Virus : MonoBehaviour
                 float Distance1 = Vector3.Distance(transform.position, Player.transform.position);
                 if (Distance1 >= 4.5f)
                 {
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position - transform.position), 15 * Time.deltaTime);
                     transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
-                    float Distance2 = Vector3.Distance(transform.position, Player.transform.position);
 
-                    //So the boss follows the player
-                    Vector3 forward;
-                    forward = Player.transform.forward;
-                    transform.position = forward * Distance2;
+                    //float Distance2 = Vector3.Distance(transform.position, Player.transform.position);
+
+                    ////So the boss follows the player
+                    //Vector3 forward;
+                    //forward = Player.transform.forward;
+                    //transform.position = forward * Distance2;
+                    //transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
                 }
 
                 else
@@ -103,11 +111,56 @@ public class Virus : MonoBehaviour
 
             else
             {
-                transform.position = new Vector3(SavedLocation.x + Mathf.Sin(Time.time), SavedLocation.y, SavedLocation.z);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position - transform.position), 2.5f * Time.deltaTime);
+
+                //The boss moves unpredicatble and rotate
                 BossMovementTimer += Time.deltaTime;
-                if (BossMovementTimer >= 3.0f)
+                if (BossMovementTimer > 6.5f)
                 {
-                    transform.position = new Vector3(SavedLocation.x - Mathf.Sin(Time.time), SavedLocation.y, SavedLocation.z);
+                    BossMovementTimer = 0.0f;
+                    VM = (VirusMovement)Random.Range(0, 8);
+                }
+
+                switch (VM)
+                {
+                    case VirusMovement.A:
+                        transform.RotateAround(Player.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
+                        break;
+
+                    case VirusMovement.B:
+                        transform.RotateAround(Player.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
+                        break;
+
+                    case VirusMovement.C:
+                        transform.RotateAround(Player.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
+                        break;
+
+                    case VirusMovement.D:
+                        transform.RotateAround(Player.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
+                        break;
+
+                    case VirusMovement.E:
+                        transform.RotateAround(Player.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
+                        transform.RotateAround(Player.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
+                        break;
+
+                    case VirusMovement.F:
+                        transform.RotateAround(Player.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
+                        transform.RotateAround(Player.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
+                        break;
+
+                    case VirusMovement.G:
+                        transform.RotateAround(Player.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
+                        transform.RotateAround(Player.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
+                        break;
+
+                    case VirusMovement.H:
+                        transform.RotateAround(Player.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
+                        transform.RotateAround(Player.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
+                        break;
+
+                    default:
+                        break;
                 }
             }
         }
