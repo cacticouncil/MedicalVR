@@ -10,7 +10,7 @@ public class _TRedAttacher : MonoBehaviour
 
     private Position caseSwitch = Position.none;
     private GameObject OurAttachedEnzyme;
-    private Collider moleculeCol;
+    //private Collider moleculeCol;
     private float moverSpeed;
     private Transform colliders;
 
@@ -46,7 +46,7 @@ public class _TRedAttacher : MonoBehaviour
     {
         if (other.gameObject.CompareTag(shotToAttack.tag) && !OurAttachedEnzyme)
         {
-            moleculeCol = other;
+        //    moleculeCol = other;
             OurAttachedEnzyme = other.gameObject;
             moverSpeed = OurAttachedEnzyme.GetComponent<_TMover>().speed;
             OurAttachedEnzyme.GetComponent<_TDestroyByTime>().CancelDestroy();
