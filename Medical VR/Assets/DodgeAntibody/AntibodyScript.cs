@@ -4,6 +4,8 @@ using System.Collections;
 public class AntibodyScript : MonoBehaviour {
 
     public GameObject Cam, Effects;
+    bool reswpawn = false;
+    float saveSpeed;
 	// Use this for initialization
 	void Start () {
 	
@@ -20,13 +22,25 @@ public class AntibodyScript : MonoBehaviour {
         {
             GetComponent<Renderer>().enabled = false;
         }
+        if(reswpawn == true)
+        {
+            if(Effects.GetComponent<ParticleSystem>().isPlaying == false)
+            {
+                reswpawn = false;
+                Cam.GetComponent<MovingCamera>().LoseresetPos();
+                Cam.GetComponent<MovingCamera>().speed = saveSpeed;
+            }   
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
        if(other.tag == "virus")
         {
-            other.GetComponent<MovingCamera>().LoseresetPos();
+            other.transform.position -= other.transform.forward * 50;
+            saveSpeed = other.GetComponent<MovingCamera>().speed;
+            other.GetComponent<MovingCamera>().speed = 0;
+            reswpawn = true;
             Effects.GetComponent<ParticleSystem>().Stop();
             Effects.GetComponent<ParticleSystem>().Play();
         }

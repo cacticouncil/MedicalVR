@@ -26,12 +26,14 @@ public class RedCellScript : MonoBehaviour {
                 virus.GetComponent<MovingCamera>().WinresetPos();
                 virus.GetComponent<MovingCamera>().speed++;
                 spawner.GetComponent<AnitbodySpawnerScript>().GenerateObstacles();
+                
             }
             else
             {
                 SceneManager.LoadScene("Credits"); 
             }
-           
+            PlayerPrefs.SetInt("\nRed Cell\n", 1);
+
         }
     }
 }
