@@ -19,7 +19,6 @@ public class Virus : MonoBehaviour
     bool BossMadeLocation;
     float BossMovementTimer;
 
-    Vector3 SavedLocation;
     float AngleSpeed;
     void Start()
     {
@@ -95,7 +94,6 @@ public class Virus : MonoBehaviour
                 else
                 {
                     //Basically the Boss made it to its destination
-                    SavedLocation = transform.position;
                     BossMadeLocation = true;
                     BossCanTakeDamage = true;
                 }
