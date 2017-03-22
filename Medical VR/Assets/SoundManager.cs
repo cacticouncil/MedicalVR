@@ -121,8 +121,6 @@ public static class SoundManager {
         } else {
             // Fade type is NONE
             if (BGM.volume != MaxBGMVolume) {
-                //float sign = Mathf.Sign(MaxBGMVolume - BGM.volume);
-                //BGM.volume = Mathf.Clamp(BGM.volume += FADESPEED * sign, BGM.volume, MaxBGMVolume);
                 BGM.volume = MaxBGMVolume;
             }
         }
@@ -213,7 +211,7 @@ public static class SoundManager {
             AudioSource source = Controller.AddComponent<AudioSource>();
             source.clip = (AudioClip)Resources.Load("SFX/" + _title);
             if (source.clip == null) {
-                Debug.LogWarning("Sound '" + _title + "' was not found in the SFX folder!");
+                Debug.Log("Sound '" + _title + "' was not found in the SFX folder!");
             }
             source.volume = MaxSFXVolume;
             source.Play();
