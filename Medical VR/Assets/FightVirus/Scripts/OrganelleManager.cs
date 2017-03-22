@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 public class OrganelleManager : MonoBehaviour
 {
+    public GameObject Player;
     public GameObject Organelle;
     public List<GameObject> OrganelleList = new List<GameObject>();
     public int OrganelleCount;

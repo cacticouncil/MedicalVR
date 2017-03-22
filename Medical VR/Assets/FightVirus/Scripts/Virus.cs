@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-enum VirusMovement { A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7 }
+enum VirusMovement { UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, UPLEFT = 4, UPRIGHT = 5, DOWNLEFT = 6, DOWNRIGHT = 7 }
 public class Virus : MonoBehaviour
 {
     GameObject VirusManager;
@@ -59,7 +59,7 @@ public class Virus : MonoBehaviour
         else if (VirusManager.GetComponent<VirusManager>().Wave4 == true)
         {
             Speed = 0.08f;
-            Health = 2000;
+            Health = 1000;
         }
     }
 
@@ -88,16 +88,8 @@ public class Virus : MonoBehaviour
                 float Distance1 = Vector3.Distance(transform.position, Player.transform.position);
                 if (Distance1 >= 4.5f)
                 {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position - transform.position), 15 * Time.deltaTime);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position - transform.position), 20 * Time.deltaTime);
                     transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
-
-                    //float Distance2 = Vector3.Distance(transform.position, Player.transform.position);
-
-                    ////So the boss follows the player
-                    //Vector3 forward;
-                    //forward = Player.transform.forward;
-                    //transform.position = forward * Distance2;
-                    //transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
                 }
 
                 else
@@ -123,38 +115,38 @@ public class Virus : MonoBehaviour
 
                 switch (VM)
                 {
-                    case VirusMovement.A:
+                    case VirusMovement.UP:
                         transform.RotateAround(Player.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
                         break;
 
-                    case VirusMovement.B:
+                    case VirusMovement.DOWN:
                         transform.RotateAround(Player.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
                         break;
 
-                    case VirusMovement.C:
+                    case VirusMovement.LEFT:
                         transform.RotateAround(Player.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
                         break;
 
-                    case VirusMovement.D:
+                    case VirusMovement.RIGHT:
                         transform.RotateAround(Player.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
                         break;
 
-                    case VirusMovement.E:
+                    case VirusMovement.UPLEFT:
                         transform.RotateAround(Player.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
                         transform.RotateAround(Player.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
                         break;
 
-                    case VirusMovement.F:
+                    case VirusMovement.UPRIGHT:
                         transform.RotateAround(Player.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
                         transform.RotateAround(Player.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
                         break;
 
-                    case VirusMovement.G:
+                    case VirusMovement.DOWNLEFT:
                         transform.RotateAround(Player.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
                         transform.RotateAround(Player.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
                         break;
 
-                    case VirusMovement.H:
+                    case VirusMovement.DOWNRIGHT:
                         transform.RotateAround(Player.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
                         transform.RotateAround(Player.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
                         break;
@@ -163,6 +155,11 @@ public class Virus : MonoBehaviour
                         break;
                 }
             }
+        }
+
+        if (Player.GetComponent<Player>().isGameOver == true)
+        {
+            Destroy(this.gameObject);
         }
     }
 
@@ -193,24 +190,37 @@ public class Virus : MonoBehaviour
                         VirusManager.GetComponent<VirusManager>().VirusList.Remove(gameObject);
                         Destroy(gameObject);
                         Player.GetComponent<Player>().Score += 100;
+                        Player.GetComponent<Player>().isGameOver = true;
                     }
                 }
             }
         }
 
-        else
+        if (transform.tag == "Virus")
         {
             if (col.name == "1VirusGoTo")
+            {
                 GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Add(transform.gameObject);
+                GoTo.GetComponent<VirusLocations>().VirusLocationList[0].SmallVirusCount += 1;
+            }
 
             else if (col.name == "2VirusGoTo")
+            {
                 GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Add(transform.gameObject);
+                GoTo.GetComponent<VirusLocations>().VirusLocationList[1].SmallVirusCount += 1;
+            }
 
             else if (col.name == "3VirusGoTo")
+            {
                 GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Add(transform.gameObject);
+                GoTo.GetComponent<VirusLocations>().VirusLocationList[2].SmallVirusCount += 1;
+            }
 
             else if (col.name == "4VirusGoTo")
+            {
                 GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Add(transform.gameObject);
+                GoTo.GetComponent<VirusLocations>().VirusLocationList[3].SmallVirusCount += 1;
+            }
 
             EnteredZone = true;
         }
