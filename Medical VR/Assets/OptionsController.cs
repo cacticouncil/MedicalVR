@@ -66,7 +66,6 @@ public class OptionsController : MonoBehaviour {
     }
 
     public void OnSettingsOK() {
-        //Screen.fullScreen = Fullscreen;
         PlayerPrefs.SetFloat("InitialSFXVolume", SoundManager.MaxSFXVolume);
         PlayerPrefs.SetFloat("InitialBGMVolume", SoundManager.MaxBGMVolume);
         SceneManager.LoadScene("MainMenu");

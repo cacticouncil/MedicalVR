@@ -5,12 +5,23 @@ public class _TRedAttacher : MonoBehaviour
 {
     enum Position { inProgress, center, final, none };
 
+    public bool _debug;
     public GameObject shotToAttack;
 
     private Position caseSwitch = Position.none;
     private GameObject OurAttachedEnzyme;
-    private Collider moleculeCol;
+    //private Collider moleculeCol;
     private float moverSpeed;
+    private Transform colliders;
+
+
+    //    SphereCollider sc; = gameObject.AddComponent("SphereCollider") as SphereCollider;
+
+    private void Start()
+    {
+        colliders = transform.parent.FindChild("Colliders");
+        _debug = false;
+    }
 
     private void FixedUpdate()
     {
@@ -35,23 +46,24 @@ public class _TRedAttacher : MonoBehaviour
     {
         if (other.gameObject.CompareTag(shotToAttack.tag) && !OurAttachedEnzyme)
         {
-            moleculeCol = other;
+        //    moleculeCol = other;
             OurAttachedEnzyme = other.gameObject;
             moverSpeed = OurAttachedEnzyme.GetComponent<_TMover>().speed;
             OurAttachedEnzyme.GetComponent<_TDestroyByTime>().CancelDestroy();
             OurAttachedEnzyme.tag = "Untagged";
             caseSwitch = Position.inProgress;
+            Destroy(OurAttachedEnzyme.GetComponent<SphereCollider>());
+            DebugStuff();
         }
 
 
+        //        Check with colliding with a ricochet-able surface(OnCollisionEnter)
+        //
+        //    Extract the normal of the surface you are colliding via contact point
 
-//        Check with colliding with a ricochet-able surface(OnCollisionEnter)
-//
-//    Extract the normal of the surface you are colliding via contact point
-//
-//    Use the projectile / bullet's direction ( transform.forward ) and the normal to calculate the vector of the projectile/bullet when it is reflected Vector3.Reflect
-//
-//    Apply the reflected vector to your projectile / bullet
+        //    Use the projectile / bullet's direction ( transform.forward ) and the normal to calculate the vector of the projectile/bullet when it is reflected Vector3.Reflect
+        //
+        //    Apply the reflected vector to your projectile / bullet
 
 
 
@@ -68,15 +80,30 @@ public class _TRedAttacher : MonoBehaviour
         OurAttachedEnzyme.transform.localPosition = transform.localPosition;
         Destroy(OurAttachedEnzyme.GetComponent<Rigidbody>());
         ++caseSwitch;
-        moleculeCol.isTrigger = false;
+        DebugStuff();
+        SphereCollider sc = colliders.gameObject.AddComponent<SphereCollider>();
+        sc.center = transform.localPosition;
+        sc.radius = 0.3f;
+     //   sc.transform.localPosition = transform.localPosition;
     }
     void MoveToPosition(Transform pos)
     {
-        float step = moverSpeed * Time.deltaTime;
-        OurAttachedEnzyme.transform.position = Vector3.MoveTowards(OurAttachedEnzyme.transform.position, pos.position, step);
-        if (.1f >= Vector3.Distance(OurAttachedEnzyme.transform.position, pos.position))
+        OurAttachedEnzyme.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+        OurAttachedEnzyme.transform.LookAt(pos);
+        OurAttachedEnzyme.transform.Translate(Vector3.forward * moverSpeed * Time.deltaTime);
+
+        if (.03f >= Vector3.Distance(OurAttachedEnzyme.transform.position, pos.position))
         {
             ++caseSwitch;
+            DebugStuff();
         }
     }
+    void DebugStuff()
+    {
+        if (_debug)
+            Debug.Log("Current position is " + caseSwitch);
+    }
 }
+
+
