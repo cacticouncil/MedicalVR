@@ -29,7 +29,28 @@ public class StrategyCellManagerScript : MonoBehaviour
     [System.NonSerialized]
     public List<StrategyItem> inventory;
 
-    private GameObject virusPrefab;
+    private GameObject virusPrefab
+    {
+        get
+        {
+            float p3 = cells.Count * .5f;
+            float p2 = cells.Count;
+            float p1 = 100.0f - p3 - p2;
+            float r = Random.Range(0.0f, 100.0f);
+            if (r <= p1)
+            {
+                return virusPrefab1;
+            }
+            else if (r > p1 && r <= p1 + p2)
+            {
+                return virusPrefab2;
+            }
+            else
+            {
+                return virusPrefab3;
+            }
+        }
+    }
     private Vector4 spawnCellStats;
     //private float xOffset = 1.0f;
     //private float yOffset = 1.0f;
@@ -39,7 +60,6 @@ public class StrategyCellManagerScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        virusPrefab = virusPrefab1;
         GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
         t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
         AddToDictionary(t.GetComponent<StrategyCellScript>());
@@ -113,18 +133,6 @@ public class StrategyCellManagerScript : MonoBehaviour
 
         cellNum = cells.Count;
         virNum = viruses.Count;
-
-        if (cellNum > 10 && virusPrefab == virusPrefab1)
-        {
-            Debug.Log("Viruses Have Mutated");
-            virusPrefab = virusPrefab2;
-        }
-
-        if (cellNum > 30 && virusPrefab == virusPrefab2)
-        {
-            Debug.Log("Viruses Have Mutated");
-            virusPrefab = virusPrefab3;
-        }
 
         sun.TurnUpdate();
 
