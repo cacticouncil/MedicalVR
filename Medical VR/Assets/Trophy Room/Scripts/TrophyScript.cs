@@ -13,6 +13,7 @@ public class TrophyScript : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
+        GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("InitialSFXVolume");
         orgRotation = transform.rotation;
         moveForward = false;
         inPedestal = false;
