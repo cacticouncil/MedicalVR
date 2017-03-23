@@ -288,29 +288,32 @@ public class StrategyCellScript : MonoBehaviour
 
     public void DelayedTurnUpdate()
     {
-        //spread immunity
-        float im = Mathf.Sqrt((tImmunity - .99f) * .01f);
-        if (!float.IsNaN(im))
+        if (!hosted)
         {
-            if (I2Dur > 0)
+            //spread immunity
+            float im = Mathf.Sqrt((tImmunity - .99f) * .01f);
+            if (!float.IsNaN(im))
             {
-                immunitySpread += parent.SpreadImmunity(key, im * 2.0f);
-                I2Dur--;
-                if (I2Dur == 0)
+                if (I2Dur > 0)
                 {
-                    i.color = Color.white;
+                    immunitySpread += parent.SpreadImmunity(key, im * 2.0f);
+                    I2Dur--;
+                    if (I2Dur == 0)
+                    {
+                        i.color = Color.white;
+                    }
                 }
-            }
-            else
-            {
-                immunitySpread += parent.SpreadImmunity(key, im);
+                else
+                {
+                    immunitySpread += parent.SpreadImmunity(key, im);
+                }
             }
         }
 
         if (hosted)
         {
             if (render)
-                render.material.color = Color.red;
+                render.material.color = Color.grey;
             else
                 Debug.Log("Cell " + gameObject.name + " does not have a renderer.");
         }
