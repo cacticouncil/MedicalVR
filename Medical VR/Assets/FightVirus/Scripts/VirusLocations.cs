@@ -2,19 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[System.Serializable]
-public struct Spawn
-{
-    public GameObject Pos;
-    public List<GameObject> VirusList;
-
-    public Spawn(GameObject go)
-    {
-        Pos = go;
-        VirusList = new List<GameObject>();
-    }
-}
-
 public class VirusLocations : MonoBehaviour
 {
     public List<Spawn> VirusLocationList = new List<Spawn>();
@@ -34,16 +21,30 @@ public class VirusLocations : MonoBehaviour
 
     void Update()
     {
+        //for (int i = 0; i < VirusLocationList.Count; i++)
+        //{
+        //    if (VirusLocationList[i].VirusList.Count == 5)
+        //    {
+        //        for (int j = 0; j < VirusManager.GetComponent<VirusManager>().VirusList.Count; j++)
+        //        {
+        //            if (VirusLocationList[i].VirusList.Contains(VirusManager.GetComponent<VirusManager>().VirusList[j]))
+        //                Destroy(VirusManager.GetComponent<VirusManager>().VirusList[j]);
+        //        }
+
+        //        VirusManager.GetComponent<VirusManager>().CreateBigVirus(VirusLocationList[i].Pos);
+        //    }
+        //}
+
         for (int i = 0; i < VirusLocationList.Count; i++)
         {
-            if (VirusLocationList[i].VirusList.Count >= 5)
+            if (VirusLocationList[i].SmallVirusCount == 5)
             {
                 for (int j = 0; j < VirusManager.GetComponent<VirusManager>().VirusList.Count; j++)
                 {
-                    if (VirusLocationList[i].VirusList.Contains(VirusManager.GetComponent<VirusManager>().VirusList[j]))
+                    if (VirusLocationList[i].VirusList.Contains(VirusManager.GetComponent<VirusManager>().VirusList[j]) && VirusManager.GetComponent<VirusManager>().VirusList[j].gameObject.tag == "Virus")
                         Destroy(VirusManager.GetComponent<VirusManager>().VirusList[j]);
                 }
-
+                VirusLocationList[i].SmallVirusCount = 0;
                 VirusManager.GetComponent<VirusManager>().CreateBigVirus(VirusLocationList[i].Pos);
             }
         }

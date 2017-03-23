@@ -6,6 +6,7 @@ public class BulletManager : MonoBehaviour
 {
     public GameObject Bullet;
     public GameObject Reticle;
+    public GameObject Player;
     public bool isTriggered;
     public float Time;
 
@@ -28,7 +29,14 @@ public class BulletManager : MonoBehaviour
         //Checking for button input
         if (GvrViewer.Instance.Triggered)
         {
+            //isTriggered = false;
             isTriggered = !isTriggered;
+        }
+
+        //Gameover stop shooting
+        if (Player.GetComponent<Player>().isGameOver)
+        {
+            isTriggered = false;
         }
     }
 

@@ -2,19 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SpawnStruct : MonoBehaviour
+public class Spawn : System.Object
 {
-    public struct Spawn
-    {
-        public GameObject Pos;
-        public List<GameObject> VirusList;
-        public int ListCount;
+    public GameObject Pos;
+    public List<GameObject> VirusList;
+    public int SmallVirusCount;
 
-        public Spawn(GameObject go)
-        {
-            Pos = go;
-            VirusList = null;
-            ListCount = 0;
-        }
+    public Spawn(GameObject go)
+    {
+        Pos = go;
+        VirusList = new List<GameObject>();
+        SmallVirusCount = 0;
     }
 }

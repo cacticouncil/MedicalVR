@@ -309,7 +309,10 @@ public class StrategyCellScript : MonoBehaviour
 
         if (hosted)
         {
-            render.material.color = Color.red;
+            if (render)
+                render.material.color = Color.red;
+            else
+                Debug.Log("Cell " + gameObject.name + " does not have a renderer.");
         }
         else if (targeted)
         {

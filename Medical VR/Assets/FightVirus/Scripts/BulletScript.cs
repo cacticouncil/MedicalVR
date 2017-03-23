@@ -6,6 +6,7 @@ public class BulletScript : MonoBehaviour
     public float LifeSpan;
     public float Speed;
     public int Damage;
+
 	void Start ()
     {
         LifeSpan = 0.0f;
