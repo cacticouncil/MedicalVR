@@ -74,9 +74,6 @@ public class StrategyCellManagerScript : MonoBehaviour
         t.GetComponent<Collider>().enabled = true;
 
         inventory = mysteryBox.items;
-
-        turnNumber = 1000;
-        MigrateViruses();
     }
 
     #region Selection
@@ -775,7 +772,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         virusPrefab2.GetComponent<StrategyVirusScript>().turnSpeed *= 1.3f;
         virusPrefab3.GetComponent<StrategyVirusScript>().turnSpeed *= 1.3f;
     }
-    
+
     void SlowDownViruses()
     {
         virusPrefab1.GetComponent<StrategyVirusScript>().turnSpeed *= .8f;
@@ -785,7 +782,28 @@ public class StrategyCellManagerScript : MonoBehaviour
 
     void AsymptomaticCarriers()
     {
-
+        int asyTotal = (int)(cellNum * .05f + 1);
+        int index = 0;
+        for (int i = 0; i < asyTotal; i++)
+        {
+            while (index < cells.Count)
+            {
+                if (!cells[index].targeted)
+                    break;
+                index++;
+            }
+            if (index >= cells.Count)
+                break;
+            
+            GameObject v = Instantiate(virusPrefab, cells[index].transform.position, Quaternion.identity, transform) as GameObject;
+            cells[index].targeted = true;
+            cells[index].virus = v;
+            v.GetComponent<StrategyVirusScript>().target = cells[index];
+            v.GetComponent<StrategyVirusScript>().percentTraveled = 100.0f;
+            v.GetComponent<StrategyVirusScript>().parent = this;
+            v.GetComponent<StrategyVirusScript>().enabled = true;
+            index++;
+        }
     }
     #endregion
 }

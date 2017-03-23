@@ -25,7 +25,16 @@ public class StrategyVirusScript : MonoBehaviour
     {
         if (target)
         {
-            GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(target.transform.position - transform.position));
+            target.targeted = true;
+            Vector3 lookRotation = target.transform.position - transform.position;
+            if (lookRotation != Vector3.zero)
+            {
+                GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(target.transform.position - transform.position));
+            }
+            else
+            {
+                GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
+            }
             startingPosition = prevPosition = nextPosition = transform.position;
             distance = Vector3.Distance(startingPosition, target.transform.position);
             Mathf.Max(distance, .001f);
