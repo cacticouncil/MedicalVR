@@ -12,10 +12,14 @@ public class PedestalScript : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        orgButtonColor = descButton.GetComponent<Renderer>().material.color;
+        if (descButton != null)
+        {
+            orgButtonColor = descButton.GetComponent<Renderer>().material.color;
+            descButton.SetActive(false);
+        }
         isSoundPlaying = false;
         inUse = false;
-        descButton.SetActive(false);
+       
 	}
 	
 	// Update is called once per frame
@@ -33,6 +37,7 @@ public class PedestalScript : MonoBehaviour {
         if (theCamera.transform.position != camPos.transform.position)
         {
             isSoundPlaying = false;
+            if(descButton != null)
             descButton.GetComponent<Renderer>().material.color = orgButtonColor;
             if(selectedTrophy != null)
             {
