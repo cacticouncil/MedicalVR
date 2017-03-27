@@ -21,10 +21,10 @@ public class VirusManager : MonoBehaviour
     bool CheckCount;
     void Start()
     {
-        Wave1 = true;
+        Wave1 = false;
         Wave2 = false;
         Wave3 = false;
-        Wave4 = false;
+        Wave4 = true;
         CheckCount = false;
         EnemyCount = 20;
         Invoke("CreateWave", 5);
@@ -94,5 +94,11 @@ public class VirusManager : MonoBehaviour
     public void CreateBigVirus(GameObject pos)
     {
         VirusList.Add(Instantiate(BigVirusCube, pos.transform.position, Quaternion.identity, transform) as GameObject);
+    }
+
+    public void CreateSmallVirus(GameObject pos)
+    {
+        VirusList.Add(Instantiate(VirusCube, pos.transform.position, Quaternion.identity, transform) as GameObject);
+        VirusList[VirusList.Count - 1].GetComponent<Virus>().BossSpawnSmallVirus = true;
     }
 }
