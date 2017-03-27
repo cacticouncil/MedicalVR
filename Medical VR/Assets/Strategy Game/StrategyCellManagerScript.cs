@@ -11,7 +11,10 @@ public class StrategyCellManagerScript : MonoBehaviour
     public List<StrategyCellScript> cells = new List<StrategyCellScript>();
     [HideInInspector]
     public List<StrategyVirusScript> viruses = new List<StrategyVirusScript>();
+    [HideInInspector]
+    public List<StrategyMigratingWhiteBloodCell> whiteCells = new List<StrategyMigratingWhiteBloodCell>();
     public GameObject cellPrefab;
+    public GameObject whiteCellPrefab;
     public GameObject virusPrefab1;
     public GameObject virusPrefab2;
     public float p2Modifier = 1;
@@ -707,6 +710,21 @@ public class StrategyCellManagerScript : MonoBehaviour
     public Vector3 RandomPositionAboveHex()
     {
         return new Vector3(Random.Range(tiles.Count * .3f * -1.0f, tiles.Count * .3f), 10, Random.Range(tiles.Count * .3f * -1.0f, tiles.Count * .3f));
+    }
+    #endregion
+
+    #region WhiteCells
+    public StrategyVirusScript FindWhiteCellNewTarget()
+    {
+        for (int i = 0; i < viruses.Count; i++)
+        {
+            if (!viruses[i].targeted)
+            {
+                viruses[i].targeted = true;
+                return viruses[i];
+            }
+        }
+        return null;
     }
     #endregion
 
