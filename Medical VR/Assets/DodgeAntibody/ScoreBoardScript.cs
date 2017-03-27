@@ -29,6 +29,9 @@ public class ScoreBoardScript : MonoBehaviour {
             case "Simon":
                 score = (int)objectWithScore.GetComponent<SimonSays>().score;
                 break;
+            case "FightVirus":
+                score = (int)objectWithScore.GetComponent<Player>().Score;
+                    break;
             default:
                 break;
         }

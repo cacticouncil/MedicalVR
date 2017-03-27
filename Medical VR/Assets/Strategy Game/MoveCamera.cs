@@ -36,8 +36,7 @@ public class MoveCamera : MonoBehaviour
 
         transform.GetChild(0).transform.LookAt(finalPos);
     }
-
-    // Update is called once per frame
+    
     void FixedUpdate()
     {
         float disCovered = (Time.time - startTime) * speed;

@@ -18,13 +18,23 @@ public class StrategyVirusScript : MonoBehaviour
 
     private float distance = .1f;
     private float startTime = 0.0f;
+    private bool trav = false;
 
     // Use this for initialization
     void Start()
     {
         if (target)
         {
-            transform.LookAt(target.transform);
+            target.targeted = true;
+            Vector3 lookRotation = target.transform.position - transform.position;
+            if (lookRotation != Vector3.zero)
+            {
+                GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(target.transform.position - transform.position));
+            }
+            else
+            {
+                GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
+            }
             startingPosition = prevPosition = nextPosition = transform.position;
             distance = Vector3.Distance(startingPosition, target.transform.position);
             Mathf.Max(distance, .001f);
@@ -40,23 +50,63 @@ public class StrategyVirusScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         float disCovered = (Time.time - startTime) * movementSpeed;
         float fracJourney = disCovered / distance;
-        if (fracJourney >= 1.0f || !target)
+        //fracJourney = 0.0f;
+        if (fracJourney >= 1.0f && (!target || (target && percentTraveled >= 1.0f)))
         {
-            transform.rotation = Quaternion.identity;
+            GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
+            if (trav)
+            {
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+            }
+            else
+            {
+                if (Vector3.Distance(transform.position, nextPosition) < .1f)
+                {
+                    trav = true;
+                }
+                else
+                {
+                    GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, nextPosition, 1));
+                }
+            }
         }
         else
         {
-            transform.LookAt(target.transform);
+            if (target)
+            {
+                Vector3 lookRotation = target.transform.position - transform.position;
+                if (lookRotation != Vector3.zero)
+                {
+                    GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(lookRotation));
+                }
+                else
+                {
+                    GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
+                }
+            }
+            else
+            {
+                Vector3 lookRotation = nextPosition - transform.position;
+                if (lookRotation != Vector3.zero)
+                {
+                    GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(lookRotation));
+                }
+                else
+                {
+                    GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
+                }
+            }
+            GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, nextPosition, fracJourney));
         }
-        transform.position = Vector3.Lerp(prevPosition, nextPosition, fracJourney);
     }
 
     public void TurnUpdate()
     {
+        trav = false;
         if (standby)
         {
             target = parent.FindVirusNewTarget(gameObject);
@@ -71,8 +121,10 @@ public class StrategyVirusScript : MonoBehaviour
                     percentTraveled = 1f - turnSpeed;
                 }
 
-                nextPosition = Vector3.Lerp(prevPosition, parent.RandomPositionAboveHex(), 1);
+                nextPosition = Vector3.Lerp(prevPosition, parent.RandomPositionAboveHex(), percentTraveled);
                 prevPosition = transform.position;
+                GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
+                distance = Vector3.Distance(prevPosition, nextPosition);
                 startTime = Time.time;
                 return;
             }
@@ -80,9 +132,10 @@ public class StrategyVirusScript : MonoBehaviour
         }
 
         //Should not be called anymore
+        #region Null
         if (target == null)
         {
-            Debug.Log("Target Lost");
+            Debug.Log("Target Lost AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             target = parent.FindVirusNewTarget(gameObject);
             transform.LookAt(target.transform);
             if (percentTraveled >= 1.0f)
@@ -98,7 +151,7 @@ public class StrategyVirusScript : MonoBehaviour
                 distance = Vector3.Distance(startingPosition, target.transform.position);
             }
         }
-
+        #endregion
 
         percentTraveled += turnSpeed;
         nextPosition = Vector3.Lerp(startingPosition, target.transform.position, percentTraveled);
@@ -115,6 +168,11 @@ public class StrategyVirusScript : MonoBehaviour
                     target = parent.FindVirusNewTarget(gameObject);
                     return;
                 }
+            }
+
+            if (GetComponent<Collider>().enabled)
+            {
+                GetComponent<Collider>().enabled = false;
             }
             target.hosted = true;
             target.virus = gameObject;
@@ -142,6 +200,16 @@ public class StrategyVirusScript : MonoBehaviour
         }
     }
 
+    public void OnDestroy()
+    {
+        if (target)
+        {
+            target.hosted = false;
+            target.targeted = false;
+        }
+        parent.viruses.Remove(this);
+    }
+
     //This virus destroys the cell it is attacking, changes to a new cell, and spawns a virus
     public virtual void Attack()
     {
@@ -159,15 +227,5 @@ public class StrategyVirusScript : MonoBehaviour
             (target.protein == StrategyCellScript.Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
             parent.KillCell(target.key);
         Destroy(gameObject);
-    }
-
-    public void OnDestroy()
-    {
-        if (target)
-        {
-            target.hosted = false;
-            target.targeted = false;
-        }
-        parent.viruses.Remove(this);
     }
 }

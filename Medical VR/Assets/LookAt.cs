@@ -3,7 +3,7 @@ using System.Collections;
 
 public class LookAt : MonoBehaviour
 {
-
+    public GameObject l;
     // Use this for initialization
     void Start()
     {
@@ -11,8 +11,15 @@ public class LookAt : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        transform.LookAt(Camera.main.transform);
+        if (GetComponent<Rigidbody>())
+        {
+            GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(l.transform.position - transform.position));
+        }
+        else
+        {
+            transform.LookAt(l.transform);
+        }
     }
 }
