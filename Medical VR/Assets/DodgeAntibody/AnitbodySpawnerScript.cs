@@ -23,13 +23,13 @@ public class AnitbodySpawnerScript : MonoBehaviour {
 	public void Restart()
     {
         levelNum = 0;
-        theLevel.GetComponent<TextMesh>().text = "LEVEL: " + levelNum.ToString();
+        theLevel.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + levelNum.ToString();
         GenerateObstacles();
     }
 	public void GenerateObstacles()
     {
         levelNum++;
-        theLevel.GetComponent<TextMesh>().text = "LEVEL: " + levelNum.ToString();
+        theLevel.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + levelNum.ToString();
         if (randPositions.Count != 0)
         {
             for (int i = 0; i < randPositions.Count; i++)
@@ -66,9 +66,9 @@ public class AnitbodySpawnerScript : MonoBehaviour {
                 if (sz == 0)
                     sz = 0;
                 else if (sz == 1)
-                    sz = 100;
+                    sz = 0;
                 else if (sz == 2)
-                    sz = -100;
+                    sz = -0;
                
                 tmpNum.Remove(tmpNum[obNum]);
                 GameObject tmp = Instantiate(refAntiBody, tmpPos, refAntiBody.transform.rotation) as GameObject;

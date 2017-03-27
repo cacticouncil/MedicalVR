@@ -22,8 +22,11 @@ public class StrategyTransporter : MonoBehaviour
         transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t);
         if (t >= 1.0f)
         {
-            transform.GetChild(0).GetComponent<Collider>().enabled = true;
-            transform.GetChild(0).parent = transform.parent;
+            if (transform.childCount > 0)
+            {
+                transform.GetChild(0).GetComponent<Collider>().enabled = true;
+                transform.GetChild(0).parent = transform.parent;
+            }
             Destroy(gameObject);
         }
     }
