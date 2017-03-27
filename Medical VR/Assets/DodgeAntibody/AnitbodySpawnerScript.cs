@@ -66,9 +66,9 @@ public class AnitbodySpawnerScript : MonoBehaviour {
                 if (sz == 0)
                     sz = 0;
                 else if (sz == 1)
-                    sz = 100;
+                    sz = 0;
                 else if (sz == 2)
-                    sz = -100;
+                    sz = -0;
                
                 tmpNum.Remove(tmpNum[obNum]);
                 GameObject tmp = Instantiate(refAntiBody, tmpPos, refAntiBody.transform.rotation) as GameObject;
