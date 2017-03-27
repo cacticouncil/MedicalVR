@@ -13,7 +13,7 @@ public class _TDestroyByTime : MonoBehaviour
 
     void Start()
     {
-        Invoke("DestroyMe", 10.0f);
+        Invoke("DestroyMe", deathTime);
     }
 
     public void CancelDestroy()

@@ -5,10 +5,41 @@ public class _TMover : MonoBehaviour
 {
     private Rigidbody rb;
     public float speed;
+    public bool isRandomUp;
+    public Boundary spawnValuesDirection;
+
+    [HideInInspector]
+    public bool DataIsSet = false;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.velocity = transform.forward * speed;
+
+        if (!isRandomUp)
+        {
+            rb.velocity = transform.forward * speed;
+        }
+        else
+        {            
+            rb.velocity = new Vector3(
+                Random.Range(spawnValuesDirection.xMax, spawnValuesDirection.xMax),
+                Random.Range(spawnValuesDirection.yMin, spawnValuesDirection.yMax),
+                Random.Range(spawnValuesDirection.zMin, spawnValuesDirection.zMax)) * speed;
+        }
+        DataIsSet = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        rb.velocity = rb.velocity.normalized * speed;
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        rb.velocity = rb.velocity.normalized * speed;
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        rb.velocity = rb.velocity.normalized * speed;
     }
 }
