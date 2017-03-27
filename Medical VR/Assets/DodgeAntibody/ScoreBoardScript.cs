@@ -106,12 +106,12 @@ public class ScoreBoardScript : MonoBehaviour {
     void DisplayScore()
     {
         
-        score1.GetComponent<TextMesh>().text = "1. " + topNames[0] + ": " + topScores[0];
-        score2.GetComponent<TextMesh>().text = "2. " + topNames[1] + ": " + topScores[1];
-        score3.GetComponent<TextMesh>().text = "3. " + topNames[2] + ": " + topScores[2];
-        score4.GetComponent<TextMesh>().text = "4. " + topNames[3] + ": " + topScores[3];
-        score5.GetComponent<TextMesh>().text = "5. " + topNames[4] + ": " + topScores[4];
-        currentScore.GetComponent<TextMesh>().text = "Your Score: " + score.ToString();
+        score1.GetComponent<TMPro.TextMeshPro>().text = "1. " + topNames[0] + ": " + topScores[0];
+        score2.GetComponent<TMPro.TextMeshPro>().text = "2. " + topNames[1] + ": " + topScores[1];
+        score3.GetComponent<TMPro.TextMeshPro>().text = "3. " + topNames[2] + ": " + topScores[2];
+        score4.GetComponent<TMPro.TextMeshPro>().text = "4. " + topNames[3] + ": " + topScores[3];
+        score5.GetComponent<TMPro.TextMeshPro>().text = "5. " + topNames[4] + ": " + topScores[4];
+        currentScore.GetComponent<TMPro.TextMeshPro>().text = "Your Score: " + score.ToString();
         SaveScore();
     }
 }

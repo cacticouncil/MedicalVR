@@ -22,7 +22,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         if(arcadeMode == true)
         {
             lives--;
-            theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+            theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         }
         transform.position = originPos;
         MenuButton.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 100);
@@ -51,12 +51,12 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         lives = 3;
         score = 0;
         speed = orgSpeed;
-        theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         //theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
     }
     void Start ()
     {
-        theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         originPos = transform.position;
         
         orgSpeed = speed;
@@ -85,7 +85,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
             {
                 score += Time.smoothDeltaTime;
                 int tmp = (int)score;
-                theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+                theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
             }
            
         }

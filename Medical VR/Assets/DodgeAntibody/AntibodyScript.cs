@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AntibodyScript : MonoBehaviour {
 
-    public GameObject Cam, Effects;
+    public GameObject Cam, Effects, banner;
     bool reswpawn = false;
     float saveSpeed;
 	// Use this for initialization
@@ -43,6 +43,12 @@ public class AntibodyScript : MonoBehaviour {
             reswpawn = true;
             Effects.GetComponent<ParticleSystem>().Stop();
             Effects.GetComponent<ParticleSystem>().Play();
+            if(PlayerPrefs.GetInt("\nWhite Cell\n") == -1)
+            {
+                banner.GetComponent<BannerScript>().ShowUp();
+                PlayerPrefs.SetInt("\nWhite Cell\n", 1);
+                SoundManager.PlaySFX("MenuEnter");
+            }
         }
     }
     void OnCollisionEnter(Collision collision)

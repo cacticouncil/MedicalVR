@@ -25,19 +25,19 @@ public class EnterNameScript : MonoBehaviour {
     {
         index++;
         index = index % 26;
-        letter1.GetComponent<TextMesh>().text = alph[index].ToString();
+        letter1.GetComponent<TMPro.TextMeshPro>().text = alph[index].ToString();
     }
     public void UpTwo()
     {
         index1++;
         index1 = index1 % 26;
-        letter2.GetComponent<TextMesh>().text = alph[index1].ToString();
+        letter2.GetComponent<TMPro.TextMeshPro>().text = alph[index1].ToString();
     }
     public void UpThree()
     {
         index2++;
         index2 = index2 % 26;
-        letter3.GetComponent<TextMesh>().text = alph[index2].ToString();
+        letter3.GetComponent<TMPro.TextMeshPro>().text = alph[index2].ToString();
     }
 
     public void DownOne()
@@ -55,7 +55,7 @@ public class EnterNameScript : MonoBehaviour {
             index1 = 26;
 
         index1--;
-        letter2.GetComponent<TextMesh>().text = alph[index1].ToString();
+        letter2.GetComponent<TMPro.TextMeshPro>().text = alph[index1].ToString();
     }
     public void DownThree()
     {
@@ -63,7 +63,7 @@ public class EnterNameScript : MonoBehaviour {
             index2 = 26;
 
         index2--;
-        letter3.GetComponent<TextMesh>().text = alph[index2].ToString();
+        letter3.GetComponent<TMPro.TextMeshPro>().text = alph[index2].ToString();
     }
     public void SetName()
     {

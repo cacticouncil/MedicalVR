@@ -5,15 +5,19 @@ using System.Collections.Generic;
 public class TrophyLoader : MonoBehaviour {
 
     public List<GameObject> Trophies = new List<GameObject>();
+    public GameObject unlockedText;
+    int numUnlocked = 0;
 	void Start ()
     {
-        //LockAllTrophies();
+        LockAllTrophies();
         for (int i = 0; i < Trophies.Count; i++)
         {
-            if (PlayerPrefs.GetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TextMesh>().text) == -1)
+            if (PlayerPrefs.GetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text) == -1)
                 Trophies[i].SetActive(false);
-            string tmp = Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TextMesh>().text;
+            else
+                numUnlocked++;
         }
+        unlockedText.GetComponent<TMPro.TextMeshPro>().text = "Unlocked: " + numUnlocked.ToString() + "/" + Trophies.Count.ToString();
     }
 	
 	// Update is called once per frame
@@ -25,7 +29,7 @@ public class TrophyLoader : MonoBehaviour {
     {
         for(int i = 0; i < Trophies.Count; i++)
         {
-            PlayerPrefs.SetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TextMesh>().text, -1);
+            PlayerPrefs.SetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text, 1);
         }
     }
 }

@@ -23,13 +23,13 @@ public class AnitbodySpawnerScript : MonoBehaviour {
 	public void Restart()
     {
         levelNum = 0;
-        theLevel.GetComponent<TextMesh>().text = "LEVEL: " + levelNum.ToString();
+        theLevel.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + levelNum.ToString();
         GenerateObstacles();
     }
 	public void GenerateObstacles()
     {
         levelNum++;
-        theLevel.GetComponent<TextMesh>().text = "LEVEL: " + levelNum.ToString();
+        theLevel.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + levelNum.ToString();
         if (randPositions.Count != 0)
         {
             for (int i = 0; i < randPositions.Count; i++)
