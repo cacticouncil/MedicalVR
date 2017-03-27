@@ -13,6 +13,12 @@ public class Cell : MonoBehaviour
             Destroy(col.gameObject);
         }
 
+        else if (col.gameObject.tag == "Virus")
+        {
+            Player.GetComponent<Player>().VirusLeaveCount += 1;
+            Destroy(col.gameObject);
+        }
+
         else if (col.gameObject.tag == "Bullet")
         {
             Destroy(col.gameObject);
