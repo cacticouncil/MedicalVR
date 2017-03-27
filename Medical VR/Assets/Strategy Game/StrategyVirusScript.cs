@@ -11,6 +11,7 @@ public class StrategyVirusScript : MonoBehaviour
     public float health = 15.0f;
     public float percentTraveled = 0.0f;
     public bool standby = false;
+    public bool targeted = false;
 
     public Vector3 startingPosition, prevPosition, nextPosition;
 
