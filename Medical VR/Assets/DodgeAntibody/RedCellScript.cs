@@ -6,7 +6,7 @@ public class RedCellScript : MonoBehaviour {
 
     // Use this for initialization
     public float speed;
-    public GameObject virus, spawner;
+    public GameObject virus, spawner, banner;
 
 	void Start ()
     {
@@ -21,7 +21,7 @@ public class RedCellScript : MonoBehaviour {
     {
         if (other.tag == "virus")
         {
-            if(virus.GetComponent<MovingCamera>().arcadeMode == true)
+            if(MovingCamera.arcadeMode == true)
             {
                 virus.GetComponent<MovingCamera>().WinresetPos();
                 virus.GetComponent<MovingCamera>().speed++;
@@ -30,10 +30,11 @@ public class RedCellScript : MonoBehaviour {
             }
             else
             {
-                SceneManager.LoadScene("Credits"); 
+                SceneManager.LoadScene("Virus Gameplay Scene"); 
             }
             if (PlayerPrefs.GetInt("Red Cell") == -1)
             {
+                banner.GetComponent<BannerScript>().ShowUp();
                 PlayerPrefs.SetInt("Red Cell", 1);
                 SoundManager.PlaySFX("MenuEnter");
             }
