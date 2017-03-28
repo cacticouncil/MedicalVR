@@ -7,31 +7,42 @@ public class StrategyMigratingWhiteBloodCell : MonoBehaviour
     public float movementSpeed = 10.0f, turnSpeed = .1f;
     public Vector3 startingPosition, prevPosition, nextPosition;
     public StrategyCellManagerScript parent;
+    public float percentTraveled = 0.0f;
 
-    private float percentTraveled = 0.0f;
     private float distance = .1f;
     private float startTime = 0.0f;
-    private bool trav = false;
-    private bool kill = false;
+    private bool trav = false, kill = false, leave = false;
 
     // Use this for initialization
     void Start()
     {
+        startingPosition = prevPosition = nextPosition = transform.position;
         parent = transform.parent.GetComponent<StrategyCellManagerScript>();
-        //target.enabled = false;
-        //transform.parent.GetComponent<StrategyCellManagerScript>()
+        parent.whiteCells.Add(this);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-
+        Vector3 destination;
+        if (target)
+            destination = Vector3.Lerp(startingPosition, target.transform.position, percentTraveled);
+        else
+            destination = nextPosition;
         float disCovered = (Time.time - startTime) * movementSpeed;
         float fracJourney = disCovered / distance;
-        //fracJourney = 0.0f;
+
         if (fracJourney >= 1.0f && (!target || (target && percentTraveled >= 1.0f)))
         {
-            if (trav)
+            if (leave)
+            {
+                if (Vector3.Distance(transform.position, destination) < .1f)
+                {
+                    Destroy(transform.gameObject);
+                }
+                GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, destination, 1));
+            }
+            else if (trav)
             {
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 if (target)
@@ -42,56 +53,74 @@ public class StrategyMigratingWhiteBloodCell : MonoBehaviour
             }
             else
             {
-                if (Vector3.Distance(transform.position, nextPosition) < .1f)
+                if (Vector3.Distance(transform.position, destination) < .1f)
                 {
                     trav = true;
                 }
                 else
                 {
-                    GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, nextPosition, 1));
+                    GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, destination, 1));
                 }
             }
         }
         else
         {
-            GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, nextPosition, fracJourney));
+            GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, destination, fracJourney));
         }
     }
 
-    void TurnUpdate()
+    public void TurnUpdate()
     {
-        trav = false;
-        if (target == null)
+        if (!kill)
         {
-            target = parent.FindWhiteCellNewTarget();
+            trav = false;
             if (target == null)
             {
-                if (percentTraveled < 1f - turnSpeed)
+                target = parent.FindWhiteCellNewTarget();
+                if (target == null)
                 {
-                    percentTraveled += turnSpeed;
-                }
-                else
-                {
-                    percentTraveled = 1f - turnSpeed;
-                }
+                    if (percentTraveled < 1f - turnSpeed)
+                    {
+                        percentTraveled += turnSpeed;
+                    }
+                    else
+                    {
+                        percentTraveled = 1f - turnSpeed;
+                    }
 
-                nextPosition = Vector3.Lerp(prevPosition, parent.RandomPositionAboveHex(), percentTraveled);
-                prevPosition = transform.position;
-                distance = Vector3.Distance(prevPosition, nextPosition);
-                startTime = Time.time;
-                return;
+                    nextPosition = Vector3.Lerp(prevPosition, parent.RandomPositionAboveHex(), percentTraveled);
+                    prevPosition = transform.position;
+                    distance = Vector3.Distance(prevPosition, nextPosition);
+                    startTime = Time.time;
+                    return;
+                }
+                startingPosition = transform.position;
             }
-            startingPosition = transform.position;
+
+            percentTraveled += turnSpeed;
+            //nextPosition = Vector3.Lerp(startingPosition, target.transform.position, percentTraveled);
+            //prevPosition = transform.position;
+            startTime = Time.time;
+
+            if (percentTraveled >= 1.0f)
+            {
+                target.enabled = false;
+            }
         }
-
-        percentTraveled += turnSpeed;
-        nextPosition = Vector3.Lerp(startingPosition, target.transform.position, percentTraveled);
-        prevPosition = transform.position;
-        startTime = Time.time;
-
-        if (percentTraveled >= 1.0f)
+        else
         {
-            target.enabled = false;
+            leave = true;
+            Vector3 direction = Random.onUnitSphere;
+            direction.y = Mathf.Clamp(direction.y, 0.65f, 1f);
+            nextPosition = direction * 100.0f;
+            startingPosition = prevPosition = transform.position;
+            distance = Vector3.Distance(startingPosition, nextPosition);
+            startTime = Time.time;
         }
+    }
+
+    void OnDestroy()
+    {
+        parent.whiteCells.Remove(this);
     }
 }

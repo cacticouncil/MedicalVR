@@ -201,16 +201,6 @@ public class StrategyVirusScript : MonoBehaviour
         }
     }
 
-    public void OnDestroy()
-    {
-        if (target)
-        {
-            target.hosted = false;
-            target.targeted = false;
-        }
-        parent.viruses.Remove(this);
-    }
-
     //This virus destroys the cell it is attacking, changes to a new cell, and spawns a virus
     public virtual void Attack()
     {
@@ -228,5 +218,16 @@ public class StrategyVirusScript : MonoBehaviour
             (target.protein == StrategyCellScript.Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
             parent.KillCell(target.key);
         Destroy(gameObject);
+    }
+
+    public void OnDestroy()
+    {
+        if (target)
+        {
+            target.hosted = false;
+            target.targeted = false;
+            target.RefreshUI();
+        }
+        parent.viruses.Remove(this);
     }
 }
