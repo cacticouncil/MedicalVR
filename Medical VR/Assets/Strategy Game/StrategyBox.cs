@@ -13,6 +13,7 @@ public class StrategyBox : MonoBehaviour
     public TextMesh actionText;
 
     public GameObject boxTab;
+    public Hilighter AHighlighter;
     public GameObject animationTab;
     public GameObject anim;
     public TextMesh animationText;
@@ -37,6 +38,7 @@ public class StrategyBox : MonoBehaviour
             actionsLeft = 4;
             actionText.text = "Actions Left: " + actionsLeft;
             int item = Random.Range(0, items.Count);
+            AHighlighter.SetGazedAt(false);
 
             //play animation
             anim.GetComponent<SpriteRenderer>().sprite = items[item].image;
