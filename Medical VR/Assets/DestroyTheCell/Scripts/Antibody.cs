@@ -111,7 +111,7 @@ public class Antibody : MonoBehaviour
 
     public bool CheckFOV()
     {
-        if (Vector3.Angle(Player.transform.position - transform.position, transform.forward) <= 55 && FlashScreen == false)
+        if (Vector3.Angle(Player.transform.position - transform.position, transform.forward) <= 45 && FlashScreen == false)
         {
             Debug.Log("Can See Player");
             AlwaysChasePlayer = true;
