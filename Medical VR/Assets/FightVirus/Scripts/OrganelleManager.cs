@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class OrganelleManager : MonoBehaviour
 {
     public GameObject Player;
+    public GameObject VirusPlayer;
     public GameObject Organelle;
     public List<GameObject> OrganelleList = new List<GameObject>();
     public int OrganelleCount;
@@ -11,10 +12,10 @@ public class OrganelleManager : MonoBehaviour
 
     void Start()
     {
-        OrganelleCount = 17;
+        OrganelleCount = 15;
         for (int i = 0; i < OrganelleCount; i++)
         {
-            SpawnRandomCell = Random.onUnitSphere * 5.0f;
+            SpawnRandomCell = Random.insideUnitSphere * 6.0f;
 
             if (SpawnRandomCell.y < 0)
                 SpawnRandomCell.y = Random.Range(0, 7);

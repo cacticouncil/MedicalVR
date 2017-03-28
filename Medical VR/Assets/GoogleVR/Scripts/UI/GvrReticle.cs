@@ -115,7 +115,7 @@ public class GvrReticle : MonoBehaviour, IGvrGazePointer {
     SetGazeTarget(intersectionPosition, isInteractive);
         if (gazedAt != null && gazeStartTime > 0.0f)
         {
-            if (Time.time - gazeStartTime > 3.0f && ExecuteEvents.CanHandleEvent<TimedInputHandler>(gazedAt))
+            if (Time.time - gazeStartTime > 2.5f && ExecuteEvents.CanHandleEvent<TimedInputHandler>(gazedAt))
             {
                 gazeStartTime = -1.0f;
                 ExecuteEvents.Execute(gazedAt, null, (TimedInputHandler handler, BaseEventData data) => handler.HandleTimeInput());
