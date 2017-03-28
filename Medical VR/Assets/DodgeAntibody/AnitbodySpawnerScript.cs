@@ -55,7 +55,7 @@ public class AnitbodySpawnerScript : MonoBehaviour {
             for (int i = 0; i < Obstacles.Count; i++)
             {
                 tmpNum.Add(Obstacles[i]);
-                if(virus.GetComponent<MovingCamera>().arcadeMode == true)
+                if(MovingCamera.arcadeMode == true)
                 tmpPoints.Add(Obstacles[i]);
             }
             for (int j = 0; j < Obstacles.Count; j++)
@@ -75,7 +75,7 @@ public class AnitbodySpawnerScript : MonoBehaviour {
                 tmp.transform.localScale = new Vector3(tmp.transform.localScale.x + sz, tmp.transform.localScale.y + sz, tmp.transform.localScale.z + sz);
                 randPositions.Add(tmp);
 
-                if(j%2 == 0 && virus.GetComponent<MovingCamera>().arcadeMode == true)
+                if(j%2 == 0 && MovingCamera.arcadeMode == true)
                 {
                     obNum = Random.Range(0, Obstacles.Count - 1 - j);
                     tmpPos = new Vector3(tmpPoints[obNum].transform.position.x, tmpPoints[obNum].transform.position.y, z);

@@ -21,7 +21,7 @@ public class RedCellScript : MonoBehaviour {
     {
         if (other.tag == "virus")
         {
-            if(virus.GetComponent<MovingCamera>().arcadeMode == true)
+            if(MovingCamera.arcadeMode == true)
             {
                 virus.GetComponent<MovingCamera>().WinresetPos();
                 virus.GetComponent<MovingCamera>().speed++;

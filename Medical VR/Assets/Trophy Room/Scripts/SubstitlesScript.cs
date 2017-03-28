@@ -63,4 +63,8 @@ public class SubstitlesScript : MonoBehaviour {
         stop = true;
         GetComponent<TMPro.TextMeshPro>().text = "";
     }
+    public void Continue()
+    {
+        stop = false;
+    }
 }
