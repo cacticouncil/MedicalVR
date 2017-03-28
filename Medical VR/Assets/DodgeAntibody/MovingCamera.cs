@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.SceneManagement;
 
 public class MovingCamera : MonoBehaviour, TimedInputHandler
 {
@@ -57,8 +58,6 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     void Start ()
     {
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
-        originPos = transform.position;
-        
         orgSpeed = speed;
         if(arcadeMode == false)
         {

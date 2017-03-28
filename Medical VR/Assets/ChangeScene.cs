@@ -35,6 +35,7 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 break;
             case 3:
                 LoadScene("DodgeAnitbodies");
+                MovingCamera.arcadeMode = true;
                 break;
             case 4:
                 LoadScene("SimonDNA");
@@ -65,6 +66,9 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 break;
             case 13:
                 LoadScene("DestroyTheCell");
+                break;
+            case 14:
+                LoadScene("Virus Gameplay Scene");
                 break;
         }
     }
