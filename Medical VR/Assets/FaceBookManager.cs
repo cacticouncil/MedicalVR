@@ -155,10 +155,10 @@ public class FacebookManager : MonoBehaviour {
         }
     }
 
-    public void ShareWithUsers()
+    public void ShareWithUsers(int gscore)
     {
         FB.AppRequest(
-            "Come and join me, I bet you can't beat my score!",
+            "Come and join me, I bet you can't beat my score! " + gscore.ToString(),
             null,
             new List<object>() { "app_users"},
             null,
