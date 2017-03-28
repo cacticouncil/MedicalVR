@@ -37,8 +37,12 @@ public class RGBSlider : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
-	
-	}
+        R.value = RecticleMaterial.color.r;
+        G.value = RecticleMaterial.color.g;
+        B.value = RecticleMaterial.color.b;
+        RecticleImage.color = myColor;
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {
