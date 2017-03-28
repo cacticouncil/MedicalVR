@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+using TMPro;
+using System;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour , TimedInputHandler
 {
     public float Score;
     public int VirusLeaveCount;
@@ -16,6 +19,7 @@ public class Player : MonoBehaviour
     public GameObject VirusCount;
     public GameObject CenterScreenObj;
     public GameObject EnemyManger;
+    public GameObject ScoreBoard;
 
     void Start()
     {
@@ -34,65 +38,74 @@ public class Player : MonoBehaviour
     {
         if (isGameOver == false)
         {
-            ScoreObj.GetComponent<TextMesh>().text = "Score " + Score.ToString();
-            VirusCount.GetComponent<TextMesh>().text = "VirusCount: " + VirusLeaveCount.ToString();
-        }
-
-        if (RuleTimer >= 4.0f)
-            DisplayRules = false;
-
-        if (DisplayRules)
-            CenterScreenObj.GetComponent<TextMesh>().text = "  Defeat the Virus " + "\n" + "from leaving the cell";
-        else
-            CenterScreenObj.GetComponent<TextMesh>().text = "";
+            ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + Score.ToString();
+            VirusCount.GetComponent<TextMeshPro>().text = "VirusCount: " + VirusLeaveCount.ToString();
 
 
-        //Display Wave
-        if (EnemyManger.GetComponent<VirusManager>().Wave1 == true && DisplayRules == false)
-        {
-            if (Wave1Timer <= 2.0f)
+            if (RuleTimer >= 4.0f)
+                DisplayRules = false;
+
+            if (DisplayRules)
+                CenterScreenObj.GetComponent<TextMeshPro>().text = "  Defeat the Virus " + "\n" + "from leaving the cell";
+            else
+                CenterScreenObj.GetComponent<TextMeshPro>().text = "";
+
+
+            //Display Wave
+            if (EnemyManger.GetComponent<VirusManager>().Wave1 == true && DisplayRules == false)
             {
-                CenterScreenObj.GetComponent<TextMesh>().text = "    Wave 1";
+                if (Wave1Timer <= 2.0f)
+                {
+                    CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 1";
+                }
+
+                Wave1Timer += Time.deltaTime;
             }
 
-            Wave1Timer += Time.deltaTime;
-        }
-
-        if (EnemyManger.GetComponent<VirusManager>().Wave2 == true)
-        {
-            if (Wave2Timer <= 2.0f)
+            if (EnemyManger.GetComponent<VirusManager>().Wave2 == true)
             {
-                CenterScreenObj.GetComponent<TextMesh>().text = "    Wave 2";
+                if (Wave2Timer <= 2.0f)
+                {
+                    CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 2";
+                }
+
+                Wave2Timer += Time.deltaTime;
             }
 
-            Wave2Timer += Time.deltaTime;
-        }
-
-        if (EnemyManger.GetComponent<VirusManager>().Wave3 == true)
-        {
-            if (Wave3Timer <= 2.0f)
+            if (EnemyManger.GetComponent<VirusManager>().Wave3 == true)
             {
-                CenterScreenObj.GetComponent<TextMesh>().text = "    Wave 3";
+                if (Wave3Timer <= 2.0f)
+                {
+                    CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 3";
+                }
+
+                Wave3Timer += Time.deltaTime;
             }
 
-            Wave3Timer += Time.deltaTime;
-        }
-
-        if (EnemyManger.GetComponent<VirusManager>().Wave4 == true)
-        {
-            if (Wave4Timer <= 2.0f)
+            if (EnemyManger.GetComponent<VirusManager>().Wave4 == true)
             {
-                CenterScreenObj.GetComponent<TextMesh>().text = "    Boss";
+                if (Wave4Timer <= 2.0f)
+                {
+                    CenterScreenObj.GetComponent<TextMeshPro>().text = "    Boss";
+                }
+
+                Wave4Timer += Time.deltaTime;
             }
 
-            Wave4Timer += Time.deltaTime;
+            RuleTimer += Time.deltaTime;
         }
-
-        RuleTimer += Time.deltaTime;
 
         if (VirusLeaveCount == 10)
         {
             isGameOver = true;
+            ScoreBoard.SetActive(true);
+            ScoreBoard.transform.position = new Vector3(transform.position.x - 1.5f, transform.position.y, transform.position.z + 35);
+            ScoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
         }
+    }
+
+    public void HandleTimeInput()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

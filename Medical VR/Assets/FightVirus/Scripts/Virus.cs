@@ -15,10 +15,14 @@ public class Virus : MonoBehaviour
     public int Health;
     bool EnteredZone;
 
+    public int SmallVirusCount = 5;
+    public bool BossSpawnSmallVirus = false;
     bool BossCanTakeDamage;
     bool BossMadeLocation;
+    int BossStartHealth;
     float BossMovementTimer;
 
+    float SpawnSmallVirusTimer;
     float AngleSpeed;
     void Start()
     {
@@ -34,12 +38,13 @@ public class Virus : MonoBehaviour
         BossMadeLocation = false;
         BossMovementTimer = 0.0f;
 
+        SpawnSmallVirusTimer = 0.0f;
         AngleSpeed = 20.0f;
 
         if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
         {
-            //Speed = 1.0f;
-            Speed = 0.006f;
+            Speed = 1.0f;
+            //Speed = 0.006f;
             Health = 20;
         }
 
@@ -55,10 +60,16 @@ public class Virus : MonoBehaviour
             Health = 60;
         }
 
-        else if (VirusManager.GetComponent<VirusManager>().Wave4 == true)
+        else if (VirusManager.GetComponent<VirusManager>().Wave4 == true && transform.tag == "Boss")
         {
             Speed = 0.08f;
-            Health = 1000;
+            Health = 40;
+            BossStartHealth = Health;
+        }
+        else if (VirusManager.GetComponent<VirusManager>().Wave4 == true)
+        {
+            Speed = 0.006f;
+            Health = 20;
         }
     }
 
@@ -67,16 +78,39 @@ public class Virus : MonoBehaviour
         if (transform.tag == "Virus")
         {
             //Virus form up at special postion
-            transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
+            if (BossSpawnSmallVirus == false)
+                transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
+
+            else
+                transform.position -= transform.forward * Speed;
         }
 
         else if (transform.tag == "BigVirus")
         {
             //Temporaily Fixed
-            Speed = 0.01f;
+            if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
+            {
+                Speed = 0.02f;
+                Health = 40;
+            }
+
+            else if (VirusManager.GetComponent<VirusManager>().Wave2 == true)
+            {
+                Speed = 0.03f;
+                Health = 50;
+            }
+
+            else if (VirusManager.GetComponent<VirusManager>().Wave3 == true)
+            {
+                Speed = 0.04f;
+                Health = 60;
+            }
+
             transform.LookAt(Player.transform.position);
-            transform.Rotate(0, 180, 0);
-            transform.position += transform.forward * Speed;
+            transform.position -= transform.forward * Speed;
+
+            //Have the big virus move around
+
         }
 
         //For Boss 
@@ -101,6 +135,21 @@ public class Virus : MonoBehaviour
 
             else
             {
+                if (Health <= BossStartHealth / 2)
+                {
+                    SpawnSmallVirusTimer += Time.deltaTime;
+                }
+
+                if (SmallVirusCount > 0)
+                {
+                    if (SpawnSmallVirusTimer >= 4.0f)
+                    {
+                        SpawnSmallVirusTimer = 0.0f;
+                        SpawnSmallViruses();
+                        SmallVirusCount -= 1;
+                    }
+                }
+
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position - transform.position), 2.5f * Time.deltaTime);
 
                 //The boss moves unpredicatble and rotate
@@ -240,5 +289,10 @@ public class Virus : MonoBehaviour
             else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Contains(transform.gameObject))
                 GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
         }
+    }
+
+    void SpawnSmallViruses()
+    {
+        VirusManager.GetComponent<VirusManager>().CreateSmallVirus(this.gameObject);
     }
 }

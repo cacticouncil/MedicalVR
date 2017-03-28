@@ -23,6 +23,7 @@ public class StrategyCellScript : MonoBehaviour
 
     [System.NonSerialized]
     public GameObject virus;
+    public GameObject itemWhiteBloodCellPrefab;
 
     public int turnSpawned = 0;
     public int childrenSpawned = 0;
@@ -101,7 +102,9 @@ public class StrategyCellScript : MonoBehaviour
         {
             defense++;
             if (d)
+            {
                 d.text = "Defense: " + defense;
+            }
             else
             {
                 Debug.Log("Error! Defense TextMesh not instantiated. Key: " + key.x + "_" + key.y);
@@ -114,7 +117,9 @@ public class StrategyCellScript : MonoBehaviour
     {
         defense = defCap;
         if (d)
+        {
             d.text = "Defense: " + defense;
+        }
         else
         {
             Debug.Log("Error! Defense TextMesh not instantiated. Key: " + key.x + "_" + key.y);
@@ -156,7 +161,9 @@ public class StrategyCellScript : MonoBehaviour
             Debug.Log("Cell gained protein " + protein.ToString());
         }
         if (i)
+        {
             i.text = "Immunity: " + (int)immunity;
+        }
         else
         {
             Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
@@ -175,7 +182,9 @@ public class StrategyCellScript : MonoBehaviour
         }
         Debug.Log("Cell gained protein " + protein.ToString());
         if (i)
+        {
             i.text = "Immunity: " + (int)immunity;
+        }
         else
         {
             Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
@@ -191,7 +200,7 @@ public class StrategyCellScript : MonoBehaviour
             RDur += powerupDuration;
             r.color = Color.blue;
             r.text = "Reproduction: " + (reproduction + rBonus);
-            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+            RefreshUI();
         }
     }
     public void UseR2()
@@ -201,7 +210,7 @@ public class StrategyCellScript : MonoBehaviour
         {
             parent.inventory[1].count--;
             parent.DuplicateCell(key, new Vector4(reproduction, defense, immunity, (int)protein));
-            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+            RefreshUI();
         }
     }
     public void UseD()
@@ -211,7 +220,7 @@ public class StrategyCellScript : MonoBehaviour
         {
             parent.inventory[2].count--;
             IncreaseDefenseToMax();
-            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+            RefreshUI();
         }
     }
     public void UseI()
@@ -221,7 +230,7 @@ public class StrategyCellScript : MonoBehaviour
         {
             parent.inventory[3].count--;
             IncreaseImmunityGreatly();
-            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+            RefreshUI();
         }
     }
     public void UseI2()
@@ -232,7 +241,7 @@ public class StrategyCellScript : MonoBehaviour
             parent.inventory[4].count--;
             I2Dur += powerupDuration;
             i.color = Color.red;
-            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+            RefreshUI();
         }
     }
     public void UseP()
@@ -248,7 +257,7 @@ public class StrategyCellScript : MonoBehaviour
             }
             p.text = "Protein: " + protein.ToString();
             Debug.Log("Cell gained protein " + protein.ToString());
-            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+            RefreshUI();
         }
     }
     public void UseV()
@@ -257,9 +266,26 @@ public class StrategyCellScript : MonoBehaviour
         if (hosted && parent.inventory[6].count > 0)
         {
             parent.inventory[6].count--;
-            Destroy(virus);
-            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+            ToggleUI(false);
+            RefreshUI();
+            Vector3 camPos = Camera.main.GetComponent<Transform>().position;
+            Vector3 dir = camPos - transform.position;
+            dir.Normalize();
+            Camera.main.GetComponent<MoveCamera>().SetDestination(camPos + dir);
+            Invoke("SpawnW", .5f);
         }
+    }
+
+    void SpawnW()
+    {
+        GameObject w = Instantiate(itemWhiteBloodCellPrefab, Camera.main.GetComponent<Transform>().position, Quaternion.identity) as GameObject;
+        w.GetComponent<StrategyItemWhiteBloodCell>().target = virus.GetComponent<StrategyVirusScript>();
+        w.GetComponent<StrategyItemWhiteBloodCell>().enabled = true;
+    }
+
+    public void RefreshUI()
+    {
+        transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
     }
 
     public void TurnUpdate()
@@ -288,29 +314,32 @@ public class StrategyCellScript : MonoBehaviour
 
     public void DelayedTurnUpdate()
     {
-        //spread immunity
-        float im = Mathf.Sqrt((tImmunity - .99f) * .01f);
-        if (!float.IsNaN(im))
+        if (!hosted)
         {
-            if (I2Dur > 0)
+            //spread immunity
+            float im = Mathf.Sqrt((tImmunity - .99f) * .01f);
+            if (!float.IsNaN(im))
             {
-                immunitySpread += parent.SpreadImmunity(key, im * 2.0f);
-                I2Dur--;
-                if (I2Dur == 0)
+                if (I2Dur > 0)
                 {
-                    i.color = Color.white;
+                    immunitySpread += parent.SpreadImmunity(key, im * 2.0f);
+                    I2Dur--;
+                    if (I2Dur == 0)
+                    {
+                        i.color = Color.white;
+                    }
                 }
-            }
-            else
-            {
-                immunitySpread += parent.SpreadImmunity(key, im);
+                else
+                {
+                    immunitySpread += parent.SpreadImmunity(key, im);
+                }
             }
         }
 
         if (hosted)
         {
             if (render)
-                render.material.color = Color.red;
+                render.material.color = Color.grey;
             else
                 Debug.Log("Cell " + gameObject.name + " does not have a renderer.");
         }
@@ -324,7 +353,7 @@ public class StrategyCellScript : MonoBehaviour
         }
 
         if (transform.GetChild(0).gameObject.activeSelf)
-            transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
+            RefreshUI();
         tImmunity = immunity;
     }
 

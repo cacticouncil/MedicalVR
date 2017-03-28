@@ -11,10 +11,15 @@ public class StrategyCellManagerScript : MonoBehaviour
     public List<StrategyCellScript> cells = new List<StrategyCellScript>();
     [HideInInspector]
     public List<StrategyVirusScript> viruses = new List<StrategyVirusScript>();
+    [HideInInspector]
+    public List<StrategyMigratingWhiteBloodCell> whiteCells = new List<StrategyMigratingWhiteBloodCell>();
     public GameObject cellPrefab;
+    public GameObject whiteCellPrefab;
     public GameObject virusPrefab1;
     public GameObject virusPrefab2;
+    public float p2Modifier = 1;
     public GameObject virusPrefab3;
+    public float p3Modifier = .5f;
     public GameObject transporter;
     public StrategyBox mysteryBox;
     public SimulateSun sun;
@@ -26,22 +31,30 @@ public class StrategyCellManagerScript : MonoBehaviour
     public bool viewingStats = false;
     public float randomRange = .5f;
 
+    private int easy = 0, medium = 1, hard = 2;
+
     [System.NonSerialized]
     public List<StrategyItem> inventory;
+    private Vector4 spawnCellStats;
+    //private float xOffset = 1.0f;
+    //private float yOffset = 1.0f;
+    public float xOffset = 2.0f;
+    public float yOffset = 2.0f;
 
+    #region VariablesWithGets&Sets
     private GameObject virusPrefab
     {
         get
         {
-            float p3 = cells.Count * .5f;
-            float p2 = cells.Count;
+            float p3 = cells.Count * p3Modifier;
+            float p2 = cells.Count * p2Modifier;
             float p1 = 100.0f - p3 - p2;
             float r = Random.Range(0.0f, 100.0f);
             if (r <= p1)
             {
                 return virusPrefab1;
             }
-            else if (r > p1 && r <= p1 + p2)
+            else if (r <= p1 + p2)
             {
                 return virusPrefab2;
             }
@@ -51,11 +64,50 @@ public class StrategyCellManagerScript : MonoBehaviour
             }
         }
     }
-    private Vector4 spawnCellStats;
-    //private float xOffset = 1.0f;
-    //private float yOffset = 1.0f;
-    public float xOffset = 2.0f;
-    public float yOffset = 2.0f;
+    private delegate void StrategyEvents();
+    StrategyEvents sEvent
+    {
+        get
+        {
+            float avg = (easy + medium + hard) * .333f;
+            float eFactor = .333f + (avg - easy) * .333f;
+            float mFactor = .333f + (avg - medium) * .333f;
+
+            float r = Random.Range(0.0f, 1.0f);
+            if (r <= eFactor)
+            {
+                easy++;
+                float e = Random.Range(0.0f, 1.0f);
+                if (e <= .25f)
+                    return MigratingWhiteCells;
+                else if (e <= .5f)
+                    return UnmutateViruses;
+                else if (e <= .75f)
+                    return SlowDownViruses;
+                return WeakenViruses;
+            }
+            else if (r <= eFactor + mFactor)
+            {
+                medium++;
+                float m = Random.Range(0.0f, 1.0f);
+                if (m <= .333f)
+                    return StrengthenViruses;
+                else if (m <= .666f)
+                    return MigrateViruses;
+                return MutateViruses;
+            }
+            else
+            {
+                hard++;
+                float h = Random.Range(0.0f, 1.0f);
+                if (h <= .5f)
+                    return SpeedUpViruses;
+                else
+                    return AsymptomaticCarriers;
+            }
+        }
+    }
+    #endregion
 
     // Use this for initialization
     void Start()
@@ -74,14 +126,13 @@ public class StrategyCellManagerScript : MonoBehaviour
         inventory = mysteryBox.items;
     }
 
+    #region Selection
     public void SetSelected(Vector2 k)
     {
         if (tiles.ContainsKey(selected))
             tiles[selected].ToggleUI(false);
         else if (selected == new Vector2(-100, -100))
             mysteryBox.ToggleUI();
-        else if (!tiles.ContainsKey(k))
-            Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 5, k.y * yOffset));
         selected = k;
     }
 
@@ -92,7 +143,9 @@ public class StrategyCellManagerScript : MonoBehaviour
         selected = new Vector2(-100, -100);
         viewingStats = false;
     }
+    #endregion
 
+    #region Turns
     public void ActionPreformed()
     {
         StartCoroutine(TurnUpdate());
@@ -112,6 +165,13 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
         Debug.Log("Cells Updated");
 
+        foreach (StrategyMigratingWhiteBloodCell child in whiteCells.ToList())
+        {
+            child.TurnUpdate();
+            yield return new WaitForEndOfFrame();
+        }
+        Debug.Log("Viruses Updated");
+
         foreach (StrategyVirusScript child in viruses.ToList())
         {
             child.TurnUpdate();
@@ -126,9 +186,14 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
         Debug.Log("Cells Late Updated");
 
-        if (turnNumber % 15 == 0)
+        if (turnNumber % 10 == 0)
         {
             SpawnVirus();
+        }
+
+        if (turnNumber % 50 == 0)
+        {
+            sEvent();
         }
 
         cellNum = cells.Count;
@@ -139,7 +204,9 @@ public class StrategyCellManagerScript : MonoBehaviour
         screenUI.text = "Turn Number: " + turnNumber + "\nCells Alive: " + cellNum + "\nViruses Alive: " + virNum;
         Debug.Log("Turn Updated");
     }
+    #endregion
 
+    #region Cells
     public void AddToDictionary(StrategyCellScript cell)
     {
         tiles.Add(cell.key, cell);
@@ -393,7 +460,9 @@ public class StrategyCellManagerScript : MonoBehaviour
 
         return immunitySpread;
     }
+    #endregion
 
+    #region Viruses
     public void SpawnVirus()
     {
         Vector3 direction = Random.onUnitSphere;
@@ -674,13 +743,20 @@ public class StrategyCellManagerScript : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            StrategyCellScript temp = tiles.Values.ElementAt(Random.Range(0, tiles.Values.Count)).GetComponent<StrategyCellScript>();
-
-            if (!temp.targeted)
+            if (cells.Count > 0)
             {
-                vir.GetComponent<StrategyVirusScript>().standby = false;
-                temp.targeted = true;
-                return temp;
+                StrategyCellScript temp = cells[Random.Range(0, cells.Count - 1)].GetComponent<StrategyCellScript>();
+
+                if (!temp.targeted)
+                {
+                    vir.GetComponent<StrategyVirusScript>().standby = false;
+                    temp.targeted = true;
+                    return temp;
+                }
+            }
+            else
+            {
+                break;
             }
         }
 
@@ -690,21 +766,132 @@ public class StrategyCellManagerScript : MonoBehaviour
 
     public Vector3 RandomPositionAboveHex()
     {
-        return new Vector3(Random.Range(tiles.Count * .2f * -1.0f, tiles.Count * .17f), 10, Random.Range(tiles.Count * .2f * -1.0f, tiles.Count * .17f));
+        return new Vector3(Random.Range(tiles.Count * .3f * -1.0f, tiles.Count * .3f), 10, Random.Range(tiles.Count * .3f * -1.0f, tiles.Count * .3f));
     }
-}
+    #endregion
 
-class Vector2Comparer : IEqualityComparer<Vector2>
-{
-    public bool Equals(Vector2 x, Vector2 y)
+    #region WhiteCells
+    public StrategyVirusScript FindWhiteCellNewTarget()
     {
-        if (x.x == y.x && x.y == y.y)
-            return true;
-        return false;
+        for (int i = 0; i < viruses.Count; i++)
+        {
+            if (!viruses[i].targeted)
+            {
+                viruses[i].targeted = true;
+                return viruses[i];
+            }
+        }
+        return null;
+    }
+    #endregion
+
+    #region Events
+    void MigrateViruses()
+    {
+        Vector3 ogDirection = Random.onUnitSphere;
+        ogDirection.y = Mathf.Clamp(ogDirection.y, 0.65f, 1f);
+        int migTotal = turnNumber / 100 + 1;
+        for (int i = 0; i < migTotal; i++)
+        {
+            float distance = Random.Range(98.0f, 102.0f);
+            Vector3 direction = ogDirection + new Vector3(Random.Range(-.2f, .2f), Random.Range(-.2f, .2f), Random.Range(-.2f, .2f));
+            Vector3 position = direction * distance;
+            GameObject v = Instantiate(virusPrefab, position, Quaternion.identity, transform) as GameObject;
+            v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
+            v.GetComponent<StrategyVirusScript>().parent = this;
+            v.GetComponent<Collider>().enabled = true;
+            v.GetComponent<StrategyVirusScript>().enabled = true;
+        }
     }
 
-    public int GetHashCode(Vector2 x)
+    void MigratingWhiteCells()
     {
-        return (int)x.x + (int)x.y * 1000000;
+        Vector3 ogDirection = Random.onUnitSphere;
+        ogDirection.y = Mathf.Clamp(ogDirection.y, 0.65f, 1f);
+        int migTotal = turnNumber / 10 + 1;
+        for (int i = 0; i < migTotal; i++)
+        {
+            float distance = Random.Range(98.0f, 102.0f);
+            Vector3 direction = ogDirection + new Vector3(Random.Range(-.2f, .2f), Random.Range(-.2f, .2f), Random.Range(-.2f, .2f));
+            Vector3 position = direction * distance;
+            GameObject w = Instantiate(whiteCellPrefab, position, Quaternion.identity, transform) as GameObject;
+            w.GetComponent<StrategyMigratingWhiteBloodCell>().target = FindWhiteCellNewTarget();
+            w.GetComponent<StrategyMigratingWhiteBloodCell>().parent = this;
+            w.GetComponent<Collider>().enabled = true;
+            w.GetComponent<StrategyMigratingWhiteBloodCell>().enabled = true;
+        }
     }
+
+    void StrengthenViruses()
+    {
+        virusPrefab1.GetComponent<StrategyVirusScript>().health *= 1.3f;
+        virusPrefab1.GetComponent<StrategyVirusScript>().attackValue *= 1.3f;
+        virusPrefab2.GetComponent<StrategyVirusScript>().health *= 1.3f;
+        virusPrefab2.GetComponent<StrategyVirusScript>().attackValue *= 1.3f;
+        virusPrefab3.GetComponent<StrategyVirusScript>().health *= 1.3f;
+        virusPrefab3.GetComponent<StrategyVirusScript>().attackValue *= 1.3f;
+    }
+
+    void WeakenViruses()
+    {
+        virusPrefab1.GetComponent<StrategyVirusScript>().health *= .8f;
+        virusPrefab1.GetComponent<StrategyVirusScript>().attackValue *= .8f;
+        virusPrefab2.GetComponent<StrategyVirusScript>().health *= .8f;
+        virusPrefab2.GetComponent<StrategyVirusScript>().attackValue *= .8f;
+        virusPrefab3.GetComponent<StrategyVirusScript>().health *= .8f;
+        virusPrefab3.GetComponent<StrategyVirusScript>().attackValue *= .8f;
+    }
+
+    void MutateViruses()
+    {
+        p2Modifier *= 2.0f;
+        p3Modifier *= 2.0f;
+    }
+
+    void UnmutateViruses()
+    {
+        p2Modifier *= .8f;
+        p3Modifier *= .8f;
+    }
+
+    void SpeedUpViruses()
+    {
+        virusPrefab1.GetComponent<StrategyVirusScript>().turnSpeed *= 1.3f;
+        virusPrefab2.GetComponent<StrategyVirusScript>().turnSpeed *= 1.3f;
+        virusPrefab3.GetComponent<StrategyVirusScript>().turnSpeed *= 1.3f;
+    }
+
+    void SlowDownViruses()
+    {
+        virusPrefab1.GetComponent<StrategyVirusScript>().turnSpeed *= .8f;
+        virusPrefab2.GetComponent<StrategyVirusScript>().turnSpeed *= .8f;
+        virusPrefab3.GetComponent<StrategyVirusScript>().turnSpeed *= .8f;
+    }
+
+    void AsymptomaticCarriers()
+    {
+        int asyTotal = (int)(cellNum * .05f + 1);
+        int index = 0;
+        for (int i = 0; i < asyTotal; i++)
+        {
+            while (index < cells.Count)
+            {
+                if (!cells[index].targeted)
+                    break;
+                index++;
+            }
+            if (index >= cells.Count)
+                break;
+
+            GameObject v = Instantiate(virusPrefab, cells[index].transform.position, Quaternion.identity, transform) as GameObject;
+            cells[index].targeted = true;
+            cells[index].virus = v;
+            v.GetComponent<StrategyVirusScript>().target = cells[index];
+            v.GetComponent<StrategyVirusScript>().percentTraveled = 100.0f;
+            v.GetComponent<StrategyVirusScript>().parent = this;
+            v.GetComponent<StrategyVirusScript>().enabled = true;
+            index++;
+        }
+    }
+    #endregion
 }

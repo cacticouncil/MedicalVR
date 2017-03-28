@@ -21,23 +21,9 @@ public class VirusLocations : MonoBehaviour
 
     void Update()
     {
-        //for (int i = 0; i < VirusLocationList.Count; i++)
-        //{
-        //    if (VirusLocationList[i].VirusList.Count == 5)
-        //    {
-        //        for (int j = 0; j < VirusManager.GetComponent<VirusManager>().VirusList.Count; j++)
-        //        {
-        //            if (VirusLocationList[i].VirusList.Contains(VirusManager.GetComponent<VirusManager>().VirusList[j]))
-        //                Destroy(VirusManager.GetComponent<VirusManager>().VirusList[j]);
-        //        }
-
-        //        VirusManager.GetComponent<VirusManager>().CreateBigVirus(VirusLocationList[i].Pos);
-        //    }
-        //}
-
         for (int i = 0; i < VirusLocationList.Count; i++)
         {
-            if (VirusLocationList[i].SmallVirusCount == 5)
+            if (VirusLocationList[i].SmallVirusCount >= 3)
             {
                 for (int j = 0; j < VirusManager.GetComponent<VirusManager>().VirusList.Count; j++)
                 {

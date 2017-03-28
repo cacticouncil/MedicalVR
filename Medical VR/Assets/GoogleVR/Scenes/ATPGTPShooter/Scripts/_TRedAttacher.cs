@@ -46,14 +46,16 @@ public class _TRedAttacher : MonoBehaviour
     {
         if (other.gameObject.CompareTag(shotToAttack.tag) && !OurAttachedEnzyme)
         {
-        //    moleculeCol = other;
+            //    moleculeCol = other;
             OurAttachedEnzyme = other.gameObject;
-            moverSpeed = OurAttachedEnzyme.GetComponent<_TMover>().speed;
+            moverSpeed = 3;
+            // moverSpeed = OurAttachedEnzyme.GetComponent<_TMover>().speed;
             OurAttachedEnzyme.GetComponent<_TDestroyByTime>().CancelDestroy();
             OurAttachedEnzyme.tag = "Untagged";
             caseSwitch = Position.inProgress;
             Destroy(OurAttachedEnzyme.GetComponent<SphereCollider>());
             DebugStuff();
+            OurAttachedEnzyme.GetComponent<Rigidbody>().useGravity = false;
         }
 
 
@@ -84,7 +86,15 @@ public class _TRedAttacher : MonoBehaviour
         SphereCollider sc = colliders.gameObject.AddComponent<SphereCollider>();
         sc.center = transform.localPosition;
         sc.radius = 0.3f;
-     //   sc.transform.localPosition = transform.localPosition;
+        if (OurAttachedEnzyme.name == "ATP Cell" || OurAttachedEnzyme.name == "ATP Cell(Clone)")
+            transform.parent.GetComponent<_TEnzymeController>().SetATP();
+        else if (OurAttachedEnzyme.name == "GTP Cell" || OurAttachedEnzyme.name == "GTP Cell(Clone)")
+            transform.parent.GetComponent<_TEnzymeController>().SetGTP();
+        else
+            Debug.Log("Could not determine Object");
+
+        
+
     }
     void MoveToPosition(Transform pos)
     {

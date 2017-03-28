@@ -32,7 +32,11 @@ public class RedCellScript : MonoBehaviour {
             {
                 SceneManager.LoadScene("Credits"); 
             }
-            PlayerPrefs.SetInt("\nRed Cell\n", 1);
+            if (PlayerPrefs.GetInt("Red Cell") == -1)
+            {
+                PlayerPrefs.SetInt("Red Cell", 1);
+                SoundManager.PlaySFX("MenuEnter");
+            }
 
         }
     }
