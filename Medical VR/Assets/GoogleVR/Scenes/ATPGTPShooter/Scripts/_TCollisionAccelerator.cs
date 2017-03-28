@@ -9,7 +9,7 @@ public class _TCollisionAccelerator : MonoBehaviour
 
     dataCollectOrder runOrder;
 
-    private Vector3 velocity;
+//    private Vector3 velocity;
     private bool DataIsCollected;
 
     private void Start()
@@ -40,6 +40,6 @@ public class _TCollisionAccelerator : MonoBehaviour
     private void CollectData()
     {
         runOrder = dataCollectOrder.Run;
-        velocity = GetComponent<Rigidbody>().velocity;
+//        velocity = GetComponent<Rigidbody>().velocity;
     }
 }

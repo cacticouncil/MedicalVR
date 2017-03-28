@@ -11,7 +11,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     // Use this for initialization
     public float score = 0;
     public Color fogColor;
-    public bool arcadeMode;
+    public static bool arcadeMode;
     Vector3 originPos;
     int lives = 3;
     float orgSpeed;

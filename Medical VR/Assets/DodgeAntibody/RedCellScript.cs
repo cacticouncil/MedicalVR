@@ -21,7 +21,7 @@ public class RedCellScript : MonoBehaviour {
     {
         if (other.tag == "virus")
         {
-            if(virus.GetComponent<MovingCamera>().arcadeMode == true)
+            if(MovingCamera.arcadeMode == true)
             {
                 virus.GetComponent<MovingCamera>().WinresetPos();
                 virus.GetComponent<MovingCamera>().speed++;
@@ -32,9 +32,9 @@ public class RedCellScript : MonoBehaviour {
             {
                 SceneManager.LoadScene("Credits"); 
             }
-            if (PlayerPrefs.GetInt("\nRed Cell\n") == -1)
+            if (PlayerPrefs.GetInt("Red Cell") == -1)
             {
-                PlayerPrefs.SetInt("\nRed Cell\n", 1);
+                PlayerPrefs.SetInt("Red Cell", 1);
                 SoundManager.PlaySFX("MenuEnter");
             }
 

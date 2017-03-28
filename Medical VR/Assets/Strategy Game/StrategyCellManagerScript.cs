@@ -31,9 +31,17 @@ public class StrategyCellManagerScript : MonoBehaviour
     public bool viewingStats = false;
     public float randomRange = .5f;
 
+    private int easy = 0, medium = 1, hard = 2;
+
     [System.NonSerialized]
     public List<StrategyItem> inventory;
+    private Vector4 spawnCellStats;
+    //private float xOffset = 1.0f;
+    //private float yOffset = 1.0f;
+    public float xOffset = 2.0f;
+    public float yOffset = 2.0f;
 
+    #region VariablesWithGets&Sets
     private GameObject virusPrefab
     {
         get
@@ -46,7 +54,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             {
                 return virusPrefab1;
             }
-            else if (r > p1 && r <= p1 + p2)
+            else if (r <= p1 + p2)
             {
                 return virusPrefab2;
             }
@@ -56,11 +64,50 @@ public class StrategyCellManagerScript : MonoBehaviour
             }
         }
     }
-    private Vector4 spawnCellStats;
-    //private float xOffset = 1.0f;
-    //private float yOffset = 1.0f;
-    public float xOffset = 2.0f;
-    public float yOffset = 2.0f;
+    private delegate void StrategyEvents();
+    StrategyEvents sEvent
+    {
+        get
+        {
+            float avg = (easy + medium + hard) * .333f;
+            float eFactor = .333f + (avg - easy) * .333f;
+            float mFactor = .333f + (avg - medium) * .333f;
+
+            float r = Random.Range(0.0f, 1.0f);
+            if (r <= eFactor)
+            {
+                easy++;
+                float e = Random.Range(0.0f, 1.0f);
+                if (e <= .25f)
+                    return MigratingWhiteCells;
+                else if (e <= .5f)
+                    return UnmutateViruses;
+                else if (e <= .75f)
+                    return SlowDownViruses;
+                return WeakenViruses;
+            }
+            else if (r <= eFactor + mFactor)
+            {
+                medium++;
+                float m = Random.Range(0.0f, 1.0f);
+                if (m <= .333f)
+                    return StrengthenViruses;
+                else if (m <= .666f)
+                    return MigrateViruses;
+                return MutateViruses;
+            }
+            else
+            {
+                hard++;
+                float h = Random.Range(0.0f, 1.0f);
+                if (h <= .5f)
+                    return SpeedUpViruses;
+                else
+                    return AsymptomaticCarriers;
+            }
+        }
+    }
+    #endregion
 
     // Use this for initialization
     void Start()
@@ -86,8 +133,6 @@ public class StrategyCellManagerScript : MonoBehaviour
             tiles[selected].ToggleUI(false);
         else if (selected == new Vector2(-100, -100))
             mysteryBox.ToggleUI();
-        else if (!tiles.ContainsKey(k))
-            Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, 5, k.y * yOffset));
         selected = k;
     }
 
@@ -120,6 +165,13 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
         Debug.Log("Cells Updated");
 
+        foreach (StrategyMigratingWhiteBloodCell child in whiteCells.ToList())
+        {
+            child.TurnUpdate();
+            yield return new WaitForEndOfFrame();
+        }
+        Debug.Log("Viruses Updated");
+
         foreach (StrategyVirusScript child in viruses.ToList())
         {
             child.TurnUpdate();
@@ -134,9 +186,14 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
         Debug.Log("Cells Late Updated");
 
-        if (turnNumber % 15 == 0)
+        if (turnNumber % 10 == 0)
         {
             SpawnVirus();
+        }
+
+        if (turnNumber % 50 == 0)
+        {
+            sEvent();
         }
 
         cellNum = cells.Count;
@@ -749,7 +806,20 @@ public class StrategyCellManagerScript : MonoBehaviour
 
     void MigratingWhiteCells()
     {
-
+        Vector3 ogDirection = Random.onUnitSphere;
+        ogDirection.y = Mathf.Clamp(ogDirection.y, 0.65f, 1f);
+        int migTotal = turnNumber / 10 + 1;
+        for (int i = 0; i < migTotal; i++)
+        {
+            float distance = Random.Range(98.0f, 102.0f);
+            Vector3 direction = ogDirection + new Vector3(Random.Range(-.2f, .2f), Random.Range(-.2f, .2f), Random.Range(-.2f, .2f));
+            Vector3 position = direction * distance;
+            GameObject w = Instantiate(whiteCellPrefab, position, Quaternion.identity, transform) as GameObject;
+            w.GetComponent<StrategyMigratingWhiteBloodCell>().target = FindWhiteCellNewTarget();
+            w.GetComponent<StrategyMigratingWhiteBloodCell>().parent = this;
+            w.GetComponent<Collider>().enabled = true;
+            w.GetComponent<StrategyMigratingWhiteBloodCell>().enabled = true;
+        }
     }
 
     void StrengthenViruses()
@@ -812,7 +882,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             }
             if (index >= cells.Count)
                 break;
-            
+
             GameObject v = Instantiate(virusPrefab, cells[index].transform.position, Quaternion.identity, transform) as GameObject;
             cells[index].targeted = true;
             cells[index].virus = v;
@@ -824,19 +894,4 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
     }
     #endregion
-}
-
-class Vector2Comparer : IEqualityComparer<Vector2>
-{
-    public bool Equals(Vector2 x, Vector2 y)
-    {
-        if (x.x == y.x && x.y == y.y)
-            return true;
-        return false;
-    }
-
-    public int GetHashCode(Vector2 x)
-    {
-        return (int)x.x + (int)x.y * 1000000;
-    }
 }

@@ -5,12 +5,13 @@ public class _TTravelToNucleus : MonoBehaviour
 {
     enum TravelPhase { run, longPath, travelToER,  destroy }
     enum nucleusChild { MainNucleus, ER, MovementPath }
-    enum nucleusPathChild { Top, Front, Back, FarPoint, EnterOne, EnterTwo, EnterThree }
-
-    public GameObject nucleus;
+    enum nucleusPathChild { Top, Front, Back, FarPoint, EnterOne, EnterTwo, EnterThree, End }
     
     private TravelPhase phase;
     private float speed = 3;
+
+    [HideInInspector]
+    public GameObject nucleus;
     [HideInInspector]
     public bool hasATP, hasGTP;
 
@@ -26,18 +27,25 @@ public class _TTravelToNucleus : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float step;
         switch (phase)
         {
             case TravelPhase.longPath:
-                step = speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, nucleus.transform.GetChild((int)nucleusChild.MovementPath).GetChild((int)targetPath).transform.position, step);
+                if (TravelToPosition())
+                {
+                    phase = TravelPhase.travelToER;
+                    targetPath = nucleusPathChild.EnterOne;
+                }
                 break;
             case TravelPhase.travelToER:
-                step = speed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, nucleus.transform.GetChild((int)nucleusChild.MovementPath).GetChild((int)targetPath).transform.position, step);
-                break;
+                if (TravelToPosition())
+                {
+                    TurnOffColliders();
+                    if (++targetPath == nucleusPathChild.End)
+                        phase = TravelPhase.destroy;
+                }
+                    break;
             case TravelPhase.destroy:
+                Destroy(gameObject);
                 break;
         }
     }
@@ -48,7 +56,7 @@ public class _TTravelToNucleus : MonoBehaviour
         float farDist = Vector3.Distance(transform.position, farPoint);
         float nearDist = Vector3.Distance(transform.position, nearPoint);
 
-        if (farDist > nearDist)
+        if (farDist < nearDist)
         {
             targetPath = nucleusPathChild.Back;
             targetPath = GetPath(targetPath, nucleusPathChild.Front);
@@ -70,5 +78,17 @@ public class _TTravelToNucleus : MonoBehaviour
             return curNearPath;
         else
             return compPath;        
+    }
+    bool TravelToPosition()
+    {
+        float step = speed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, nucleus.transform.GetChild((int)nucleusChild.MovementPath).GetChild((int)targetPath).transform.position, step);
+        if (Vector3.Distance(nucleus.transform.GetChild((int)nucleusChild.MovementPath).GetChild((int)targetPath).transform.position, transform.position) < 0.1f)
+            return true;
+        else return false;
+    }
+    void TurnOffColliders()
+    {
+        transform.FindChild("Colliders").gameObject.SetActive(false);
     }
 }
