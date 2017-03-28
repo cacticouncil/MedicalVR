@@ -15,7 +15,7 @@ public class Virus : MonoBehaviour
     public int Health;
     bool EnteredZone;
 
-    public int SmallVirusCount = 5;
+    public int SmallVirusCount = 10;
     public bool BossSpawnSmallVirus = false;
     bool BossCanTakeDamage;
     bool BossMadeLocation;
@@ -43,8 +43,8 @@ public class Virus : MonoBehaviour
 
         if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
         {
-            Speed = 1.0f;
-            //Speed = 0.006f;
+            //Speed = 1.0f;
+            Speed = 0.006f;
             Health = 20;
         }
 
@@ -87,7 +87,6 @@ public class Virus : MonoBehaviour
 
         else if (transform.tag == "BigVirus")
         {
-            //Temporaily Fixed
             if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
             {
                 Speed = 0.02f;
@@ -106,11 +105,13 @@ public class Virus : MonoBehaviour
                 Health = 60;
             }
 
+            //Temporaily Fixed
             transform.LookAt(Player.transform.position);
             transform.position -= transform.forward * Speed;
 
             //Have the big virus move around
-
+            //transform.position = new Vector3(Mathf.PingPong(Speed, 2), transform.position.y, transform.position.z);
+            //transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.PingPong(Speed, 2));
         }
 
         //For Boss 

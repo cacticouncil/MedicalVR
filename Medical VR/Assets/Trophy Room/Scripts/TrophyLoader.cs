@@ -29,7 +29,8 @@ public class TrophyLoader : MonoBehaviour {
     {
         for(int i = 0; i < Trophies.Count; i++)
         {
-            PlayerPrefs.SetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text, 1);
+            PlayerPrefs.SetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text, -1);
+            string tmp = Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text;
         }
     }
 }

@@ -17,25 +17,6 @@ public class MoveCamera : MonoBehaviour
         startTime = Time.time;
         GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
     }
-
-    void Move(Vector3 pos)
-    {
-        //Heading towards position
-        Vector3 heading = pos - transform.position;
-        //Find normalized direction
-        float distance = Mathf.Max(heading.magnitude, .001f);
-        Vector3 direction = heading / distance;
-        if (direction.magnitude < 0.01f)
-        {
-            direction = new Vector3(0.0f, 0.0f, 1.0f);
-        }
-
-        direction *= speed;
-
-        Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
-
-        transform.GetChild(0).transform.LookAt(finalPos);
-    }
     
     void FixedUpdate()
     {

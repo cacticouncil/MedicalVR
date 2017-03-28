@@ -13,6 +13,7 @@ public class StrategyBox : MonoBehaviour
     public TextMesh actionText;
 
     public GameObject boxTab;
+    public Hilighter AHighlighter;
     public GameObject animationTab;
     public GameObject anim;
     public TextMesh animationText;
@@ -37,6 +38,7 @@ public class StrategyBox : MonoBehaviour
             actionsLeft = 4;
             actionText.text = "Actions Left: " + actionsLeft;
             int item = Random.Range(0, items.Count);
+            AHighlighter.SetGazedAt(false);
 
             //play animation
             anim.GetComponent<SpriteRenderer>().sprite = items[item].image;
@@ -56,7 +58,7 @@ public class StrategyBox : MonoBehaviour
         if (key != cellmanager.selected)
         {
             transform.GetChild(0).gameObject.SetActive(true);
-
+            GetComponent<Collider>().enabled = false;
             //This is the new target position
             mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1.5f));
             cellmanager.SetSelected(key);
@@ -66,5 +68,6 @@ public class StrategyBox : MonoBehaviour
     public void ToggleUI()
     {
         transform.GetChild(0).gameObject.SetActive(false);
+        GetComponent<Collider>().enabled = true;
     }
 }

@@ -69,6 +69,13 @@ public class MemoryUI : MonoBehaviour {
         if (lives < 1 || timeRemaining < 0)
         {
             ShowScore();
+
+            //Destroy(Spheres.GetComponent<Randomsphere>().Spheres2[(int)Letters.C]);
+            //Destroy(Spheres.GetComponent<Randomsphere>().Spheres2[(int)Letters.G]);
+            //Destroy(Spheres.GetComponent<Randomsphere>().Spheres2[(int)Letters.U]);
+            //Destroy(Spheres.GetComponent<Randomsphere>().Spheres2[(int)Letters.A]);
+            //Destroy(Spheres.GetComponent<Randomsphere>().Spheres2[(int)Letters.T]);
+            //Destroy(Spheres.GetComponent<Randomsphere>().Spheres2[(int)Letters.A2]);
         }
         else
         {

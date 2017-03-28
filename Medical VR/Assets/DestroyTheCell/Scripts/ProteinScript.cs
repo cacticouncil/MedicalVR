@@ -4,21 +4,29 @@ using System;
 
 public class ProteinScript : MonoBehaviour, TimedInputHandler
 {
-    GameObject ProteinManager;
+    GameObject WaveManager;
     GameObject Player;
+
     void Start()
     {
-        ProteinManager = gameObject.transform.parent.gameObject;
-        Player = ProteinManager.GetComponent<ProteinSpawn>().Player;
+        WaveManager = gameObject.transform.parent.gameObject;
+        Player = WaveManager.GetComponent<WaveManager>().Player;
     }
 
-    public void OnGazeEnter(bool enter)
+    void Update()
     {
-        if (enter)
-            Player.GetComponent<VirusPlayer>().Speed = 0;
-        
-        else
-            Player.GetComponent<VirusPlayer>().Speed = .01f;
+        if (Player.GetComponent<VirusPlayer>().isGameover)
+            Destroy(this.gameObject);
+    }
+
+    public void OnGazeEnter()
+    {
+        Player.GetComponent<VirusPlayer>().Speed = 0;
+    }
+
+    public void OnGazeExit()
+    {
+        Player.GetComponent<VirusPlayer>().Speed = .01f;
     }
 
     public void HandleTimeInput()
@@ -29,6 +37,6 @@ public class ProteinScript : MonoBehaviour, TimedInputHandler
     void OnDestroy()
     {
         Player.GetComponent<VirusPlayer>().Speed = .01f;
-        ProteinManager.GetComponent<ProteinSpawn>().ProteinList.Remove(transform.gameObject);
+        WaveManager.GetComponent<WaveManager>().ProteinList.Remove(transform.gameObject);
     }
 }

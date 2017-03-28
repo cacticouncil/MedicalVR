@@ -128,7 +128,7 @@ public class Randomsphere : MonoBehaviour {
                 {
                     i = 0;
                     j = 2;
-                    k = 3;
+                    k = 5;
                 }
                 break;
             default:
@@ -165,7 +165,6 @@ public class Randomsphere : MonoBehaviour {
         if (correct == 3)
         {
             Reset();
-
             memoryui.GetComponent<MemoryUI>().Level += 1;
         }
 
@@ -295,7 +294,8 @@ public class Randomsphere : MonoBehaviour {
         correct = 0;
 
         memoryui.GetComponent<MemoryUI>().finnished = false;
-        memoryui.GetComponent<MemoryUI>().startTime -= 10;
+        if(!(memoryui.GetComponent<MemoryUI>().startTime < 15))
+            memoryui.GetComponent<MemoryUI>().startTime -= 5;
         memoryui.GetComponent<MemoryUI>().timeRemaining = memoryui.GetComponent<MemoryUI>().startTime;
     }
 

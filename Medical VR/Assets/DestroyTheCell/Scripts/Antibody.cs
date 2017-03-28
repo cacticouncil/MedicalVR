@@ -4,7 +4,7 @@ using System.Collections;
 enum Movements { XAxis = 0, YAxis = 1, XYAxis = 2, NXAxis = 3, NYAxis = 4, NXNYAxis = 5, XNYAxis = 6, NXYAxis = 7}
 public class Antibody : MonoBehaviour
 {
-    GameObject AntibodyManager;
+    GameObject WaveManager;
     GameObject Player;
     Movements M;
     bool AlwaysChasePlayer;
@@ -16,8 +16,8 @@ public class Antibody : MonoBehaviour
 
     void Start()
     {
-        AntibodyManager = gameObject.transform.parent.gameObject;
-        Player = AntibodyManager.GetComponent<AntibodyManager>().Player;
+        WaveManager = gameObject.transform.parent.gameObject;
+        Player = WaveManager.GetComponent<WaveManager>().Player;
         M = (Movements)Random.Range(0, 7);
         AlwaysChasePlayer = false;
         FlashScreen = false;
@@ -102,15 +102,16 @@ public class Antibody : MonoBehaviour
             //Chase the player
             transform.LookAt(Player.GetComponent<VirusPlayer>().transform.position);
             transform.position += transform.forward * Speed;
-            //transform.position += Player.GetComponent<VirusPlayer>().transform.position * Speed;
-            //transform.position = Vector3.SmoothDamp(transform.position, Player.GetComponent<VirusPlayer>().transform.position, ref Temp, Speed);
             GetComponent<Rigidbody>().velocity *= Speed;
         }
+
+        if (Player.GetComponent<VirusPlayer>().isGameover)
+            Destroy(this.gameObject);
     }
 
     public bool CheckFOV()
     {
-        if (Vector3.Angle(Player.transform.position - transform.position, transform.forward) <= 45 && FlashScreen == false)
+        if (Vector3.Angle(Player.transform.position - transform.position, transform.forward) <= 55 && FlashScreen == false)
         {
             Debug.Log("Can See Player");
             AlwaysChasePlayer = true;
@@ -129,6 +130,8 @@ public class Antibody : MonoBehaviour
             Player.GetComponent<VirusPlayer>().Respawn();
         }
 
+        //Possibly colliding with the wall
+        //Maybe make it head the opposite way
         else
         {
 

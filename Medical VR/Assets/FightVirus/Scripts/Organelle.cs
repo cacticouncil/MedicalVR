@@ -6,6 +6,7 @@ public class Organelle : MonoBehaviour
 {
     GameObject OrganelleManager;
     GameObject Player;
+    GameObject VirusPlayer;
     public bool isDead;
     OrganelleMovement CM;
     Vector3 StartPos;
@@ -13,6 +14,7 @@ public class Organelle : MonoBehaviour
     {
         OrganelleManager = gameObject.transform.parent.gameObject;
         Player = OrganelleManager.GetComponent<OrganelleManager>().Player;
+        VirusPlayer = OrganelleManager.GetComponent<OrganelleManager>().VirusPlayer;
         isDead = false;
         StartPos = transform.position;
         CM = (OrganelleMovement)Random.Range(0, 4);
@@ -42,7 +44,16 @@ public class Organelle : MonoBehaviour
                 break;
         }
 
-        if (Player.GetComponent<Player>().isGameOver)
-            Destroy(this.gameObject);
+        if (this.gameObject.GetComponent<Player>())
+        {
+            if (Player.GetComponent<Player>().isGameOver)
+                Destroy(this.gameObject);
+        }
+
+        else if (this.gameObject.GetComponent<VirusPlayer>())
+        {
+            if (VirusPlayer.GetComponent<VirusPlayer>().isGameover)
+                Destroy(this.gameObject);
+        }
     }
 }
