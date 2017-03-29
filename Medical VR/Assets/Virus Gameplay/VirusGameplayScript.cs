@@ -6,17 +6,33 @@ using UnityEngine.SceneManagement;
 public class VirusGameplayScript : MonoBehaviour {
 
     public List<GameObject> places;
-    public GameObject subtitltes, blackCurtain, theCamera, redCell;
+    public GameObject subtitltes, blackCurtain, theCamera, redCell, virus;
+    public static int loadCase;
     // Use this for initialization
     delegate void Func();
     Func doAction;
-    float speed = 30;
+    float moveSpeed = 1, fadeSpeed;
     int I = 0;
 	void Start ()
     {
         doAction = NullFunction;
         redCell.SetActive(false);
-	}
+        virus.SetActive(false);
+        switch (loadCase)
+        {
+            case (1):
+                I = 1;
+                subtitltes.GetComponent<SubstitlesScript>().theTimer = 22;
+                transform.position = places[I].transform.position;
+                redCell.SetActive(true);
+                virus.SetActive(true);
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            default:
+                break;
+        }
+    }
 	void NullFunction()
     {
 
@@ -31,18 +47,22 @@ public class VirusGameplayScript : MonoBehaviour {
     void RiseCurtain()
     {
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0,a- (Time.deltaTime*0.5f));
+        if (a > 255)
+            a = 255;
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0,a- (Time.deltaTime*fadeSpeed));
         
     }
     void LowerCurtain()
     {
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
+        if (a < 0)
+            a = 0;
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * fadeSpeed));
     }
     void MoveTo()
     {
         if(I != places.Count)
-        theCamera.transform.position = Vector3.MoveTowards(theCamera.transform.position, places[I].transform.position, speed *Time.deltaTime);
+        theCamera.transform.position = Vector3.MoveTowards(theCamera.transform.position, places[I].transform.position, moveSpeed *Time.deltaTime);
     }
     void CheckCaases()
     {
@@ -50,26 +70,45 @@ public class VirusGameplayScript : MonoBehaviour {
         {
             case (4):
                 doAction = RiseCurtain;
+                fadeSpeed = 0.5f;
                 break;
             case (7):
                 doAction = NullFunction;
-                I = 1;
-                break;
-            case (10):
-                doAction = NullFunction;
-                if(redCell.activeSelf == false)
+                if (redCell.activeSelf == false)
                 {
                     redCell.SetActive(true);
                     subtitltes.GetComponent<SubstitlesScript>().Stop();
-                }  
+                }
                 break;
-            case (14):
-                MovingCamera.arcadeMode = false;
-                doAction = LowerCurtain;
-                
+            case (10):
+                doAction = NullFunction;
+                if (virus.activeSelf == false)
+                {
+                    virus.SetActive(true);
+                    redCell.GetComponent<SphereCollider>().enabled = false;
+                    subtitltes.GetComponent<SubstitlesScript>().Stop();
+                }
                 break;
             case (15):
+                doAction = NullFunction;
+                I = 1;
+                moveSpeed = 30;
+                break;
+            case (20):
+                MovingCamera.arcadeMode = false;
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case (21):
                 SceneManager.LoadScene("DodgeAnitbodies");
+                break;
+            case (27):
+                SimonSays.arcadeMode = false;
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case (28):
+                SceneManager.LoadScene("SimonDNA");
                 break;
             default:
                 break;

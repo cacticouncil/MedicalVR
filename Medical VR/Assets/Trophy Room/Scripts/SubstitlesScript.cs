@@ -45,8 +45,7 @@ public class SubstitlesScript : MonoBehaviour {
             }
             else
                 GetComponent<TMPro.TextMeshPro>().text = "";
-        }
-        
+        }   
 	}
 
     public void Replay()
@@ -66,5 +65,9 @@ public class SubstitlesScript : MonoBehaviour {
     public void Continue()
     {
         stop = false;
+    }
+    public bool IsDone()
+    {
+        return stop;
     }
 }
