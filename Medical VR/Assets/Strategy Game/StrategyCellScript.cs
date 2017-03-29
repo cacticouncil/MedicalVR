@@ -4,10 +4,7 @@ using System.Collections;
 
 public class StrategyCellScript : MonoBehaviour
 {
-    public float reproduction = 0;
-    public int defense = 0;
-    public float immunity = 0;
-    public int defCap = 5;
+    public float reproduction = 0, defense = 0, immunity = 0;
     public TMPro.TextMeshPro r;
     public TMPro.TextMeshPro d;
     public TMPro.TextMeshPro i;
@@ -98,7 +95,7 @@ public class StrategyCellScript : MonoBehaviour
 
     public void IncreaseDefense()
     {
-        if (!hosted && defense < defCap)
+        if (!hosted)
         {
             defense++;
             if (d)
@@ -113,9 +110,9 @@ public class StrategyCellScript : MonoBehaviour
         }
     }
 
-    public void IncreaseDefenseToMax()
+    public void IncreaseDefenseGreatly()
     {
-        defense = defCap;
+        defense += dBonus;
         if (d)
         {
             d.text = "Defense: " + defense;
@@ -216,10 +213,10 @@ public class StrategyCellScript : MonoBehaviour
     public void UseD()
     {
         //check for item
-        if (defense != defCap && parent.inventory[2].count > 0)
+        if (parent.inventory[2].count > 0)
         {
             parent.inventory[2].count--;
-            IncreaseDefenseToMax();
+            IncreaseDefenseGreatly();
             RefreshUI();
         }
     }
@@ -339,9 +336,13 @@ public class StrategyCellScript : MonoBehaviour
         if (hosted)
         {
             if (render)
+            {
                 render.material.color = Color.grey;
+            }
             else
+            {
                 Debug.Log("Cell " + gameObject.name + " does not have a renderer.");
+            }
         }
         else if (targeted)
         {
@@ -353,7 +354,9 @@ public class StrategyCellScript : MonoBehaviour
         }
 
         if (transform.GetChild(0).gameObject.activeSelf)
+        {
             RefreshUI();
+        }
         tImmunity = immunity;
     }
 

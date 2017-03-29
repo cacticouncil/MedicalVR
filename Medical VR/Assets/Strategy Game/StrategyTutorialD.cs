@@ -4,10 +4,9 @@ using System.Collections;
 
 public class StrategyTutorialD : MonoBehaviour
 {
-    public int defense = 1;
-    public int defCap = 5;
-    public int hp = 1;
-    public TextMesh text;
+    public float defense = 1;
+    public float hp = 1;
+    public TMPro.TextMeshPro text;
     public GameObject virus, virus2, cell;
 
     private enum Status
@@ -60,11 +59,8 @@ public class StrategyTutorialD : MonoBehaviour
 
     public void Click()
     {
-        if (defense < defCap)
-        {
-            defense++;
-            text.text = "Defense: " + defense;
-        }
+        defense++;
+        text.text = "Defense: " + defense;
     }
 
     IEnumerator VirusAttack()
@@ -98,7 +94,7 @@ public class StrategyTutorialD : MonoBehaviour
         virus2.gameObject.SetActive(false);
         yield return new WaitForSeconds(1.0f);
         Debug.Log("Moving");
-        hp = defense;
+        hp = Mathf.Sqrt(defense * 5 + 1);
         cell.GetComponent<SpriteRenderer>().color = Color.green;
         stat = Status.Moving;
         enumerStarted = false;

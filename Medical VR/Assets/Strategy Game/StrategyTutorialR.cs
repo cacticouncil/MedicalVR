@@ -4,19 +4,16 @@ using System.Collections;
 
 public class StrategyTutorialR : MonoBehaviour
 {
-    public int reproduction = 1;
+    public int reproduction = 0;
     public int repCap = 5;
-    public TextMesh text;
+    public TMPro.TextMeshPro text;
     public GameObject left, right;
 
     public void Click()
     {
-        if (reproduction < repCap)
-        {
-            reproduction++;
-            text.text = "Reproduction: " + reproduction;
-            left.GetComponent<MoveLeftOrRight>().IncreaseSpeed();
-            right.GetComponent<MoveLeftOrRight>().IncreaseSpeed();
-        }
+        reproduction++;
+        text.text = "Reproduction: " + reproduction;
+        left.GetComponent<MoveLeftOrRight>().IncreaseSpeed();
+        right.GetComponent<MoveLeftOrRight>().IncreaseSpeed();
     }
 }

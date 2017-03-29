@@ -184,7 +184,7 @@ public class StrategyVirusScript : MonoBehaviour
             if (target.protein != StrategyCellScript.Proteins.Mx1 || (target.protein == StrategyCellScript.Proteins.Mx1 && Random.Range(0.0f, 100.0f) <= 50))
             {
                 attackDuration += attackValue;
-                if (attackDuration >= target.defense)
+                if (attackDuration >= Mathf.Sqrt(target.defense * 5 + 1))
                 {
                     float t = health;
                     health -= target.immunity;
