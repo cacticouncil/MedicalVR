@@ -7,7 +7,7 @@ public class StrategyBoxAnimation : MonoBehaviour
     public Vector3 midPosition = new Vector3(1, 1, 1);
     public Vector3 endScale = new Vector3(1, 1, 1);
     public Vector3 endPosition = new Vector3(1, 1, 1);
-    
+
     public GameObject text;
     public Transform rotateMe;
     public Vector3 startRotation, endRotation;
@@ -47,7 +47,6 @@ public class StrategyBoxAnimation : MonoBehaviour
                 rotateMe.rotation = Quaternion.Euler(Vector3.Lerp(startRotation, endRotation, 1.0f));
                 chestAnimation = false;
                 startTime = Time.time;
-                GetComponent<SpriteRenderer>().enabled = true;
             }
         }
         else
@@ -69,6 +68,8 @@ public class StrategyBoxAnimation : MonoBehaviour
             {
                 transform.localPosition = Vector3.Lerp(start, midPosition, percent);
                 transform.localScale = Vector3.Lerp(Vector3.zero, midScale, percent);
+                if (!GetComponent<SpriteRenderer>().enabled)
+                    GetComponent<SpriteRenderer>().enabled = true;
             }
         }
     }
@@ -77,7 +78,7 @@ public class StrategyBoxAnimation : MonoBehaviour
     {
         transform.position = start;
         rotateMe.rotation = Quaternion.Euler(startRotation);
-        chestAnimation = false;
+        chestAnimation = true;
         GetComponent<SpriteRenderer>().enabled = false;
     }
 }
