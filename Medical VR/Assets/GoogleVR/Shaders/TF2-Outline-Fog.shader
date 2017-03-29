@@ -107,9 +107,10 @@
 				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
 
 				float3 norm = mul((float3x3)UNITY_MATRIX_IT_MV, v.normal);
-				float2 offset = TransformViewToProjection(norm.xy);
+				norm.x *= UNITY_MATRIX_P[0][0];
+				norm.y *= UNITY_MATRIX_P[1][1];
 
-				o.pos.xy += offset * o.pos.z * _Outline;
+				o.pos.xy += norm.xy * _Outline;
 				o.color = _OutlineColor;
 
 				float cameraVertDist = length(mul(UNITY_MATRIX_MV, v.vertex).xyz);
