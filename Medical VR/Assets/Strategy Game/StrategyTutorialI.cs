@@ -4,13 +4,16 @@ using System.Collections;
 
 public class StrategyTutorialI : MonoBehaviour
 {
-    public int immunity = 1;
-    public int immCap = 15;
-    public TextMesh text;
-    public GameObject virus, virus2, cell, protein, arrows;
+    public int immunity = 0;
+    public int tImmunity = 0;
+    public TMPro.TextMeshPro text;
+    public GameObject virus, virus2, cell, protein, arrow1, arrow2;
+    public Transform arrow1End, arrow2End;
 
     private enum Status
     {
+        Wait,
+        Arrows,
         Protein,
         Moving,
         Dieing,
@@ -18,20 +21,21 @@ public class StrategyTutorialI : MonoBehaviour
         Kill
     }
     private Status stat;
-    private Vector3 startPos;
-    private Vector3 pstartPos, pstartScale;
+    private Vector3 startPos, arrow1StartPos, arrow1StartScale, arrow2StartPos, arrow2StartScale, pstartPos, pstartScale;
     private float startTime;
     private bool enumerStarted;
     void Start()
     {
         startPos = virus.transform.position;
+        arrow1StartPos = arrow1.transform.localPosition;
+        arrow2StartPos = arrow2.transform.localPosition;
+        arrow1StartScale = arrow1.transform.localScale;
+        arrow2StartScale = arrow2.transform.localScale;
         pstartPos = protein.transform.position;
         pstartScale = protein.transform.localScale;
         startTime = Time.time;
-        stat = Status.Moving;
+        stat = Status.Wait;
         enumerStarted = false;
-        cell.GetComponent<SpriteRenderer>().color = Color.green;
-        Debug.Log("Moving");
     }
 
     // Update is called once per frame
@@ -39,6 +43,48 @@ public class StrategyTutorialI : MonoBehaviour
     {
         switch (stat)
         {
+            case Status.Wait:
+                {
+                    if (Time.time - startTime >= 1.0f)
+                    {
+                        if (tImmunity >= 1)
+                        {
+                            stat = Status.Arrows;
+                        }
+                        else
+                        {
+                            stat = Status.Moving;
+                            cell.GetComponent<SpriteRenderer>().color = Color.green;
+                        }
+                        startTime = Time.time;
+                    }
+                }
+                break;
+            case Status.Arrows:
+                {
+                    float percent = (Time.time - startTime);
+                    arrow1.transform.localPosition = Vector3.Lerp(arrow1StartPos, arrow1End.localPosition, percent);
+                    arrow1.transform.localScale = Vector3.Lerp(arrow1StartScale, arrow1End.localScale, percent);
+                    arrow2.transform.localPosition = Vector3.Lerp(arrow2StartPos, arrow2End.localPosition, percent);
+                    arrow2.transform.localScale = Vector3.Lerp(arrow2StartScale, arrow2End.localScale, percent);
+
+                    if (percent >= 1.0f)
+                    {
+                        if (tImmunity >= 10)
+                        {
+                            protein.SetActive(true);
+                            stat = Status.Protein;
+                        }
+                        else
+                        {
+                            virus.SetActive(true);
+                            stat = Status.Moving;
+                            cell.GetComponent<SpriteRenderer>().color = Color.green;
+                        }
+                        startTime = Time.time;
+                    }
+                }
+                break;
             case Status.Protein:
                 {
                     float percent = (Time.time - startTime);
@@ -47,8 +93,8 @@ public class StrategyTutorialI : MonoBehaviour
                     if (percent >= 1.0f)
                     {
                         startTime = Time.time;
-                        stat = Status.Moving;
                         cell.GetComponent<SpriteRenderer>().color = Color.green;
+                        stat = Status.Moving;
                     }
                 }
                 break;
@@ -57,7 +103,9 @@ public class StrategyTutorialI : MonoBehaviour
                     float percent = (Time.time - startTime);
                     virus.transform.position = Vector3.Lerp(startPos, cell.transform.position, percent);
                     if (percent >= 1.0f)
+                    {
                         stat = Status.Attacking;
+                    }
                 }
                 break;
             case Status.Attacking:
@@ -77,23 +125,25 @@ public class StrategyTutorialI : MonoBehaviour
 
     public void Click()
     {
-        if (immunity < immCap)
-        {
-            immunity++;
-            text.text = "Immunity: " + immunity;
-        }
+        immunity++;
+        text.text = "Immunity: " + immunity;
     }
 
     IEnumerator VirusAttack()
     {
         enumerStarted = true;
-        Debug.Log("Attacking");
         if (!protein.activeSelf)
         {
             cell.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0, 0);
             yield return new WaitForSeconds(1.0f);
             cell.GetComponent<SpriteRenderer>().enabled = false;
             virus2.gameObject.SetActive(true);
+            arrow1.SetActive(false);
+            arrow2.SetActive(false);
+        }
+        else if (tImmunity >= 20)
+        {
+
         }
         else
         {
@@ -101,7 +151,9 @@ public class StrategyTutorialI : MonoBehaviour
             cell.GetComponent<SpriteRenderer>().color = Color.white;
             yield return new WaitForSeconds(1.0f);
             virus.SetActive(false);
-            arrows.SetActive(true);
+            cell.SetActive(false);
+            arrow1.SetActive(false);
+            arrow2.SetActive(false);
         }
         stat = Status.Kill;
         enumerStarted = false;
@@ -110,31 +162,43 @@ public class StrategyTutorialI : MonoBehaviour
     IEnumerator Reset()
     {
         enumerStarted = true;
-        Debug.Log("Resetting");
         yield return new WaitForSeconds(1.0f);
         virus.transform.position = startPos;
         cell.GetComponent<SpriteRenderer>().enabled = true;
         cell.GetComponent<SpriteRenderer>().color = Color.white;
-        virus2.gameObject.SetActive(false);
-        yield return new WaitForSeconds(1.0f);
-        Debug.Log("Moving");
-        if (immunity >= immCap)
+        virus.SetActive(true);
+        virus2.SetActive(false);
+        tImmunity = immunity;
+        if (tImmunity >= 10)
         {
-            protein.SetActive(true);
+            //Reset Arrows
+            arrow1.SetActive(true);
+            arrow1.transform.localPosition = arrow1StartPos;
+            arrow1.transform.localScale = arrow1StartScale;
+            arrow2.SetActive(true);
+            arrow2.transform.localPosition = arrow2StartPos;
+            arrow2.transform.localScale = arrow2StartScale;
+
+            //Reset Protein
             protein.transform.position = pstartPos;
             protein.transform.localScale = pstartScale;
-            virus.SetActive(true);
+            protein.SetActive(true);
             virus.GetComponent<SpriteRenderer>().color = Color.white;
-            arrows.SetActive(false);
             cell.GetComponent<SpriteRenderer>().sortingOrder = 0;
-            yield return new WaitForSeconds(1.0f);
-            stat = Status.Protein;
         }
-        else
+        else if (tImmunity >= 1)
         {
-            cell.GetComponent<SpriteRenderer>().color = Color.green;
-            stat = Status.Moving;
+            //Reset Arrows
+            arrow1.SetActive(true);
+            arrow1.transform.localPosition = arrow1StartPos;
+            arrow1.transform.localScale = arrow1StartScale;
+            arrow2.SetActive(true);
+            arrow2.transform.localPosition = arrow2StartPos;
+            arrow2.transform.localScale = arrow2StartScale;
         }
+        cell.SetActive(true);
+        stat = Status.Wait;
+        //arrows.SetActive(true);
         enumerStarted = false;
         startTime = Time.time;
     }
