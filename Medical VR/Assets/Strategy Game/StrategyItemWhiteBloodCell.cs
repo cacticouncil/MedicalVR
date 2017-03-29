@@ -5,9 +5,11 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
 {
     public StrategyVirusScript target;
     public GameObject transporter;
+    private StrategyCellScript cell;
 
     void Start()
     {
+        cell = target.target;
         target.enabled = false;
         GameObject t = Instantiate(transporter, transform.position, Quaternion.identity) as GameObject;
         t.GetComponent<StrategyTransporter>().destination = target.transform.position;
@@ -33,6 +35,14 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
             transform.localScale = Vector3.Lerp(scale, Vector3.zero, t);
             yield return new WaitForFixedUpdate();
         }
+
+        Vector3 camPos = Camera.main.GetComponent<Transform>().position;
+        Vector3 dir = transform.position - camPos;
+        dir.Normalize();
+        Camera.main.GetComponent<MoveCamera>().SetDestination(camPos + dir);
+
+        cell.RefreshUI();
+        cell.ToggleUI(true);
         Destroy(gameObject);
     }
 }

@@ -267,7 +267,7 @@ public class StrategyCellScript : MonoBehaviour
         {
             parent.inventory[6].count--;
             ToggleUI(false);
-            RefreshUI();
+            //RefreshUI();
             Vector3 camPos = Camera.main.GetComponent<Transform>().position;
             Vector3 dir = camPos - transform.position;
             dir.Normalize();
