@@ -20,7 +20,7 @@ public class SimonSays : MonoBehaviour {
     float timer = 3, theTimer;
 
     Vector3 orgPos;
-    public static bool arcadeMode = false;
+    public static bool arcadeMode = true;
     bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false;
     public enum theColors
     {
