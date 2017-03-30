@@ -46,7 +46,9 @@ public class StrategyUIScript : MonoBehaviour
                     items[i].GetComponentInChildren<TMPro.TextMeshPro>().text = inventory[i].count.ToString();
                 }
                 else
+                {
                     items[i].SetActive(false);
+                }
             }
             items[inventory.Count - 1].SetActive(false);
         }

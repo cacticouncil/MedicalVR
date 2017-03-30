@@ -3,12 +3,10 @@ using System.Collections;
 
 public class ScrollingTexture : MonoBehaviour
 {
-    public float xSpeed1, ySpeed1;
-    public float xSpeed2, ySpeed2;
+    public float xSpeed, ySpeed;
 
     void Update()
     {
-        GetComponent<Renderer>().material.SetTextureOffset("_MainTex", new Vector2(Time.time * xSpeed1, Time.time * ySpeed1));
-        //GetComponent<Renderer>().material.SetTextureOffset("_Tex2", new Vector2(Time.time * xSpeed2, Time.time * ySpeed2));
+        GetComponent<Renderer>().material.mainTextureOffset += new Vector2(Time.deltaTime * xSpeed, Time.deltaTime * ySpeed);
     }
 }

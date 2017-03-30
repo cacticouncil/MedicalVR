@@ -76,15 +76,16 @@
             uniform float4 _OutlineColor;
    
             v2f vert(appdata v) {
-                v2f o;
-                o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
- 
-                float3 norm   = mul ((float3x3)UNITY_MATRIX_IT_MV, v.normal);
-                float2 offset = TransformViewToProjection(norm.xy);
- 
-                o.pos.xy += offset * o.pos.z * _Outline;
-                o.color = _OutlineColor;
-                return o;
+				v2f o;
+				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+
+				float3 norm = normalize(mul((float3x3)UNITY_MATRIX_IT_MV, v.normal));
+				norm.x *= UNITY_MATRIX_P[0][0];
+				norm.y *= UNITY_MATRIX_P[1][1];
+
+				o.pos.xy += norm.xy * _Outline;
+				o.color = _OutlineColor;
+				return o;
             }
             ENDCG
        

@@ -6,17 +6,17 @@ using UnityEngine.SceneManagement;
 public class MovingCamera : MonoBehaviour, TimedInputHandler
 {
 
-    public GameObject redCell;
+    public GameObject subtitles;
     public float speed;
     public GameObject theScore, theLives, scoreBoard, UI, MenuButton;
     // Use this for initialization
     public float score = 0;
     public Color fogColor;
-    public static bool arcadeMode;
+    public static bool arcadeMode = true;
     Vector3 originPos;
     int lives = 3;
     float orgSpeed;
-    bool stopMoving = false;
+    bool stopMoving = false, startSpeed = true;
     
    public void LoseresetPos()
     {
@@ -57,11 +57,13 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     }
     void Start ()
     {
+        originPos = transform.position;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         orgSpeed = speed;
         if(arcadeMode == false)
         {
             UI.SetActive(false);
+            speed = 0;
         }
     }
 	
@@ -72,6 +74,17 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     }
     void FixedUpdate()
     {
+        if(arcadeMode == false)
+        {
+            if(startSpeed == true)
+            {
+                if(subtitles.GetComponent<SubstitlesScript>().IsDone() == true)
+                {
+                    speed = orgSpeed;
+                    startSpeed = false;
+                }
+            }
+        }
         AvoidBack();
         if(lives < 1)
         {
