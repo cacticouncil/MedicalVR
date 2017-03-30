@@ -1,26 +1,80 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class RnaMessengerScript : MonoBehaviour {
 
-    public GameObject Refpolynuclei, simon;
+    public GameObject Refpolynuclei, simon, subtitles, blackCurtain;
     Stack<GameObject> chain = new Stack<GameObject>();
     Stack<GameObject> wrongChain = new Stack<GameObject>();
     List<Vector3> prevPos = new List<Vector3>();
     int wrongs = 0, tmpScore, tmpLives;
     Vector3 target;
-
+    float timer = 0, timer2 = 0;
     // Use this for initialization
     void Start ()
     {
         tmpScore = simon.GetComponent<SimonSays>().score;
         tmpLives = simon.GetComponent<SimonSays>().lives;
-       
+       if(SimonSays.arcadeMode == false)
+        {
+            subtitles.GetComponent<SubstitlesScript>().Stop();
+            simon.GetComponent<SimonSays>().lives = 0;
+            simon.GetComponent<SimonSays>().sign.SetActive(false);
+        }
+        else
+        {
+            blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+        }
     }
 	// Update is called once per frame
 	void Update ()
     {
+        if(SimonSays.arcadeMode == false && simon.GetComponent<SimonSays>().polys !=simon.GetComponent<SimonSays>().polysDone )
+        {
+            timer += Time.deltaTime;
+            if(timer > 1 && timer < 2)
+            {
+                subtitles.GetComponent<SubstitlesScript>().Continue();
+            }
+            float a = blackCurtain.GetComponent<Renderer>().material.color.a;
+            if (a > 255)
+                a = 255;
+            blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
+        }
+        else if(simon.GetComponent<SimonSays>().polys == simon.GetComponent<SimonSays>().polysDone)
+        {
+            timer2 += Time.deltaTime;
+            if(timer2 > 2.5f)
+            {
+                
+                VirusGameplayScript.loadCase = 2;
+                SceneManager.LoadScene("Virus Gameplay Scene");
+            }
+            if(timer2 > 1.5f)
+            {
+                simon.GetComponent<SimonSays>().sign.SetActive(false);
+                float a = blackCurtain.GetComponent<Renderer>().material.color.a;
+                if (a < 0)
+                    a = 0;
+                blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
+            }
+            
+        }
+        switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
+        {
+            case (6):
+                if(simon.GetComponent<SimonSays>().lives == 0)
+                {
+                    simon.GetComponent<SimonSays>().lives = 3;
+                    simon.GetComponent<SimonSays>().sign.SetActive(true);
+                    simon.GetComponent<SimonSays>().theLives.GetComponent<TMPro.TextMeshPro>().text = "Lives: " + 3;
+                }
+                break;
+            default:
+                break;
+        }
         BreakAnimation();
         if (tmpLives != simon.GetComponent<SimonSays>().lives)
         {
