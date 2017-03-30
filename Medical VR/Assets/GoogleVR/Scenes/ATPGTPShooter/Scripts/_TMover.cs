@@ -22,7 +22,7 @@ public class _TMover : MonoBehaviour
         else
         {            
             rb.velocity = new Vector3(
-                Random.Range(spawnValuesDirection.xMax, spawnValuesDirection.xMax),
+                Random.Range(spawnValuesDirection.xMin, spawnValuesDirection.xMax),
                 Random.Range(spawnValuesDirection.yMin, spawnValuesDirection.yMax),
                 Random.Range(spawnValuesDirection.zMin, spawnValuesDirection.zMax)) * speed;
         }

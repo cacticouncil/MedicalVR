@@ -3,6 +3,8 @@ using System.Collections;
 
 public class _TEnzymeController : MonoBehaviour
 {
+    public GameObject particles;
+
     [HideInInspector]
     public bool hasATP = false, hasGTP = false;
 
@@ -17,10 +19,15 @@ public class _TEnzymeController : MonoBehaviour
         hasGTP = true;
         UpdateSettings();
     }
-    
+
     private void UpdateSettings()
     {
         if (hasGTP && hasATP)
+        {
+            if (particles)
+                Instantiate(particles, transform.position, transform.rotation, transform);
+
             GetComponent<_TTravelToNucleus>().StartTravel();
+        }
     }
 }
