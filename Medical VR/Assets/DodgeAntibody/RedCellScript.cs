@@ -6,17 +6,40 @@ public class RedCellScript : MonoBehaviour {
 
     // Use this for initialization
     public float speed;
-    public GameObject virus, spawner, banner;
-
+    public GameObject virus, spawner, banner, blackCurtain;
+    bool fade = false;
+    float timer = 0;
 	void Start ()
     {
-        
+       if(MovingCamera.arcadeMode == true)
+        {
+            blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+        }
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        //transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + speed);
-	}
+	void Update ()
+    {
+        if (fade)
+        {
+            timer += Time.deltaTime;
+            float a = blackCurtain.GetComponent<Renderer>().material.color.a;
+            if (a < 0)
+                a = 0;
+            blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
+            if (timer > 1)
+            {
+                VirusGameplayScript.loadCase = 1;
+                SceneManager.LoadScene("Virus Gameplay Scene");
+            }
+        }
+        else
+        {
+            float a = blackCurtain.GetComponent<Renderer>().material.color.a;
+            blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
+        }
+
+    }
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "virus")
@@ -30,7 +53,8 @@ public class RedCellScript : MonoBehaviour {
             }
             else
             {
-                SceneManager.LoadScene("Virus Gameplay Scene"); 
+                fade = true;
+                timer = 0;
             }
             if (PlayerPrefs.GetInt("Red Cell") == -1)
             {
