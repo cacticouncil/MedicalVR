@@ -11,7 +11,9 @@ public class Boundary
 
 public class _TGameController : MonoBehaviour
 {
-    public GameObject hazard;
+    public GameObject enzyme;
+    public GameObject enzymeCollector;
+    public int maxNumEnzymes;
     public GameObject nucleus;
     public Boundary spawnValues;
     public int hazardCount;
@@ -31,13 +33,16 @@ public class _TGameController : MonoBehaviour
         {
             for (int i = 0; i < hazardCount; ++i)
             {
-                Vector3 spawnPosition = new Vector3(
-                    Random.Range(spawnValues.xMin, spawnValues.xMax),
-                    Random.Range(spawnValues.yMin, spawnValues.yMax),
-                    Random.Range(spawnValues.zMin, spawnValues.zMax));
-                Quaternion spawnRotation = Quaternion.identity;
-                GameObject haz = Instantiate(hazard, spawnPosition, spawnRotation) as GameObject;
-                haz.GetComponent<_TTravelToNucleus>().nucleus = nucleus;
+                if (maxNumEnzymes > transform.GetChild(0).childCount)
+                {
+                    Vector3 spawnPosition = new Vector3(
+                        Random.Range(spawnValues.xMin, spawnValues.xMax),
+                        Random.Range(spawnValues.yMin, spawnValues.yMax),
+                        Random.Range(spawnValues.zMin, spawnValues.zMax));
+                    Quaternion spawnRotation = Quaternion.identity;
+                    GameObject haz = Instantiate(enzyme, spawnPosition, spawnRotation, enzymeCollector.transform) as GameObject;
+                    haz.GetComponent<_TTravelToNucleus>().nucleus = nucleus;
+                }
                 yield return new WaitForSeconds(spawnWait);
             }
             yield return new WaitForSeconds(waveWait);
