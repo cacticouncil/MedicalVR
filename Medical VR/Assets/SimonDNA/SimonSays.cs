@@ -20,7 +20,7 @@ public class SimonSays : MonoBehaviour {
     float timer = 3, theTimer;
 
     Vector3 orgPos;
-    public bool arcadeMode = true;
+    public static bool arcadeMode = true;
     bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false;
     public enum theColors
     {
@@ -303,7 +303,7 @@ public class SimonSays : MonoBehaviour {
             polyLeft.GetComponent<TMPro.TextMeshPro>().text = "Nucleids Done: " + polysDone.ToString();
             if (polysDone == polys)
             {
-                SceneManager.LoadScene("Credits");
+                SceneManager.LoadScene("Virus Gameplay Scene");
             }
         }
     }
