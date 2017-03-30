@@ -7,6 +7,8 @@ public class _TRedAttacher : MonoBehaviour
 
     public bool _debug;
     public GameObject shotToAttack;
+    public GameObject ConnectionParticle;
+    public float ParticleSize;
 
     private Position caseSwitch = Position.none;
     private GameObject OurAttachedEnzyme;
@@ -14,8 +16,6 @@ public class _TRedAttacher : MonoBehaviour
     private float moverSpeed;
     private Transform colliders;
 
-
-    //    SphereCollider sc; = gameObject.AddComponent("SphereCollider") as SphereCollider;
 
     private void Start()
     {
@@ -38,7 +38,6 @@ public class _TRedAttacher : MonoBehaviour
                 attachMolecule();
                 break;
         }
-
     }
 
 
@@ -57,25 +56,10 @@ public class _TRedAttacher : MonoBehaviour
             DebugStuff();
             OurAttachedEnzyme.GetComponent<Rigidbody>().useGravity = false;
         }
-
-
-        //        Check with colliding with a ricochet-able surface(OnCollisionEnter)
-        //
-        //    Extract the normal of the surface you are colliding via contact point
-
-        //    Use the projectile / bullet's direction ( transform.forward ) and the normal to calculate the vector of the projectile/bullet when it is reflected Vector3.Reflect
-        //
-        //    Apply the reflected vector to your projectile / bullet
-
-
-
-
-
     }
 
     private void attachMolecule()
     {
-
         OurAttachedEnzyme.transform.SetParent(transform.parent.gameObject.transform, false);
         OurAttachedEnzyme.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
         OurAttachedEnzyme.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
@@ -86,6 +70,9 @@ public class _TRedAttacher : MonoBehaviour
         SphereCollider sc = colliders.gameObject.AddComponent<SphereCollider>();
         sc.center = transform.localPosition;
         sc.radius = 0.3f;
+
+        SetParticle();
+
         if (OurAttachedEnzyme.name == "ATP Cell" || OurAttachedEnzyme.name == "ATP Cell(Clone)")
             transform.parent.GetComponent<_TEnzymeController>().SetATP();
         else if (OurAttachedEnzyme.name == "GTP Cell" || OurAttachedEnzyme.name == "GTP Cell(Clone)")
@@ -93,7 +80,7 @@ public class _TRedAttacher : MonoBehaviour
         else
             Debug.Log("Could not determine Object");
 
-        
+   //     GameObject haz = Instantiate(hazard, spawnPosition, spawnRotation) as GameObject;
 
     }
     void MoveToPosition(Transform pos)
@@ -108,6 +95,22 @@ public class _TRedAttacher : MonoBehaviour
             ++caseSwitch;
             DebugStuff();
         }
+    }
+
+    void SetParticle()
+    {
+        GameObject flash;
+        if (ConnectionParticle)
+        {
+            Vector3 flashPosition = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
+            flash = Instantiate(ConnectionParticle, transform.position, transform.rotation, transform) as GameObject;
+            flash.transform.localScale = new Vector3(ParticleSize, ParticleSize, ParticleSize);
+            Debug.Log("current Position: " + flash.transform.position);
+            Debug.Log("Transforms Position: " + transform.position);
+            flash.transform.localPosition = new Vector3(0, -0.1f, 0);
+        }
+        else
+            Debug.Log("No Connection Particle to Instatiate.");
     }
     void DebugStuff()
     {

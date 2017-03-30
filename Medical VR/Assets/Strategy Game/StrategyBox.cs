@@ -7,16 +7,16 @@ public class StrategyBox : MonoBehaviour
     public StrategyCellManagerScript cellmanager;
 
     public List<StrategyItem> items = new List<StrategyItem>();
-    public List<TextMesh> text = new List<TextMesh>();
+    public List<TMPro.TextMeshPro> text = new List<TMPro.TextMeshPro>();
 
     public int actionsLeft;
-    public TextMesh actionText;
+    public TMPro.TextMeshPro actionText;
 
     public GameObject boxTab;
     public Hilighter AHighlighter;
     public GameObject animationTab;
     public GameObject anim;
-    public TextMesh animationText;
+    public TMPro.TextMeshPro animationText;
 
     public MoveCamera mainCamera;
 
@@ -60,7 +60,7 @@ public class StrategyBox : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
             GetComponent<Collider>().enabled = false;
             //This is the new target position
-            mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1.5f));
+            mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f));
             cellmanager.SetSelected(key);
         }
     }
