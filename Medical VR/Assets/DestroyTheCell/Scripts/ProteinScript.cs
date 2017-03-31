@@ -56,7 +56,6 @@ public class ProteinScript : MonoBehaviour, TimedInputHandler
 
     void OnDestroy()
     {
-        Player.GetComponent<VirusPlayer>().Speed = .01f;
         WaveManager.GetComponent<WaveManager>().ProteinCount -= 1;
         WaveManager.GetComponent<WaveManager>().ProteinList.Remove(transform.gameObject);
     }

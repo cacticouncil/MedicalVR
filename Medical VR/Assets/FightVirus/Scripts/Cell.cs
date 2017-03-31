@@ -4,7 +4,6 @@ using System.Collections;
 public class Cell : MonoBehaviour
 {
     public GameObject Player;
-    public GameObject VirusPlayer;
 
     void OnTriggerExit(Collider col)
     {

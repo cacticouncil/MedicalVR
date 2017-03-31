@@ -36,23 +36,23 @@ public class WaveManager : MonoBehaviour
                 switch (WaveNumber)
                 {
                     case 1:
-                        ProteinCount = 1;
+                        ProteinCount = 3;
                         AntiViralProteinCount = 2;
                         break;
 
                     case 2:
-                        ProteinCount = 2;
+                        ProteinCount = 4;
                         AntiViralProteinCount = 3;
                         break;
 
                     case 3:
-                        ProteinCount = 1;
+                        ProteinCount = 5;
                         AntiViralProteinCount = 4;
                         break;
 
                     case 4:
-                        ProteinCount = 2;
-                        AntiViralProteinCount = 1;
+                        ProteinCount = 6;
+                        AntiViralProteinCount = 4;
                         break;
 
                     default:
