@@ -1,17 +1,17 @@
 fileFormatVersion: 2
-guid: ee9e7adcf4b628140901ca096ef425bd
-timeCreated: 1490992311
+guid: f698cf735d14ddb498db50113b898b61
+timeCreated: 1490992405
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: pCylinder2
+    100002: MitocondriaInside_low:Mitocondria__low
     400000: //RootNode
-    400002: pCylinder2
-    2300000: pCylinder2
-    3300000: pCylinder2
-    4300000: pCylinder2
+    400002: MitocondriaInside_low:Mitocondria__low
+    2300000: MitocondriaInside_low:Mitocondria__low
+    3300000: MitocondriaInside_low:Mitocondria__low
+    4300000: MitocondriaInside_low:Mitocondria__low
   materials:
     importMaterials: 1
     materialName: 0
