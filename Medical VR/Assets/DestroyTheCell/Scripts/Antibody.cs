@@ -109,9 +109,14 @@ public class Antibody : MonoBehaviour
             Destroy(this.gameObject);
     }
 
+    public void DestroyAntiBody()
+    {
+        Destroy(this.gameObject);
+    }
+
     public bool CheckFOV()
     {
-        if (Vector3.Angle(Player.transform.position - transform.position, transform.forward) <= 45 && FlashScreen == false)
+        if (Vector3.Angle(Player.transform.position - transform.position, transform.forward) <= 35 && FlashScreen == false && Vector3.Distance(transform.position, Player.transform.position) <= 5.0f)
         {
             Debug.Log("Can See Player");
             AlwaysChasePlayer = true;

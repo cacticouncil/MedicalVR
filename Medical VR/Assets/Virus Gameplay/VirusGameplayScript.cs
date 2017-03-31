@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class VirusGameplayScript : MonoBehaviour {
 
     public List<GameObject> places;
-    public GameObject subtitltes, blackCurtain, theCamera, redCell, virus;
+    public GameObject subtitltes, blackCurtain, theCamera, virus;
     public static int loadCase;
     // Use this for initialization
     delegate void Func();
@@ -16,7 +16,6 @@ public class VirusGameplayScript : MonoBehaviour {
 	void Start ()
     {
         doAction = NullFunction;
-        redCell.SetActive(false);
         virus.SetActive(false);
         switch (loadCase)
         {
@@ -24,7 +23,6 @@ public class VirusGameplayScript : MonoBehaviour {
                 I = 1;
                 subtitltes.GetComponent<SubstitlesScript>().theTimer = 22;
                 transform.position = places[I].transform.position;
-                redCell.SetActive(true);
                 virus.SetActive(true);
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
@@ -33,7 +31,7 @@ public class VirusGameplayScript : MonoBehaviour {
                 I = 1;
                 subtitltes.GetComponent<SubstitlesScript>().theTimer = 29;
                 transform.position = places[I].transform.position;
-                redCell.SetActive(true);
+                
                 virus.SetActive(true);
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
@@ -83,18 +81,14 @@ public class VirusGameplayScript : MonoBehaviour {
                 break;
             case (7):
                 doAction = NullFunction;
-                if (redCell.activeSelf == false)
-                {
-                    redCell.SetActive(true);
-                    subtitltes.GetComponent<SubstitlesScript>().Stop();
-                }
+                subtitltes.GetComponent<SubstitlesScript>().Stop();
                 break;
             case (10):
                 doAction = NullFunction;
                 if (virus.activeSelf == false)
                 {
                     virus.SetActive(true);
-                    redCell.GetComponent<SphereCollider>().enabled = false;
+                    
                     subtitltes.GetComponent<SubstitlesScript>().Stop();
                 }
                 break;

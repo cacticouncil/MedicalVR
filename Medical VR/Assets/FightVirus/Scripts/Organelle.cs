@@ -4,9 +4,9 @@ using System.Collections;
 enum OrganelleMovement { MoveRight = 0, MoveLeft = 1, MoveUp = 2, MoveDown = 3 }
 public class Organelle : MonoBehaviour
 {
-    GameObject OrganelleManager;
-    GameObject Player;
-    GameObject VirusPlayer;
+    public GameObject OrganelleManager;
+    public GameObject Player;
+    public GameObject VirusPlayer;
     public bool isDead;
     OrganelleMovement CM;
     Vector3 StartPos;
