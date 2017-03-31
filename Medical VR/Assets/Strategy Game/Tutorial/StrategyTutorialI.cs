@@ -54,7 +54,7 @@ public class StrategyTutorialI : MonoBehaviour
                         else
                         {
                             stat = Status.Moving;
-                            cell.GetComponent<SpriteRenderer>().color = Color.green;
+                            cell.GetComponent<Renderer>().material.color = Color.green;
                         }
                         startTime = Time.time;
                     }
@@ -79,7 +79,7 @@ public class StrategyTutorialI : MonoBehaviour
                         {
                             virus.SetActive(true);
                             stat = Status.Moving;
-                            cell.GetComponent<SpriteRenderer>().color = Color.green;
+                            cell.GetComponent<Renderer>().material.color = Color.green;
                         }
                         startTime = Time.time;
                     }
@@ -93,7 +93,7 @@ public class StrategyTutorialI : MonoBehaviour
                     if (percent >= 1.0f)
                     {
                         startTime = Time.time;
-                        cell.GetComponent<SpriteRenderer>().color = Color.green;
+                        cell.GetComponent<Renderer>().material.color = Color.green;
                         stat = Status.Moving;
                     }
                 }
@@ -134,9 +134,9 @@ public class StrategyTutorialI : MonoBehaviour
         enumerStarted = true;
         if (!protein.activeSelf)
         {
-            cell.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0, 0);
+            cell.GetComponent<Renderer>().material.color = new Color(1.0f, 0, 0);
             yield return new WaitForSeconds(1.0f);
-            cell.GetComponent<SpriteRenderer>().enabled = false;
+            cell.GetComponent<Renderer>().enabled = false;
             virus2.gameObject.SetActive(true);
             arrow1.SetActive(false);
             arrow2.SetActive(false);
@@ -147,8 +147,8 @@ public class StrategyTutorialI : MonoBehaviour
         }
         else
         {
-            virus.GetComponent<SpriteRenderer>().color = Color.red;
-            cell.GetComponent<SpriteRenderer>().color = Color.white;
+            virus.GetComponent<Renderer>().material.color = Color.red;
+            cell.GetComponent<Renderer>().material.color = Color.white;
             yield return new WaitForSeconds(1.0f);
             virus.SetActive(false);
             cell.SetActive(false);
@@ -164,8 +164,8 @@ public class StrategyTutorialI : MonoBehaviour
         enumerStarted = true;
         yield return new WaitForSeconds(1.0f);
         virus.transform.position = startPos;
-        cell.GetComponent<SpriteRenderer>().enabled = true;
-        cell.GetComponent<SpriteRenderer>().color = Color.white;
+        cell.GetComponent<Renderer>().enabled = true;
+        cell.GetComponent<Renderer>().material.color = Color.white;
         virus.SetActive(true);
         virus2.SetActive(false);
         tImmunity = immunity;
@@ -183,8 +183,7 @@ public class StrategyTutorialI : MonoBehaviour
             protein.transform.position = pstartPos;
             protein.transform.localScale = pstartScale;
             protein.SetActive(true);
-            virus.GetComponent<SpriteRenderer>().color = Color.white;
-            cell.GetComponent<SpriteRenderer>().sortingOrder = 0;
+            virus.GetComponent<Renderer>().material.color = Color.white;
         }
         else if (tImmunity >= 1)
         {

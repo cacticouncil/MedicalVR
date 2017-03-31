@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b1b4da8405b155141b6f89619efd984b
-timeCreated: 1488468025
+guid: 859500c51345e534cb4c4dcf8276a2af
+timeCreated: 1490984071
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: pPrism1
+    4300000: pPlane1
     9500000: //RootNode
   materials:
     importMaterials: 1
