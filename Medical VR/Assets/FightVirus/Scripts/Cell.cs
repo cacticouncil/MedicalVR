@@ -15,7 +15,9 @@ public class Cell : MonoBehaviour
 
         else if (col.gameObject.tag == "Virus")
         {
-            Player.GetComponent<Player>().VirusLeaveCount += 1;
+            if (Player.GetComponent<Player>())
+                Player.GetComponent<Player>().VirusLeaveCount += 1;
+            
             Destroy(col.gameObject);
         }
 

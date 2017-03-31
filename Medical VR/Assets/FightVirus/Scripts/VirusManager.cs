@@ -21,10 +21,10 @@ public class VirusManager : MonoBehaviour
     bool CheckCount;
     void Start()
     {
-        Wave1 = false;
+        Wave1 = true;
         Wave2 = false;
         Wave3 = false;
-        Wave4 = true;
+        Wave4 = false;
         CheckCount = false;
         EnemyCount = 20;
         Invoke("CreateWave", 5);

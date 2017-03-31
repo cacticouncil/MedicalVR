@@ -24,7 +24,8 @@ public class StrategyTransporter : MonoBehaviour
         {
             if (transform.childCount > 0)
             {
-                transform.GetChild(0).GetComponent<Collider>().enabled = true;
+                if (transform.GetChild(0).GetComponent<Collider>())
+                    transform.GetChild(0).GetComponent<Collider>().enabled = true;
                 transform.GetChild(0).parent = transform.parent;
             }
             Destroy(gameObject);
