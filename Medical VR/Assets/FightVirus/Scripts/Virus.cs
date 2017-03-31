@@ -43,8 +43,8 @@ public class Virus : MonoBehaviour
 
         if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
         {
-            Speed = 1.0f;
-            //Speed = 0.006f;
+            //Speed = 1.0f;
+            Speed = 0.006f;
             Health = 20;
         }
 

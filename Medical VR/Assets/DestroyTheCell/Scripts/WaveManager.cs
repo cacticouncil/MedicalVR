@@ -18,34 +18,41 @@ public class WaveManager : MonoBehaviour
     Vector3 ProteinLocation;
 
     public int WaveNumber = 1;
-
+    public bool CanDestroyProteins = false;
     void Update()
     {
-        //If you clear the wave
         if (WaveNumber < 5)
         {
-            if (ProteinCount == 0 && ProteinList.Count == 0)
+            if (ProteinCount == 0 && ProteinList.Count == 0 && Player.GetComponent<VirusPlayer>().WaveStarted == false)
             {
+                if (WaveNumber != 1)
+                {
+                    for (int i = 0; i < AntiViralProteinList.Count; i++)
+                    {
+                        AntiViralProteinList[i].gameObject.GetComponent<Antibody>().DestroyAntiBody();
+                    }
+                }
+
                 switch (WaveNumber)
                 {
                     case 1:
-                        ProteinCount = 3;
+                        ProteinCount = 1;
                         AntiViralProteinCount = 2;
                         break;
 
                     case 2:
-                        ProteinCount = 5;
+                        ProteinCount = 2;
                         AntiViralProteinCount = 3;
                         break;
 
                     case 3:
-                        ProteinCount = 7;
+                        ProteinCount = 1;
                         AntiViralProteinCount = 4;
                         break;
 
                     case 4:
-                        ProteinCount = 10;
-                        AntiViralProteinCount = 5;
+                        ProteinCount = 2;
+                        AntiViralProteinCount = 1;
                         break;
 
                     default:
@@ -55,19 +62,28 @@ public class WaveManager : MonoBehaviour
                 CreateProteinWave();
                 Player.GetComponent<VirusPlayer>().Respawn();
                 Player.GetComponent<VirusPlayer>().Speed = 0.0f;
-                Invoke("CreateAntiViralProteinWave", 5);
+                Player.GetComponent<VirusPlayer>().WaveStarted = true;
+                CanDestroyProteins = false;
+                Invoke("CreateAntiViralProteinWave", 7);
             }
         }
-    }
 
-    void CreateAntiViralProteinWave()
-    {
-        for (int i = 0; i < AntiViralProteinCount; i++)
+        //Completed All Waves
+        else if (WaveNumber >= 5)
         {
-            AntiViralProteinLocation = Random.insideUnitSphere * 6.5f;
-            AntiViralProteinList.Add(Instantiate(AntiViralProtein, AntiViralProteinLocation, Quaternion.identity, transform) as GameObject);
+            if (ProteinCount == 0 && ProteinList.Count == 0 && Player.GetComponent<VirusPlayer>().WaveStarted == false)
+            {
+                Player.GetComponent<VirusPlayer>().isGameover = true;
+                Player.GetComponent<VirusPlayer>().Speed = 0.0f;
+            }
         }
-        Player.GetComponent<VirusPlayer>().Speed = .01f;
+
+
+        for (int i = 0; i < AntiViralProteinList.Count; i++)
+        {
+            if (AntiViralProteinList[i].gameObject == null)
+                AntiViralProteinList.Remove(AntiViralProteinList[i]);
+        }
     }
 
     void CreateProteinWave()
@@ -77,5 +93,26 @@ public class WaveManager : MonoBehaviour
             ProteinLocation = Random.onUnitSphere * 6.5f;
             ProteinList.Add(Instantiate(Protein, ProteinLocation, Quaternion.identity, transform) as GameObject);
         }
+    }
+
+    void CreateAntiViralProteinWave()
+    {
+        for (int i = 0; i < AntiViralProteinCount; i++)
+        {
+            AntiViralProteinLocation = Random.insideUnitSphere * 6.5f;
+            while (Vector3.Distance(AntiViralProteinLocation, Player.transform.position) <= 2.5f)
+                AntiViralProteinRespawn(AntiViralProteinLocation);
+            
+            AntiViralProteinList.Add(Instantiate(AntiViralProtein, AntiViralProteinLocation, Quaternion.identity, transform) as GameObject);
+        }
+
+        Player.GetComponent<VirusPlayer>().Speed = .01f;
+        CanDestroyProteins = true;
+    }
+
+    Vector3 AntiViralProteinRespawn(Vector3 Position)
+    {
+        Position = Random.insideUnitSphere * 6.5f;
+        return Position;
     }
 }

@@ -12,7 +12,7 @@ public class OrganelleManager : MonoBehaviour
 
     void Start()
     {
-        OrganelleCount = 15;
+        OrganelleCount = 10;
         for (int i = 0; i < OrganelleCount; i++)
         {
             SpawnRandomCell = Random.insideUnitSphere * 6.0f;
