@@ -29,6 +29,15 @@ public class VirusGameplayScript : MonoBehaviour {
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 break;
+            case (2):
+                I = 1;
+                subtitltes.GetComponent<SubstitlesScript>().theTimer = 29;
+                transform.position = places[I].transform.position;
+                redCell.SetActive(true);
+                virus.SetActive(true);
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
+                break;
             default:
                 break;
         }
