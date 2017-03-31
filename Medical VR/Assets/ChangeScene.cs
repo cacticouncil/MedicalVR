@@ -29,6 +29,7 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 break;
             case 1:
                 LoadScene("MemoryGame");
+                MemoryUI.arcadeMode = true;
                 break;
             case 2:
                 LoadScene("FightVirus");

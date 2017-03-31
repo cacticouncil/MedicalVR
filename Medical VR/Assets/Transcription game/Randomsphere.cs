@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+
 enum Letters
 {C, G, U, A, T, A2
 };
@@ -12,6 +14,7 @@ public enum GNE
 
 public class Randomsphere : MonoBehaviour {
     public GameObject memoryui;
+    public GameObject victoryeffect;
     public GameObject[] Spheres;
     public GameObject[] Spheres2;
     private List<GameObject> testSpheres;
@@ -33,6 +36,8 @@ public class Randomsphere : MonoBehaviour {
     private Color T1color;
     private Color A2color;
 
+    private bool playfx;
+
     private Vector3 C1position;
     private Vector3 G1position;
     private Vector3 U1position;
@@ -44,7 +49,7 @@ public class Randomsphere : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
+        playfx = false;
         testSpheres = new List<GameObject>();
         ans = new List<string>();
 
@@ -64,7 +69,10 @@ public class Randomsphere : MonoBehaviour {
         T1position = Spheres2[(int)Letters.T].transform.position;
         A2position = Spheres2[(int)Letters.A2].transform.position;
 
-        Genes = (GNE)Random.Range(0, 9);
+        if (MemoryUI.arcadeMode == true)
+            Genes = (GNE)Random.Range(0, 9);
+        else
+            Genes = 0;
 
         switch (Genes)
         {
@@ -132,6 +140,7 @@ public class Randomsphere : MonoBehaviour {
                 }
                 break;
             default:
+                SceneManager.LoadScene("MainMenu");
                 break;
         }
 
@@ -164,8 +173,20 @@ public class Randomsphere : MonoBehaviour {
 
         if (correct == 3)
         {
-            Reset();
-            memoryui.GetComponent<MemoryUI>().Level += 1;
+
+            //victoryeffect.GetComponent<ParticleSystem>().Stop();
+            if (playfx == false)
+            {
+                victoryeffect.GetComponent<ParticleSystem>().Play();
+                playfx = true;
+            }
+
+            if (victoryeffect.GetComponent<ParticleSystem>().isPlaying == false)
+            {
+                playfx = false;
+                Reset();
+                memoryui.GetComponent<MemoryUI>().Level += 1;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -188,10 +209,17 @@ public class Randomsphere : MonoBehaviour {
 
         GNE temp = Genes;
 
-        Genes = (GNE)Random.Range(0, 9);
-
-        if (temp == Genes)
+        if (MemoryUI.arcadeMode == true)
+        {
             Genes = (GNE)Random.Range(0, 9);
+
+            if (temp == Genes)
+                Genes = (GNE)Random.Range(0, 9);
+        }
+        else
+        {
+            Genes += 1;
+        }
 
 
 
@@ -261,6 +289,7 @@ public class Randomsphere : MonoBehaviour {
                 }
                 break;
             default:
+                SceneManager.LoadScene("MainMenu");
                 break;
         }
 
