@@ -62,6 +62,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         orgSpeed = speed;
         if(arcadeMode == false)
         {
+            subtitles.SetActive(true);
             UI.SetActive(false);
             speed = 0;
         }
