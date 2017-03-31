@@ -5,6 +5,7 @@ public class _TMover : MonoBehaviour
 {
     private Rigidbody rb;
     public float speed;
+    public bool keepVelocity;
     public bool isRandomUp;
     public Boundary spawnValuesDirection;
 
@@ -20,7 +21,7 @@ public class _TMover : MonoBehaviour
             rb.velocity = transform.forward * speed;
         }
         else
-        {            
+        {
             rb.velocity = new Vector3(
                 Random.Range(spawnValuesDirection.xMin, spawnValuesDirection.xMax),
                 Random.Range(spawnValuesDirection.yMin, spawnValuesDirection.yMax),
@@ -31,15 +32,18 @@ public class _TMover : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        rb.velocity = rb.velocity.normalized * speed;
+        if (keepVelocity)
+            rb.velocity = rb.velocity.normalized * speed;
     }
     private void OnCollisionExit(Collision collision)
     {
-        rb.velocity = rb.velocity.normalized * speed;
+        if (keepVelocity)
+            rb.velocity = rb.velocity.normalized * speed;
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        rb.velocity = rb.velocity.normalized * speed;
+        if (keepVelocity)
+            rb.velocity = rb.velocity.normalized * speed;
     }
 }
