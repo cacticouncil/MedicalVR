@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+enum ShotNumber { ATPOne, ATPTwo, ATPThree, GTPOne, GTPTwo, GTPThree, reset };
+
 public class _TPlayerController : MonoBehaviour
 {
-    enum ShotNumber { ATPOne, ATPTwo, ATPThree, GTPOne, GTPTwo, GTPThree, reset };
     private ShotNumber currentRound;
 
     public GameObject Camera;
@@ -65,5 +67,9 @@ public class _TPlayerController : MonoBehaviour
             nextFire = Time.time + fireRate;
             Instantiate(shot[1], shotSpawn.position, shotSpawn.rotation);
         }
+    }
+    public int GetShotNumber()
+    {
+        return (int)currentRound;
     }
 }

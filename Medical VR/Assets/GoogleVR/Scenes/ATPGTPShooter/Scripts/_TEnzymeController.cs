@@ -4,6 +4,7 @@ using System.Collections;
 public class _TEnzymeController : MonoBehaviour
 {
     public GameObject particles;
+    public int pointsValue;
 
     [HideInInspector]
     public bool hasATP = false, hasGTP = false;
@@ -28,6 +29,12 @@ public class _TEnzymeController : MonoBehaviour
                 Instantiate(particles, transform.position, transform.rotation, transform);
 
             GetComponent<_TTravelToNucleus>().StartTravel();
+            if (transform.parent.parent.GetComponent<_TGameController>())
+            {
+                transform.parent.parent.GetComponent<_TGameController>().AddToScore(pointsValue);
+            }
+            else
+                Debug.Log("Unable to Access Game Controller");
         }
     }
 }

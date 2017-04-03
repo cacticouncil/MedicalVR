@@ -11,7 +11,8 @@ public class VirusGameplayScript : MonoBehaviour {
     // Use this for initialization
     delegate void Func();
     Func doAction;
-    float moveSpeed = 1, fadeSpeed;
+    public float moveSpeed;
+    float fadeSpeed;
     int I = 0;
 	void Start ()
     {
@@ -21,7 +22,7 @@ public class VirusGameplayScript : MonoBehaviour {
         {
             case (1):
                 I = 1;
-                subtitltes.GetComponent<SubstitlesScript>().theTimer = 22;
+                subtitltes.GetComponent<SubstitlesScript>().theTimer = 65.5f;
                 transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 doAction = RiseCurtain;
@@ -79,11 +80,11 @@ public class VirusGameplayScript : MonoBehaviour {
                 doAction = RiseCurtain;
                 fadeSpeed = 0.5f;
                 break;
-            case (7):
+            case (20):
                 doAction = NullFunction;
                 subtitltes.GetComponent<SubstitlesScript>().Stop();
                 break;
-            case (10):
+            case (35):
                 doAction = NullFunction;
                 if (virus.activeSelf == false)
                 {
@@ -92,25 +93,26 @@ public class VirusGameplayScript : MonoBehaviour {
                     subtitltes.GetComponent<SubstitlesScript>().Stop();
                 }
                 break;
-            case (15):
+            case (55):
                 doAction = NullFunction;
                 I = 1;
-                moveSpeed = 30;
+                //moveSpeed = 30;
                 break;
-            case (20):
+            case (64):
                 MovingCamera.arcadeMode = false;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case (21):
+            case (65):
+                if(subtitltes.GetComponent<SubstitlesScript>().theTimer < 65.5f)
                 SceneManager.LoadScene("DodgeAnitbodies");
                 break;
-            case (27):
+            case (159):
                 SimonSays.arcadeMode = false;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case (28):
+            case (160):
                 SceneManager.LoadScene("SimonDNA");
                 break;
             default:
