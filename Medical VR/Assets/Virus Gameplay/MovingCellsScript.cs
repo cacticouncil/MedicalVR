@@ -13,7 +13,7 @@ public class MovingCellsScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (Vector3.Distance(transform.position, Cam.transform.position) < 3000)
+        if (Vector3.Distance(transform.position, Cam.transform.position) < 4000)
         {
             if (GetComponent<Renderer>() != null)
             GetComponent<Renderer>().enabled = true;
