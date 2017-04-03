@@ -12,7 +12,8 @@ public class BulletScript : MonoBehaviour
         LifeSpan = 0.0f;
         Speed = 6.0f;
         Damage = 10;
-	}
+        GetComponent<Rigidbody>().velocity = transform.forward * Speed;
+    }
 	
 	void Update ()
     {
@@ -25,8 +26,8 @@ public class BulletScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        transform.position += transform.up * Random.Range(-.01f, .01f);
-        GetComponent<Rigidbody>().velocity = transform.forward * Speed;
+        //GetComponent<Rigidbody>().velocity += transform.forward * Random.Range(-.1f, .1f) + transform.up * Random.Range(-.1f, .1f);
+        GetComponent<Rigidbody>().velocity += transform.up * Random.Range(-.1f, .1f);
     }
 
     void OnTriggerEnter(Collider Virus)

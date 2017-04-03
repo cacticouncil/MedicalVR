@@ -4,16 +4,22 @@ using System;
 
 public class BulletManager : MonoBehaviour
 {
-    public GameObject Bullet;
+    //public GameObject Bullet;
+    public GameObject BlueProtein;
+    public GameObject RedProtein;
+    public GameObject YellowProtein;
+    public GameObject GreenProtein;
+
     public GameObject Reticle;
     public GameObject Player;
     public bool isTriggered;
     public float Time;
-
+    int ChangeProtein;
     void Start()
     {
         isTriggered = true;
         Time = 0;
+        ChangeProtein = 0;
     }
 
     void Update()
@@ -42,6 +48,33 @@ public class BulletManager : MonoBehaviour
 
     void StartShooting()
     {
-        Instantiate(Bullet, Reticle.transform.position, Reticle.transform.rotation);
+        //Instantiate(Bullet, Reticle.transform.position, Reticle.transform.rotation);
+
+        switch (ChangeProtein)
+        {
+            case 0:
+                Instantiate(BlueProtein, Reticle.transform.position, Reticle.transform.rotation);//BlueProtein.transform.rotation);
+                break;
+
+            case 1:
+                Instantiate(RedProtein, Reticle.transform.position, Reticle.transform.rotation);//RedProtein.transform.rotation);
+                break;
+
+            case 2:
+                Instantiate(YellowProtein, Reticle.transform.position, Reticle.transform.rotation);//YellowProtein.transform.rotation);
+                break;
+
+            case 3:
+                Instantiate(GreenProtein, Reticle.transform.position, Reticle.transform.rotation);//GreenProtein.transform.rotation);
+                break;
+
+            default:
+                break;
+        }
+
+        ChangeProtein += 1;
+
+        if (ChangeProtein >= 4)
+            ChangeProtein = 0;
     }
 }
