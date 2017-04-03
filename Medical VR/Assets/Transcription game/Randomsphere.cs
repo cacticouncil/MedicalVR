@@ -23,7 +23,7 @@ public class Randomsphere : MonoBehaviour {
     private int j;
     private int k;
 
-    int correct;
+    public static int correct;
 
     private GameObject clonei;
     private GameObject clonej;
