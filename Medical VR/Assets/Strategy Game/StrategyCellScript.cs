@@ -62,6 +62,7 @@ public class StrategyCellScript : MonoBehaviour
     {
         turnSpawned = parent.turnNumber;
         parent.cells.Add(this);
+        parent.cellsSpawned++;
         r.text = "Reproduction: " + reproduction;
         d.text = "Defense: " + defense;
         i.text = "Immunity: " + (int)immunity;
@@ -367,6 +368,7 @@ public class StrategyCellScript : MonoBehaviour
 
     void OnDestroy()
     {
+        parent.immunitySpread += immunitySpread;
         parent.cells.Remove(this);
     }
 }

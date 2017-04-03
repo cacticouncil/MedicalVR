@@ -24,6 +24,11 @@ public class DetailsText : MonoBehaviour {
         turnsToReproduce = (int)(cell.Treproduction / cell.reproduction);
         childrenSpawned = cell.childrenSpawned;
         immunitySpread = (int)(cell.immunitySpread);
-        t.text = "Turn Spawned: " + turnSpawned + "\nTurns To Reproduce: " + turnsToReproduce + "\nChildren Spawned: " + childrenSpawned + "\nImmunity Spread: " + immunitySpread;
+        t.text = "Turn Spawned: " + turnSpawned + 
+            "\nTurns To Reproduce: " + turnsToReproduce + 
+            "\nChildren Spawned: " + childrenSpawned + 
+            "\nImmunity Spread: " + immunitySpread + 
+            "\nCells Alive: " + cell.parent.cellNum + 
+            "\nViruses Alive: " + cell.parent.virNum;
 	}
 }

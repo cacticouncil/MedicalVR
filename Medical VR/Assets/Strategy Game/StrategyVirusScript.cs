@@ -228,6 +228,7 @@ public class StrategyVirusScript : MonoBehaviour
             target.targeted = false;
             target.RefreshUI();
         }
+        parent.virusKills++;
         parent.viruses.Remove(this);
     }
 }

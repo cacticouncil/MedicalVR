@@ -102,11 +102,8 @@ public class _TRedAttacher : MonoBehaviour
         GameObject flash;
         if (ConnectionParticle)
         {
-            Vector3 flashPosition = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
             flash = Instantiate(ConnectionParticle, transform.position, transform.rotation, transform) as GameObject;
             flash.transform.localScale = new Vector3(ParticleSize, ParticleSize, ParticleSize);
-            Debug.Log("current Position: " + flash.transform.position);
-            Debug.Log("Transforms Position: " + transform.position);
             flash.transform.localPosition = new Vector3(0, -0.1f, 0);
         }
         else
