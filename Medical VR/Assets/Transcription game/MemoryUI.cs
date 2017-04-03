@@ -52,7 +52,9 @@ public class MemoryUI : MonoBehaviour {
 
         if (arcadeMode == true)
         {
+            if(!(Randomsphere.correct == 3))
             timeRemaining -= Time.deltaTime;
+
             string minutes = ((int)timeRemaining / 60).ToString();
             string seconds = (timeRemaining % 60).ToString("f2");
             Timer.GetComponent<TextMesh>().text = "Timer: " + minutes + ":" + seconds;

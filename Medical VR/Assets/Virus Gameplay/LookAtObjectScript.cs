@@ -4,7 +4,7 @@ using System.Collections;
 public class LookAtObjectScript : MonoBehaviour {
 
     public GameObject subtitles;
-    public string tag;
+    public string theTag;
 	// Use this for initialization
 	void Start ()
     {
@@ -18,13 +18,13 @@ public class LookAtObjectScript : MonoBehaviour {
 	}
     public void LookedAtAction()
     {
-        if (tag == "Cell" && (int)subtitles.GetComponent<SubstitlesScript>().theTimer == 20)
+        if (theTag == "Cell" && (int)subtitles.GetComponent<SubstitlesScript>().theTimer == 20)
         {
             subtitles.GetComponent<SubstitlesScript>().Continue();
             subtitles.GetComponent<SubstitlesScript>().theTimer+= 1;
         }
 
-        else if (tag == "Virus" && (int)subtitles.GetComponent<SubstitlesScript>().theTimer == 35)
+        else if (theTag == "Virus" && (int)subtitles.GetComponent<SubstitlesScript>().theTimer == 35)
         {
             subtitles.GetComponent<SubstitlesScript>().Continue();
             subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
