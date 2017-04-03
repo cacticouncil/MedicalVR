@@ -36,8 +36,8 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
     {
         if (move == true)
         {
-           /* transform.position*/  //Vector3.MoveTowards(transform.position, endMarker.position, speed);
-            transform.position += endMarker.position * speed;
+           /* transform.position*/  Vector3.MoveTowards(transform.position, endMarker.position, speed);
+            //transform.position += endMarker.position * speed;
             move = false;
         }
     }
