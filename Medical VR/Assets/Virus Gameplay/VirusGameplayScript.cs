@@ -23,15 +23,15 @@ public class VirusGameplayScript : MonoBehaviour {
             case (1):
                 I = 1;
                 subtitltes.GetComponent<SubstitlesScript>().theTimer = 65.5f;
-                transform.position = places[I].transform.position;
+                theCamera.transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 break;
             case (2):
-                I = 1;
+                I = 2;
                 subtitltes.GetComponent<SubstitlesScript>().theTimer = 29;
-                transform.position = places[I].transform.position;
+                theCamera.transform.position = places[I].transform.position;
                 
                 virus.SetActive(true);
                 doAction = RiseCurtain;
@@ -106,6 +106,16 @@ public class VirusGameplayScript : MonoBehaviour {
             case (65):
                 if(subtitltes.GetComponent<SubstitlesScript>().theTimer < 65.5f)
                 SceneManager.LoadScene("DodgeAnitbodies");
+                break;
+            case (94):
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case (95):
+                I = 2;
+                theCamera.transform.position = places[I].transform.position;
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
                 break;
             case (159):
                 SimonSays.arcadeMode = false;
