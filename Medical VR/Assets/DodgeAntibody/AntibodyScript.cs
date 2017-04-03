@@ -43,7 +43,7 @@ public class AntibodyScript : MonoBehaviour {
             reswpawn = true;
             Effects.GetComponent<ParticleSystem>().Stop();
             Effects.GetComponent<ParticleSystem>().Play();
-            if(PlayerPrefs.GetInt("White Cell") == -1)
+            if(PlayerPrefs.GetInt("White Cell") != 1)
             {
                 banner.GetComponent<BannerScript>().ShowUp();
                 PlayerPrefs.SetInt("White Cell", 1);

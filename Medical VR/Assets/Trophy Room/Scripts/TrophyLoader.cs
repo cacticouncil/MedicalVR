@@ -12,10 +12,10 @@ public class TrophyLoader : MonoBehaviour {
        // LockAllTrophies();
         for (int i = 0; i < Trophies.Count; i++)
         {
-            if (PlayerPrefs.GetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text) == -1)
-                Trophies[i].SetActive(false);
-            else
+            if (PlayerPrefs.GetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text) != 1)
                 numUnlocked++;
+            else
+                Trophies[i].SetActive(false);
         }
         unlockedText.GetComponent<TMPro.TextMeshPro>().text = "Unlocked: " + numUnlocked.ToString() + "/" + Trophies.Count.ToString();
     }
