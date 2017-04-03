@@ -53,6 +53,7 @@
                 o.Specular = specGloss.r;
                 o.Gloss = specGloss.g;
 				o.Alpha = tex2D(_MainTex, IN.uv_MainTex).a;
+				_Color.rgb *= 2;
  
                 half3 rim = pow(max(0, dot(float3(0, 1, 0), WorldNormalVector (IN, o.Normal))), _RimPower) * _RimColor.rgb * _RimColor.a * specGloss.b;
                 o.Emission = rim;

@@ -12,10 +12,10 @@ public class SimonSays : MonoBehaviour {
     public GameObject green;
     public GameObject sign, UI, scoreBoard, theScore, theLives, polyLeft, GO, gameTimer;
 
-    public int score = 0;
+    public int score = 0, polys = 0, polysDone;
     Color cY, cR, cB, cG;
 
-    int round = 1, inputed = 0, shownSign = 0, scoreCombo = 1, polys = 0, polysDone; 
+    int round = 1, inputed = 0, shownSign = 0, scoreCombo = 1;
 
     float timer = 3, theTimer;
 
@@ -303,7 +303,7 @@ public class SimonSays : MonoBehaviour {
             polyLeft.GetComponent<TMPro.TextMeshPro>().text = "Nucleids Done: " + polysDone.ToString();
             if (polysDone == polys)
             {
-                SceneManager.LoadScene("Virus Gameplay Scene");
+               
             }
         }
     }

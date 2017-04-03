@@ -1,14 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using TMPro;
 
 public class VirusPlayer : MonoBehaviour
 {
+    public static bool isArcade = true;
     public GameObject TimerText;
     public GameObject Spawn;
     public GameObject WaveManager;
+
+    public GameObject VirusAttack;
+    public List<GameObject> VirusAttackList = new List<GameObject>();
+    Vector3 SpawnVirusAttack;
 
     public float TimeLeft;
     public float Speed;
@@ -20,9 +26,9 @@ public class VirusPlayer : MonoBehaviour
     Color FlashColor;
 
     public GameObject Instructions;
-    public float Timer = 0.0f;
-    int WaveNum = 0;
     bool InstructionsDone = false;
+
+    public bool WaveStarted = false;
     void Start()
     {
         TimeLeft = 60.0f;
@@ -35,42 +41,49 @@ public class VirusPlayer : MonoBehaviour
         StartCoroutine(DisplayText("Target the Proteins" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
     }
 
-
     void Update()
     {
-        TimeLeft -= Time.deltaTime;
-        TimerText.GetComponent<TextMeshPro>().text = "Timer: " + TimeLeft.ToString("f0");
+        if (isArcade == true)
+        {
+            TimeLeft -= Time.deltaTime;
+            TimerText.GetComponent<TextMeshPro>().text = "Timer: " + TimeLeft.ToString("f0") + "           Lives: " + Lives.ToString();
 
-        //Temporarily have the countdown stay at 0
-        if (TimeLeft <= 0.0f)
-            TimeLeft = 0.0f;
+            //Temporarily have the countdown stay at 0
+            if (TimeLeft <= 0.0f)
+                TimeLeft = 0.0f;
+        }
 
         //Display wave text
         if (InstructionsDone == true)
         {
-            if (WaveNum != WaveManager.GetComponent<WaveManager>().WaveNumber)
+            if (WaveStarted == true)
             {
                 switch (WaveManager.GetComponent<WaveManager>().WaveNumber)
                 {
                     case 1:
-                        StartCoroutine(DisplayText("Wave1", 3.0f));
+                        StartCoroutine(DisplayText("Wave1", 2.5f));
                         break;
+
                     case 2:
-                        StartCoroutine(DisplayText("Wave2", 3.0f));
+                        StartCoroutine(DisplayText("Wave2", 2.5f));
                         break;
+
                     case 3:
-                        StartCoroutine(DisplayText("Wave3", 3.0f));
+                        StartCoroutine(DisplayText("Wave3", 2.5f));
                         break;
+
                     case 4:
-                        StartCoroutine(DisplayText("Wave4", 3.0f));
+                        StartCoroutine(DisplayText("Wave4", 2.5f));
                         break;
+
                     default:
                         break;
                 }
-                WaveNum = WaveManager.GetComponent<WaveManager>().WaveNumber;
+
+                WaveManager.GetComponent<WaveManager>().WaveNumber += 1;
+                WaveStarted = false;
             }
         }
-
 
         Collider[] AntibodiesCloseBy = Physics.OverlapSphere(transform.position, 5.0f);
 
@@ -87,11 +100,15 @@ public class VirusPlayer : MonoBehaviour
             }
         }
 
-        if (Lives == 0)
+        if (isArcade == true)
         {
             //Gameover
-            isGameover = true;
+            if (Lives == 0)
+                isGameover = true;
         }
+
+        if (isGameover == true)
+            Speed = 0.0f;
     }
 
     void FixedUpdate()
@@ -121,6 +138,15 @@ public class VirusPlayer : MonoBehaviour
     public void Respawn()
     {
         transform.position = Spawn.transform.position;
+    }
+
+    public void SpawnAttackViruses()
+    {
+        SpawnVirusAttack = transform.position;
+        GameObject V = Instantiate(VirusAttack, SpawnVirusAttack, Quaternion.identity) as GameObject;
+        V.GetComponent<LeaveCell>().MainCamera = this.gameObject;
+        VirusAttackList.Add(V);
+        V.GetComponent<LeaveCell>().enabled = true;
     }
 }
 
