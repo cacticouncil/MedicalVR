@@ -13,7 +13,7 @@ public class StrategyCellScript : MonoBehaviour
     public Vector2 key;
     public bool targeted = false;
     public bool hosted = false;
-    public float Treproduction = 10;
+    public float Treproduction = 50;
     public int reproductionReset = 50;
     public float rBonus = 15, dBonus = 5, iBonus = 10;
     public int powerupDuration = 25;
@@ -62,6 +62,7 @@ public class StrategyCellScript : MonoBehaviour
     {
         turnSpawned = parent.turnNumber;
         parent.cells.Add(this);
+        parent.cellsSpawned++;
         r.text = "Reproduction: " + reproduction;
         d.text = "Defense: " + defense;
         i.text = "Immunity: " + (int)immunity;
@@ -367,6 +368,7 @@ public class StrategyCellScript : MonoBehaviour
 
     void OnDestroy()
     {
+        parent.immunitySpread += immunitySpread;
         parent.cells.Remove(this);
     }
 }

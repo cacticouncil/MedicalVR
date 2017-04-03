@@ -11,11 +11,12 @@ public class MemoryUI : MonoBehaviour {
     public float startTime = 60.0f;
     public bool finnished = false;
     public float timeRemaining = 60.0f;
+    public static bool arcadeMode = false;
+
     public void LoseresetPos()
     {
-       
-        lives--;
-        theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+            lives--;
+            theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
     }
 
     void ShowScore()
@@ -49,14 +50,20 @@ public class MemoryUI : MonoBehaviour {
         if (finnished)
             return;
 
-         timeRemaining -= Time.deltaTime;
-        string minutes = ((int)timeRemaining / 60).ToString();
-        string seconds = (timeRemaining % 60).ToString("f2");
-        Timer.GetComponent<TextMesh>().text = "Timer: " + minutes + ":" + seconds;
+        if (arcadeMode == true)
+        {
+            if(!(Randomsphere.correct == 3))
+            timeRemaining -= Time.deltaTime;
 
-        
+            string minutes = ((int)timeRemaining / 60).ToString();
+            string seconds = (timeRemaining % 60).ToString("f2");
+            Timer.GetComponent<TextMesh>().text = "Timer: " + minutes + ":" + seconds;
+        }
+        else
+        {
+            Timer.GetComponent<TextMesh>().text = "";
+        }
     }
-
     public void Finish()
     {
         finnished = true;
@@ -79,9 +86,15 @@ public class MemoryUI : MonoBehaviour {
         }
         else
         {
-            //score += Time.smoothDeltaTime;
-            int tmp = (int)score;
-            theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+            if (arcadeMode == true)
+            {
+                int tmp = (int)score;
+                theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+            }
+            else
+            {
+                theScore.GetComponent<TextMesh>().text = "";
+            }
             theLevels.GetComponent<TextMesh>().text = "LEVEL: " + Level.ToString();
         }
 

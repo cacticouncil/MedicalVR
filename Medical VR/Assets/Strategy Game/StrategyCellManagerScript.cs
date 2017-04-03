@@ -31,7 +31,14 @@ public class StrategyCellManagerScript : MonoBehaviour
     public bool viewingStats = false;
     public float randomRange = .5f;
 
+    public GameObject victory;
+
+    private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500);
+
     private int easy = 0, medium = 1, hard = 2;
+
+    public int virusKills, cellsSpawned;
+    public float immunitySpread;
 
     [System.NonSerialized]
     public List<StrategyItem> inventory;
@@ -130,16 +137,26 @@ public class StrategyCellManagerScript : MonoBehaviour
     public void SetSelected(Vector2 k)
     {
         if (tiles.ContainsKey(selected))
+        {
             tiles[selected].ToggleUI(false);
-        else if (selected == new Vector2(-100, -100))
+        }
+        else if (selected == mysteryBoxIndex)
+        {
             mysteryBox.ToggleUI();
+        }
+        else if (selected == victoryIndex && victory)
+        {
+            victory.GetComponent<Destroy>().Kill();
+        }
         selected = k;
     }
 
     public void Unselect()
     {
         if (tiles.ContainsKey(selected))
+        {
             tiles[selected].ToggleUI(false);
+        }
         selected = new Vector2(-100, -100);
         viewingStats = false;
     }
@@ -150,43 +167,46 @@ public class StrategyCellManagerScript : MonoBehaviour
     {
         StartCoroutine(TurnUpdate());
         if (screenUI)
+        {
             screenUI.text = "Turn Number: " + turnNumber + "\nCells Alive: " + cellNum + "\nViruses Alive: " + virNum;
+        }
     }
 
     IEnumerator TurnUpdate()
     {
         Debug.Log("Turn Updating");
         turnNumber++;
+        sun.TurnUpdate();
 
         foreach (StrategyCellScript child in cells.ToList())
         {
             child.TurnUpdate();
-            yield return new WaitForEndOfFrame();
         }
+        yield return new WaitForEndOfFrame();
         Debug.Log("Cells Updated");
 
         foreach (StrategyMigratingWhiteBloodCell child in whiteCells.ToList())
         {
             child.TurnUpdate();
-            yield return new WaitForEndOfFrame();
         }
+        yield return new WaitForEndOfFrame();
         Debug.Log("Viruses Updated");
 
         foreach (StrategyVirusScript child in viruses.ToList())
         {
             child.TurnUpdate();
-            yield return new WaitForEndOfFrame();
         }
+        yield return new WaitForEndOfFrame();
         Debug.Log("Viruses Updated");
 
         foreach (StrategyCellScript child in cells.ToList())
         {
             child.DelayedTurnUpdate();
-            yield return new WaitForEndOfFrame();
         }
+        yield return new WaitForEndOfFrame();
         Debug.Log("Cells Late Updated");
 
-        if (turnNumber % 10 == 0)
+        if (turnNumber >= 30 && turnNumber % 15 == 0)
         {
             SpawnVirus();
         }
@@ -199,7 +219,24 @@ public class StrategyCellManagerScript : MonoBehaviour
         cellNum = cells.Count;
         virNum = viruses.Count;
 
-        sun.TurnUpdate();
+        if (cellNum >= 50)
+        {
+            if (victory)
+            {
+                victory.SetActive(true);
+                foreach (StrategyCellScript child in cells.ToList())
+                    immunitySpread += child.immunitySpread;
+                victory.GetComponent<TMPro.TextMeshPro>().text = "Congratulations! You've won!" + 
+                    "\nYou reached a colony size of " + cellNum + " cells." + 
+                    "\nIt took you " + turnNumber + " turns." +
+                    "\nYou spawned " + cellsSpawned + " cells." +
+                    "\nYou spread " + (int)immunitySpread + " immunity." +
+                    "\nYou killed " + virusKills + " viruses." +
+                    "\nAt this point you can continue in sandbox mode, retry, or return to the main menu.";
+                Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(victory.transform.position.x, victory.transform.position.y, victory.transform.position.z - 1.5f));
+                SetSelected(new Vector2(-500, -500));
+            }
+        }
 
         screenUI.text = "Turn Number: " + turnNumber + "\nCells Alive: " + cellNum + "\nViruses Alive: " + virNum;
         Debug.Log("Turn Updated");

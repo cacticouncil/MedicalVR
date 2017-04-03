@@ -20,7 +20,7 @@ public class StrategyBox : MonoBehaviour
 
     public MoveCamera mainCamera;
 
-    private Vector2 key = new Vector2(-100, -100);
+    private Vector2 key = new Vector2(500, 500);
     void Start()
     {
         if (mainCamera == null)

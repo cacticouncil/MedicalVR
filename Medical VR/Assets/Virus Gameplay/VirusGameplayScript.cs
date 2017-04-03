@@ -6,34 +6,33 @@ using UnityEngine.SceneManagement;
 public class VirusGameplayScript : MonoBehaviour {
 
     public List<GameObject> places;
-    public GameObject subtitltes, blackCurtain, theCamera, redCell, virus;
+    public GameObject subtitltes, blackCurtain, theCamera, virus;
     public static int loadCase;
     // Use this for initialization
     delegate void Func();
     Func doAction;
-    float moveSpeed = 1, fadeSpeed;
+    public float moveSpeed;
+    float fadeSpeed;
     int I = 0;
 	void Start ()
     {
         doAction = NullFunction;
-        redCell.SetActive(false);
         virus.SetActive(false);
         switch (loadCase)
         {
             case (1):
                 I = 1;
-                subtitltes.GetComponent<SubstitlesScript>().theTimer = 22;
-                transform.position = places[I].transform.position;
-                redCell.SetActive(true);
+                subtitltes.GetComponent<SubstitlesScript>().theTimer = 65.5f;
+                theCamera.transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 break;
             case (2):
-                I = 1;
+                I = 2;
                 subtitltes.GetComponent<SubstitlesScript>().theTimer = 29;
-                transform.position = places[I].transform.position;
-                redCell.SetActive(true);
+                theCamera.transform.position = places[I].transform.position;
+                
                 virus.SetActive(true);
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
@@ -81,42 +80,49 @@ public class VirusGameplayScript : MonoBehaviour {
                 doAction = RiseCurtain;
                 fadeSpeed = 0.5f;
                 break;
-            case (7):
+            case (20):
                 doAction = NullFunction;
-                if (redCell.activeSelf == false)
-                {
-                    redCell.SetActive(true);
-                    subtitltes.GetComponent<SubstitlesScript>().Stop();
-                }
+                subtitltes.GetComponent<SubstitlesScript>().Stop();
                 break;
-            case (10):
+            case (35):
                 doAction = NullFunction;
                 if (virus.activeSelf == false)
                 {
                     virus.SetActive(true);
-                    redCell.GetComponent<SphereCollider>().enabled = false;
+                    
                     subtitltes.GetComponent<SubstitlesScript>().Stop();
                 }
                 break;
-            case (15):
+            case (55):
                 doAction = NullFunction;
                 I = 1;
-                moveSpeed = 30;
+                //moveSpeed = 30;
                 break;
-            case (20):
+            case (64):
                 MovingCamera.arcadeMode = false;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case (21):
+            case (65):
+                if(subtitltes.GetComponent<SubstitlesScript>().theTimer < 65.5f)
                 SceneManager.LoadScene("DodgeAnitbodies");
                 break;
-            case (27):
+            case (94):
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case (95):
+                I = 2;
+                theCamera.transform.position = places[I].transform.position;
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case (159):
                 SimonSays.arcadeMode = false;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case (28):
+            case (160):
                 SceneManager.LoadScene("SimonDNA");
                 break;
             default:

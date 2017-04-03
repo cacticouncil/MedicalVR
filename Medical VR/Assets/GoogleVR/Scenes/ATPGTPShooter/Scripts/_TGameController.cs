@@ -11,6 +11,9 @@ public class Boundary
 
 public class _TGameController : MonoBehaviour
 {
+    public int scorePerEnzyme;
+    public int score;
+
     public GameObject enzyme;
     public GameObject enzymeCollector;
     public int maxNumEnzymes;
@@ -23,6 +26,7 @@ public class _TGameController : MonoBehaviour
 
     void Start ()
     {
+        score = 0;
         StartCoroutine(SpawnWaves());
     }
 
@@ -42,10 +46,21 @@ public class _TGameController : MonoBehaviour
                     Quaternion spawnRotation = Quaternion.identity;
                     GameObject haz = Instantiate(enzyme, spawnPosition, spawnRotation, enzymeCollector.transform) as GameObject;
                     haz.GetComponent<_TTravelToNucleus>().nucleus = nucleus;
+                    if (haz.GetComponent<_TEnzymeController>())
+                        haz.GetComponent<_TEnzymeController>().pointsValue = scorePerEnzyme;
+                    else
+                        Debug.Log("Unable to access Enzyme Controller");
+
+                   // Debug.Log("Velocity:" haz.transform.G)
+
                 }
                 yield return new WaitForSeconds(spawnWait);
             }
             yield return new WaitForSeconds(waveWait);
         }
+    }
+    public void AddToScore(int _points)
+    {
+        score += _points;
     }
 }

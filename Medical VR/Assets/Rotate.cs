@@ -5,12 +5,6 @@ public class Rotate : MonoBehaviour
 {
     public bool x, y, z;
     public Vector3 rotation;
-    private Rigidbody rig;
-
-    void Start()
-    {
-        rig = GetComponent<Rigidbody>();
-    }
 
     void Update()
     {

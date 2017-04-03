@@ -9,11 +9,11 @@ public class BannerScript : MonoBehaviour {
     bool show = false;
     bool hide = false;
     float theTimer = 0;
-    Vector3 orgPos;
+    //Vector3 orgPos;
 	// Use this for initialization
 	void Start ()
     {
-        orgPos = transform.position;
+        //orgPos = transform.position;
 	}
 	
 	// Update is called once per frame
