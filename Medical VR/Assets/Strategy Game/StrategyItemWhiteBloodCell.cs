@@ -4,18 +4,15 @@ using System.Collections;
 public class StrategyItemWhiteBloodCell : MonoBehaviour
 {
     public StrategyVirusScript target;
-    public GameObject transporter;
     private StrategyCellScript cell;
+    private Vector3 spawnLocation;
 
     void Start()
     {
         cell = target.target;
+        spawnLocation = transform.position;
         target.enabled = false;
-        GameObject t = Instantiate(transporter, transform.position, Quaternion.identity) as GameObject;
-        t.GetComponent<StrategyTransporter>().destination = target.transform.position;
-        transform.parent = t.transform;
-        t.GetComponent<StrategyTransporter>().enabled = true;
-        Invoke("DestroyTarget", 1);
+        StartCoroutine(Arrive());
     }
 
     void DestroyTarget()
@@ -24,7 +21,7 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
         StartCoroutine(Leave());
     }
 
-    IEnumerator Leave()
+    IEnumerator Arrive()
     {
         float startTime = Time.time;
         Vector3 scale = transform.localScale;
@@ -32,6 +29,23 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
         while (t < 1.0f)
         {
             t = Time.time - startTime;
+            transform.localScale = Vector3.Lerp(Vector3.zero, scale, t);
+            transform.position = Vector3.Lerp(spawnLocation, cell.transform.position, t);
+            yield return new WaitForFixedUpdate();
+        }
+        transform.localScale = scale;
+        transform.position = cell.transform.position;
+        Invoke("DestroyTarget", 1);
+    }
+
+    IEnumerator Leave()
+    {
+        float startTime = Time.time;
+        Vector3 scale = transform.localScale;
+        float t = (Time.time - startTime) * .5f;
+        while (t < 1.0f)
+        {
+            t = (Time.time - startTime) * .5f;
             transform.localScale = Vector3.Lerp(scale, Vector3.zero, t);
             yield return new WaitForFixedUpdate();
         }

@@ -8,9 +8,10 @@ public class StrategyTutorialD : MonoBehaviour
     public float hp = 1;
     public TMPro.TextMeshPro text;
     public GameObject virus, virus1, virus2, cell;
+    public ParticleSystem particles;
 
-    private Vector3 v1end = new Vector3(-.5f, 0, 0);
-    private Vector3 v2end = new Vector3(.5f, 0, 0);
+    private Vector3 v1end = new Vector3(-1, 0, 0);
+    private Vector3 v2end = new Vector3(1, 0, 0);
     private Color sc;
 
     private enum Status
@@ -62,25 +63,28 @@ public class StrategyTutorialD : MonoBehaviour
                     float percent = (Time.time - startTime) * .5f;
                     virus.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, percent);
                     cell.GetComponent<Renderer>().material.color = Color.Lerp(sc, Color.black, percent);
+                    virus1.transform.position = Vector3.Lerp(virus.transform.position, virus.transform.position + v1end, percent * .5f);
+                    virus1.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent * .5f);
+                    virus2.transform.position = Vector3.Lerp(virus.transform.position, virus.transform.position + v2end, percent * .5f);
+                    virus2.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent * .5f);
                     if (percent >= 1.0f)
                     {
-                        stat = Status.Split;
+                        particles.Play();
                         virus.gameObject.SetActive(false);
-                        virus1.gameObject.SetActive(true);
-                        virus2.gameObject.SetActive(true);
-                        startTime = Time.time;
+                        stat = Status.Split;
+                        //startTime = Time.time;
                     }
                 }
                 break;
             case Status.Split:
                 {
-                    float percent = (Time.time - startTime) * 2.0f;
-                    virus1.transform.position = Vector3.Lerp(virus.transform.position, virus.transform.position + v1end, percent);
-                    virus1.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent);
-                    virus2.transform.position = Vector3.Lerp(virus.transform.position, virus.transform.position + v2end, percent);
-                    virus2.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent);
-                    cell.GetComponent<Renderer>().material.color = new Color(0, 0, 0, Mathf.Lerp(1, 0, percent));
-                    if (percent >= 1.0f)
+                    float percent = (Time.time - startTime) * .5f;
+                    virus1.transform.position = Vector3.Lerp(virus.transform.position, virus.transform.position + v1end, percent * .5f);
+                    virus1.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent * .5f);
+                    virus2.transform.position = Vector3.Lerp(virus.transform.position, virus.transform.position + v2end, percent * .5f);
+                    virus2.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent * .5f);
+                    cell.GetComponent<Renderer>().material.color = new Color(0, 0, 0, Mathf.Lerp(1, 0, percent - 1.0f));
+                    if (percent >= 2.0f)
                     {
                         cell.GetComponent<Renderer>().enabled = false;
                         stat = Status.Reset;
@@ -119,6 +123,8 @@ public class StrategyTutorialD : MonoBehaviour
         cell.GetComponent<Renderer>().material.color = new Color(1.0f, 0, 0);
         yield return new WaitForSeconds(.1f);
         sc = cell.GetComponent<Renderer>().material.color;
+        virus1.gameObject.SetActive(true);
+        virus2.gameObject.SetActive(true);
         startTime = Time.time;
         stat = Status.Dying;
         enumerStarted = false;
