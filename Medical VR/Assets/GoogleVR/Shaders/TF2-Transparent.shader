@@ -1,4 +1,4 @@
-﻿Shader "Test/Transparent-Outline-Test"
+﻿Shader "Custom/TF2-Outline-Transparent"
 {
 	Properties
 	{
