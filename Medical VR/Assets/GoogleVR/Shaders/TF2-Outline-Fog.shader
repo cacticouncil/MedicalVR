@@ -59,7 +59,7 @@
 				fixed3 ramp = tex2D(_RampTex, float2(NdotL * atten, 0)).rgb;
 
 				float nh = max(0, dot(s.Normal, h));
-				float spec = pow(nh, s.Gloss * 128) * s.Specular;
+				float spec = pow(nh, s.Gloss * 128) * s.Specular * saturate(NdotL);
 
 				fixed4 c;
 				c.rgb = ((s.Albedo * _Color.rgb * ramp * _LightColor0.rgb + _LightColor0.rgb * spec) * (atten * 2));
