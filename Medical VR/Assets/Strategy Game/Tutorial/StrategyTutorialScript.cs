@@ -10,7 +10,6 @@ public class StrategyTutorialScript : MonoBehaviour
     public GameObject leftArrow;
     public GameObject rightArrow;
     public GameObject cellManager;
-    public GameObject screenUI;
 
     public void Destroy()
     {
