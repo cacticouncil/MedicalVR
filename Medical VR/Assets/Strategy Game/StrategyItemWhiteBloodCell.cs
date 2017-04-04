@@ -31,7 +31,7 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
             t = Time.time - startTime;
             transform.localScale = Vector3.Lerp(Vector3.zero, scale, t);
             transform.position = Vector3.Lerp(spawnLocation, cell.transform.position, t);
-            yield return new WaitForFixedUpdate();
+            yield return 0;
         }
         transform.localScale = scale;
         transform.position = cell.transform.position;
@@ -47,7 +47,7 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
         {
             t = (Time.time - startTime) * .5f;
             transform.localScale = Vector3.Lerp(scale, Vector3.zero, t);
-            yield return new WaitForFixedUpdate();
+            yield return 0;
         }
 
         Vector3 camPos = Camera.main.GetComponent<Transform>().position;

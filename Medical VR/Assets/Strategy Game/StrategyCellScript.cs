@@ -338,7 +338,11 @@ public class StrategyCellScript : MonoBehaviour
         {
             if (render)
             {
-                render.material.color = Color.grey;
+                if (render.material.color != Color.black)
+                {
+                    StopCoroutine("ChangeColorOverTime");
+                    StartCoroutine(ChangeColorOverTime(Color.black));
+                }
             }
             else
             {
@@ -347,11 +351,19 @@ public class StrategyCellScript : MonoBehaviour
         }
         else if (targeted)
         {
-            render.material.color = Color.green;
+            if (render.material.color != Color.green)
+            {
+                StopCoroutine("ChangeColorOverTime");
+                StartCoroutine(ChangeColorOverTime(Color.green));
+            }
         }
         else
         {
-            render.material.color = Color.white;
+            if (render.material.color != Color.grey)
+            {
+                StopCoroutine("ChangeColorOverTime");
+                StartCoroutine(ChangeColorOverTime(Color.grey));
+            }
         }
 
         if (transform.GetChild(0).gameObject.activeSelf)
@@ -370,5 +382,20 @@ public class StrategyCellScript : MonoBehaviour
     {
         parent.immunitySpread += immunitySpread;
         parent.cells.Remove(this);
+    }
+
+    IEnumerator ChangeColorOverTime(Color c)
+    {
+
+        float startTime = Time.time;
+        float t = Time.time - startTime;
+        Color start = render.material.color;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            render.material.color = Color.Lerp(start, c, t);
+            yield return 0;
+        }
+        render.material.color = c;
     }
 }
