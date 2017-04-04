@@ -22,6 +22,7 @@ public class VesselOpening : MonoBehaviour {
         }
         else if(otherSide != null)
         {
+            if(other.transform.position.x < transform.position.x)
             other.transform.position = new Vector3(otherSide.transform.position.x, other.transform.position.y, other.transform.position.z);
         }
     }
