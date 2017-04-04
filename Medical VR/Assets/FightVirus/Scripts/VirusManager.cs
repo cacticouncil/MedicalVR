@@ -76,7 +76,6 @@ public class VirusManager : MonoBehaviour
         {
             for (int i = 0; i < EnemyCount; i++)
             {
-                //SpawnRandomVirus = Random.insideUnitCircle. * 7.0f;
                 SpawnRandomVirus.x = Random.Range(-2.0f, 2.0f);
                 SpawnRandomVirus.y = Random.Range(0.0f, 1.0f);
                 SpawnRandomVirus.z = Random.Range(-2.0f, 2.0f);
