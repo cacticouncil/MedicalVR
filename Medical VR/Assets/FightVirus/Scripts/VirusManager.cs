@@ -26,7 +26,7 @@ public class VirusManager : MonoBehaviour
         Wave3 = false;
         Wave4 = false;
         CheckCount = false;
-        EnemyCount = 20;
+        EnemyCount = 12;
         Invoke("CreateWave", 5);
     }
 
@@ -39,7 +39,7 @@ public class VirusManager : MonoBehaviour
                 Wave1 = false;
                 Wave2 = true;
                 CheckCount = false;
-                EnemyCount = 25;
+                EnemyCount = 16;
                 Invoke("CreateWave", 5);
             }
 
@@ -48,7 +48,7 @@ public class VirusManager : MonoBehaviour
                 Wave2 = false;
                 Wave3 = true;
                 CheckCount = false;
-                EnemyCount = 35;
+                EnemyCount = 20;
                 Invoke("CreateWave", 5);
             }
 
@@ -64,9 +64,7 @@ public class VirusManager : MonoBehaviour
         for (int i = 0; i < VirusList.Count; i++)
         {
             if (VirusList[i].gameObject == null)
-            {
                 VirusList.Remove(VirusList[i]);
-            }
         }
     }
 
@@ -78,27 +76,31 @@ public class VirusManager : MonoBehaviour
         {
             for (int i = 0; i < EnemyCount; i++)
             {
-                SpawnRandomVirus = Random.onUnitSphere * 7.0f;
+                //SpawnRandomVirus = Random.insideUnitCircle. * 7.0f;
+                SpawnRandomVirus.x = Random.Range(-2.0f, 2.0f);
+                SpawnRandomVirus.y = Random.Range(0.0f, 1.0f);
+                SpawnRandomVirus.z = Random.Range(-2.0f, 2.0f);
                 VirusList.Add(Instantiate(VirusCube, SpawnRandomVirus, Quaternion.identity, transform) as GameObject);
             }
+
             CheckCount = true;
         }
 
         else if (Wave4 == true)
         {
+            //Boss
             VirusList.Add(Instantiate(BossCube, BossSpawn.transform.position, Quaternion.identity, transform) as GameObject);
             CheckCount = false;
         }
-    }
-
-    public void CreateBigVirus(GameObject pos)
-    {
-        VirusList.Add(Instantiate(BigVirusCube, pos.transform.position, Quaternion.identity, transform) as GameObject);
     }
 
     public void CreateSmallVirus(GameObject pos)
     {
         VirusList.Add(Instantiate(VirusCube, pos.transform.position, Quaternion.identity, transform) as GameObject);
         VirusList[VirusList.Count - 1].GetComponent<Virus>().BossSpawnSmallVirus = true;
+    }
+    public void CreateBigVirus(GameObject pos)
+    {
+        VirusList.Add(Instantiate(BigVirusCube, pos.transform.position, Quaternion.identity, transform) as GameObject);
     }
 }

@@ -98,9 +98,9 @@ public class Player : MonoBehaviour , TimedInputHandler
         if (VirusLeaveCount == 10)
         {
             isGameOver = true;
-            ScoreBoard.SetActive(true);
-            ScoreBoard.transform.position = new Vector3(transform.position.x - 1.5f, transform.position.y, transform.position.z + 35);
-            ScoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
+            //ScoreBoard.SetActive(true);
+            //ScoreBoard.transform.position = new Vector3(transform.position.x - 1.5f, transform.position.y, transform.position.z + 35);
+            //ScoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
         }
     }
 

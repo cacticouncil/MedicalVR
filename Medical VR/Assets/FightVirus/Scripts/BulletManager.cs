@@ -4,7 +4,6 @@ using System;
 
 public class BulletManager : MonoBehaviour
 {
-    //public GameObject Bullet;
     public GameObject BlueProtein;
     public GameObject RedProtein;
     public GameObject YellowProtein;
@@ -34,38 +33,31 @@ public class BulletManager : MonoBehaviour
 
         //Checking for button input
         if (GvrViewer.Instance.Triggered)
-        {
-            //isTriggered = false;
             isTriggered = !isTriggered;
-        }
 
         //Gameover stop shooting
         if (Player.GetComponent<Player>().isGameOver)
-        {
             isTriggered = false;
-        }
     }
 
     void StartShooting()
     {
-        //Instantiate(Bullet, Reticle.transform.position, Reticle.transform.rotation);
-
         switch (ChangeProtein)
         {
             case 0:
-                Instantiate(BlueProtein, Reticle.transform.position, Reticle.transform.rotation);//BlueProtein.transform.rotation);
+                Instantiate(BlueProtein, Reticle.transform.position, Reticle.transform.rotation);
                 break;
 
             case 1:
-                Instantiate(RedProtein, Reticle.transform.position, Reticle.transform.rotation);//RedProtein.transform.rotation);
+                Instantiate(RedProtein, Reticle.transform.position, Reticle.transform.rotation);
                 break;
 
             case 2:
-                Instantiate(YellowProtein, Reticle.transform.position, Reticle.transform.rotation);//YellowProtein.transform.rotation);
+                Instantiate(YellowProtein, Reticle.transform.position, Reticle.transform.rotation);
                 break;
 
             case 3:
-                Instantiate(GreenProtein, Reticle.transform.position, Reticle.transform.rotation);//GreenProtein.transform.rotation);
+                Instantiate(GreenProtein, Reticle.transform.position, Reticle.transform.rotation);
                 break;
 
             default:
