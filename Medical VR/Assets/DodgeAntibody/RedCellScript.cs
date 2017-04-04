@@ -14,6 +14,7 @@ public class RedCellScript : MonoBehaviour {
        if(MovingCamera.arcadeMode == true)
         {
             blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+            GetComponent<BoxCollider>().size = new Vector3(GetComponent<BoxCollider>().size.x, 0.5f, GetComponent<BoxCollider>().size.z);
         }
 	}
 	
@@ -56,7 +57,7 @@ public class RedCellScript : MonoBehaviour {
                 fade = true;
                 timer = 0;
             }
-            if (PlayerPrefs.GetInt("Red Cell") == -1)
+            if (PlayerPrefs.GetInt("Red Cell") != 1)
             {
                 banner.GetComponent<BannerScript>().ShowUp();
                 PlayerPrefs.SetInt("Red Cell", 1);
