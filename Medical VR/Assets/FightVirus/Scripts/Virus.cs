@@ -15,7 +15,7 @@ public class Virus : MonoBehaviour
     public int Health;
     bool EnteredZone;
 
-    public int SmallVirusCount = 10;
+    public int BossSmallVirusCount = 10;
     public bool BossSpawnSmallVirus = false;
     bool BossCanTakeDamage;
     bool BossMadeLocation;
@@ -46,25 +46,25 @@ public class Virus : MonoBehaviour
             if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
             {
                 //Speed = 1.0f;
-                Speed = 0.006f;
+                Speed = 0.003f;
                 Health = 20;
             }
 
             else if (VirusManager.GetComponent<VirusManager>().Wave2 == true)
             {
-                Speed = 0.009f;
+                Speed = 0.006f;
                 Health = 40;
             }
 
             else if (VirusManager.GetComponent<VirusManager>().Wave3 == true)
             {
-                Speed = 0.01f;
+                Speed = 0.009f;
                 Health = 60;
             }
 
             else if (VirusManager.GetComponent<VirusManager>().Wave4 == true)
             {
-                Speed = 0.006f;
+                Speed = 0.01f;
                 Health = 20;
             }
         }
@@ -74,19 +74,19 @@ public class Virus : MonoBehaviour
         {
             if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
             {
-                Speed = 0.02f;
+                Speed = 0.001f;
                 Health = 40;
             }
 
             else if (VirusManager.GetComponent<VirusManager>().Wave2 == true)
             {
-                Speed = 0.03f;
+                Speed = 0.002f;
                 Health = 50;
             }
 
             else if (VirusManager.GetComponent<VirusManager>().Wave3 == true)
             {
-                Speed = 0.04f;
+                Speed = 0.003f;
                 Health = 60;
             }
         }
@@ -94,7 +94,7 @@ public class Virus : MonoBehaviour
         else if (VirusManager.GetComponent<VirusManager>().Wave4 == true && transform.tag == "Boss")
         {
             Speed = 0.08f;
-            Health = 40;
+            Health = 300;
             BossStartHealth = Health;
         }
     }
@@ -145,17 +145,15 @@ public class Virus : MonoBehaviour
             else
             {
                 if (Health <= BossStartHealth / 2)
-                {
                     SpawnSmallVirusTimer += Time.deltaTime;
-                }
 
-                if (SmallVirusCount > 0)
+                if (BossSmallVirusCount > 0)
                 {
                     if (SpawnSmallVirusTimer >= 4.0f)
                     {
                         SpawnSmallVirusTimer = 0.0f;
                         SpawnSmallViruses();
-                        SmallVirusCount -= 1;
+                        BossSmallVirusCount -= 1;
                     }
                 }
 
@@ -252,7 +250,7 @@ public class Virus : MonoBehaviour
             }
         }
 
-        if (transform.tag == "Virus" || transform.tag == "BigVirus")
+        if (transform.tag == "Virus")
         {
             if (col.name == "1VirusGoTo")
             {
@@ -284,19 +282,22 @@ public class Virus : MonoBehaviour
 
     void OnDestroy()
     {
-        if (EnteredZone == true)
+        if (transform.tag == "Virus")
         {
-            if (GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Contains(transform.gameObject))
-                GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Remove(transform.gameObject);
+            if (EnteredZone == true)
+            {
+                if (GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Contains(transform.gameObject))
+                    GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Remove(transform.gameObject);
 
-            else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Contains(transform.gameObject))
-                GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Remove(transform.gameObject);
+                else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Contains(transform.gameObject))
+                    GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Remove(transform.gameObject);
 
-            else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Contains(transform.gameObject))
-                GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Remove(transform.gameObject);
+                else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Contains(transform.gameObject))
+                    GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Remove(transform.gameObject);
 
-            else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Contains(transform.gameObject))
-                GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
+                else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Contains(transform.gameObject))
+                    GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
+            }
         }
     }
 

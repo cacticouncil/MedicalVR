@@ -23,13 +23,14 @@ public class VirusLocations : MonoBehaviour
     {
         for (int i = 0; i < VirusLocationList.Count; i++)
         {
-            if (VirusLocationList[i].SmallVirusCount >= 3)
+            if (VirusLocationList[i].SmallVirusCount == 3)
             {
                 for (int j = 0; j < VirusManager.GetComponent<VirusManager>().VirusList.Count; j++)
                 {
                     if (VirusLocationList[i].VirusList.Contains(VirusManager.GetComponent<VirusManager>().VirusList[j]) && VirusManager.GetComponent<VirusManager>().VirusList[j].gameObject.tag == "Virus")
                         Destroy(VirusManager.GetComponent<VirusManager>().VirusList[j]);
                 }
+
                 VirusLocationList[i].SmallVirusCount = 0;
                 VirusManager.GetComponent<VirusManager>().CreateBigVirus(VirusLocationList[i].Pos);
             }
