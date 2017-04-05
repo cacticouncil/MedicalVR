@@ -5,21 +5,30 @@ using System.Collections;
 public class SimulateSun : MonoBehaviour
 {
     public float degrees;
+    private int turn = 0;
+    void Start()
+    {
+        StartCoroutine(R());
+    }
 
     // Update is called once per frame
     public void TurnUpdate()
     {
-        StopCoroutine("R");
-        StartCoroutine(R());
+        turn += 60;
     }
 
     IEnumerator R()
     {
         float rotation = degrees / 60.0f;
-        for (int i = 0; i < 60.0f; i++)
+        while (true)
         {
-            transform.Rotate(new Vector3(rotation, 0));
-            yield return new WaitForSeconds(.016f);
+            while (turn > 0)
+            {
+                transform.Rotate(new Vector3(rotation, 0));
+                turn--;
+                yield return new WaitForSeconds(.016f);
+            }
+            yield return 0;
         }
     }
 }
