@@ -39,6 +39,6 @@ public class SpawnCGamp : MonoBehaviour {
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1, 0, 0, 0.5f);
-        Gizmos.DrawCube(transform.localPosition + Center.transform.position, size);
+        Gizmos.DrawCube(/*transform.localPosition + */Center.transform.position, size);
     }
 }
