@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 public class VirusGameplayScript : MonoBehaviour {
 
     public List<GameObject> places;
+    public List<GameObject> Sceneries;
     public GameObject subtitltes, blackCurtain, theCamera, virus;
-    public static int loadCase;
+    public static int loadCase =1;
     // Use this for initialization
     delegate void Func();
     Func doAction;
@@ -18,9 +19,14 @@ public class VirusGameplayScript : MonoBehaviour {
     {
         doAction = NullFunction;
         virus.SetActive(false);
+        Sceneries[1].SetActive(false);
+        Sceneries[2].SetActive(false);
         switch (loadCase)
         {
             case (1):
+                Sceneries[0].SetActive(false);
+                Sceneries[1].SetActive(true);
+                Sceneries[2].SetActive(false);
                 I = 2;
                 subtitltes.GetComponent<SubstitlesScript>().theTimer = 120.5f;
                 theCamera.transform.position = places[I].transform.position;
@@ -29,6 +35,9 @@ public class VirusGameplayScript : MonoBehaviour {
                 fadeSpeed = 1.5f;
                 break;
             case (2):
+                Sceneries[0].SetActive(false);
+                Sceneries[1].SetActive(false);
+                Sceneries[2].SetActive(true);
                 I = 4;
                 subtitltes.GetComponent<SubstitlesScript>().theTimer = 29;
                 theCamera.transform.position = places[I].transform.position;
@@ -162,6 +171,8 @@ public class VirusGameplayScript : MonoBehaviour {
                 fadeSpeed = 1.5f;
                 break;
             case (150):
+                Sceneries[1].SetActive(false);
+                Sceneries[2].SetActive(true);
                 I = 4;
                 theCamera.transform.position = places[I].transform.position;
                 doAction = RiseCurtain;
