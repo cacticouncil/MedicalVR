@@ -29,7 +29,7 @@ public class LeaveCell : MonoBehaviour
     void FixedUpdate()
     {
         TempTimerForAttackVirusToLeaveCell += Time.deltaTime;
-        if (TempTimerForAttackVirusToLeaveCell >= 6.5f)
+        if (TempTimerForAttackVirusToLeaveCell >= 7.5f)
             Destroy(this.gameObject);
         
         if (CanLeaveCell == false)
