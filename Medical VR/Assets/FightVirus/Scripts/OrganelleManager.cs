@@ -6,13 +6,15 @@ public class OrganelleManager : MonoBehaviour
     public GameObject Player;
     public GameObject VirusPlayer;
     public GameObject Organelle;
+    public GameObject Nucleus;
+
     public List<GameObject> OrganelleList = new List<GameObject>();
     public int OrganelleCount;
     Vector3 SpawnRandomCell;
 
     void Start()
     {
-        OrganelleCount = 10;
+        OrganelleCount = 8;
         for (int i = 0; i < OrganelleCount; i++)
         {
             SpawnRandomCell = Random.insideUnitSphere * 6.0f;
@@ -22,5 +24,6 @@ public class OrganelleManager : MonoBehaviour
 
             OrganelleList.Add(Instantiate(Organelle, SpawnRandomCell, Quaternion.identity, transform) as GameObject);
         }
+        OrganelleList.Add(Instantiate(Nucleus, SpawnRandomCell, Quaternion.identity, transform) as GameObject);
     }
 }

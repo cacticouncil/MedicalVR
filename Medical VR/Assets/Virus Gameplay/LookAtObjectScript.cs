@@ -18,13 +18,13 @@ public class LookAtObjectScript : MonoBehaviour {
 	}
     public void LookedAtAction()
     {
-        if (theTag == "Cell" && (int)subtitles.GetComponent<SubstitlesScript>().theTimer == 20)
+        if (theTag == "Cell" && (int)subtitles.GetComponent<SubstitlesScript>().theTimer == 35)
         {
             subtitles.GetComponent<SubstitlesScript>().Continue();
             subtitles.GetComponent<SubstitlesScript>().theTimer+= 1;
         }
 
-        else if (theTag == "Virus" && (int)subtitles.GetComponent<SubstitlesScript>().theTimer == 35)
+        else if (theTag == "Virus" && (int)subtitles.GetComponent<SubstitlesScript>().theTimer == 65)
         {
             subtitles.GetComponent<SubstitlesScript>().Continue();
             subtitles.GetComponent<SubstitlesScript>().theTimer += 1;

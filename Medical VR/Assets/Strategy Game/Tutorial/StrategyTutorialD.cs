@@ -84,6 +84,7 @@ public class StrategyTutorialD : MonoBehaviour
                     virus2.transform.position = Vector3.Lerp(virus.transform.position, virus.transform.position + v2end, percent * .5f);
                     virus2.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent * .5f);
                     cell.GetComponent<Renderer>().material.color = new Color(0, 0, 0, Mathf.Lerp(1, 0, percent - 1.0f));
+                    cell.GetComponent<Renderer>().material.SetColor("_OutlineColor", new Color(0, 0, 0, Mathf.Lerp(1, 0, percent - 1.0f)));
                     if (percent >= 2.0f)
                     {
                         cell.GetComponent<Renderer>().enabled = false;
