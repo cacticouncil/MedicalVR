@@ -4,15 +4,15 @@ using System.Collections;
 public class _TRaycastTarget : MonoBehaviour
 {
     public GameObject gun;
-    public GameObject oldReticle;
-    public GameObject newReticle;
-
+    public GameObject LineSegments;
+    public float LineSeparation;
+    //    public GameObject oldReticle;
+    //    public GameObject newReticle;
 
     private Transform targetTransform;
     private Ray theRay;
 
-    public Material mat;
-    private LineRenderer lineRenderer;
+    //    private LineRenderer lineRenderer;
 
     int DebugStuff;
 
@@ -21,10 +21,6 @@ public class _TRaycastTarget : MonoBehaviour
     {
         if (!gun)
             Debug.Log("failed to load Gun");
-        lineRenderer = GetComponent<LineRenderer>();
-
-        lineRenderer.SetVertexCount(20);
-        lineRenderer.SetColors(Color.green, Color.green);
     }
 
     // Update is called once per frame
@@ -32,8 +28,8 @@ public class _TRaycastTarget : MonoBehaviour
     {
         theRay.origin = gun.transform.position;
         theRay.direction = gun.transform.TransformDirection(Vector3.forward);
-        PlotTrajectory(gun.transform.position, gun.transform.forward * 10, .2f, 1.0f);
-
+        //PlotTrajectory(gun.transform.position, gun.transform.forward * 10, LineSeparation, 2.0f);
+        //PlotTrajectory(gun.transform.position, gun.transform.forward * 10, .2f, 1.0f);
 
     }
 
@@ -44,35 +40,31 @@ public class _TRaycastTarget : MonoBehaviour
 
     public void PlotTrajectory(Vector3 start, Vector3 startVelocity, float timestep, float maxTime)
     {
-        Vector3 prev = start;
-        int i = 1;
-        for (;; i++)
+        Vector3 prev = Vector3.zero;
+        int i = 0;
+        for (; ; i++)
         {
-            if (i > 21)
+            if (i > 19)
                 break;
-            float t = timestep * i;
+            float t = timestep * i * 0.5f;
             if (t > maxTime) break;
             Vector3 pos = PlotTrajectoryAtTime(start, startVelocity, t);
             if (Physics.Linecast(prev, pos)) break;
-        //    Debug.DrawLine(prev, pos, Color.yellow);
-            lineRenderer.SetPosition(i, prev);
-            //lineRenderer.SetPosition(i+1, start);
+
+            LineSegments.transform.GetChild(i).transform.position = pos;
+            LineSegments.transform.GetChild(i).transform.LookAt(prev);
 
             prev = pos;
         }
-        for(;i < 20; i++)
+        for (; i < 20; i++)
         {
-            lineRenderer.SetPosition(i, prev);
+            LineSegments.transform.GetChild(i).transform.position = Vector3.zero;
+            //            lineRenderer.SetPosition(i, prev);
         }
     }
 
+
     private void FixedUpdate()
-    {
-        PlotTrajectory(gun.transform.position, gun.transform.forward * 10, .2f, 1.0f);
-
-    }
-
-    private void LateUpdate()
     {
         PlotTrajectory(gun.transform.position, gun.transform.forward * 10, .2f, 1.0f);
 
