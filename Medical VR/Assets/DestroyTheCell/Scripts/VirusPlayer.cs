@@ -21,22 +21,27 @@ public class VirusPlayer : MonoBehaviour
     public int Lives;
     public bool isGameover = false;
 
-    public Image Screen;
-    Color OriginalColor;
-    Color FlashColor;
+    //public Image Screen;
+    //Color OriginalColor;
+    //Color FlashColor;
 
     public GameObject Instructions;
     bool InstructionsDone = false;
 
     public bool WaveStarted = false;
+    //public GameObject FadeThisObject;
+    //public Material Trans;
+    //float FadeSpeed = 0.2f;
+    //float Alpha = 0.0f;
+    //float FadeDir = -1;
     void Start()
     {
         TimeLeft = 60.0f;
         Speed = 0.0f;
         Lives = 100;
 
-        OriginalColor = Screen.color;
-        FlashColor = new Color(1, 1, 1, .2f);
+        //OriginalColor = Screen.color;
+        //FlashColor = new Color(1, 1, 1, .2f);
 
         StartCoroutine(DisplayText("Target the Proteins" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
     }
@@ -94,8 +99,9 @@ public class VirusPlayer : MonoBehaviour
                 //If there is an enemy close then check if player is in the field of view
                 if (enemy.GetComponent<Antibody>())
                 {
-                    if (enemy.GetComponent<Antibody>().CheckFOV() == true)
-                        StartCoroutine(FlashScreen());
+                    //if (enemy.GetComponent<Antibody>().CheckFOV() == true)
+                        //FlashScreen();
+                        //StartCoroutine(FlashScreen());
                 }
             }
         }
@@ -117,11 +123,15 @@ public class VirusPlayer : MonoBehaviour
         GetComponent<Rigidbody>().velocity *= Speed;
     }
 
-    IEnumerator FlashScreen()
+    void FlashScreen()
     {
-        Screen.color = FlashColor;
-        yield return new WaitForSeconds(.5f);
-        Screen.color = OriginalColor;
+        //Screen.color = FlashColor;
+        //yield return new WaitForSeconds(.5f);
+        //Screen.color = OriginalColor;
+
+        //Alpha -= FadeDir * FadeSpeed * Time.deltaTime;
+        //Alpha = Mathf.Clamp01(Alpha);
+        //FadeThisObject.
     }
 
     IEnumerator DisplayText(string message, float duration)
