@@ -13,57 +13,81 @@ public class VirusManager : MonoBehaviour
     public List<GameObject> VirusList;
     Vector3 SpawnRandomVirus;
 
-    public bool Wave1;
-    public bool Wave2;
-    public bool Wave3;
-    public bool Wave4;
     int EnemyCount;
-    bool CheckCount;
+    public bool CheckCount;
+
+    public int WaveNumber;
+    bool SpawnBoss = false;
+
+
+    float SmallVirusSpeed;
+    int SmallVirusHealth;
+
+    float BigVirusSpeed;
+    int BigVirusHealth;
+
+    float BossVirusSpeed;
+    public int BossVirusHealth;
+
     void Start()
     {
-        Wave1 = true;
-        Wave2 = false;
-        Wave3 = false;
-        Wave4 = false;
+        WaveNumber = 1;
         CheckCount = false;
-        EnemyCount = 12;
-        Invoke("CreateWave", 5);
     }
 
     void Update()
     {
         if (CheckCount == true)
         {
-            if (VirusList.Count == 0 && Wave1 == true)
+            if (VirusList.Count == 0)
             {
-                Wave1 = false;
-                Wave2 = true;
-                CheckCount = false;
-                EnemyCount = 16;
-                Invoke("CreateWave", 5);
-            }
+                switch (WaveNumber)
+                {
+                    case 1:
+                        EnemyCount = 12;
+                        SmallVirusSpeed = 0.003f;
+                        SmallVirusHealth = 20;
+                        BigVirusSpeed = 0.001f;
+                        BigVirusHealth = 40;
+                        break;
 
-            else if (VirusList.Count == 0 && Wave2 == true)
-            {
-                Wave2 = false;
-                Wave3 = true;
-                CheckCount = false;
-                EnemyCount = 20;
-                Invoke("CreateWave", 5);
-            }
+                    case 2:
+                        EnemyCount = 16;
+                        SmallVirusSpeed = 0.006f;
+                        SmallVirusHealth = 40;
+                        BigVirusSpeed = 0.002f;
+                        BigVirusHealth = 50;
+                        break;
 
-            else if (VirusList.Count == 0 && Wave3 == true)
-            {
-                Wave3 = false;
-                Wave4 = true;
+                    case 3:
+                        EnemyCount = 20;
+                        SmallVirusSpeed = 0.009f;
+                        SmallVirusHealth = 60;
+                        BigVirusSpeed = 0.003f;
+                        BigVirusHealth = 60;
+                        break;
+
+                    case 4:
+                        SpawnBoss = true;
+                        SmallVirusSpeed = 0.01f;
+                        SmallVirusHealth = 20;
+                        BossVirusSpeed = 0.1f;
+                        BossVirusHealth = 400;
+                        break;
+
+                    default:
+                        break;
+                }
+
                 CheckCount = false;
+                Player.GetComponent<Player>().DisplayWaveNumber = true;
                 Invoke("CreateWave", 5);
             }
         }
 
         for (int i = 0; i < VirusList.Count; i++)
         {
-            if (VirusList[i].gameObject == null)
+            if (VirusList[i].gameObject == null || VirusList[i].GetComponent<Virus>().Health <= 0)
                 VirusList.Remove(VirusList[i]);
         }
     }
@@ -72,34 +96,50 @@ public class VirusManager : MonoBehaviour
     {
         VirusList = new List<GameObject>();
 
-        if (Wave1 == true || Wave2 == true || Wave3 == true)
+        if (SpawnBoss == false)
         {
             for (int i = 0; i < EnemyCount; i++)
             {
-                SpawnRandomVirus.x = Random.Range(-2.0f, 2.0f);
+                SpawnRandomVirus.x = Random.Range(-2.2f, 2.2f);
                 SpawnRandomVirus.y = Random.Range(0.0f, 1.0f);
-                SpawnRandomVirus.z = Random.Range(-2.0f, 2.0f);
-                VirusList.Add(Instantiate(VirusCube, SpawnRandomVirus, Quaternion.identity, transform) as GameObject);
+                SpawnRandomVirus.z = Random.Range(-2.2f, 2.2f);
+                GameObject VC = Instantiate(VirusCube, SpawnRandomVirus, Quaternion.identity, transform) as GameObject;
+                VC.GetComponent<Virus>().Speed = SmallVirusSpeed;
+                VC.GetComponent<Virus>().Health = SmallVirusHealth;
+                VirusList.Add(VC);
             }
 
             CheckCount = true;
+
         }
 
-        else if (Wave4 == true)
+        else if (SpawnBoss == true)
         {
             //Boss
-            VirusList.Add(Instantiate(BossCube, BossSpawn.transform.position, Quaternion.identity, transform) as GameObject);
+            GameObject BC = Instantiate(BossCube, BossSpawn.transform.position, Quaternion.identity, transform) as GameObject;
+            BC.GetComponent<Virus>().Speed = BossVirusSpeed;
+            BC.GetComponent<Virus>().Health = BossVirusHealth;
+            VirusList.Add(BC);
             CheckCount = false;
         }
+
+        WaveNumber += 1;
     }
 
     public void CreateSmallVirus(GameObject pos)
     {
-        VirusList.Add(Instantiate(VirusCube, pos.transform.position, Quaternion.identity, transform) as GameObject);
+        GameObject SMC = Instantiate(VirusCube, pos.transform.position, Quaternion.identity, transform) as GameObject;
+        SMC.GetComponent<Virus>().Speed = SmallVirusSpeed;
+        SMC.GetComponent<Virus>().Health = SmallVirusHealth;
+        VirusList.Add(SMC);
         VirusList[VirusList.Count - 1].GetComponent<Virus>().BossSpawnSmallVirus = true;
     }
+
     public void CreateBigVirus(GameObject pos)
     {
-        VirusList.Add(Instantiate(BigVirusCube, pos.transform.position, Quaternion.identity, transform) as GameObject);
+        GameObject BVC = Instantiate(BigVirusCube, pos.transform.position, Quaternion.identity, transform) as GameObject;
+        BVC.GetComponent<Virus>().Speed = BigVirusSpeed;
+        BVC.GetComponent<Virus>().Health = BigVirusHealth;
+        VirusList.Add(BVC);
     }
 }

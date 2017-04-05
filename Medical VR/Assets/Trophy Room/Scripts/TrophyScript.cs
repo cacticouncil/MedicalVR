@@ -10,8 +10,8 @@ public class TrophyScript : MonoBehaviour {
     bool moveForward, inPedestal;
     Vector3 orgPos, target, pedestalTarget;
     Quaternion orgRotation;
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("InitialSFXVolume");
         orgRotation = transform.rotation;
@@ -44,8 +44,8 @@ public class TrophyScript : MonoBehaviour {
             transform.position = Vector3.MoveTowards(transform.position, pedestalTarget, speed * Time.deltaTime);
             InSelection();
         }
-	    
 	}
+
     void InSelection()
     {
         if (transform.position == pedestalTarget)

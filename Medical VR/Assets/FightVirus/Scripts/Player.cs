@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System;
 
-public class Player : MonoBehaviour , TimedInputHandler
+public class Player : MonoBehaviour, TimedInputHandler
 {
     public float Score;
     public int VirusLeaveCount;
@@ -21,6 +21,8 @@ public class Player : MonoBehaviour , TimedInputHandler
     public GameObject EnemyManger;
     public GameObject ScoreBoard;
 
+
+    public bool DisplayWaveNumber = false;
     void Start()
     {
         Score = 0.0f;
@@ -42,54 +44,67 @@ public class Player : MonoBehaviour , TimedInputHandler
             VirusCount.GetComponent<TextMeshPro>().text = "VirusCount: " + VirusLeaveCount.ToString();
 
 
-            if (RuleTimer >= 4.0f)
+            if (RuleTimer >= 4.0f && RuleTimer <= 5.0f)
+            {
+                RuleTimer = 10.0f;
                 DisplayRules = false;
+                EnemyManger.GetComponent<VirusManager>().CheckCount = true;
+            }
 
             if (DisplayRules)
                 CenterScreenObj.GetComponent<TextMeshPro>().text = "  Defeat the Virus " + "\n" + "from leaving the cell";
             else
                 CenterScreenObj.GetComponent<TextMeshPro>().text = "";
 
-
-            //Display Wave
-            if (EnemyManger.GetComponent<VirusManager>().Wave1 == true && DisplayRules == false)
+            if (DisplayWaveNumber == true)
             {
-                if (Wave1Timer <= 2.0f)
+                switch (EnemyManger.GetComponent<VirusManager>().WaveNumber)
                 {
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 1";
+                    case 1:
+                        if (Wave1Timer <= 2.0f)
+                            CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 1";
+
+                        else
+                            DisplayWaveNumber = false;
+                        
+                        Wave1Timer += Time.deltaTime;
+                        break;
+
+                    case 2:
+                        if (Wave2Timer <= 2.0f)
+                            CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 2";
+
+                        else
+                            DisplayWaveNumber = false;
+
+                        Wave2Timer += Time.deltaTime;
+                        break;
+
+                    case 3:
+                        if (Wave3Timer <= 2.0f)
+                            CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 3";
+
+                        else
+                            DisplayWaveNumber = false;
+
+                        Wave3Timer += Time.deltaTime;
+
+                        break;
+
+                    case 4:
+                        if (Wave4Timer <= 2.0f)
+                            CenterScreenObj.GetComponent<TextMeshPro>().text = "    Boss";
+
+                        else
+                            DisplayWaveNumber = false;
+
+                        Wave4Timer += Time.deltaTime;
+
+                        break;
+
+                    default:
+                        break;
                 }
-
-                Wave1Timer += Time.deltaTime;
-            }
-
-            if (EnemyManger.GetComponent<VirusManager>().Wave2 == true)
-            {
-                if (Wave2Timer <= 2.0f)
-                {
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 2";
-                }
-
-                Wave2Timer += Time.deltaTime;
-            }
-
-            if (EnemyManger.GetComponent<VirusManager>().Wave3 == true)
-            {
-                if (Wave3Timer <= 2.0f)
-                {
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 3";
-                }
-
-                Wave3Timer += Time.deltaTime;
-            }
-
-            if (EnemyManger.GetComponent<VirusManager>().Wave4 == true)
-            {
-                if (Wave4Timer <= 2.0f)
-                {
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "    Boss";
-                }
-
-                Wave4Timer += Time.deltaTime;
             }
 
             RuleTimer += Time.deltaTime;

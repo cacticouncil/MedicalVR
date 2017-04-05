@@ -40,63 +40,7 @@ public class Virus : MonoBehaviour
 
         SpawnSmallVirusTimer = 0.0f;
         AngleSpeed = 20.0f;
-
-        if (transform.tag == "Virus")
-        {
-            if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
-            {
-                //Speed = 1.0f;
-                Speed = 0.003f;
-                Health = 20;
-            }
-
-            else if (VirusManager.GetComponent<VirusManager>().Wave2 == true)
-            {
-                Speed = 0.006f;
-                Health = 40;
-            }
-
-            else if (VirusManager.GetComponent<VirusManager>().Wave3 == true)
-            {
-                Speed = 0.009f;
-                Health = 60;
-            }
-
-            else if (VirusManager.GetComponent<VirusManager>().Wave4 == true)
-            {
-                Speed = 0.01f;
-                Health = 20;
-            }
-        }
-
-
-        else if (transform.tag == "BigVirus")
-        {
-            if (VirusManager.GetComponent<VirusManager>().Wave1 == true)
-            {
-                Speed = 0.001f;
-                Health = 40;
-            }
-
-            else if (VirusManager.GetComponent<VirusManager>().Wave2 == true)
-            {
-                Speed = 0.002f;
-                Health = 50;
-            }
-
-            else if (VirusManager.GetComponent<VirusManager>().Wave3 == true)
-            {
-                Speed = 0.003f;
-                Health = 60;
-            }
-        }
-
-        else if (VirusManager.GetComponent<VirusManager>().Wave4 == true && transform.tag == "Boss")
-        {
-            Speed = 0.08f;
-            Health = 300;
-            BossStartHealth = Health;
-        }
+        BossStartHealth = VirusManager.GetComponent<VirusManager>().BossVirusHealth;
     }
 
     void Update()
@@ -227,9 +171,9 @@ public class Virus : MonoBehaviour
 
                 if (Health == 0)
                 {
+                    Player.GetComponent<Player>().Score += 100;
                     VirusManager.GetComponent<VirusManager>().VirusList.Remove(gameObject);
                     Destroy(gameObject);
-                    Player.GetComponent<Player>().Score += 100;
                 }
             }
 
