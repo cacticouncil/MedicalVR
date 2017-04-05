@@ -46,7 +46,15 @@ public class Virus_VirusGameplay : MonoBehaviour {
         {
             case (105):
                 I = 1;
-                moveSpeed = 600;
+                moveSpeed = 450;
+                break;
+            case (130):
+                I = 3;
+                moveSpeed = 50;
+                break;
+            case (145):
+                I = 4;
+                moveSpeed = 50;
                 break;
             default:
                 break;
