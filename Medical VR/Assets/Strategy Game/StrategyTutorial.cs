@@ -6,71 +6,145 @@ public class StrategyTutorial : MonoBehaviour
     public GameObject redCell;
     public GameObject virus;
     public GameObject whiteCell;
+    public GameObject yourCell;
+    public GameObject plane;
+    public GameObject planeDes;
+    public GameObject mysteryBoxMesh;
+    public GameObject cellManager;
+    public GameObject mysteryBox;
     public Vector3 cellPosition;
-    public SimulateSun sun;
-    public int cNum = 0;
     public TMPro.TextMeshPro[] text;
 
     public GameObject[] cells = new GameObject[7];
     public GameObject[] viruses = new GameObject[3];
+    private int cNum = -1;
     private Vector3 offset = new Vector3(.5f, 0, 0);
     private int rNum = 0;
+
+    void Start()
+    {
+        StartCoroutine(ClickForMe());
+    }
 
     public void Click()
     {
         switch (cNum)
         {
+            case -1:
+                StartCoroutine(StartText());
+                break;
             //Cells
-            case 4:
-                StartCoroutine(TurnTextOn(1));
+            case 0:
                 StartCoroutine(SpawnRedCell());
                 break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
             case 5:
             case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
                 StartCoroutine(SpawnRedCell());
                 break;
 
             //Virus
-            case 11:
-                StartCoroutine(TurnTextOn(2));
+            case 7:
+                StartCoroutine(TurnTextOn(1));
                 StartCoroutine(MoveVirus());
                 break;
-            case 12:
+            case 8:
                 StartCoroutine(VirusAttack());
                 break;
-            case 13:
+            case 9:
                 StartCoroutine(Dying());
                 break;
-            case 14:
+            case 10:
                 StartCoroutine(Split());
                 break;
 
             //White Cells
-            case 15:
-                StartCoroutine(TurnTextOn(3));
+            case 11:
+                StartCoroutine(TurnTextOn(2));
                 StartCoroutine(ArriveWhiteCell());
                 break;
-            case 16:
+            case 12:
                 StartCoroutine(MoveWhiteCell());
                 break;
-            case 17:
+            case 13:
                 StartCoroutine(LeaveWhiteCell());
                 break;
 
-            //Shrink Cells
-            case 18:
+            //Your Cell
+            case 14:
                 StartCoroutine(ShrinkCells());
+                StartCoroutine(TurnTextOn(3));
+                StartCoroutine(SpawnCell());
+                break;
+            case 15:
+                StartCoroutine(TurnTextOn(4));
+                plane.SetActive(true);
+                break;
+            case 16:
+                StartCoroutine(TurnTextOn(5));
+                plane.SetActive(false);
+                break;
+            case 17:
+                StartCoroutine(TurnTextOn(6));
+                planeDes.SetActive(true);
+                break;
+
+            //Mystery Box
+            case 18:
+                StartCoroutine(TurnTextOn(7));
+                StartCoroutine(SpawnBox());
+                break;
+            case 19:
+                StartCoroutine(TurnTextOn(8));
+                break;
+            case 20:
+                StartCoroutine(TurnTextOn(9));
+                StartCoroutine(LeaveBox());
+                break;
+
+            //Clean Up 
+            case 21:
+                cellManager.SetActive(true);
+                mysteryBox.SetActive(true);
+                StopCoroutine("ClickForMe");
+                Destroy(gameObject);
                 break;
 
             default:
                 break;
         }
-        sun.TurnUpdate();
         cNum++;
+    }
+
+    IEnumerator ClickForMe()
+    {
+        while (true)
+        {
+            Click();
+            yield return new WaitForSeconds(1.0f);
+        }
+    }
+
+    #region Text
+    IEnumerator StartText()
+    {
+        Color a = text[0].color;
+        a.a = 0.0f;
+        text[0].color = a;
+        float startTime = Time.time;
+        float percent = 0.0f;
+        while (percent < 1.0f)
+        {
+            percent = (Time.time - startTime);
+            a.a = Mathf.Lerp(0.0f, 1.0f, percent);
+            text[0].color = a;
+            yield return 0;
+        }
+        a.a = 1.0f;
+        text[0].color = a;
     }
 
     IEnumerator TurnTextOn(int index)
@@ -105,6 +179,7 @@ public class StrategyTutorial : MonoBehaviour
         a.a = 1.0f;
         text[index].color = a;
     }
+    #endregion
 
     #region RedCells
     IEnumerator SpawnRedCell()
@@ -306,6 +381,55 @@ public class StrategyTutorial : MonoBehaviour
             yield return 0;
         }
         whiteCell.SetActive(false);
+    }
+    #endregion
+
+    #region YourCell
+    IEnumerator SpawnCell()
+    {
+        float startTime = Time.time;
+        float percent = Time.time - startTime;
+        while (percent < 1.0f)
+        {
+            percent = Time.time - startTime;
+            yourCell.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent);
+            yield return 0;
+        }
+        yourCell.transform.localScale = Vector3.one;
+    }
+    #endregion
+
+    #region MysteryBox
+    IEnumerator SpawnBox()
+    {
+        float startTime = Time.time;
+        float percent = Time.time - startTime;
+        Vector3 pos = yourCell.transform.position;
+        Vector3 des = new Vector3(1, 0, 0);
+        while (percent < 1.0f)
+        {
+            percent = Time.time - startTime;
+            yourCell.transform.position = Vector3.Lerp(pos, des, percent);
+            mysteryBoxMesh.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent);
+            yield return 0;
+        }
+        yourCell.transform.position = des;
+        mysteryBoxMesh.transform.localScale = Vector3.one;
+    }
+
+    IEnumerator LeaveBox()
+    {
+        float startTime = Time.time;
+        float percent = Time.time - startTime;
+        Vector3 pos = mysteryBoxMesh.transform.position;
+        Vector3 des = new Vector3(1, 0, 0);
+        while (percent < 1.0f)
+        {
+            percent = Time.time - startTime;
+            mysteryBoxMesh.transform.position = Vector3.Lerp(pos, des, percent);
+            yield return 0;
+        }
+        mysteryBoxMesh.transform.position = des;
     }
     #endregion
 }
