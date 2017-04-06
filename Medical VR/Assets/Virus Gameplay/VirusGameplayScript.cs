@@ -8,7 +8,7 @@ public class VirusGameplayScript : MonoBehaviour {
     public List<GameObject> places;
     public List<GameObject> Sceneries;
     public GameObject subtitltes, blackCurtain, theCamera, virus;
-    public static int loadCase =1;
+    public static int loadCase = 1;
     // Use this for initialization
     delegate void Func();
     Func doAction;
@@ -28,7 +28,7 @@ public class VirusGameplayScript : MonoBehaviour {
                 Sceneries[1].SetActive(true);
                 Sceneries[2].SetActive(false);
                 I = 2;
-                subtitltes.GetComponent<SubstitlesScript>().theTimer = 120.5f;
+               // subtitltes.GetComponent<SubstitlesScript>().theTimer = 132.5f;
                 theCamera.transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 doAction = RiseCurtain;
@@ -145,45 +145,145 @@ public class VirusGameplayScript : MonoBehaviour {
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-010") == false)
                     SoundManager.PlayVoice("Medical_VR_Game_VO_Line-010");
                 break;
+            case (100):
+                if((t > 100.5f))
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-011_B") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-011_B");
+                break;
             case (105):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-011") == false)
+                if ((t > 105.5f))
+                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-011") == false)
                     SoundManager.PlayVoice("Medical_VR_Game_VO_Line-011");
 
                 doAction = NullFunction;
                    I = 1;
                   //moveSpeed = 30;
                 break;
-            case (119):
+            case (116):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-012") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-012");
+                break;
+            case (131):
                 MovingCamera.arcadeMode = false;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case (120):
-                if (subtitltes.GetComponent<SubstitlesScript>().theTimer < 120.5f)
+            case (132):
+                if (subtitltes.GetComponent<SubstitlesScript>().theTimer < 132.5f)
                     SceneManager.LoadScene("DodgeAnitbodies");
                 break;
-            case (130):
-                I = 3;
-                moveSpeed = 100;
+            case (133):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-013") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-013");
                 break;
-            case (149):
+            case (146):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-014") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-014");
+                break;
+            case (151):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-015") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-015");
+                I = 3;
+               moveSpeed = 100;
+               break;
+            case (158):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-016") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-016");
+                break;
+            case (162):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-017") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-017");
+                break;
+            case (171):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-018") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-018");
+                break;
+            case (177):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-019") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-019");
+                break;
+            case (181):
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case (150):
+            case (182):
                 Sceneries[1].SetActive(false);
                 Sceneries[2].SetActive(true);
                 I = 4;
+                RenderSettings.fogDensity = 0;
                 theCamera.transform.position = places[I].transform.position;
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case (159):
+            case (183):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-020") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-020");
+                break;
+            case (192):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-021") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-021");
+                break;
+            case (198):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-022") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-022");
+                break;
+            case (205):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-023") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-023");
+                break;
+            case (216):
+                if ((t > 216.5f))
+                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-024") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-024");
+                break;
+            case (227):
+                doAction = NullFunction;
+                I = 5;
+                moveSpeed = 250;
+                break;
+            case (236):
+                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-026") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-026");
+                break;
+            case (246):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-027") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-027");
+                break;
+            case (248):
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case (249):
+                I = 6;
+                RenderSettings.fogDensity = 0;
+                theCamera.transform.position = places[I].transform.position;
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-028") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-028");
+                break;
+            case (257):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-029") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-029");
+                break;
+            case (262):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-030") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-030");
+                break;
+            case (270):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-031") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-031");
+                break;
+            case (277):
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-032") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-032");
+                break;
+            case (286):
                 SimonSays.arcadeMode = false;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case (160):
+            case (287):
                 SceneManager.LoadScene("SimonDNA");
                 break;
             default:

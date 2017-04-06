@@ -6,7 +6,7 @@ enum VirusMovement { UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, UPLEFT = 4, UPRIGHT 
 public class Virus : MonoBehaviour
 {
     GameObject VirusManager;
-    GameObject Player;
+    GameObject FightVirusPlayer;
     GameObject GoTo;
 
     VirusMovement VM;
@@ -27,7 +27,7 @@ public class Virus : MonoBehaviour
     void Start()
     {
         VirusManager = gameObject.transform.parent.gameObject;
-        Player = VirusManager.GetComponent<VirusManager>().Player;
+        FightVirusPlayer = VirusManager.GetComponent<VirusManager>().FightVirusPlayer;
         GoTo = VirusManager.GetComponent<VirusManager>().VirusLocations;
         EnteredZone = false;
 
@@ -45,119 +45,134 @@ public class Virus : MonoBehaviour
 
     void Update()
     {
-        if (transform.tag == "Virus")
+        if (Player.TutorialMode == false)
         {
-            //Virus form up at special postion
-            if (BossSpawnSmallVirus == false)
-                transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
-
-            else
-                transform.position -= transform.forward * Speed;
-        }
-
-        else if (transform.tag == "BigVirus")
-        {
-            //Temporaily Fixed
-            transform.LookAt(Player.transform.position);
-            transform.position -= transform.forward * Speed;
-
-            //Have the big virus move around
-            //transform.position = new Vector3(Mathf.PingPong(Speed, 2), transform.position.y, transform.position.z);
-            //transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.PingPong(Speed, 2));
-        }
-
-        //For Boss 
-        else if (transform.tag == "Boss")
-        {
-            if (BossMadeLocation == false)
+            if (transform.tag == "Virus")
             {
-                float Distance1 = Vector3.Distance(transform.position, Player.transform.position);
-                if (Distance1 >= 4.5f)
+                //Virus form up at special postion
+                if (BossSpawnSmallVirus == false)
+                    transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[RandomVirusLocation].Pos.transform.position, Speed);
+
+                else
+                    transform.position -= transform.forward * Speed;
+            }
+
+            else if (transform.tag == "BigVirus")
+            {
+                //Temporaily Fixed
+                transform.LookAt(FightVirusPlayer.transform.position);
+                transform.position -= transform.forward * Speed;
+
+                //Have the big virus move around
+                //transform.position = new Vector3(Mathf.PingPong(Speed, 2), transform.position.y, transform.position.z);
+                //transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.PingPong(Speed, 2));
+            }
+
+            //For Boss 
+            else if (transform.tag == "Boss")
+            {
+                if (BossMadeLocation == false)
                 {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position - transform.position), 20 * Time.deltaTime);
-                    transform.position = Vector3.MoveTowards(transform.position, Player.transform.position, Speed);
+                    float Distance1 = Vector3.Distance(transform.position, FightVirusPlayer.transform.position);
+                    if (Distance1 >= 4.5f)
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(FightVirusPlayer.transform.position - transform.position), 20 * Time.deltaTime);
+                        transform.position = Vector3.MoveTowards(transform.position, FightVirusPlayer.transform.position, Speed);
+                    }
+
+                    else
+                    {
+                        //Basically the Boss made it to its destination
+                        BossMadeLocation = true;
+                        BossCanTakeDamage = true;
+                    }
                 }
 
                 else
                 {
-                    //Basically the Boss made it to its destination
-                    BossMadeLocation = true;
-                    BossCanTakeDamage = true;
+                    if (Health <= BossStartHealth * .75f)
+                        SpawnSmallVirusTimer += Time.deltaTime;
+
+                    if (BossSmallVirusCount > 0)
+                    {
+                        if (SpawnSmallVirusTimer >= 4.0f)
+                        {
+                            SpawnSmallVirusTimer = 0.0f;
+                            SpawnSmallViruses();
+                            BossSmallVirusCount -= 1;
+                        }
+                    }
+
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(FightVirusPlayer.transform.position - transform.position), 2.5f * Time.deltaTime);
+
+                    //The boss moves unpredicatble and rotate
+                    BossMovementTimer += Time.deltaTime;
+                    if (BossMovementTimer > 6.5f)
+                    {
+                        BossMovementTimer = 0.0f;
+                        VM = (VirusMovement)Random.Range(0, 8);
+                    }
+
+                    switch (VM)
+                    {
+                        case VirusMovement.UP:
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
+                            break;
+
+                        case VirusMovement.DOWN:
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
+                            break;
+
+                        case VirusMovement.LEFT:
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
+                            break;
+
+                        case VirusMovement.RIGHT:
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
+                            break;
+
+                        case VirusMovement.UPLEFT:
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
+                            break;
+
+                        case VirusMovement.UPRIGHT:
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
+                            break;
+
+                        case VirusMovement.DOWNLEFT:
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
+                            break;
+
+                        case VirusMovement.DOWNRIGHT:
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
+                            transform.RotateAround(FightVirusPlayer.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
             }
 
-            else
+            if (FightVirusPlayer.GetComponent<Player>().isGameOver == true)
             {
-                if (Health <= BossStartHealth / 2)
-                    SpawnSmallVirusTimer += Time.deltaTime;
-
-                if (BossSmallVirusCount > 0)
-                {
-                    if (SpawnSmallVirusTimer >= 4.0f)
-                    {
-                        SpawnSmallVirusTimer = 0.0f;
-                        SpawnSmallViruses();
-                        BossSmallVirusCount -= 1;
-                    }
-                }
-
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position - transform.position), 2.5f * Time.deltaTime);
-
-                //The boss moves unpredicatble and rotate
-                BossMovementTimer += Time.deltaTime;
-                if (BossMovementTimer > 6.5f)
-                {
-                    BossMovementTimer = 0.0f;
-                    VM = (VirusMovement)Random.Range(0, 8);
-                }
-
-                switch (VM)
-                {
-                    case VirusMovement.UP:
-                        transform.RotateAround(Player.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
-                        break;
-
-                    case VirusMovement.DOWN:
-                        transform.RotateAround(Player.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
-                        break;
-
-                    case VirusMovement.LEFT:
-                        transform.RotateAround(Player.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
-                        break;
-
-                    case VirusMovement.RIGHT:
-                        transform.RotateAround(Player.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
-                        break;
-
-                    case VirusMovement.UPLEFT:
-                        transform.RotateAround(Player.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
-                        transform.RotateAround(Player.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
-                        break;
-
-                    case VirusMovement.UPRIGHT:
-                        transform.RotateAround(Player.transform.position, Vector3.up, AngleSpeed * Time.deltaTime);
-                        transform.RotateAround(Player.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
-                        break;
-
-                    case VirusMovement.DOWNLEFT:
-                        transform.RotateAround(Player.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
-                        transform.RotateAround(Player.transform.position, Vector3.left, AngleSpeed * Time.deltaTime);
-                        break;
-
-                    case VirusMovement.DOWNRIGHT:
-                        transform.RotateAround(Player.transform.position, Vector3.down, AngleSpeed * Time.deltaTime);
-                        transform.RotateAround(Player.transform.position, Vector3.right, AngleSpeed * Time.deltaTime);
-                        break;
-
-                    default:
-                        break;
-                }
+                Destroy(this.gameObject);
             }
         }
 
-        if (Player.GetComponent<Player>().isGameOver == true)
+        else if (Player.TutorialMode == true)
         {
-            Destroy(this.gameObject);
+            if (transform.tag == "Virus")
+                transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[0].Pos.transform.position, Speed);
+
+            else if (transform.tag == "BigVirus")
+            {
+                transform.LookAt(FightVirusPlayer.transform.position);
+                transform.position -= transform.forward * Speed;
+            }
         }
     }
 
@@ -171,7 +186,7 @@ public class Virus : MonoBehaviour
 
                 if (Health == 0)
                 {
-                    Player.GetComponent<Player>().Score += 100;
+                    FightVirusPlayer.GetComponent<Player>().Score += 100;
                     VirusManager.GetComponent<VirusManager>().VirusList.Remove(gameObject);
                     Destroy(gameObject);
                 }
@@ -187,8 +202,8 @@ public class Virus : MonoBehaviour
                     {
                         VirusManager.GetComponent<VirusManager>().VirusList.Remove(gameObject);
                         Destroy(gameObject);
-                        Player.GetComponent<Player>().Score += 100;
-                        Player.GetComponent<Player>().isGameOver = true;
+                        FightVirusPlayer.GetComponent<Player>().Score += 100;
+                        FightVirusPlayer.GetComponent<Player>().isGameOver = true;
                     }
                 }
             }
@@ -226,22 +241,19 @@ public class Virus : MonoBehaviour
 
     void OnDestroy()
     {
-        if (transform.tag == "Virus")
+        if (transform.tag == "Virus" && EnteredZone == true)
         {
-            if (EnteredZone == true)
-            {
-                if (GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Contains(transform.gameObject))
-                    GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Remove(transform.gameObject);
+            if (GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Contains(transform.gameObject))
+                GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Remove(transform.gameObject);
 
-                else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Contains(transform.gameObject))
-                    GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Remove(transform.gameObject);
+            else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Contains(transform.gameObject))
+                GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Remove(transform.gameObject);
 
-                else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Contains(transform.gameObject))
-                    GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Remove(transform.gameObject);
+            else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Contains(transform.gameObject))
+                GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Remove(transform.gameObject);
 
-                else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Contains(transform.gameObject))
-                    GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
-            }
+            else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Contains(transform.gameObject))
+                GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
         }
     }
 

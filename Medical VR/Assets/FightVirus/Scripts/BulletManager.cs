@@ -10,34 +10,58 @@ public class BulletManager : MonoBehaviour
     public GameObject GreenProtein;
 
     public GameObject Reticle;
-    public GameObject Player;
+    public GameObject FightVirusPlayer;
     public bool isTriggered;
     public float Time;
     int ChangeProtein;
+    public bool CanIShoot = false;
     void Start()
     {
         isTriggered = true;
         Time = 0;
         ChangeProtein = 0;
+
+        if (Player.TutorialMode == false)
+            isTriggered = true;
+        
+        else if (Player.TutorialMode == true)
+            isTriggered = false;
     }
 
     void Update()
     {
-        //Bullet Delay
-        Time += UnityEngine.Time.deltaTime;
-        if (isTriggered == true && Time >= .2f)
+        if (Player.TutorialMode == false)
         {
-            Time = 0.0f;
-            StartShooting();
+            //Bullet Delay
+            Time += UnityEngine.Time.deltaTime;
+            if (isTriggered == true && Time >= .2f)
+            {
+                Time = 0.0f;
+                StartShooting();
+            }
+
+            //Checking for button input
+            if (GvrViewer.Instance.Triggered)
+                isTriggered = !isTriggered;
+
+            //Gameover stop shooting
+            if (FightVirusPlayer.GetComponent<Player>().isGameOver)
+                isTriggered = false;
         }
 
-        //Checking for button input
-        if (GvrViewer.Instance.Triggered)
-            isTriggered = !isTriggered;
+        //For tutorial mode dont have them shoot unless directed to
+        else if (Player.TutorialMode == true && CanIShoot == true)
+        {
+            Time += UnityEngine.Time.deltaTime;
+            if (isTriggered == true && Time >= .2f)
+            {
+                Time = 0.0f;
+                StartShooting();
+            }
 
-        //Gameover stop shooting
-        if (Player.GetComponent<Player>().isGameOver)
-            isTriggered = false;
+            if (GvrViewer.Instance.Triggered)
+                isTriggered = !isTriggered;
+        }
     }
 
     void StartShooting()

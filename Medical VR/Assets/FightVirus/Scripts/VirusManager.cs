@@ -8,7 +8,7 @@ public class VirusManager : MonoBehaviour
     public GameObject BigVirusCube;
     public GameObject BossCube;
     public GameObject BossSpawn;
-    public GameObject Player;
+    public GameObject FightVirusPlayer;
     public GameObject VirusLocations;
     public List<GameObject> VirusList;
     Vector3 SpawnRandomVirus;
@@ -29,6 +29,7 @@ public class VirusManager : MonoBehaviour
     float BossVirusSpeed;
     public int BossVirusHealth;
 
+    public bool CanISpawn = false;
     void Start()
     {
         WaveNumber = 1;
@@ -37,7 +38,7 @@ public class VirusManager : MonoBehaviour
 
     void Update()
     {
-        if (CheckCount == true)
+        if (CheckCount == true && Player.TutorialMode == false)
         {
             if (VirusList.Count == 0)
             {
@@ -80,11 +81,44 @@ public class VirusManager : MonoBehaviour
                 }
 
                 CheckCount = false;
-                Player.GetComponent<Player>().DisplayWaveNumber = true;
+                FightVirusPlayer.GetComponent<Player>().DisplayWaveNumber = true;
                 Invoke("CreateWave", 5);
             }
         }
 
+        if (Player.TutorialMode == true)
+        {
+            //Set up tutorial waves
+            if (CanISpawn == true)
+            {
+                switch (WaveNumber)
+                {
+                    case 1:
+                        EnemyCount = 3;
+                        SmallVirusSpeed = 0.003f;
+                        SmallVirusHealth = 20;
+                        BigVirusSpeed = 0.007f;
+                        BigVirusHealth = 40;
+                        Invoke("CreateWave", 2);
+                        break;
+
+                    case 2:
+                        EnemyCount = 7;
+                        SmallVirusSpeed = 0.003f;
+                        SmallVirusHealth = 20;
+                        BigVirusSpeed = 0.001f;
+                        BigVirusHealth = 40;
+                        Invoke("CreateWave", 2);
+                        break;
+
+                    default:
+                        break;
+                }
+                CanISpawn = false;
+            }
+        }
+
+        //This will clean up empty gameobjects
         for (int i = 0; i < VirusList.Count; i++)
         {
             if (VirusList[i].gameObject == null || VirusList[i].GetComponent<Virus>().Health <= 0)
@@ -110,7 +144,6 @@ public class VirusManager : MonoBehaviour
             }
 
             CheckCount = true;
-
         }
 
         else if (SpawnBoss == true)
