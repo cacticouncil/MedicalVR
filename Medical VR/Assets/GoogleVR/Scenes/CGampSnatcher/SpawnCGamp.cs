@@ -6,7 +6,7 @@ public class SpawnCGamp : MonoBehaviour {
     public GameObject Cgampprefab;
 
     public GameObject Center;
-    public Vector3 size;
+    public float size;
 
     //public Quaternion min;
     //public Quaternion max;
@@ -32,13 +32,13 @@ public class SpawnCGamp : MonoBehaviour {
 
     public void JaysonShit()
     {
-        Vector3 pos = Center.transform.position + new Vector3(Random.Range(-size.x / 2, size.x / 2), Random.Range(-size.y / 2, size.y / 2), Random.Range(-size.z / 2, size.z / 2));
+        Vector3 pos = /*Center.transform.position + */Random.insideUnitSphere * size;
         Instantiate(Cgampprefab, pos, Quaternion.identity);
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1, 0, 0, 0.5f);
-        Gizmos.DrawCube(/*transform.localPosition + */Center.transform.position, size);
+        Gizmos.DrawSphere(/*transform.localPosition + */Center.transform.position, size);
     }
 }
