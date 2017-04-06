@@ -17,6 +17,11 @@
 	{
 		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
 
+		Pass
+	{
+		ColorMask 0
+	}
+
 		CGPROGRAM
 #pragma surface surf TF2 alpha
 #pragma target 3.0
@@ -99,14 +104,6 @@
 		return o;
 	}
 	ENDCG
-
-		Pass
-	{
-		Name "MASK"
-		Tags{ "Queue" = "Transparent" }
-		ColorMask 0
-		ZWrite On
-	}
 
 		Pass
 	{
