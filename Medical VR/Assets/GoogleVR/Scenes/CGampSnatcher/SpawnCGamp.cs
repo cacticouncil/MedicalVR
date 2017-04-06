@@ -27,13 +27,13 @@ public class SpawnCGamp : MonoBehaviour {
     {
         
 
-        InvokeRepeating("JaysonShit", 1, 0.5f);
+        InvokeRepeating("SpawnC", 1, 1);
     }
 
-    public void JaysonShit()
+    public void SpawnC()
     {
         Vector3 pos = /*Center.transform.position + */Random.insideUnitSphere * size;
-        Instantiate(Cgampprefab, pos, Quaternion.identity);
+        GameObject CGamp = Instantiate(Cgampprefab, pos, Quaternion.identity) as GameObject;
     }
 
     private void OnDrawGizmosSelected()
