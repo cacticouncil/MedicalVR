@@ -158,7 +158,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                 case 2:
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  If you look around " + "\n" + "there are 4 zones to protect";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  If you look around " + "\n" + "there are four zones to protect";
 
                     else
                     {
@@ -189,7 +189,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                     }
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  If 3 of them meet up they " + "\n" + "will create bigger viruses";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  If three of them meet up they " + "\n" + "will create bigger viruses";
 
                     else
                     {
@@ -202,7 +202,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Don't let more than 10 leave";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Don't let more than ten leave";
 
                     if (VirusLeaveCount == 1)
                     {
