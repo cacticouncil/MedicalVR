@@ -6,8 +6,10 @@ public class StrategyTutorial : MonoBehaviour
     public GameObject redCell;
     public GameObject virus;
     public GameObject whiteCell;
+    public GameObject yourCell;
+    public GameObject plane;
+    public GameObject planeDes;
     public Vector3 cellPosition;
-    public SimulateSun sun;
     public int cNum = 0;
     public TMPro.TextMeshPro[] text;
 
@@ -21,55 +23,67 @@ public class StrategyTutorial : MonoBehaviour
         switch (cNum)
         {
             //Cells
-            case 4:
-                StartCoroutine(TurnTextOn(1));
+            case 0:
                 StartCoroutine(SpawnRedCell());
                 break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
             case 5:
             case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
                 StartCoroutine(SpawnRedCell());
                 break;
 
             //Virus
-            case 11:
-                StartCoroutine(TurnTextOn(2));
+            case 7:
+                StartCoroutine(TurnTextOn(1));
                 StartCoroutine(MoveVirus());
                 break;
-            case 12:
+            case 8:
                 StartCoroutine(VirusAttack());
                 break;
-            case 13:
+            case 9:
                 StartCoroutine(Dying());
                 break;
-            case 14:
+            case 10:
                 StartCoroutine(Split());
                 break;
 
             //White Cells
-            case 15:
-                StartCoroutine(TurnTextOn(3));
+            case 11:
+                StartCoroutine(TurnTextOn(2));
                 StartCoroutine(ArriveWhiteCell());
                 break;
-            case 16:
+            case 12:
                 StartCoroutine(MoveWhiteCell());
                 break;
-            case 17:
+            case 13:
                 StartCoroutine(LeaveWhiteCell());
                 break;
 
-            //Shrink Cells
-            case 18:
+            //Your Cell
+            case 14:
                 StartCoroutine(ShrinkCells());
+                StartCoroutine(TurnTextOn(3));
+                StartCoroutine(SpawnCell());
+                break;
+            case 15:
+                StartCoroutine(TurnTextOn(4));
+                plane.SetActive(true);
+                break;
+            case 16:
+                StartCoroutine(TurnTextOn(5));
+                break;
+            case 17:
+                StartCoroutine(TurnTextOn(6));
+                plane.SetActive(false);
+                planeDes.SetActive(true);
                 break;
 
             default:
                 break;
         }
-        sun.TurnUpdate();
         cNum++;
     }
 
@@ -306,6 +320,22 @@ public class StrategyTutorial : MonoBehaviour
             yield return 0;
         }
         whiteCell.SetActive(false);
+    }
+    #endregion
+
+    #region YourCell
+    IEnumerator SpawnCell()
+    {
+
+        float startTime = Time.time;
+        float percent = Time.time - startTime;
+        while (percent < 1.0f)
+        {
+            percent = Time.time - startTime;
+            yourCell.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent);
+            yield return 0;
+        }
+        yourCell.transform.localScale = Vector3.one;
     }
     #endregion
 }
