@@ -38,12 +38,24 @@ public class Virus_VirusGameplay : MonoBehaviour {
     void MoveTo()
     {
         if (I != places.Count)
-            transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
+            if (I == 10)
+            {
+                if (dna.transform.rotation == places[I].transform.rotation)
+                    dna.transform.position = Vector3.MoveTowards(dna.transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
+            }
+            else
+                transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
+
     }
     void fadeCapsid()
     {
         float a = capsid.GetComponent<Renderer>().material.color.a;
         capsid.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - Time.deltaTime);
+    }
+    void RotateTo()
+    {
+        if (I != places.Count)
+            dna.transform.rotation = Quaternion.RotateTowards(dna.transform.rotation, places[I].transform.rotation, 100* Time.deltaTime);
     }
     void CheckCaases()
     {
@@ -84,6 +96,16 @@ public class Virus_VirusGameplay : MonoBehaviour {
                 doAction = NullFunction;
                 I = 8;
                 transform.position = places[I].transform.position;
+                break;
+            case (252):
+                doAction = NullFunction;
+                I = 9;
+                moveSpeed = 50;
+                break;
+            case (256):
+                doAction = RotateTo;
+                I = 10;
+                moveSpeed = 50;
                 break;
             default:
                 break;
