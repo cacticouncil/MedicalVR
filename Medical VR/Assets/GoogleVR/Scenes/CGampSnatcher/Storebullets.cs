@@ -10,7 +10,12 @@ public class Storebullets : MonoBehaviour {
     public static bool arcadeMode = true;
     int lives = 3;
 
+    public GameObject Camera;
 
+    public float fireRate;
+    public GameObject bullet;
+
+    private float nextFire;
     public void LoseresetPos()
     {
         if (arcadeMode == true)
@@ -50,10 +55,21 @@ public class Storebullets : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        bool bPressed = Input.GetButtonDown("Fire1");
+        //     bool bHeld = Input.GetButton("Fire1");
+        //     bool bUp = Input.GetButtonUp("Fire1");
 
+
+
+        if (bPressed && Time.time > nextFire)
+        {
+            shootCGamp();
+        }
     }
     void FixedUpdate()
     {
+        gameObject.transform.rotation = Camera.transform.rotation;
+
         if (arcadeMode == false)
         {
 
@@ -71,6 +87,19 @@ public class Storebullets : MonoBehaviour {
             theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
         }
 
+    }
+   
+    private void shootCGamp()
+    {
+        if (bullet)
+        {
+            if (bulletamount > 0)
+            {
+                nextFire = Time.time + fireRate;
+                Instantiate(bullet, Camera.transform.position, Camera.transform.rotation);
+                bulletamount -= 1;
+            }
+        }
     }
 
 }
