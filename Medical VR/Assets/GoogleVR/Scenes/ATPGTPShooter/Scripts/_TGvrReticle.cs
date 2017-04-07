@@ -93,6 +93,9 @@ public class _TGvrReticle : MonoBehaviour, IGvrGazePointer
     public void OnGazeStart(Camera camera, GameObject targetObject, Vector3 intersectionPosition,
                             bool isInteractive)
     {
+        if (targetObject)
+            if (targetObject.transform.CompareTag("Finish"))
+                return;
         SetGazeTarget(intersectionPosition, isInteractive);
         gazedAt = targetObject;
         gazeStartTime = Time.time;
@@ -107,6 +110,9 @@ public class _TGvrReticle : MonoBehaviour, IGvrGazePointer
     public void OnGazeStay(Camera camera, GameObject targetObject, Vector3 intersectionPosition,
                            bool isInteractive)
     {
+        if (targetObject)
+            if (targetObject.transform.CompareTag("Finish"))
+                return;
         SetGazeTarget(intersectionPosition, isInteractive);
         if (gazedAt != null && gazeStartTime > 0.0f)
         {
@@ -245,7 +251,7 @@ public class _TGvrReticle : MonoBehaviour, IGvrGazePointer
     {
         Vector3 targetLocalPosition = transform.InverseTransformPoint(target);
 
-//        Debug.Log(transform.InverseTransformPoint(target));
+        //        Debug.Log(transform.InverseTransformPoint(target));
 
         if (targetLocalPosition.z < 5)
             targetLocalPosition.z = 30;
