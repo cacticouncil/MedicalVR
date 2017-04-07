@@ -7,7 +7,12 @@ using TMPro;
 
 public class VirusPlayer : MonoBehaviour
 {
-    public static bool isArcade = true;
+    //Varaibles for Tutorial
+    public static bool TutorialMode = true;
+    int WhatToRead = 1;
+    bool CanIRead = true;
+    public static bool ArcadeMode = false;
+
     public GameObject TimerText;
     public GameObject Spawn;
     public GameObject WaveManager;
@@ -20,10 +25,6 @@ public class VirusPlayer : MonoBehaviour
     public float Speed;
     public int Lives;
     public bool isGameover = false;
-
-    //public Image Screen;
-    //Color OriginalColor;
-    //Color FlashColor;
 
     public GameObject Instructions;
     bool InstructionsDone = false;
@@ -40,15 +41,15 @@ public class VirusPlayer : MonoBehaviour
         Speed = 0.0f;
         Lives = 100;
 
-        //OriginalColor = Screen.color;
-        //FlashColor = new Color(1, 1, 1, .2f);
-
-        StartCoroutine(DisplayText("Target the Proteins" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
+        if (TutorialMode == false)
+        {
+            StartCoroutine(DisplayText("Target the Proteins" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
+        }
     }
 
     void Update()
     {
-        if (isArcade == true)
+        if (TutorialMode == false)
         {
             TimeLeft -= Time.deltaTime;
             TimerText.GetComponent<TextMeshPro>().text = "Timer: " + TimeLeft.ToString("f0") + "           Lives: " + Lives.ToString();
@@ -56,71 +57,110 @@ public class VirusPlayer : MonoBehaviour
             //Temporarily have the countdown stay at 0
             if (TimeLeft <= 0.0f)
                 TimeLeft = 0.0f;
-        }
 
-        //Display wave text
-        if (InstructionsDone == true)
-        {
-            if (WaveStarted == true)
+            //Display wave text
+            if (InstructionsDone == true)
             {
-                switch (WaveManager.GetComponent<WaveManager>().WaveNumber)
+                if (WaveStarted == true)
                 {
-                    case 1:
-                        StartCoroutine(DisplayText("Wave1", 2.5f));
-                        break;
+                    switch (WaveManager.GetComponent<WaveManager>().WaveNumber)
+                    {
+                        case 1:
+                            StartCoroutine(DisplayText("Wave1", 2.5f));
+                            break;
 
-                    case 2:
-                        StartCoroutine(DisplayText("Wave2", 2.5f));
-                        break;
+                        case 2:
+                            StartCoroutine(DisplayText("Wave2", 2.5f));
+                            break;
 
-                    case 3:
-                        StartCoroutine(DisplayText("Wave3", 2.5f));
-                        break;
+                        case 3:
+                            StartCoroutine(DisplayText("Wave3", 2.5f));
+                            break;
 
-                    case 4:
-                        StartCoroutine(DisplayText("Wave4", 2.5f));
-                        break;
+                        case 4:
+                            StartCoroutine(DisplayText("Wave4", 2.5f));
+                            break;
 
-                    default:
-                        break;
-                }
+                        default:
+                            break;
+                    }
 
-                WaveManager.GetComponent<WaveManager>().WaveNumber += 1;
-                WaveStarted = false;
-            }
-        }
-
-        Collider[] AntibodiesCloseBy = Physics.OverlapSphere(transform.position, 5.0f);
-
-        if (AntibodiesCloseBy.Length != 0)
-        {
-            foreach (Collider enemy in AntibodiesCloseBy)
-            {
-                //If there is an enemy close then check if player is in the field of view
-                if (enemy.GetComponent<Antibody>())
-                {
-                    //if (enemy.GetComponent<Antibody>().CheckFOV() == true)
-                        //FlashScreen();
-                        //StartCoroutine(FlashScreen());
+                    WaveManager.GetComponent<WaveManager>().WaveNumber += 1;
+                    WaveStarted = false;
                 }
             }
-        }
 
-        if (isArcade == true)
-        {
+            //Check which enemies are nearby
+            Collider[] AntibodiesCloseBy = Physics.OverlapSphere(transform.position, 5.0f);
+
+            if (AntibodiesCloseBy.Length != 0)
+            {
+                foreach (Collider enemy in AntibodiesCloseBy)
+                {
+                    //If there is an enemy close then check if player is in the field of view
+                    if (enemy.GetComponent<AntiViralProtein>())
+                    {
+                        if (enemy.GetComponent<AntiViralProtein>().CheckFOV() == true)
+                            FlashScreen();
+                    }
+                }
+            }
+
             //Gameover
             if (Lives == 0)
                 isGameover = true;
+
+            if (isGameover == true)
+                Speed = 0.0f;
         }
 
-        if (isGameover == true)
-            Speed = 0.0f;
+        else if (TutorialMode == true)
+        {
+            if (CanIRead == true)
+            {
+                switch (WhatToRead)
+                {
+                    case 1:
+                        StartCoroutine(DisplayText("Welcome to Destroy the Cell", 3.5f));
+                        break;
+
+                    case 2:
+                        StartCoroutine(DisplayText("The objective is to kill the cell receptors", 3.5f));
+                        WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
+                        break;
+
+                    case 3:
+                        StartCoroutine(DisplayText("Do this by looking at them", 3.5f));
+                        WaveManager.GetComponent<WaveManager>().CanDestroyProteins = true;
+                        break;
+
+                    case 4:
+                        StartCoroutine(DisplayText("You will shoot attack viruses", 3.5f));
+                        break;
+
+                    case 5:
+                        StartCoroutine(DisplayText("You need to avoid anti viral proteins", 3.5f));
+                        WaveManager.GetComponent<WaveManager>().CanISpawnAntiViralProtein = true;
+                        break; 
+
+                    default:
+                        Instructions.GetComponent<TextMeshPro>().enabled = true;
+                        Instructions.GetComponent<TextMeshPro>().text = " ";
+                        break;
+                }
+                CanIRead = false;
+                WhatToRead += 1;
+            }
+        }
     }
 
     void FixedUpdate()
     {
-        transform.position += transform.forward * Speed;
-        GetComponent<Rigidbody>().velocity *= Speed;
+        if (TutorialMode == false)
+        {
+            transform.position += transform.forward * Speed;
+            GetComponent<Rigidbody>().velocity *= Speed;
+        }
     }
 
     void FlashScreen()
@@ -143,6 +183,8 @@ public class VirusPlayer : MonoBehaviour
 
         if (InstructionsDone == false)
             InstructionsDone = true;
+
+        CanIRead = true;
     }
 
     public void Respawn()
@@ -154,9 +196,9 @@ public class VirusPlayer : MonoBehaviour
     {
         SpawnVirusAttack = transform.position;
         GameObject V = Instantiate(VirusAttack, SpawnVirusAttack, Quaternion.identity) as GameObject;
-        V.GetComponent<LeaveCell>().MainCamera = this.gameObject;
+        V.GetComponent<AttackVirus>().MainCamera = this.gameObject;
         VirusAttackList.Add(V);
-        V.GetComponent<LeaveCell>().enabled = true;
+        V.GetComponent<AttackVirus>().enabled = true;
     }
 }
 
