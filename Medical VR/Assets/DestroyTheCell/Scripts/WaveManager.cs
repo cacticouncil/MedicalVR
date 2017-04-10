@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class WaveManager : MonoBehaviour
 {
     public GameObject Player;
+    public GameObject AntiViralProteinRotation;
 
     int WhatColorProtein;
     public GameObject TheOGProtien;
@@ -16,7 +17,10 @@ public class WaveManager : MonoBehaviour
     public int AntiViralProteinCount;
     Vector3 AntiViralProteinLocation;
 
+    int WhatColorCellReceptor;
     public GameObject CellReceptors;
+    public GameObject CellReceptor1;
+    public GameObject CellReceptor2;
     public List<GameObject> CellReceptorsList = new List<GameObject>();
     public int CellReceptorCount;
     Vector3 CellReceptorLocation;
@@ -47,23 +51,23 @@ public class WaveManager : MonoBehaviour
                     switch (WaveNumber)
                     {
                         case 1:
-                            CellReceptorCount = 3;
-                            AntiViralProteinCount = 2;
+                            CellReceptorCount = 1;
+                            AntiViralProteinCount = 1;
                             break;
 
                         case 2:
-                            CellReceptorCount = 4;
-                            AntiViralProteinCount = 3;
+                            CellReceptorCount = 1;
+                            AntiViralProteinCount = 1;
                             break;
 
                         case 3:
-                            CellReceptorCount = 5;
-                            AntiViralProteinCount = 4;
+                            CellReceptorCount = 1;
+                            AntiViralProteinCount = 1;
                             break;
 
                         case 4:
-                            CellReceptorCount = 6;
-                            AntiViralProteinCount = 4;
+                            CellReceptorCount = 1;
+                            AntiViralProteinCount = 1;
                             break;
 
                         default:
@@ -72,7 +76,7 @@ public class WaveManager : MonoBehaviour
 
                     CreateCellReceptorWave();
                     Player.GetComponent<VirusPlayer>().Respawn();
-                    Player.GetComponent<VirusPlayer>().Speed = 0.0f;
+                    Player.GetComponent<VirusPlayer>().PlayerSpeed = 0.0f;
                     Player.GetComponent<VirusPlayer>().WaveStarted = true;
                     CanDestroyProteins = false;
                     Invoke("CreateAntiViralProteinWave", 6);
@@ -80,15 +84,14 @@ public class WaveManager : MonoBehaviour
             }
 
             //Completed All Waves
-            else if (WaveNumber >= 5)
+            else if (WaveNumber == 5)
             {
                 if (CellReceptorCount == 0 && CellReceptorsList.Count == 0 && Player.GetComponent<VirusPlayer>().WaveStarted == false)
                 {
                     Player.GetComponent<VirusPlayer>().isGameover = true;
-                    Player.GetComponent<VirusPlayer>().Speed = 0.0f;
+                    Player.GetComponent<VirusPlayer>().PlayerSpeed = 0.0f;
                 }
             }
-
 
             for (int i = 0; i < AntiViralProteinList.Count; i++)
             {
@@ -99,16 +102,27 @@ public class WaveManager : MonoBehaviour
 
         else if (VirusPlayer.TutorialMode == true)
         {
+            switch (WaveNumber)
+            {
+                case 1:
+                    CellReceptorCount = 1;
+                    AntiViralProteinCount = 1;
+                    break;
+
+                case 2:
+                    CellReceptorCount = 3;
+                    AntiViralProteinCount = 2;
+                    break;
+            }
+
             if (CanISpawnCellReceptor == true)
             {
-                CellReceptorCount = 1;
                 CreateCellReceptorWave();
                 CanISpawnCellReceptor = false;
             }
 
             if (CanISpawnAntiViralProtein == true)
             {
-                AntiViralProteinCount = 1;
                 CreateAntiViralProteinWave();
                 CanISpawnAntiViralProtein = false;
             }
@@ -119,15 +133,25 @@ public class WaveManager : MonoBehaviour
     {
         for (int i = 0; i < CellReceptorCount; i++)
         {
-            if (VirusPlayer.TutorialMode == false)
-            {
-                CellReceptorLocation = Random.onUnitSphere * 6.5f;
-                CellReceptorsList.Add(Instantiate(CellReceptors, CellReceptorLocation, Quaternion.identity, transform) as GameObject);
-            }
+            //if (VirusPlayer.TutorialMode == false)
+                CellReceptorLocation = Random.onUnitSphere * 7.0f;
 
-            else if (VirusPlayer.TutorialMode == true)
+            //else if (VirusPlayer.TutorialMode == true)
+            //    CellReceptorLocation = Random.onUnitSphere * 4.5f;
+
+            WhatColorCellReceptor = Random.Range(1, 3);
+            switch (WhatColorCellReceptor)
             {
-                CellReceptorsList.Add(Instantiate(CellReceptors, TutorialCellReceptor.transform.position, Quaternion.identity, transform) as GameObject);
+                case 1:
+                    CellReceptorsList.Add(Instantiate(CellReceptor1, CellReceptorLocation, Quaternion.identity, transform) as GameObject);
+                    break;
+
+                case 2:
+                    CellReceptorsList.Add(Instantiate(CellReceptor2, CellReceptorLocation, Quaternion.identity, transform) as GameObject);
+                    break;
+
+                default:
+                    break;
             }
         }
     }
@@ -137,19 +161,19 @@ public class WaveManager : MonoBehaviour
         for (int i = 0; i < AntiViralProteinCount; i++)
         {
             if (VirusPlayer.TutorialMode == false)
-            {
-                AntiViralProteinLocation = Random.insideUnitSphere * 6.5f;
-                while (Vector3.Distance(AntiViralProteinLocation, Player.transform.position) <= 2.5f)
-                    AntiViralProteinRespawn(AntiViralProteinLocation);
-            }
+                AntiViralProteinLocation = Random.onUnitSphere * 5.0f;
 
             else if (VirusPlayer.TutorialMode == true)
             {
-                AntiViralProteinLocation = TutorialCellReceptor.transform.position;
+                if (WaveNumber == 1)
+                    AntiViralProteinLocation = TutorialCellReceptor.transform.position;
+
+                else if (WaveNumber == 2)
+                    AntiViralProteinLocation = Random.onUnitSphere * 6.0f;
             }
 
-            //WhatColorProtein = Random.Range(0, 5);
-            WhatColorProtein = 5;
+            WhatColorProtein = Random.Range(0, 5);
+
             switch (WhatColorProtein)
             {
                 case 1:
@@ -168,9 +192,6 @@ public class WaveManager : MonoBehaviour
                     AntiViralProteinList.Add(Instantiate(GreenAntiViralProtein, AntiViralProteinLocation, Quaternion.identity, transform) as GameObject);
                     break;
 
-                case 5:
-                    AntiViralProteinList.Add(Instantiate(TheOGProtien, AntiViralProteinLocation, Quaternion.identity, transform) as GameObject);
-                    break;
                 default:
                     break;
             }
@@ -178,12 +199,18 @@ public class WaveManager : MonoBehaviour
 
         if (VirusPlayer.TutorialMode == false)
         {
-            Player.GetComponent<VirusPlayer>().Speed = .01f;
+            Player.GetComponent<VirusPlayer>().PlayerSpeed = .01f;
             CanDestroyProteins = true;
         }
     }
 
     Vector3 AntiViralProteinRespawn(Vector3 Position)
+    {
+        Position = Random.insideUnitSphere * 6.5f;
+        return Position;
+    }
+
+    Vector3 CellReceptorRespawn(Vector3 Position)
     {
         Position = Random.insideUnitSphere * 6.5f;
         return Position;

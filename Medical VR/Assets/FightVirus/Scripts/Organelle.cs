@@ -5,16 +5,16 @@ enum OrganelleMovement { MoveRight = 0, MoveLeft = 1, MoveUp = 2, MoveDown = 3 }
 public class Organelle : MonoBehaviour
 {
     public GameObject OrganelleManager;
-    public GameObject Player;
-    public GameObject VirusPlayer;
+    public GameObject FightVirusPlayer;
+    public GameObject DestroyTheCellPlayer;
     public bool isDead;
     OrganelleMovement CM;
     Vector3 StartPos;
     void Start()
     {
         OrganelleManager = gameObject.transform.parent.gameObject;
-        Player = OrganelleManager.GetComponent<OrganelleManager>().Player;
-        VirusPlayer = OrganelleManager.GetComponent<OrganelleManager>().VirusPlayer;
+        FightVirusPlayer = OrganelleManager.GetComponent<OrganelleManager>().FightVirusPlayer;
+        DestroyTheCellPlayer = OrganelleManager.GetComponent<OrganelleManager>().DestoryTheCellPlayer;
         isDead = false;
         StartPos = transform.position;
         CM = (OrganelleMovement)Random.Range(0, 4);
@@ -46,13 +46,13 @@ public class Organelle : MonoBehaviour
 
         if (this.gameObject.GetComponent<Player>())
         {
-            if (Player.GetComponent<Player>().isGameOver)
+            if (FightVirusPlayer.GetComponent<Player>().isGameOver)
                 Destroy(this.gameObject);
         }
 
         else if (this.gameObject.GetComponent<VirusPlayer>())
         {
-            if (VirusPlayer.GetComponent<VirusPlayer>().isGameover)
+            if (DestroyTheCellPlayer.GetComponent<VirusPlayer>().isGameover)
                 Destroy(this.gameObject);
         }
     }
