@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 public class OrganelleManager : MonoBehaviour
 {
-    public GameObject Player;
-    public GameObject VirusPlayer;
+    public GameObject FightVirusPlayer;
+    public GameObject DestoryTheCellPlayer;
     public GameObject Organelle;
     public GameObject Nucleus;
+    public GameObject Mitocondria;
 
     public List<GameObject> OrganelleList = new List<GameObject>();
     public int OrganelleCount;
@@ -14,16 +15,20 @@ public class OrganelleManager : MonoBehaviour
 
     void Start()
     {
-        OrganelleCount = 8;
-        for (int i = 0; i < OrganelleCount; i++)
+        if (Player.TutorialMode == false || VirusPlayer.TutorialMode == false)
         {
-            SpawnRandomCell = Random.insideUnitSphere * 6.0f;
+            OrganelleCount = 5;
+            for (int i = 0; i < OrganelleCount; i++)
+            {
+                SpawnRandomCell = Random.insideUnitSphere * 6.0f;
 
-            if (SpawnRandomCell.y < 0)
-                SpawnRandomCell.y = Random.Range(0, 7);
+                if (SpawnRandomCell.y < 0)
+                    SpawnRandomCell.y = Random.Range(0, 7);
 
-            OrganelleList.Add(Instantiate(Organelle, SpawnRandomCell, Quaternion.identity, transform) as GameObject);
+                OrganelleList.Add(Instantiate(Organelle, SpawnRandomCell, Quaternion.identity, transform) as GameObject);
+            }
+            OrganelleList.Add(Instantiate(Nucleus, SpawnRandomCell, Quaternion.identity, transform) as GameObject);
+            OrganelleList.Add(Instantiate(Mitocondria, SpawnRandomCell, Quaternion.identity, transform) as GameObject);
         }
-        OrganelleList.Add(Instantiate(Nucleus, SpawnRandomCell, Quaternion.identity, transform) as GameObject);
     }
 }
