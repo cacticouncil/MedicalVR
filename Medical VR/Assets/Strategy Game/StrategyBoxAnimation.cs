@@ -68,8 +68,8 @@ public class StrategyBoxAnimation : MonoBehaviour
             {
                 transform.localPosition = Vector3.Lerp(start, midPosition, percent);
                 transform.localScale = Vector3.Lerp(Vector3.zero, midScale, percent);
-                if (!GetComponent<SpriteRenderer>().enabled)
-                    GetComponent<SpriteRenderer>().enabled = true;
+                if (!GetComponent<Renderer>().enabled)
+                    GetComponent<Renderer>().enabled = true;
             }
         }
     }
@@ -79,6 +79,6 @@ public class StrategyBoxAnimation : MonoBehaviour
         transform.position = start;
         rotateMe.rotation = Quaternion.Euler(startRotation);
         chestAnimation = true;
-        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<Renderer>().enabled = false;
     }
 }
