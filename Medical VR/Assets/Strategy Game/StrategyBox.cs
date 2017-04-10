@@ -41,7 +41,8 @@ public class StrategyBox : MonoBehaviour
             AHighlighter.SetGazedAt(false);
 
             //play animation
-            anim.GetComponent<SpriteRenderer>().sprite = items[item].image;
+            anim.GetComponent<MeshRenderer>().material = items[item].material;
+            anim.GetComponent<MeshFilter>().mesh = items[item].mesh;
             animationText.text = "You Received " + items[item].type;
             animationTab.SetActive(true);
 
