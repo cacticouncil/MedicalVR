@@ -15,6 +15,7 @@ public class BulletManager : MonoBehaviour
     public float Time;
     int ChangeProtein;
     public bool CanIShoot = false;
+
     void Start()
     {
         isTriggered = true;

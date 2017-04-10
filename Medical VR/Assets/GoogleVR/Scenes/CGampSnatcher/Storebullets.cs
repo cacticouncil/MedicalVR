@@ -5,12 +5,12 @@ using System;
 public class Storebullets : MonoBehaviour {
 
     public static int bulletamount;
-    public GameObject theScore, theLives, scoreBoard, UI;
-    public float score = 0;
+    public GameObject theScore, theLives, scoreBoard, UI, BulletAmount;
+    public static float score = 0;
     public static bool arcadeMode = true;
     int lives = 3;
 
-    public GameObject Camera;
+    public GameObject shotSpawn;
 
     public float fireRate;
     public GameObject bullet;
@@ -44,7 +44,7 @@ public class Storebullets : MonoBehaviour {
     void Start()
     {
         bulletamount = 0;
-
+        BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         if (arcadeMode == false)
         {
@@ -55,6 +55,8 @@ public class Storebullets : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+
+        BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + Storebullets.bulletamount;
         bool bPressed = Input.GetButtonDown("Fire1");
         //     bool bHeld = Input.GetButton("Fire1");
         //     bool bUp = Input.GetButtonUp("Fire1");
@@ -68,7 +70,7 @@ public class Storebullets : MonoBehaviour {
     }
     void FixedUpdate()
     {
-        gameObject.transform.rotation = Camera.transform.rotation;
+    //    gameObject.transform.rotation = Camera.transform.rotation;
 
         if (arcadeMode == false)
         {
@@ -82,7 +84,7 @@ public class Storebullets : MonoBehaviour {
 
         if (arcadeMode == true)
         {
-            score += Time.smoothDeltaTime;
+            //score += Time.smoothDeltaTime;
             int tmp = (int)score;
             theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
         }
@@ -96,8 +98,9 @@ public class Storebullets : MonoBehaviour {
             if (bulletamount > 0)
             {
                 nextFire = Time.time + fireRate;
-                Instantiate(bullet, Camera.transform.position, Camera.transform.rotation);
+                Instantiate(bullet, shotSpawn.transform.position, shotSpawn.transform.rotation);
                 bulletamount -= 1;
+                BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
             }
         }
     }
