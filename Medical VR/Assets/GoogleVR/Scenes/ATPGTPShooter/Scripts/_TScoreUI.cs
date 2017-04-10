@@ -7,11 +7,11 @@ public class _TScoreUI : MonoBehaviour
     public GameObject gameController;
 
     private const string DISPLAY_TEXT_FORMAT = "Score\n{0}";
-    private TextMesh textField;
+    // private TextMesh textField;
 
     void Awake()
     {
-        textField = GetComponent<TextMesh>();
+    //    textField = GetComponent<TextMesh>();
     }
 
     void Start()
@@ -31,6 +31,6 @@ public class _TScoreUI : MonoBehaviour
     void LateUpdate()
     {
         //      currentShot = (ShotNumber)player.GetComponent<_TPlayerController>().GetShotNumber();
-        textField.text = string.Format(DISPLAY_TEXT_FORMAT, gameController.GetComponent<_TGameController>().score);
+    //    textField.text = string.Format(DISPLAY_TEXT_FORMAT, gameController.GetComponent<_TGameController>().score);
     }
 }
