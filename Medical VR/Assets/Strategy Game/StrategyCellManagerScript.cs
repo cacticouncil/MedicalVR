@@ -91,7 +91,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                     return UnmutateViruses;
                 else if (e <= .75f)
                     return SlowDownViruses;
-                return WeakenViruses;
+                return DefendCells;
             }
             else if (r <= eFactor + mFactor)
             {
@@ -267,6 +267,10 @@ public class StrategyCellManagerScript : MonoBehaviour
             c.GetComponent<StrategyCellScript>().immunity = (int)spawnCellStats.z;
             c.GetComponent<StrategyCellScript>().protein = (StrategyCellScript.Proteins)((int)spawnCellStats.w);
             spawnCellStats = Vector4.zero;
+        }
+        else
+        {
+            c.GetComponent<StrategyCellScript>().defense = tiles[p].GetComponent<StrategyCellScript>().defense;
         }
         t.GetComponent<StrategyTransporter>().enabled = true;
         c.GetComponent<StrategyCellScript>().enabled = true;
@@ -869,14 +873,21 @@ public class StrategyCellManagerScript : MonoBehaviour
         virusPrefab3.GetComponent<StrategyVirusScript>().attackValue *= 1.3f;
     }
 
-    void WeakenViruses()
+    void DefendCells()
     {
-        virusPrefab1.GetComponent<StrategyVirusScript>().health *= .8f;
-        virusPrefab1.GetComponent<StrategyVirusScript>().attackValue *= .8f;
-        virusPrefab2.GetComponent<StrategyVirusScript>().health *= .8f;
-        virusPrefab2.GetComponent<StrategyVirusScript>().attackValue *= .8f;
-        virusPrefab3.GetComponent<StrategyVirusScript>().health *= .8f;
-        virusPrefab3.GetComponent<StrategyVirusScript>().attackValue *= .8f;
+        float highestDefense = float.MinValue;
+        for (int i = 0; i < cells.Count; i++)
+        {
+            if (cells[i].defense > highestDefense)
+                highestDefense = cells[i].defense;
+        }
+
+        highestDefense += 5.0f;
+
+        for (int i = 0; i < cells.Count; i++)
+        {
+            cells[i].defense = highestDefense;
+        }
     }
 
     void MutateViruses()

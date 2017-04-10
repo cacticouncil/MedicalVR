@@ -51,7 +51,9 @@ public class StrategyBox : MonoBehaviour
             boxTab.SetActive(false);
         }
         else
+        {
             actionText.text = "Actions Left: " + actionsLeft;
+        }
     }
 
     public void MoveTo()
