@@ -5,6 +5,7 @@ public class _TRaycastTarget : MonoBehaviour
 {
     public GameObject gun;
     public GameObject LineSegments;
+    public GameObject GVRReticle;
     public float LineSeparation;
 
     private Transform targetTransform;
@@ -64,9 +65,12 @@ public class _TRaycastTarget : MonoBehaviour
         RaycastHit hit;
 
         Physics.Raycast(gun.transform.position, gun.transform.TransformDirection(Vector3.forward), out hit);
-        
+
         if (hit.transform.CompareTag("Finish"))
             rayOn = false;
-        else rayOn = true;
+        else
+            rayOn = true;
+        if(GVRReticle)
+            GVRReticle.SetActive(!rayOn);
     }
 }
