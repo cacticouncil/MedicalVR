@@ -6,6 +6,6 @@ public class CGampBullet : MonoBehaviour, TimedInputHandler {
     public void HandleTimeInput()
     {
         Destroy(gameObject);
-        Storebullets.bulletamount += 1;
+       Storebullets.bulletamount += 1;
     }
 }
