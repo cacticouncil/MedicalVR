@@ -6,15 +6,16 @@ public class StrategyItem
 {
     public enum StrategyItems
     {
-        R = 0,
-        R2,
-        D,
+        CDK = 0,
+        TGF,
+        Fuzeon,
         I,
         I2,
-        P,
-        V
+        Protein,
+        WhiteCell
     }
     public StrategyItems type;
-    public Sprite image;
+    public Mesh mesh;
+    public Material material;
     public int count = 0;
 }

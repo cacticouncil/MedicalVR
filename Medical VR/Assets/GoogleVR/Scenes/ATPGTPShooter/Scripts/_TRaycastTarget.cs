@@ -5,33 +5,28 @@ public class _TRaycastTarget : MonoBehaviour
 {
     public GameObject gun;
     public GameObject LineSegments;
+    public GameObject GVRReticle;
     public float LineSeparation;
-    //    public GameObject oldReticle;
-    //    public GameObject newReticle;
 
     private Transform targetTransform;
-    private Ray theRay;
-
-    //    private LineRenderer lineRenderer;
+    private bool rayOn;
 
     int DebugStuff;
 
-    // Use this for initialization
     void Start()
     {
         if (!gun)
             Debug.Log("failed to load Gun");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        theRay.origin = gun.transform.position;
-        theRay.direction = gun.transform.TransformDirection(Vector3.forward);
-        //PlotTrajectory(gun.transform.position, gun.transform.forward * 10, LineSeparation, 2.0f);
-        //PlotTrajectory(gun.transform.position, gun.transform.forward * 10, .2f, 1.0f);
-
-    }
+    //    void Update()
+    //    {
+    //       RaycastHit hit = new RaycastHit();
+    //       theRay.origin = gun.transform.position;
+    //       theRay.direction = gun.transform.TransformDirection(Vector3.forward);
+    //
+    //       if (Physics.Raycast(theRay, out hit) && )
+    //    }
 
     public Vector3 PlotTrajectoryAtTime(Vector3 start, Vector3 startVelocity, float time)
     {
@@ -42,31 +37,40 @@ public class _TRaycastTarget : MonoBehaviour
     {
         Vector3 prev = Vector3.zero;
         int i = 0;
-        for (; ; i++)
-        {
-            if (i > 19)
-                break;
-            float t = timestep * i * 0.5f;
-            if (t > maxTime) break;
-            Vector3 pos = PlotTrajectoryAtTime(start, startVelocity, t);
-            if (Physics.Linecast(prev, pos)) break;
+        if (rayOn)
+            for (; ; i++)
+            {
+                if (i > 19)
+                    break;
+                float t = timestep * i * 0.5f;
+                if (t > maxTime) break;
+                Vector3 pos = PlotTrajectoryAtTime(start, startVelocity, t);
+                if (Physics.Linecast(prev, pos)) break;
 
-            LineSegments.transform.GetChild(i).transform.position = pos;
-            LineSegments.transform.GetChild(i).transform.LookAt(prev);
+                LineSegments.transform.GetChild(i).transform.position = pos;
+                LineSegments.transform.GetChild(i).transform.LookAt(prev);
 
-            prev = pos;
-        }
+                prev = pos;
+            }
         for (; i < 20; i++)
         {
             LineSegments.transform.GetChild(i).transform.position = Vector3.zero;
-            //            lineRenderer.SetPosition(i, prev);
         }
     }
-
 
     private void FixedUpdate()
     {
         PlotTrajectory(gun.transform.position, gun.transform.forward * 10, .2f, 1.0f);
 
+        RaycastHit hit;
+
+        Physics.Raycast(gun.transform.position, gun.transform.TransformDirection(Vector3.forward), out hit);
+
+        if (hit.transform.CompareTag("Finish"))
+            rayOn = false;
+        else
+            rayOn = true;
+        if(GVRReticle)
+            GVRReticle.SetActive(!rayOn);
     }
 }
