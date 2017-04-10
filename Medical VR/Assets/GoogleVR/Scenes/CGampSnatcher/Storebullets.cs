@@ -6,11 +6,11 @@ public class Storebullets : MonoBehaviour {
 
     public static int bulletamount;
     public GameObject theScore, theLives, scoreBoard, UI, BulletAmount;
-    public float score = 0;
+    public static float score = 0;
     public static bool arcadeMode = true;
     int lives = 3;
 
-    public GameObject Camera;
+    public GameObject shotSpawn;
 
     public float fireRate;
     public GameObject bullet;
@@ -70,7 +70,7 @@ public class Storebullets : MonoBehaviour {
     }
     void FixedUpdate()
     {
-        gameObject.transform.rotation = Camera.transform.rotation;
+    //    gameObject.transform.rotation = Camera.transform.rotation;
 
         if (arcadeMode == false)
         {
@@ -98,7 +98,7 @@ public class Storebullets : MonoBehaviour {
             if (bulletamount > 0)
             {
                 nextFire = Time.time + fireRate;
-                Instantiate(bullet, Camera.transform.position, Camera.transform.rotation);
+                Instantiate(bullet, shotSpawn.transform.position, shotSpawn.transform.rotation);
                 bulletamount -= 1;
                 BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
             }

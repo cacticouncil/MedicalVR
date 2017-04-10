@@ -2,36 +2,35 @@
 using System.Collections;
 
 public class CBullet : MonoBehaviour {
-    public float LifeSpan;
-    public float Speed;
-    public int Damage;
+    //public float LifeSpan;
+    //public float Speed;
+    //public int Damage;
+    public GameObject Trial;
 
     void Start()
     {
-        LifeSpan = 0.0f;
-        Speed = 6.0f;
-        Damage = 10;
+        //LifeSpan = 0.0f;
+        //Speed = 6.0f;
+        //Damage = 10;
+        Instantiate(Trial,transform.position, transform.rotation, transform);
+        Trial.GetComponent<ParticleSystem>().Play();
     }
 
     void Update()
     {
-        LifeSpan += Time.deltaTime;
-        if (LifeSpan >= 2.2f)
-            Destroy(gameObject);
+        //LifeSpan += Time.deltaTime;
+        //if (LifeSpan >= 2.2f)
+        //    Destroy(gameObject);
     }
 
     void FixedUpdate()
     {
-        //GetComponent<Rigidbody>().velocity += transform.forward * Random.Range(-.1f, .1f) + transform.up * Random.Range(-.1f, .1f);
-        //GetComponent<Rigidbody>().velocity += transform.up * Random.Range(-.1f, .1f);
-
-        //Remember that the object is rotated so when it moves forward it needs to use the up axis to do so. 
-        GetComponent<Rigidbody>().velocity = transform.forward * Speed;
+        //GetComponent<Rigidbody>().velocity = transform.forward * Speed;
     }
 
-    void OnTriggerEnter(Collider Virus)
-    {
-        if (Virus.tag == "Ribosome")
-            Destroy(gameObject);
-    }
+    //void OnTriggerEnter(Collider Virus)
+    //{
+    //    if (Virus.tag == "Ribosome")
+    //        Destroy(gameObject);
+    //}
 }
