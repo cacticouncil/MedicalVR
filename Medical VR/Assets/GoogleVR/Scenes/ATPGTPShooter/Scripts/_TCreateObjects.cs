@@ -1,14 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class _TCreateObjects : MonoBehaviour {
-    GameObject parent;
-    GameObject objects;
-    int numberOfObjects;
+public class _TCreateObjects : MonoBehaviour
+{
+    public GameObject parent;
+    public GameObject objects;
+    public int numberOfObjects;
 
-	// Use this for initialization
-	void Start () {
-        for(int i = 0; i < numberOfObjects; ++i)
-            Instantiate(objects, parent.transform);
+    void Start()
+    {
+        if (objects)
+            if (parent)
+                for (int i = 0; i < numberOfObjects; ++i)
+                    Instantiate(objects, parent.transform);
+            else
+                for (int i = 0; i < numberOfObjects; ++i)
+                    Instantiate(objects);
+        else
+            Debug.Log("Could not Create Objects");
     }
 }
