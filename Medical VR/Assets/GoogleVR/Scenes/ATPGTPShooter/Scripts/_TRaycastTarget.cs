@@ -70,6 +70,7 @@ public class _TRaycastTarget : MonoBehaviour
             rayOn = false;
         else
             rayOn = true;
-        GVRReticle.SetActive(!rayOn);
+        if(GVRReticle)
+            GVRReticle.SetActive(!rayOn);
     }
 }
