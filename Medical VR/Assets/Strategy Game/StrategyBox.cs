@@ -56,6 +56,14 @@ public class StrategyBox : MonoBehaviour
         }
     }
 
+    public void GiveAll()
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            items[i].count++;
+        }
+    }
+
     public void MoveTo()
     {
         if (key != cellmanager.selected)

@@ -35,13 +35,13 @@ public class _TRaycastTarget : MonoBehaviour
 
     public void PlotTrajectory(Vector3 start, Vector3 startVelocity, float timestep, float maxTime)
     {
+        int LineSegmentCount = LineSegments.transform.childCount;
         Vector3 prev = Vector3.zero;
         int i = 0;
         if (rayOn)
-            for (; ; i++)
-            {
-                if (i > 19)
-                    break;
+            while (i < LineSegmentCount)
+            {                
+                LineSegments.transform.GetChild(i).gameObject.SetActive(true);
                 float t = timestep * i * 0.5f;
                 if (t > maxTime) break;
                 Vector3 pos = PlotTrajectoryAtTime(start, startVelocity, t);
@@ -51,10 +51,12 @@ public class _TRaycastTarget : MonoBehaviour
                 LineSegments.transform.GetChild(i).transform.LookAt(prev);
 
                 prev = pos;
+                ++i;
             }
-        for (; i < 20; i++)
+        for (; i < LineSegmentCount; i++)
         {
-            LineSegments.transform.GetChild(i).transform.position = Vector3.zero;
+            //    LineSegments.transform.GetChild(i).transform.position = Vector3.zero;
+            LineSegments.transform.GetChild(i).gameObject.SetActive(false);
         }
     }
 
