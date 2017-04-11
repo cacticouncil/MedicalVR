@@ -24,6 +24,8 @@ public class FacebookManager : MonoBehaviour {
     public string ProfileName { get; set;}
     public Sprite ProfilePic { get; set; }
 
+    public int GlobalScore { get; set; }
+
     public string AppLinkURL { get; set; }
 
 
@@ -74,7 +76,7 @@ public class FacebookManager : MonoBehaviour {
         FB.GetAppLink(DealWithAppLink);
     }
 
-    void DisplayUsername(IResult result)
+   public void DisplayUsername(IResult result)
     {
         if (result.Error == null)
             ProfileName = "" + result.ResultDictionary["first_name"];
@@ -82,7 +84,7 @@ public class FacebookManager : MonoBehaviour {
             Debug.Log(result.Error);
     }
 
-    void DisplayProfilePic(IGraphResult result)
+    public void DisplayProfilePic(IGraphResult result)
     {
         if (result.Texture != null) //maybe it is ==
             ProfilePic = Sprite.Create(result.Texture, new Rect(0, 0, 128, 128), new Vector2());
@@ -174,12 +176,14 @@ public class FacebookManager : MonoBehaviour {
         Debug.Log(result.RawResult);
     }
 
-    public void SetScore()
+    public void SetScore(int Scoreint)
     {
-        //var scoreData = new Dictionary<string, string>();
-        //scoreData["score"] = UnityEngine.Random.Range(10, 200).ToString();
-        //FB.API("/me/scores", HttpMethod.POST, delegate (IGraphResult result) {
-        //    Debug.Log("Score submit result: " + result.RawResult);
-        //}, scoreData);
+
+        var ScoreData = new Dictionary<string, string>();
+        GlobalScore += Scoreint;
+
+        ScoreData["score"] = GlobalScore.ToString();
+
+        FB.API("/me/scores", HttpMethod.POST, delegate (IGraphResult result) { Debug.Log("Score Submitted successfully" + result.RawResult); }, ScoreData);
     }
 }
