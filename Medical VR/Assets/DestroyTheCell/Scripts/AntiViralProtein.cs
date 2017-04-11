@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-enum Movements { XAxis = 0, YAxis = 1, XYAxis = 2, NXAxis = 3, NYAxis = 4, NXNYAxis = 5, XNYAxis = 6, NXYAxis = 7}
+enum Movements { XAxis = 0, YAxis = 1, XYAxis = 2, NXAxis = 3, NYAxis = 4, NXNYAxis = 5, XNYAxis = 6, NXYAxis = 7 }
 public class AntiViralProtein : MonoBehaviour
 {
     GameObject WaveManager;
@@ -24,99 +24,113 @@ public class AntiViralProtein : MonoBehaviour
         isRotating = false;
         RotateTimer = 0.0f;
         MoveTimer = 0.0f;
-        Speed = .005f;
+        Speed = .004f;
 
-        if (VirusPlayer.TutorialMode == true)
-        {
+        if (VirusPlayer.TutorialMode == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
             Speed = 0.0f;
-        }
     }
 
     void Update()
     {
-        if (AlwaysChasePlayer == false)
+        if (VirusPlayer.TutorialMode == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
         {
-            if (isRotating)
+            AlwaysChasePlayer = true;
+            Speed = .007f;
+            transform.LookAt(Player.transform);
+            transform.position = Vector3.MoveTowards(transform.position, Player.GetComponent<VirusPlayer>().transform.position, Speed);
+        }
+
+        else
+        {
+            if (AlwaysChasePlayer == false)
             {
-                RotateTimer += Time.deltaTime;
-
-                //Give it random rotate behavior
-                switch (M)
+                if (isRotating == true)
                 {
-                    case Movements.XAxis:
-                        transform.Rotate(.5f, 0, 0);
-                        break;
+                    RotateTimer += Time.deltaTime * .5f;
 
-                    case Movements.YAxis:
-                        transform.Rotate(0, .5f, 0);
-                        break;
+                    //Give it random rotate behavior
+                    switch (M)
+                    {
+                        case Movements.XAxis:
+                            transform.Rotate(.05f, 0, 0);
+                            break;
 
-                    case Movements.XYAxis:
-                        transform.Rotate(.5f, .5f, 0);
-                        break;
+                        case Movements.YAxis:
+                            transform.Rotate(0, .05f, 0);
+                            break;
 
-                    case Movements.NXAxis:
-                        transform.Rotate(-.5f, 0, 0);
-                        break;
+                        case Movements.XYAxis:
+                            transform.Rotate(.05f, .05f, 0);
+                            break;
 
-                    case Movements.NYAxis:
-                        transform.Rotate(0, -.5f, 0);
-                        break;
+                        case Movements.NXAxis:
+                            transform.Rotate(-.05f, 0, 0);
+                            break;
 
-                    case Movements.NXNYAxis:
-                        transform.Rotate(-.5f, -.5f, 0);
-                        break;
+                        case Movements.NYAxis:
+                            transform.Rotate(0, -.05f, 0);
+                            break;
 
-                    case Movements.XNYAxis:
-                        transform.Rotate(.5f, -.5f, 0);
-                        break;
+                        case Movements.NXNYAxis:
+                            transform.Rotate(-.05f, -.05f, 0);
+                            break;
 
-                    case Movements.NXYAxis:
-                        transform.Rotate(-.5f, .5f, 0);
-                        break;
-                    default:
-                        break;
+                        case Movements.XNYAxis:
+                            transform.Rotate(.05f, -.05f, 0);
+                            break;
+
+                        case Movements.NXYAxis:
+                            transform.Rotate(-.05f, .05f, 0);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (RotateTimer >= 4.0f)
+                    {
+                        M = (Movements)Random.Range(0, 7);
+                        RotateTimer = 0.0f;
+                        isRotating = false;
+                    }
                 }
 
-                if (RotateTimer >= 4.0f)
+                //After rotate timer then move in that direction
+                else if (isRotating == false)
                 {
-                    M = (Movements)Random.Range(0, 7);
-                    RotateTimer = 0.0f;
-                    isRotating = false;
+                    MoveTimer += Time.deltaTime;
+
+                    transform.position += transform.forward * Speed;
+                    GetComponent<Rigidbody>().velocity *= Speed;
+
+                    if (MoveTimer >= 5.5f)
+                    {
+                        MoveTimer = 0.0f;
+                        isRotating = true;
+                    }
                 }
             }
 
-            //After rotate timer then move in that direction
-            else if (isRotating == false)
+            else if (AlwaysChasePlayer == true)
             {
-                MoveTimer += Time.deltaTime;
-
-                transform.position += transform.forward * Speed;
-                GetComponent<Rigidbody>().velocity *= Speed;
-
-                if (MoveTimer >= 5.5f)
-                {
-                    MoveTimer = 0.0f;
-                    isRotating = true;
-                }
+                //Chase the player
+                transform.LookAt(Player.GetComponent<VirusPlayer>().transform.position);
+                transform.position = Vector3.MoveTowards(transform.position, Player.GetComponent<VirusPlayer>().transform.position, Speed);
             }
+
         }
 
-        else if (AlwaysChasePlayer == true)
-        {
-            //Chase the player
-            transform.LookAt(Player.GetComponent<VirusPlayer>().transform.position);
-            transform.position += transform.forward * Speed;
-            GetComponent<Rigidbody>().velocity *= Speed;
-        }
-
-        if (Player.GetComponent<VirusPlayer>().isGameover)
+        if (Player.GetComponent<VirusPlayer>().isGameover || Player.GetComponent<VirusPlayer>().TutorialModeCompleted == true)
             Destroy(this.gameObject);
     }
 
     public void DestroyAntiBody()
     {
         Destroy(this.gameObject);
+    }
+
+    void OnDestroy()
+    {
+        WaveManager.GetComponent<WaveManager>().AntiViralProteinList.Remove(transform.gameObject);
     }
 
     public bool CheckFOV()
@@ -140,8 +154,7 @@ public class AntiViralProtein : MonoBehaviour
             Player.GetComponent<VirusPlayer>().Respawn();
         }
 
-        //Possibly colliding with the wall
-        //Maybe make it head the opposite way
+        //Possibly colliding with the wall so maybe make it head the opposite way
         else
         {
 

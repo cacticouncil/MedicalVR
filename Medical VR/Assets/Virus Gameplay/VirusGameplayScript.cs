@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class VirusGameplayScript : MonoBehaviour {
+public class VirusGameplayScript : MonoBehaviour
+{
 
     public List<GameObject> places;
     public List<GameObject> Sceneries;
@@ -15,7 +16,7 @@ public class VirusGameplayScript : MonoBehaviour {
     public float moveSpeed;
     float fadeSpeed;
     int I = 0;
-	void Start ()
+    void Start()
     {
         doAction = NullFunction;
         virus.SetActive(false);
@@ -27,7 +28,7 @@ public class VirusGameplayScript : MonoBehaviour {
             case (1):
                 Sceneries[0].SetActive(false);
                 Sceneries[1].SetActive(true);
-                
+
                 I = 2;
                 subtitltes.GetComponent<SubstitlesScript>().theTimer = 132.5f;
                 theCamera.transform.position = places[I].transform.position;
@@ -49,16 +50,26 @@ public class VirusGameplayScript : MonoBehaviour {
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 break;
+            case (3):
+                Sceneries[0].SetActive(false);
+                Sceneries[1].SetActive(false);
+                Sceneries[2].SetActive(true);
+                Sceneries[3].SetActive(false);
+                RenderSettings.fogDensity = 0;
+                subtitltes.GetComponent<SubstitlesScript>().theTimer = 352.5f;
+                I = 9;
+                theCamera.transform.position = places[I].transform.position;
+                break;
             default:
                 break;
         }
     }
-	void NullFunction()
+    void NullFunction()
     {
 
     }
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+    void Update()
     {
         CheckCaases();
         doAction();
@@ -69,8 +80,8 @@ public class VirusGameplayScript : MonoBehaviour {
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a > 255)
             a = 255;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0,a- (Time.deltaTime*fadeSpeed));
-        
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * fadeSpeed));
+
     }
     void LowerCurtain()
     {
@@ -81,8 +92,8 @@ public class VirusGameplayScript : MonoBehaviour {
     }
     void MoveTo()
     {
-        if(I != places.Count)
-        theCamera.transform.position = Vector3.MoveTowards(theCamera.transform.position, places[I].transform.position, moveSpeed *Time.deltaTime);
+        if (I != places.Count)
+            theCamera.transform.position = Vector3.MoveTowards(theCamera.transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
     }
     void CheckCaases()
     {
@@ -91,16 +102,16 @@ public class VirusGameplayScript : MonoBehaviour {
         {
             case (1):
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-001") == false)
-                SoundManager.PlayVoice("Medical_VR_Game_VO_Line-001");
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-001");
                 break;
             case (4):
                 doAction = RiseCurtain;
                 fadeSpeed = 0.5f;
                 break;
             case (16):
-                if(t > 16.23f)
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-002") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-002");
+                if (t > 16.23f)
+                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-002") == false)
+                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-002");
                 break;
             case (24):
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-003") == false)
@@ -121,7 +132,7 @@ public class VirusGameplayScript : MonoBehaviour {
             case (58):
                 if (t > 58.5f)
                     if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-006") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-006");
+                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-006");
                 break;
             case (65):
                 doAction = NullFunction;
@@ -133,8 +144,8 @@ public class VirusGameplayScript : MonoBehaviour {
                 }
                 break;
             case (66):
-                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-007") == false)
-                     SoundManager.PlayVoice("Medical_VR_Game_VO_Line-007");
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-007") == false)
+                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-007");
                 break;
             case (78):
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-008") == false)
@@ -149,18 +160,18 @@ public class VirusGameplayScript : MonoBehaviour {
                     SoundManager.PlayVoice("Medical_VR_Game_VO_Line-010");
                 break;
             case (100):
-                if((t > 100.5f))
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-011_B") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-011_B");
+                if ((t > 100.5f))
+                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-011_B") == false)
+                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-011_B");
                 break;
             case (105):
                 if ((t > 105.5f))
                     if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-011") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-011");
+                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-011");
 
                 doAction = NullFunction;
-                   I = 1;
-                  //moveSpeed = 30;
+                I = 1;
+                //moveSpeed = 30;
                 break;
             case (116):
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-012") == false)
@@ -187,8 +198,8 @@ public class VirusGameplayScript : MonoBehaviour {
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-015") == false)
                     SoundManager.PlayVoice("Medical_VR_Game_VO_Line-015");
                 I = 3;
-               moveSpeed = 100;
-               break;
+                moveSpeed = 100;
+                break;
             case (158):
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-016") == false)
                     SoundManager.PlayVoice("Medical_VR_Game_VO_Line-016");
@@ -237,7 +248,7 @@ public class VirusGameplayScript : MonoBehaviour {
             case (216):
                 if ((t > 216.5f))
                     if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-024") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-024");
+                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-024");
                 break;
             case (227):
                 doAction = NullFunction;
@@ -245,7 +256,7 @@ public class VirusGameplayScript : MonoBehaviour {
                 moveSpeed = 250;
                 break;
             case (236):
-                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-026") == false)
+                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-026") == false)
                     SoundManager.PlayVoice("Medical_VR_Game_VO_Line-026");
                 break;
             case (246):
@@ -293,8 +304,8 @@ public class VirusGameplayScript : MonoBehaviour {
                 fadeSpeed = 1.5f;
                 break;
             case (287):
-                if(subtitltes.GetComponent<SubstitlesScript>().theTimer < 287.5)
-                SceneManager.LoadScene("SimonDNA");
+                if (subtitltes.GetComponent<SubstitlesScript>().theTimer < 287.5)
+                    SceneManager.LoadScene("SimonDNA");
                 break;
             case (288):
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-033") == false)
@@ -353,14 +364,14 @@ public class VirusGameplayScript : MonoBehaviour {
             case (352):
                 VirusPlayer.ArcadeMode = false;
                 //SceneManager.LoadScene("DestroyTheCell");
-                if(t > 352.5)
+                if (t > 352.5)
                 {
                     doAction = RiseCurtain;
                     fadeSpeed = 1.5f;
                 }
                 break;
             case (353):
-                
+
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-040") == false)
                     SoundManager.PlayVoice("Medical_VR_Game_VO_Line-040");
                 break;

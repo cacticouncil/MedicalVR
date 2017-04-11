@@ -51,7 +51,17 @@ public class StrategyBox : MonoBehaviour
             boxTab.SetActive(false);
         }
         else
+        {
             actionText.text = "Actions Left: " + actionsLeft;
+        }
+    }
+
+    public void GiveAll()
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            items[i].count++;
+        }
     }
 
     public void MoveTo()

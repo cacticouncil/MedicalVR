@@ -1,24 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-
-public class _TShooterUIController : MonoBehaviour {
+using TMPro;
+public class _TShooterUIController : MonoBehaviour
+{
 
     ShotNumber currentShot;
     public GameObject player;
 
-    private const string DISPLAY_TEXT_FORMAT = "{0} Loaded\nRounds Left : {1}";
+    private const string DISPLAY_TEXT_FORMAT = "{0} Loaded\n{1} : Rounds Left";
     private const string MSF_FORMAT = "#.#";
-//    private const float MS_PER_SEC = 1000f;
+    //    private const float MS_PER_SEC = 1000f;
 
-    private TextMesh textField;
-//    private float fps = 60;
+   // private TextMesh textField;
+    private TMPro.TextMeshPro tmPro;
+    //    private float fps = 60;
 
     public Camera cam;
 
     void Awake()
     {
-        textField = GetComponent<TextMesh>();
+        //textField = GetComponent<TextMesh>();
+        tmPro = GetComponent<TextMeshPro>();
     }
 
     void Start()
@@ -39,41 +42,53 @@ public class _TShooterUIController : MonoBehaviour {
     {
         currentShot = (ShotNumber)player.GetComponent<_TPlayerController>().GetShotNumber();
 
-        switch(currentShot)
+        switch (currentShot)
         {
             case ShotNumber.ATPOne:
-                textField.text = string.Format(DISPLAY_TEXT_FORMAT,
-                "ATP ", "3");
+                SetText(true, "3");
                 break;
             case ShotNumber.ATPTwo:
-                textField.text = string.Format(DISPLAY_TEXT_FORMAT,
-                "ATP ", "2");
+                SetText(true, "2");
                 break;
             case ShotNumber.ATPThree:
-                textField.text = string.Format(DISPLAY_TEXT_FORMAT,
-                "ATP ", "1");
+                SetText(true, "1");
                 break;
             case ShotNumber.GTPOne:
-                textField.text = string.Format(DISPLAY_TEXT_FORMAT,
-                "GTP ", "3");
+                SetText(false, "3");
                 break;
             case ShotNumber.GTPTwo:
-                textField.text = string.Format(DISPLAY_TEXT_FORMAT,
-                "GTP ", "2");
+                SetText(false, "2");
                 break;
             case ShotNumber.GTPThree:
-                textField.text = string.Format(DISPLAY_TEXT_FORMAT,
-                "GTP ", "1");
+                SetText(false, "1");
                 break;
 
         }
 
-     //   float deltaTime = Time.unscaledDeltaTime;
-     //   float interp = deltaTime / (0.5f + deltaTime);
-     //   float currentFPS = 1.0f / deltaTime;
-     //   fps = Mathf.Lerp(fps, currentFPS, interp);
-     //   float msf = MS_PER_SEC / fps;
-     //   textField.text = string.Format(DISPLAY_TEXT_FORMAT,
-     //       msf.ToString(MSF_FORMAT), Mathf.RoundToInt(fps));
+
+
+        //   float deltaTime = Time.unscaledDeltaTime;
+        //   float interp = deltaTime / (0.5f + deltaTime);
+        //   float currentFPS = 1.0f / deltaTime;
+        //   fps = Mathf.Lerp(fps, currentFPS, interp);
+        //   float msf = MS_PER_SEC / fps;
+        //   textField.text = string.Format(DISPLAY_TEXT_FORMAT,
+        //       msf.ToString(MSF_FORMAT), Mathf.RoundToInt(fps));
+    }
+
+    void SetText(bool _isATP, string numRound)
+    {
+        transform.GetChild(0).gameObject.SetActive(_isATP);
+        transform.GetChild(1).gameObject.SetActive(!_isATP);
+        if (_isATP)
+        {            
+            tmPro.text = string.Format(DISPLAY_TEXT_FORMAT,
+                "ATP ", numRound);
+        }
+        else
+        {
+            tmPro.text = string.Format(DISPLAY_TEXT_FORMAT,
+                "GTP ", numRound);
+        }
     }
 }

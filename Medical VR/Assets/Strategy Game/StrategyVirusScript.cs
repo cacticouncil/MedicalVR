@@ -132,28 +132,6 @@ public class StrategyVirusScript : MonoBehaviour
             startingPosition = transform.position;
         }
 
-        //Should not be called anymore
-        #region Null
-        if (target == null)
-        {
-            Debug.Log("Target Lost AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            target = parent.FindVirusNewTarget(gameObject);
-            transform.LookAt(target.transform);
-            if (percentTraveled >= 1.0f)
-            {
-                startingPosition = transform.position;
-                distance = Vector3.Distance(startingPosition, target.transform.position);
-                Mathf.Max(distance, .001f);
-                percentTraveled = 1.0f;
-                attackDuration = 0;
-            }
-            else
-            {
-                distance = Vector3.Distance(startingPosition, target.transform.position);
-            }
-        }
-        #endregion
-
         percentTraveled += turnSpeed;
         nextPosition = Vector3.Lerp(startingPosition, target.transform.position, percentTraveled);
         prevPosition = transform.position;
@@ -184,7 +162,7 @@ public class StrategyVirusScript : MonoBehaviour
             if (target.protein != StrategyCellScript.Proteins.Mx1 || (target.protein == StrategyCellScript.Proteins.Mx1 && Random.Range(0.0f, 100.0f) <= 50))
             {
                 attackDuration += attackValue;
-                if (attackDuration >= Mathf.Sqrt(target.defense * 5 + 1))
+                if (attackDuration >= Mathf.Sqrt(target.defense * 5))
                 {
                     float t = health;
                     health -= target.immunity;
