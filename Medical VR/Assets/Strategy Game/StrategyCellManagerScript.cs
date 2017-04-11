@@ -33,6 +33,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     public float randomRange = .5f;
 
     public GameObject victory;
+    public GameObject particleToTarget;
 
     private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500);
 
@@ -187,32 +188,28 @@ public class StrategyCellManagerScript : MonoBehaviour
             child.TurnUpdate();
         }
         yield return new WaitForEndOfFrame();
-        Debug.Log("Cells Updated");
 
         foreach (StrategyMigratingWhiteBloodCell child in whiteCells.ToList())
         {
             child.TurnUpdate();
         }
         yield return new WaitForEndOfFrame();
-        Debug.Log("Viruses Updated");
 
         foreach (StrategyVirusScript child in viruses.ToList())
         {
             child.TurnUpdate();
         }
         yield return new WaitForEndOfFrame();
-        Debug.Log("Viruses Updated");
 
         foreach (StrategyCellScript child in cells.ToList())
         {
             child.DelayedTurnUpdate();
         }
         yield return new WaitForEndOfFrame();
-        Debug.Log("Cells Late Updated");
 
         if (turnNumber >= 30 && turnNumber % 15 == 0)
         {
-            //SpawnVirus();
+            SpawnVirus();
         }
 
         if (turnNumber % 50 == 0)
@@ -241,8 +238,6 @@ public class StrategyCellManagerScript : MonoBehaviour
                 SetSelected(new Vector2(-500, -500));
             }
         }
-
-        Debug.Log("Turn Updated");
     }
     #endregion
 
@@ -574,111 +569,171 @@ public class StrategyCellManagerScript : MonoBehaviour
         Destroy(instance.gameObject);
     }
 
-    public float SpreadImmunity(Vector2 starting, float imm)
+    public float SpreadImmunity(Vector2 k, float imm)
     {
         float immunitySpread = 0;
 
-        Vector2 check = starting;
+        Vector2 check = k;
         if (check.y % 2 == 0)
         {
             //Top Right (+1, +1)
             check.x += 1;
             check.y += 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
 
             //Right (+1, 0)
-            check = starting;
+            check = k;
             check.x += 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
 
             //Bottom Right (+1, -1)
-            check = starting;
+            check = k;
             check.x += 1;
             check.y -= 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
 
             //Bottom Left (0, -1)
-            check = starting;
+            check = k;
             check.y -= 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
 
             //Left (-1, 0)
-            check = starting;
+            check = k;
             check.x -= 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
 
             //Top Left (0, +1)
-            check = starting;
+            check = k;
             check.y += 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
         }
         else
         {
             //Top Right (0, +1)
             check.y += 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
 
             //Right (+1, 0)
-            check = starting;
+            check = k;
             check.x += 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
 
             //Bottom Right (0, -1)
-            check = starting;
+            check = k;
             check.y -= 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
 
             //Bottom Left (-1, -1)
-            check = starting;
+            check = k;
             check.x -= 1;
             check.y -= 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
 
             //Left (-1, 0)
-            check = starting;
+            check = k;
             check.x -= 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
 
             //Top Left (-1, +1)
-            check = starting;
+            check = k;
             check.x -= 1;
             check.y += 1;
-            if (!tiles.ContainsKey(check))
+            if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm); immunitySpread += imm;
+                tiles[check].AddImmunity(imm);
+                immunitySpread += imm;
+                GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
+                p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
+                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().enabled = true;
             }
         }
 

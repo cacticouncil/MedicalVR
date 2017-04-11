@@ -3,15 +3,33 @@ using System.Collections;
 
 public class TurnParticles : MonoBehaviour
 {
-    public Transform target;
+    public Vector3 target;
+    public float immunity;
+
     ParticleSystem p;
     ParticleSystem.Particle[] particles;
+    private float lifetime;
+    private float threshHold = .99f;
+    private byte fadeRate = 2;
+    private float vComparer = .04f;
+    private bool first = true;
     // Use this for initialization
     void OnEnable()
     {
+        transform.LookAt(target);
         p = GetComponent<ParticleSystem>();
+        ParticleSystem.EmissionModule e = p.emission;
+        e.rate = Mathf.CeilToInt(immunity) + 1;
+        lifetime = p.startLifetime;
+        p.startLifetime = 100.0f;
+        first = true;
         p.Play();
         StartCoroutine(Curve());
+    }
+
+    void OnDisable()
+    {
+        p.startLifetime = lifetime;
     }
 
     private IEnumerator Curve()
@@ -19,16 +37,36 @@ public class TurnParticles : MonoBehaviour
         while (p.IsAlive())
         {
             InitializeIfNeeded();
-
             // GetParticles is allocation free because we reuse the m_Particles buffer between updates
             int numParticlesAlive = p.GetParticles(particles);
 
-            for (int i = 0; i < particles.Length; i++)
+            for (int i = 0; i < numParticlesAlive; i++)
             {
-                particles[i].rotation3D = Vector3.zero;
-                float f = particles[i].lifetime / particles[i].startLifetime;
-                Vector3 direction = target.position - particles[i].position;
-                particles[i].velocity = particles[i].velocity * f + direction * (1.0f - f);
+                if (first)
+                {
+                    float s = immunity - (int)immunity;
+                    particles[0].startSize = s;
+                    first = false;
+                }
+                if (V3Equal(particles[i].position, target))
+                {
+                    particles[i].lifetime = 0.0f;
+                }
+                else
+                {
+                    float f = 1.0f - Mathf.Clamp01((particles[i].lifetime - (p.startLifetime - lifetime)) / lifetime);
+                    if (f > threshHold)
+                    {
+                        Color32 c = particles[i].startColor;
+                        if (c.a < fadeRate)
+                            c.a = 0;
+                        else
+                            c.a -= fadeRate;
+                        particles[i].startColor = c;
+                    }
+                    Vector3 direction = target - particles[i].position;
+                    particles[i].velocity = Vector3.Lerp(particles[i].velocity, direction, f);
+                }
             }
 
             // Apply the particle changes to the particle system
@@ -36,15 +74,20 @@ public class TurnParticles : MonoBehaviour
 
             yield return new WaitForFixedUpdate();
         }
-        this.enabled = false;
+        Destroy(gameObject);
     }
 
-    void InitializeIfNeeded()
+    private void InitializeIfNeeded()
     {
         if (p == null)
             p = GetComponent<ParticleSystem>();
 
         if (particles == null || particles.Length < p.maxParticles)
             particles = new ParticleSystem.Particle[p.maxParticles];
+    }
+
+    private bool V3Equal(Vector3 a, Vector3 b)
+    {
+        return Vector3.SqrMagnitude(a - b) < vComparer;
     }
 }

@@ -159,7 +159,6 @@ public class StrategyCellScript : MonoBehaviour
         {
             protein = (Proteins)Random.Range(1, 7);
             p.text = "Protein: " + protein.ToString();
-            Debug.Log("Cell gained protein " + protein.ToString());
         }
         if (i)
         {
@@ -178,9 +177,7 @@ public class StrategyCellScript : MonoBehaviour
         {
             protein = (Proteins)Random.Range(1, 7);
             p.text = "Protein: " + protein.ToString();
-            Debug.Log("Cell gained protein " + protein.ToString());
         }
-        Debug.Log("Cell gained protein " + protein.ToString());
         if (i)
         {
             i.text = "Immunity: " + (int)immunity;
@@ -256,7 +253,6 @@ public class StrategyCellScript : MonoBehaviour
                 protein = (Proteins)Random.Range(1, 7);
             }
             p.text = "Protein: " + protein.ToString();
-            Debug.Log("Cell gained protein " + protein.ToString());
             RefreshUI();
         }
     }
