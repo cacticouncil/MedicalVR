@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class VirusGameplayScript : MonoBehaviour
+public class CellGameplayScript : MonoBehaviour
 {
 
     public List<GameObject> places;
@@ -100,30 +100,46 @@ public class VirusGameplayScript : MonoBehaviour
         float t = subtitltes.GetComponent<SubstitlesScript>().theTimer;
         switch ((int)subtitltes.GetComponent<SubstitlesScript>().theTimer)
         {
+            case (0):
+                doAction = RiseCurtain;
+                fadeSpeed = 0.5f;
+                break;
             case (1):
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-001") == false)
                     SoundManager.PlayVoice("Medical_VR_Game_VO_Line-001");
                 break;
-            case (4):
-                doAction = RiseCurtain;
-                fadeSpeed = 0.5f;
+            case (5):
                 break;
             case (16):
-                if (t > 16.23f)
-                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-002") == false)
-                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-002");
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                virus.SetActive(true);
                 break;
-            case (24):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-003") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-003");
+            case (17):
+                Sceneries[0].SetActive(false);
+                Sceneries[1].SetActive(true);
+                I = 1;
+                theCamera.transform.position = places[I].transform.position;
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
                 break;
-            case (35):
+            case (20):
                 doAction = NullFunction;
-                subtitltes.GetComponent<SubstitlesScript>().Stop();
+                I = 2;
+                moveSpeed = 100;
                 break;
-            case (36):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-004") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-004");
+            case (28):
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case (29):
+                Sceneries[1].SetActive(false);
+                Sceneries[2].SetActive(true);
+                I = 3;
+                RenderSettings.fogDensity = 0;
+                theCamera.transform.position = places[I].transform.position;
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
                 break;
             case (48):
                 if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-005") == false)

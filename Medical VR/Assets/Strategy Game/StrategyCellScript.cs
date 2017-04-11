@@ -386,7 +386,6 @@ public class StrategyCellScript : MonoBehaviour
 
     IEnumerator ChangeColorOverTime(Color c)
     {
-
         float startTime = Time.time;
         float t = Time.time - startTime;
         Color start = render.material.color;
