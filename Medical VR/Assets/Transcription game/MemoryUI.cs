@@ -1,9 +1,15 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
 public class MemoryUI : MonoBehaviour {
 
-    public GameObject theScore, theLives, theLevels, scoreBoard, UI, Spheres, Timer;
+    public GameObject theScore, theLives, theLevels, scoreBoard, UI, Spheres, Timer, Capsules;
+    public GameObject Username, ProfilePic;
+
+    public int GlobalScore;
     // Use this for initialization
     public float score = 0;
     int lives = 3;
@@ -12,21 +18,26 @@ public class MemoryUI : MonoBehaviour {
     public bool finnished = false;
     public float timeRemaining = 60.0f;
     public static bool arcadeMode = false;
-
+    public FBscript hi;
     public void LoseresetPos()
     {
             lives--;
-            theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+            theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
     }
 
     void ShowScore()
     {
         lives = 3;
         UI.SetActive(false);
+        Capsules.SetActive(false);
+        Spheres.GetComponent<Randomsphere>().Getclonei().SetActive(false);
+        Spheres.GetComponent<Randomsphere>().Getclonej().SetActive(false);
+        Spheres.GetComponent<Randomsphere>().Getclonek().SetActive(false);
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
-        scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
-
+        //scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
+        Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + FacebookManager.Instance.GlobalScore;
+        ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
     public void RestartGame()
     {
@@ -36,7 +47,7 @@ public class MemoryUI : MonoBehaviour {
         lives = 3;
         score = 0;
         Level = 0;
-        theLives.GetComponent<TextMesh>().text = "LIVES: " + lives;
+        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         Spheres.GetComponent<Randomsphere>().Reset();
         startTime = 60.0f;
         timeRemaining = 60.0f;
@@ -57,11 +68,11 @@ public class MemoryUI : MonoBehaviour {
 
             string minutes = ((int)timeRemaining / 60).ToString();
             string seconds = (timeRemaining % 60).ToString("f2");
-            Timer.GetComponent<TextMesh>().text = "Timer: " + minutes + ":" + seconds;
+            Timer.GetComponent<TMPro.TextMeshPro>().text = "Timer: " + minutes + ":" + seconds;
         }
         else
         {
-            Timer.GetComponent<TextMesh>().text = "";
+            Timer.GetComponent<TMPro.TextMeshPro>().text = "";
         }
     }
     public void Finish()
@@ -89,13 +100,13 @@ public class MemoryUI : MonoBehaviour {
             if (arcadeMode == true)
             {
                 int tmp = (int)score;
-                theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
+                theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
             }
             else
             {
-                theScore.GetComponent<TextMesh>().text = "";
+                theScore.GetComponent<TMPro.TextMeshPro>().text = "";
             }
-            theLevels.GetComponent<TextMesh>().text = "LEVEL: " + Level.ToString();
+            theLevels.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + Level.ToString();
         }
 
     }
