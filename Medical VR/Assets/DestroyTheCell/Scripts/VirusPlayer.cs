@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class VirusPlayer : MonoBehaviour
 {
     //Variables for Tutorial
-    public static bool TutorialMode = false;
+    public static bool TutorialMode = true;
     int WhatToRead = 1;
     bool CanIRead = true;
     public bool TutorialModeCompleted = false;
