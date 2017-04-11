@@ -15,7 +15,7 @@ public class VirusPlayer : MonoBehaviour
     public bool TutorialModeCompleted = false;
 
     //Variable for Arcade
-    public static bool ArcadeMode = true;
+    public static bool ArcadeMode = false;
 
     //Variables for Game
     public GameObject TimerText;
@@ -42,8 +42,9 @@ public class VirusPlayer : MonoBehaviour
     void Start()
     {
         TimeLeft = 60.0f;
-        PlayerSpeed = 0.0f;
-        Lives = 100;
+        //PlayerSpeed = 0.0f;
+        PlayerSpeed = .02f;
+        Lives = 3;
 
         if (TutorialMode == false)
             StartCoroutine(DisplayText("Target the Cell Receptors" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
@@ -53,12 +54,15 @@ public class VirusPlayer : MonoBehaviour
     {
         if (TutorialMode == false)
         {
-            TimeLeft -= Time.deltaTime;
-            TimerText.GetComponent<TextMeshPro>().text = "Timer: " + TimeLeft.ToString("f0") + "           Lives: " + Lives.ToString();
+            if (ArcadeMode == true)
+            {
+                TimeLeft -= Time.deltaTime;
+                TimerText.GetComponent<TextMeshPro>().text = "Timer: " + TimeLeft.ToString("f0") + "           Lives: " + Lives.ToString();
 
-            //Temporarily have the countdown stay at 0
-            if (TimeLeft <= 0.0f)
-                TimeLeft = 0.0f;
+                //Temporarily have the countdown stay at 0
+                if (TimeLeft <= 0.0f)
+                    TimeLeft = 0.0f;
+            }
 
             //Display wave text
             if (InstructionsDone == true)
@@ -109,19 +113,35 @@ public class VirusPlayer : MonoBehaviour
             }
 
             //Gameover
-            if (Lives == 0)
-                isGameover = true;
+            if (ArcadeMode == true)
+            {
+                if (Lives == 0)
+                    isGameover = true;
+            }
 
             if (isGameover == true)
             {
                 BeatGameTimer += Time.deltaTime;
                 StartCoroutine(DisplayText("You Win", 3.5f));
 
-                if (BeatGameTimer >= 2.5)
+                if (ArcadeMode == false)
                 {
-                    VirusGameplayScript.loadCase = 3;
-                    SceneManager.LoadScene("Virus Gameplay Scene");
+                    //For story mode
+                    if (BeatGameTimer >= 2.5)
+                    {
+                        VirusGameplayScript.loadCase = 3;
+                        SceneManager.LoadScene("Virus Gameplay Scene");
+                    }
                 }
+
+                //else if (ArcadeMode == true)
+                //{
+                //    //For arcade mode after you beat the game
+                //    if (BeatGameTimer >= 2.5)
+                //    {
+
+                //    }
+                //}
             }
         }
 
@@ -155,7 +175,7 @@ public class VirusPlayer : MonoBehaviour
                     case 4:
                         StartCoroutine(DisplayText("And using your reticle to destroy them", 3.5f));
                         CanIMove = true;
-                        PlayerSpeed = .01f;
+                        PlayerSpeed = .02f;
                         WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
                         break;
 
@@ -182,7 +202,7 @@ public class VirusPlayer : MonoBehaviour
                     case 9:
                         StartCoroutine(DisplayText("Now pratice targeting these cell receptors", 3.5f));
                         CanIMove = true;
-                        PlayerSpeed = .01f;
+                        PlayerSpeed = .02f;
                         WaveManager.GetComponent<WaveManager>().WaveNumber = 2;
                         WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
                         WaveManager.GetComponent<WaveManager>().CanISpawnAntiViralProtein = true;
