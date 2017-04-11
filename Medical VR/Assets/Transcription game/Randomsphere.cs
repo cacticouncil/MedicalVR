@@ -14,7 +14,7 @@ public enum GNE
 
 public class Randomsphere : MonoBehaviour {
     public GameObject memoryui;
-    public GameObject victoryeffect;
+    public GameObject victoryeffect, NextLevel;
     public GameObject[] Spheres;
     public GameObject[] Spheres2;
     private List<GameObject> testSpheres;
@@ -49,6 +49,7 @@ public class Randomsphere : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        NextLevel.SetActive(false);
         playfx = false;
         testSpheres = new List<GameObject>();
         ans = new List<string>();
@@ -177,12 +178,15 @@ public class Randomsphere : MonoBehaviour {
             //victoryeffect.GetComponent<ParticleSystem>().Stop();
             if (playfx == false)
             {
+                NextLevel.SetActive(true);
+                NextLevel.GetComponent<TMPro.TextMeshPro>().text = "Next Level";
                 victoryeffect.GetComponent<ParticleSystem>().Play();
                 playfx = true;
             }
 
             if (victoryeffect.GetComponent<ParticleSystem>().isPlaying == false)
             {
+                NextLevel.SetActive(false);
                 playfx = false;
                 Reset();
                 memoryui.GetComponent<MemoryUI>().Level += 1;

@@ -42,7 +42,7 @@ public class CellReceptors : MonoBehaviour, TimedInputHandler
 
     public void OnGazeExit()
     {
-        Player.GetComponent<VirusPlayer>().PlayerSpeed = .01f;
+        Player.GetComponent<VirusPlayer>().PlayerSpeed = .02f;
     }
 
     public void HandleTimeInput()

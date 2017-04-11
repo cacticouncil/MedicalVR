@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Virus_VirusGameplay : MonoBehaviour {
 
     public List<GameObject> places;
-    public GameObject subtitltes, virusWithMesh, capsid, dna;
+    public GameObject subtitles, virusWithMesh, capsid, dna;
 
     delegate void Func();
     Func doAction;
@@ -59,7 +59,7 @@ public class Virus_VirusGameplay : MonoBehaviour {
     }
     void CheckCaases()
     {
-        switch ((int)subtitltes.GetComponent<SubstitlesScript>().theTimer)
+        switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
             case (105):
                 I = 1;
