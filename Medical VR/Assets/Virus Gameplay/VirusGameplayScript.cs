@@ -363,7 +363,7 @@ public class VirusGameplayScript : MonoBehaviour
                 break;
             case (352):
                 VirusPlayer.ArcadeMode = false;
-                //SceneManager.LoadScene("DestroyTheCell");
+                SceneManager.LoadScene("DestroyTheCell");
                 if (t > 352.5)
                 {
                     doAction = RiseCurtain;
