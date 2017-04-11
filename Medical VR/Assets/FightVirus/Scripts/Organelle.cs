@@ -22,27 +22,27 @@ public class Organelle : MonoBehaviour
 
     void Update()
     {
-        switch (CM)
-        {
-            case OrganelleMovement.MoveRight:
-                transform.position = new Vector3(StartPos.x + Mathf.Sin(Time.time), StartPos.y, StartPos.z);
-                break;
+        //switch (CM)
+        //{
+        //    case OrganelleMovement.MoveRight:
+        //        transform.position = new Vector3(StartPos.x + Mathf.Sin(Time.time), StartPos.y, StartPos.z);
+        //        break;
 
-            case OrganelleMovement.MoveLeft:
-                transform.position = new Vector3(StartPos.x - Mathf.Sin(Time.time), StartPos.y, StartPos.z);
-                break;
+        //    case OrganelleMovement.MoveLeft:
+        //        transform.position = new Vector3(StartPos.x - Mathf.Sin(Time.time), StartPos.y, StartPos.z);
+        //        break;
 
-            case OrganelleMovement.MoveUp:
-                transform.position = new Vector3(StartPos.x, StartPos.y + Mathf.Sin(Time.time), StartPos.z);
-                break;
+        //    case OrganelleMovement.MoveUp:
+        //        transform.position = new Vector3(StartPos.x, StartPos.y + Mathf.Sin(Time.time), StartPos.z);
+        //        break;
 
-            case OrganelleMovement.MoveDown:
-                transform.position = new Vector3(StartPos.x, StartPos.y - Mathf.Sin(Time.time), StartPos.z);
-                break;
+        //    case OrganelleMovement.MoveDown:
+        //        transform.position = new Vector3(StartPos.x, StartPos.y - Mathf.Sin(Time.time), StartPos.z);
+        //        break;
 
-            default:
-                break;
-        }
+        //    default:
+        //        break;
+        //}
 
         if (this.gameObject.GetComponent<Player>())
         {
