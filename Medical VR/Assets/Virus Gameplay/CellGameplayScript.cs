@@ -8,7 +8,7 @@ public class CellGameplayScript : MonoBehaviour
 
     public List<GameObject> places;
     public List<GameObject> Sceneries;
-    public GameObject subtitltes, blackCurtain, theCamera, virus, rna;
+    public GameObject subtitles, blackCurtain, theCamera, virus, rna;
     public static int loadCase;
     // Use this for initialization
     delegate void Func();
@@ -30,7 +30,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[1].SetActive(true);
 
                 I = 2;
-                subtitltes.GetComponent<SubstitlesScript>().theTimer = 132.5f;
+                subtitles.GetComponent<SubstitlesScript>().theTimer = 132.5f;
                 theCamera.transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 doAction = RiseCurtain;
@@ -42,7 +42,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(false);
                 Sceneries[3].SetActive(true);
                 I = 7;
-                subtitltes.GetComponent<SubstitlesScript>().theTimer = 287.5f;
+                subtitles.GetComponent<SubstitlesScript>().theTimer = 287.5f;
                 theCamera.transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 virus.GetComponent<Virus_VirusGameplay>().dna.transform.position = virus.GetComponent<Virus_VirusGameplay>().places[10].transform.position;
@@ -56,7 +56,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 Sceneries[3].SetActive(false);
                 RenderSettings.fogDensity = 0;
-                subtitltes.GetComponent<SubstitlesScript>().theTimer = 352.5f;
+                subtitles.GetComponent<SubstitlesScript>().theTimer = 352.5f;
                 I = 9;
                 theCamera.transform.position = places[I].transform.position;
                 break;
@@ -97,8 +97,8 @@ public class CellGameplayScript : MonoBehaviour
     }
     void CheckCaases()
     {
-        float t = subtitltes.GetComponent<SubstitlesScript>().theTimer;
-        switch ((int)subtitltes.GetComponent<SubstitlesScript>().theTimer)
+        float t = subtitles.GetComponent<SubstitlesScript>().theTimer;
+        switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
             case (0):
                 doAction = RiseCurtain;
@@ -141,14 +141,12 @@ public class CellGameplayScript : MonoBehaviour
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case (48):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-005") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-005");
+            case (44):
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
                 break;
-            case (58):
-                if (t > 58.5f)
-                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-006") == false)
-                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-006");
+            case (45):
+                SceneManager.LoadScene("ATPGTPShooter");
                 break;
             case (65):
                 doAction = NullFunction;
@@ -156,7 +154,7 @@ public class CellGameplayScript : MonoBehaviour
                 {
                     virus.SetActive(true);
 
-                    subtitltes.GetComponent<SubstitlesScript>().Stop();
+                    subtitles.GetComponent<SubstitlesScript>().Stop();
                 }
                 break;
             case (66):
@@ -199,7 +197,7 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (132):
-                if (subtitltes.GetComponent<SubstitlesScript>().theTimer < 132.5f)
+                if (subtitles.GetComponent<SubstitlesScript>().theTimer < 132.5f)
                     SceneManager.LoadScene("DodgeAnitbodies");
                 break;
             case (133):
@@ -320,7 +318,7 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (287):
-                if (subtitltes.GetComponent<SubstitlesScript>().theTimer < 287.5)
+                if (subtitles.GetComponent<SubstitlesScript>().theTimer < 287.5)
                     SceneManager.LoadScene("SimonDNA");
                 break;
             case (288):
