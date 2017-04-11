@@ -12,11 +12,11 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     // Use this for initialization
     public float score = 0;
     public Color fogColor;
-    public static bool arcadeMode = true;
+    public static bool arcadeMode = false;
     Vector3 originPos;
     int lives = 3;
     float orgSpeed;
-    bool stopMoving = false, startSpeed = true;
+    public bool stopMoving = false, startSpeed = true;
     
    public void LoseresetPos()
     {
@@ -45,6 +45,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
         lives = 3;
     }
+
    public void RestartGame()
     {
         UI.SetActive(true);
@@ -73,6 +74,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     {
       
     }
+
     void FixedUpdate()
     {
         if(arcadeMode == false)
@@ -86,11 +88,13 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
                 }
             }
         }
+
         AvoidBack();
         if(lives < 1)
         {
             ShowScore();
         }
+
         else if(stopMoving == false)
         {
             transform.position += transform.forward * speed;
@@ -100,9 +104,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
                 int tmp = (int)score;
                 theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
             }
-           
         }
-       
     }
 
     void AvoidBack()
