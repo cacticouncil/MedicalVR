@@ -130,7 +130,6 @@ public class StrategyCellScript : MonoBehaviour
         if (!hosted)
         {
             immunity++;
-            tImmunity++;
             if (protein == Proteins.None && immunity >= 10f)
             {
                 protein = (Proteins)Random.Range(1, 7);
@@ -151,6 +150,10 @@ public class StrategyCellScript : MonoBehaviour
     //Called from cell manager
     public void AddImmunity(float imm)
     {
+        if (hosted)
+        {
+            immunity += imm;
+        }
         immunity += imm;
         if (protein == Proteins.None && immunity >= 10f)
         {
@@ -171,7 +174,6 @@ public class StrategyCellScript : MonoBehaviour
     public void IncreaseImmunityGreatly()
     {
         immunity += iBonus;
-        tImmunity += iBonus;
         if (protein == Proteins.None && immunity >= 10f)
         {
             protein = (Proteins)Random.Range(1, 7);
@@ -288,6 +290,7 @@ public class StrategyCellScript : MonoBehaviour
 
     public void TurnUpdate()
     {
+        tImmunity = immunity;
         if (!hosted)
         {
             if (RDur > 0)
@@ -370,7 +373,6 @@ public class StrategyCellScript : MonoBehaviour
         {
             RefreshUI();
         }
-        tImmunity = immunity;
     }
 
     public void ToggleUI(bool b)
