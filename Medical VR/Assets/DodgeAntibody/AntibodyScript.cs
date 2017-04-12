@@ -1,20 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AntibodyScript : MonoBehaviour {
+public class AntibodyScript : MonoBehaviour
+{
 
     public GameObject Cam, Effects, banner;
     bool reswpawn = false;
     float saveSpeed;
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    public GameObject TutorialMode;
+    // Use this for initialization
+    void Start()
     {
-        if(Vector3.Distance(transform.position, Cam.transform.position) < 3000)
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Vector3.Distance(transform.position, Cam.transform.position) < 3000)
         {
             GetComponent<Renderer>().enabled = true;
         }
@@ -22,20 +26,23 @@ public class AntibodyScript : MonoBehaviour {
         {
             GetComponent<Renderer>().enabled = false;
         }
-        if(reswpawn == true)
+        if (reswpawn == true)
         {
-            if(Effects.GetComponent<ParticleSystem>().isPlaying == false)
+            if (Effects.GetComponent<ParticleSystem>().isPlaying == false)
             {
                 reswpawn = false;
                 Cam.GetComponent<MovingCamera>().LoseresetPos();
                 Cam.GetComponent<MovingCamera>().speed = saveSpeed;
-            }   
+
+                if (MovingCamera.TutorialMode == true)
+                    Cam.GetComponent<MovingCamera>().speed = 0;
+            }
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-       if(other.tag == "virus")
+        if (other.tag == "virus")
         {
             other.transform.position -= other.transform.forward * 50;
             saveSpeed = other.GetComponent<MovingCamera>().speed;
@@ -43,19 +50,18 @@ public class AntibodyScript : MonoBehaviour {
             reswpawn = true;
             Effects.GetComponent<ParticleSystem>().Stop();
             Effects.GetComponent<ParticleSystem>().Play();
-            if(PlayerPrefs.GetInt("White Cell") != 1)
+            if (PlayerPrefs.GetInt("White Cell") != 1)
             {
                 banner.GetComponent<BannerScript>().ShowUp();
                 PlayerPrefs.SetInt("White Cell", 1);
                 SoundManager.PlaySFX("MenuEnter");
             }
-        }
-    }
-    void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.tag == "virus")
-        {
-            collision.gameObject.GetComponent<MovingCamera>().LoseresetPos();
+
+            //For tutorial mode 
+            if (MovingCamera.TutorialMode == true)
+            {
+                TutorialMode.GetComponent<DodgeAntiBodyTutorial>().MoveStoy();
+            }
         }
     }
 }
