@@ -45,27 +45,63 @@ public class VirusManager : MonoBehaviour
                 switch (WaveNumber)
                 {
                     case 1:
-                        EnemyCount = 12;
-                        SmallVirusSpeed = 0.003f;
-                        SmallVirusHealth = 20;
-                        BigVirusSpeed = 0.001f;
-                        BigVirusHealth = 40;
+                        if (Player.ArcadeMode == true)
+                        {
+                            EnemyCount = 12;
+                            SmallVirusSpeed = 0.003f;
+                            SmallVirusHealth = 20;
+                            BigVirusSpeed = 0.001f;
+                            BigVirusHealth = 40;
+                        }
+
+                        else if (Player.ArcadeMode == false)
+                        {
+                            EnemyCount = 7;
+                            SmallVirusSpeed = 0.003f;
+                            SmallVirusHealth = 20;
+                            BigVirusSpeed = 0.001f;
+                            BigVirusHealth = 40;
+                        }
                         break;
 
                     case 2:
-                        EnemyCount = 16;
-                        SmallVirusSpeed = 0.006f;
-                        SmallVirusHealth = 40;
-                        BigVirusSpeed = 0.002f;
-                        BigVirusHealth = 50;
+                        if (Player.ArcadeMode == true)
+                        {
+                            EnemyCount = 16;
+                            SmallVirusSpeed = 0.004f;
+                            SmallVirusHealth = 40;
+                            BigVirusSpeed = 0.002f;
+                            BigVirusHealth = 50;
+                        }
+
+                        else if (Player.ArcadeMode == false)
+                        {
+                            EnemyCount = 12;
+                            SmallVirusSpeed = 0.003f;
+                            SmallVirusHealth = 40;
+                            BigVirusSpeed = 0.002f;
+                            BigVirusHealth = 50;
+                        }
                         break;
 
                     case 3:
-                        EnemyCount = 20;
-                        SmallVirusSpeed = 0.009f;
-                        SmallVirusHealth = 60;
-                        BigVirusSpeed = 0.003f;
-                        BigVirusHealth = 60;
+                        if (Player.ArcadeMode == true)
+                        {
+                            EnemyCount = 20;
+                            SmallVirusSpeed = 0.009f;
+                            SmallVirusHealth = 60;
+                            BigVirusSpeed = 0.003f;
+                            BigVirusHealth = 60;
+                        }
+
+                        else if (Player.ArcadeMode == false)
+                        {
+                            EnemyCount = 17;
+                            SmallVirusSpeed = 0.004f;
+                            SmallVirusHealth = 60;
+                            BigVirusSpeed = 0.003f;
+                            BigVirusHealth = 60;
+                        }
                         break;
 
                     case 4:
@@ -88,7 +124,6 @@ public class VirusManager : MonoBehaviour
 
         if (Player.TutorialMode == true)
         {
-            //Set up tutorial waves
             if (CanISpawn == true)
             {
                 switch (WaveNumber)
@@ -104,7 +139,7 @@ public class VirusManager : MonoBehaviour
 
                     case 2:
                         EnemyCount = 7;
-                        SmallVirusSpeed = 0.003f;
+                        SmallVirusSpeed = 0.002f;
                         SmallVirusHealth = 20;
                         BigVirusSpeed = 0.001f;
                         BigVirusHealth = 40;

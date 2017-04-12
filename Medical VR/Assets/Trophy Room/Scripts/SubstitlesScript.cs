@@ -14,7 +14,7 @@ public class SubstitlesScript : MonoBehaviour {
     public List<Subtitle> theSubtitles = new List<Subtitle>();
     public float theTimer = 0;
     int i = 0;
-    bool stop = false;
+    bool stop = false, done = false;
 	void Start ()
     {
         if (theSubtitles.Count == 0)
@@ -35,6 +35,7 @@ public class SubstitlesScript : MonoBehaviour {
                     if (i >= theSubtitles.Count)
                     {
                         stop = true;
+                        done = true;
                     }
                     GetComponent<TMPro.TextMeshPro>().text = "";
                 }
@@ -68,6 +69,6 @@ public class SubstitlesScript : MonoBehaviour {
     }
     public bool IsDone()
     {
-        return stop;
+        return done;
     }
 }

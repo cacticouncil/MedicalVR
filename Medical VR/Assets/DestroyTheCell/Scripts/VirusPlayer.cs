@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class VirusPlayer : MonoBehaviour
 {
     //Variables for Tutorial
-    public static bool TutorialMode = false;
+    public static bool TutorialMode = true;
     int WhatToRead = 1;
     bool CanIRead = true;
     public bool TutorialModeCompleted = false;
@@ -52,6 +52,7 @@ public class VirusPlayer : MonoBehaviour
 
     void Update()
     {
+        //For arcade and story mode
         if (TutorialMode == false)
         {
             if (ArcadeMode == true)
@@ -121,27 +122,33 @@ public class VirusPlayer : MonoBehaviour
 
             if (isGameover == true)
             {
-                BeatGameTimer += Time.deltaTime;
-                StartCoroutine(DisplayText("You Win", 3.5f));
-
-                if (ArcadeMode == false)
+                if (Lives != 0)
                 {
-                    //For story mode
-                    if (BeatGameTimer >= 2.5)
+                    BeatGameTimer += Time.deltaTime;
+                    StartCoroutine(DisplayText("You Win", 3.5f));
+                }
+
+                else
+                {
+                    BeatGameTimer += Time.deltaTime;
+                    StartCoroutine(DisplayText("You Lose", 3.5f));
+                }
+
+                if (BeatGameTimer >= 2.5f)
+                {
+                    //For story mode once you beat it proceed to the next story mode
+                    if (ArcadeMode == false)
                     {
                         VirusGameplayScript.loadCase = 3;
                         SceneManager.LoadScene("Virus Gameplay Scene");
                     }
+
+                    //For arcade mode once you beat it will bring up scoreboard 
+                    //else if (ArcadeMode == true)
+                    //{
+                    //
+                    //}
                 }
-
-                //else if (ArcadeMode == true)
-                //{
-                //    //For arcade mode after you beat the game
-                //    if (BeatGameTimer >= 2.5)
-                //    {
-
-                //    }
-                //}
             }
         }
 
@@ -230,6 +237,18 @@ public class VirusPlayer : MonoBehaviour
             if (VirusAttackList[i].gameObject == null)
                 VirusAttackList.Remove(VirusAttackList[i]);
         }
+
+        ////After you beat tutorial if story mode bool is active transtion to story mode for this game
+        //if (TutorialModeCompleted == true)
+        //{
+
+        //}
+
+        ////Otherwise just play tutorial once and leave to  main menu
+        //if (TutorialModeCompleted == true)
+        //{
+
+        //}
     }
 
     void FixedUpdate()

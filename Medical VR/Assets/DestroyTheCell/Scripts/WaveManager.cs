@@ -65,6 +65,7 @@ public class WaveManager : MonoBehaviour
                                 CellReceptorCount = 7;
                                 AntiViralProteinCount = 4;
                             }
+
                             else if (VirusPlayer.ArcadeMode == false)
                             {
                                 CellReceptorCount = 5;
@@ -75,9 +76,10 @@ public class WaveManager : MonoBehaviour
                         case 4:
                             if (VirusPlayer.ArcadeMode == true)
                             {
-                                CellReceptorCount = 10;
+                                CellReceptorCount = 9;
                                 AntiViralProteinCount = 5;
                             }
+
                             else if (VirusPlayer.ArcadeMode == false)
                             {
                                 CellReceptorCount = 5;
@@ -94,7 +96,7 @@ public class WaveManager : MonoBehaviour
                     Player.GetComponent<VirusPlayer>().PlayerSpeed = 0.0f;
                     Player.GetComponent<VirusPlayer>().WaveStarted = true;
                     CanDestroyProteins = false;
-                    Invoke("CreateAntiViralProteinWave", 6);
+                    Invoke("CreateAntiViralProteinWave", 5);
                 }
             }
 
