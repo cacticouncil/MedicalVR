@@ -2,9 +2,21 @@
 using UnityEngine.UI;
 using System.Collections;
 
+public enum Proteins
+{
+    None,
+    RNase_L,
+    PKR,
+    TRIM22,
+    IFIT,
+    CH25H,
+    Mx1
+}
+
 public class StrategyCellScript : MonoBehaviour
 {
     public float reproduction = 0, defense = 0, immunity = 0;
+    public Proteins protein = Proteins.None;
     public TMPro.TextMeshPro r;
     public TMPro.TextMeshPro d;
     public TMPro.TextMeshPro i;
@@ -31,23 +43,14 @@ public class StrategyCellScript : MonoBehaviour
 
     public StrategyCellManagerScript parent;
 
+    public TMPro.TextMeshPro[] texts;
+
     private float tImmunity;
 
     private MoveCamera mainCamera;
     private float camOffset = 5.0f;
     private float scaledDistance = 1.3f;
 
-    public enum Proteins
-    {
-        None,
-        RNase_L,
-        PKR,
-        TRIM22,
-        IFIT,
-        CH25H,
-        Mx1
-    }
-    public Proteins protein = Proteins.None;
 
     void Awake()
     {
@@ -79,6 +82,7 @@ public class StrategyCellScript : MonoBehaviour
         tImmunity = immunity;
     }
 
+    #region IncreasingStats
     public void IncreaseReproduction()
     {
         if (!hosted)
@@ -196,11 +200,13 @@ public class StrategyCellScript : MonoBehaviour
             Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
         }
     }
+    #endregion
 
+    #region PowerUps
     public void UseR()
     {
         //check for item
-        if (parent.inventory[0].count > 0)
+        if (!hosted && parent.inventory[0].count > 0)
         {
             parent.inventory[0].count--;
             RDur += powerupDuration;
@@ -212,7 +218,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseR2()
     {
         //check for item
-        if (parent.inventory[1].count > 0)
+        if (!hosted && parent.inventory[1].count > 0)
         {
             parent.inventory[1].count--;
             parent.DuplicateCell(key, new Vector4(reproduction, defense, immunity, (int)protein));
@@ -222,7 +228,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseD()
     {
         //check for item
-        if (parent.inventory[2].count > 0)
+        if (!hosted && parent.inventory[2].count > 0)
         {
             parent.inventory[2].count--;
             IncreaseDefenseGreatly();
@@ -232,7 +238,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseI()
     {
         //check for item
-        if (parent.inventory[3].count > 0)
+        if (!hosted && parent.inventory[3].count > 0)
         {
             parent.inventory[3].count--;
             IncreaseImmunityGreatly();
@@ -242,7 +248,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseI2()
     {
         //check for item
-        if (parent.inventory[4].count > 0)
+        if (!hosted && parent.inventory[4].count > 0)
         {
             parent.inventory[4].count--;
             I2Dur += powerupDuration;
@@ -253,7 +259,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseP()
     {
         //check for item
-        if (protein != Proteins.None && parent.inventory[5].count > 0)
+        if (!hosted && protein != Proteins.None && parent.inventory[5].count > 0)
         {
             parent.inventory[5].count--;
             Proteins prev = protein;
@@ -287,12 +293,9 @@ public class StrategyCellScript : MonoBehaviour
         w.GetComponent<StrategyItemWhiteBloodCell>().target = virus.GetComponent<StrategyVirusScript>();
         w.GetComponent<StrategyItemWhiteBloodCell>().enabled = true;
     }
+    #endregion
 
-    public void RefreshUI()
-    {
-        transform.GetChild(0).GetComponent<StrategyUIScript>().Refresh();
-    }
-
+    #region Turns
     public void TurnUpdate()
     {
         tImmunity = immunity;
@@ -379,17 +382,43 @@ public class StrategyCellScript : MonoBehaviour
             RefreshUI();
         }
     }
+    #endregion
 
+    #region UI
     public void ToggleUI(bool b)
     {
         transform.GetChild(0).gameObject.SetActive(b);
+        if (b)
+            RefreshUI();
     }
 
-    void OnDestroy()
+    public void RefreshUI()
     {
-        parent.immunitySpread += immunitySpread;
-        parent.cells.Remove(this);
+        for (int i = 0; i < 7; i++)
+        {
+            texts[i].text = parent.inventory[i].count.ToString();
+            if (parent.inventory[i].count > 0)
+            {
+                texts[i].color = Color.white;
+            }
+            else
+            {
+                texts[i].color = Color.red;
+            }
+        }
+        if (hosted)
+        {
+            foreach (TMPro.TextMeshPro text in texts)
+            {
+                text.color = Color.red;
+            }
+            if (parent.inventory[6].count > 0)
+            {
+                texts[6].color = Color.white;
+            }
+        }
     }
+    #endregion
 
     IEnumerator ChangeColorOverTime(Color c)
     {
@@ -447,5 +476,25 @@ public class StrategyCellScript : MonoBehaviour
         mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
         parent.SetSelected(transform.GetComponent<StrategyCellScript>().key);
         parent.viewingStats = false;
+    }
+
+    public IEnumerator Die()
+    {
+        parent.immunitySpread += immunitySpread;
+        parent.cells.Remove(this);
+
+        float startTime = Time.time;
+        float t = 0;
+        Color c = render.material.color;
+        Color o = render.material.GetColor("_OutlineColor");
+
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            c.a = Mathf.Lerp(1, 0, t);
+            o.a = Mathf.Lerp(1, 0, t);
+            yield return 0;
+        }
+        Destroy(gameObject);
     }
 }

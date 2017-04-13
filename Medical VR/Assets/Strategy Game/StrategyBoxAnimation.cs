@@ -25,7 +25,6 @@ public class StrategyBoxAnimation : MonoBehaviour
 
     void OnEnable()
     {
-        Debug.Log("On Enable Called");
         text.SetActive(false);
         startTime = Time.time;
     }
