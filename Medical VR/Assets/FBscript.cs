@@ -5,6 +5,18 @@ using System.Collections.Generic;
 using Facebook.Unity;
 using System;
 
+enum MiniGames
+{
+    FightVirus,
+    DestroyCell,
+    DodgeAntibodies,
+    SimonDNA,
+    MemoryGame,
+    ATPGTPShooter,
+    cGampSnatcher,
+    StrategyGame
+}
+
 public class FBscript : MonoBehaviour, TimedInputHandler{
 
   public  GameObject DialogLoggedIn;
@@ -139,6 +151,13 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
     {
         FB.API("/app/scores?fields=score,user.limit(30)", HttpMethod.GET, getScoresCallback);
     }
+    
+    public void NewQueryScore(string filename)
+    {
+        string filepath = "/app/scores/" + filename + "?fields=score,user.limit(30)";
+        //FB.API("/app/scores/filetwo?fields=score,user.limit(30)", HttpMethod.GET, getScoresCallback);
+        FB.API(filepath, HttpMethod.GET, getScoresCallback);
+    }
 
     private void getScoresCallback(IResult result)
     {
@@ -188,13 +207,41 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
         }
     }
 
-    public void SetScore(int Scoreint)
+ //   public void SetScore(int Scoreint)
+ //   {
+ //       var ScoreData = new Dictionary<string, string>();
+ //   //    GlobalScore += Scoreint;
+ //       GlobalScore = 50;
+ //       ScoreData["score"] = GlobalScore.ToString();
+ //
+ //       FB.API("/me/scores", HttpMethod.POST, delegate(IGraphResult result) {Debug.Log("Score Submitted successfully" + result.RawResult);}, ScoreData);
+ //       Debug.Log("Sending a score of " + GlobalScore);
+ //   }
+
+    public void newSetScore()
     {
+
+        int Scoreint = 70;
+
         var ScoreData = new Dictionary<string, string>();
-        GlobalScore += Scoreint; 
+        GlobalScore = Scoreint;
 
         ScoreData["score"] = GlobalScore.ToString();
+        FB.API("/me/scores/fileone", HttpMethod.POST, delegate (IGraphResult result) { Debug.Log("Score Submitted successfully" + result.RawResult); }, ScoreData);
+        Debug.Log("Sending a score of file1 " + GlobalScore);
 
-        FB.API("/me/scores", HttpMethod.POST, delegate(IGraphResult result) {Debug.Log("Score Submitted successfully" + result.RawResult);}, ScoreData);
+
+        var ScoreData2 = new Dictionary<string, string>();
+        GlobalScore += 10;
+        ScoreData2["score"] = GlobalScore.ToString();
+        FB.API("/me/scores/filetwo", HttpMethod.POST, delegate (IGraphResult result) { Debug.Log("Score Submitted successfully" + result.RawResult); }, ScoreData2);
+        Debug.Log("Sending a score of file2 " + GlobalScore);
+
+
+        var ScoreData3 = new Dictionary<string, string>();
+        GlobalScore += 10;
+        ScoreData3["score"] = GlobalScore.ToString();
+        FB.API("/me/scores/filethree", HttpMethod.POST, delegate (IGraphResult result) { Debug.Log("Score Submitted successfully" + result.RawResult); }, ScoreData3);
+        Debug.Log("Sending a score of file3 " + GlobalScore);
     }
 }

@@ -7,6 +7,6 @@ public class SetScore : MonoBehaviour, TimedInputHandler
     public FBscript hi;
     public void HandleTimeInput()
     {
-        hi.SetScore(hi.GlobalScore);
+//        hi.SetScore(hi.GlobalScore);
     }
 }
