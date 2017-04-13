@@ -5,21 +5,31 @@ using System.Collections.Generic;
 using Facebook.Unity;
 using System;
 
-public class FBscript : MonoBehaviour, TimedInputHandler
+enum MiniGames
 {
-    
+    FightVirus,
+    DestroyCell,
+    DodgeAntibodies,
+    SimonDNA,
+    MemoryGame,
+    ATPGTPShooter,
+    cGampSnatcher,
+    StrategyGame
+}
 
-    public GameObject DialogLoggedIn;
-    public GameObject DialogLoggedOut;
-    public GameObject DialogUsername;
-    public GameObject DialogProfilePic;
-   
+public class FBscript : MonoBehaviour, TimedInputHandler{
+
+  public  GameObject DialogLoggedIn;
+  public  GameObject DialogLoggedOut;
+  public GameObject DialogUsername;
+  public GameObject DialogProfilePic;
+    public int GlobalScore;
 
     public GameObject ScoreEntryPanel;
     public GameObject ScrollScoreList;
     void Awake()
     {
-        FacebookManager.Instance.GlobalScore = 0;
+        GlobalScore = 0;
         FacebookManager.Instance.InitFB();
         DealWithFBMenus(FB.IsLoggedIn);
     }
@@ -34,7 +44,7 @@ public class FBscript : MonoBehaviour, TimedInputHandler
     }
     void OnHideUnity(bool IsGameShown)
     {
-        if (!IsGameShown)
+        if(!IsGameShown)
             Time.timeScale = 0;
         else
             Time.timeScale = 1;
@@ -49,7 +59,7 @@ public class FBscript : MonoBehaviour, TimedInputHandler
 
     void AuthCallBack(IResult result)
     {
-        if (result.Error != null)
+        if(result.Error != null)
             Debug.Log(result.Error);
         else
         {
@@ -66,14 +76,14 @@ public class FBscript : MonoBehaviour, TimedInputHandler
         }
     }
 
-    void DealWithFBMenus(bool isLoggedIn)
+    void DealWithFBMenus( bool isLoggedIn)
     {
         if (isLoggedIn)
         {
             DialogLoggedIn.SetActive(true);
             DialogLoggedOut.SetActive(false);
 
-            if (FacebookManager.Instance.ProfileName != null)
+            if(FacebookManager.Instance.ProfileName != null)
             {
                 Text UserName = DialogUsername.GetComponent<Text>();
                 UserName.text = "Hi, " + FacebookManager.Instance.ProfileName;
@@ -102,9 +112,9 @@ public class FBscript : MonoBehaviour, TimedInputHandler
 
     IEnumerator WaitForProfileName()
     {
-        while (FacebookManager.Instance.ProfileName == null)
+        while(FacebookManager.Instance.ProfileName == null)
         {
-            yield return null;
+          yield return null;
         }
 
         DealWithFBMenus(FacebookManager.Instance.IsLoggedIn);
@@ -134,12 +144,19 @@ public class FBscript : MonoBehaviour, TimedInputHandler
 
     public void ShareWithUsers()
     {
-        FacebookManager.Instance.ShareWithUsers(FacebookManager.Instance.GlobalScore);
+        FacebookManager.Instance.ShareWithUsers(GlobalScore);
     }
 
     public void QueryScore()
     {
         FB.API("/app/scores?fields=score,user.limit(30)", HttpMethod.GET, getScoresCallback);
+    }
+    
+    public void NewQueryScore(string filename)
+    {
+        string filepath = "/app/scores/" + filename + "?fields=score,user.limit(30)";
+        //FB.API("/app/scores/filetwo?fields=score,user.limit(30)", HttpMethod.GET, getScoresCallback);
+        FB.API(filepath, HttpMethod.GET, getScoresCallback);
     }
 
     private void getScoresCallback(IResult result)
@@ -175,9 +192,8 @@ public class FBscript : MonoBehaviour, TimedInputHandler
             Fnametext.text = user["name"].ToString();
             Fscoretext.text = entry["score"].ToString();
 
-            FB.API("/" + user["id"].ToString() + "/picture?type=square&height=40&width=40", HttpMethod.GET, delegate (IGraphResult picResult)
-            {
-                if (picResult.Texture != null)
+            FB.API("/" + user["id"].ToString() + "/picture?type=square&height=40&width=40", HttpMethod.GET, delegate(IGraphResult picResult) {
+                if(picResult.Texture != null)
                 {
                     FUserAvatar.sprite = Sprite.Create(picResult.Texture, new Rect(0, 0, 40, 40), new Vector2());
                 }
@@ -191,8 +207,41 @@ public class FBscript : MonoBehaviour, TimedInputHandler
         }
     }
 
-    public void SetScore(int Scoreint)
+ //   public void SetScore(int Scoreint)
+ //   {
+ //       var ScoreData = new Dictionary<string, string>();
+ //   //    GlobalScore += Scoreint;
+ //       GlobalScore = 50;
+ //       ScoreData["score"] = GlobalScore.ToString();
+ //
+ //       FB.API("/me/scores", HttpMethod.POST, delegate(IGraphResult result) {Debug.Log("Score Submitted successfully" + result.RawResult);}, ScoreData);
+ //       Debug.Log("Sending a score of " + GlobalScore);
+ //   }
+
+    public void newSetScore()
     {
-        FacebookManager.Instance.SetScore(Scoreint);
+
+        int Scoreint = 70;
+
+        var ScoreData = new Dictionary<string, string>();
+        GlobalScore = Scoreint;
+
+        ScoreData["score"] = GlobalScore.ToString();
+        FB.API("/me/scores/fileone", HttpMethod.POST, delegate (IGraphResult result) { Debug.Log("Score Submitted successfully" + result.RawResult); }, ScoreData);
+        Debug.Log("Sending a score of file1 " + GlobalScore);
+
+
+        var ScoreData2 = new Dictionary<string, string>();
+        GlobalScore += 10;
+        ScoreData2["score"] = GlobalScore.ToString();
+        FB.API("/me/scores/filetwo", HttpMethod.POST, delegate (IGraphResult result) { Debug.Log("Score Submitted successfully" + result.RawResult); }, ScoreData2);
+        Debug.Log("Sending a score of file2 " + GlobalScore);
+
+
+        var ScoreData3 = new Dictionary<string, string>();
+        GlobalScore += 10;
+        ScoreData3["score"] = GlobalScore.ToString();
+        FB.API("/me/scores/filethree", HttpMethod.POST, delegate (IGraphResult result) { Debug.Log("Score Submitted successfully" + result.RawResult); }, ScoreData3);
+        Debug.Log("Sending a score of file3 " + GlobalScore);
     }
 }
