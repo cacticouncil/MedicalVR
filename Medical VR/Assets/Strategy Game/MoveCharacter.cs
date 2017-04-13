@@ -2,57 +2,23 @@
 using System.Collections;
 
 [RequireComponent(typeof(Collider))]
-public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
+public class MoveCharacter : MonoBehaviour
 {
-    private Vector3 startingPosition;
-    public MoveCamera mainCamera;
-    public float camOffset = 2.0f;
-    public float scaledDistance = 1.5f;
+    private MoveCamera mainCamera;
+    private float camOffset = 5.0f;
+    private float scaledDistance = 1.3f;
 
     void Start()
     {
-        startingPosition = transform.localPosition;
         if (mainCamera == null)
         {
             mainCamera = Camera.main.GetComponent<MoveCamera>();
         }
     }
 
-    void LateUpdate()
-    {
-        GvrViewer.Instance.UpdateState();
-        if (GvrViewer.Instance.BackButtonPressed)
-        {
-            Application.Quit();
-        }
-    }
-
-    public void Reset()
-    {
-        transform.localPosition = startingPosition;
-    }
-
-    public void ToggleVRMode()
-    {
-        GvrViewer.Instance.VRModeEnabled = !GvrViewer.Instance.VRModeEnabled;
-    }
-
-    public void ToggleDistortionCorrection()
-    {
-        GvrViewer.Instance.DistortionCorrectionEnabled =
-          !GvrViewer.Instance.DistortionCorrectionEnabled;
-    }
-
-#if !UNITY_HAS_GOOGLEVR || UNITY_EDITOR
-    public void ToggleDirectRender()
-    {
-        GvrViewer.Controller.directRender = !GvrViewer.Controller.directRender;
-    }
-#endif  //  !UNITY_HAS_GOOGLEVR || UNITY_EDITOR
-
     public void MoveTo()
     {
-        if ((transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats && transform.GetComponentInParent<StrategyCellManagerScript>().selected != transform.GetComponent<StrategyCellScript>().key) || (!transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats && transform.GetComponentInParent<StrategyCellManagerScript>().selected == transform.GetComponent<StrategyCellScript>().key))
+        if ((transform.parent.GetComponent<StrategyCellManagerScript>().viewingStats && transform.parent.GetComponent<StrategyCellManagerScript>().selected != transform.GetComponent<StrategyCellScript>().key) || (!transform.parent.GetComponent<StrategyCellManagerScript>().viewingStats && transform.parent.GetComponent<StrategyCellManagerScript>().selected == transform.GetComponent<StrategyCellScript>().key))
         {
             //Get the direction of the player from the cell
             Vector3 heading = mainCamera.transform.position - transform.position;
@@ -74,47 +40,23 @@ public class MoveCharacter : MonoBehaviour, IGvrGazeResponder
 
             //This is the new target position
             mainCamera.SetDestination(finalPos);
-            transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
+            transform.parent.GetComponent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
             gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
-            transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = true;
+            transform.parent.GetComponent<StrategyCellManagerScript>().viewingStats = true;
         }
-        else if (!transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats)// && transform.GetComponentInParent<StrategyCellManagerScript>().selected != transform.GetComponent<StrategyCellScript>().key)
+        else if (!transform.parent.GetComponent<StrategyCellManagerScript>().viewingStats)
         {
             mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
-            //gameObject.GetComponent<StrategyCellScript>().ToggleUI(false);
-            transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
-            transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = false;
+            transform.parent.GetComponent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
+            transform.parent.GetComponent<StrategyCellManagerScript>().viewingStats = false;
         }
     }
 
     public void Back()
     {
         mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
-        //gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
-        transform.GetComponentInParent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
-        transform.GetComponentInParent<StrategyCellManagerScript>().viewingStats = false;
+        transform.parent.GetComponent<StrategyCellManagerScript>().SetSelected(transform.GetComponent<StrategyCellScript>().key);
+        transform.parent.GetComponent<StrategyCellManagerScript>().viewingStats = false;
     }
-
-    #region IGvrGazeResponder implementation
-
-    //Called when the user is looking on a GameObject with this script,
-    // as long as it is set to an appropriate layer (see GvrGaze).
-    public void OnGazeEnter()
-    {
-    }
-
-    //Called when the user stops looking on the GameObject, after OnGazeEnter
-    // was already called.
-    public void OnGazeExit()
-    {
-    }
-
-    //Called when the viewer's trigger is used, between OnGazeEnter and OnGazeExit.
-    public void OnGazeTrigger()
-    {
-        MoveTo();
-    }
-
-    #endregion
 }
 
