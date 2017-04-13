@@ -1,46 +1,90 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class DodgeAntiBodyTutorial : MonoBehaviour
 {
     public GameObject Subtitles;
     public GameObject Player;
     public GameObject RedCell;
     public GameObject RedCellTutorialLocation;
+    public GameObject WhiteCell;
 
     Vector3 SavedRedCellPosition;
-    public static bool TutorialMode = false;
+    public List<GameObject> WhiteCellsToActivate;
 
     void Start()
     {
-        if (TutorialMode == true)
+        if (MovingCamera.TutorialMode == true)
         {
-            //Make sure nothing is populating in the scene other than the player
+            //Save red cell orginal position
             SavedRedCellPosition = RedCell.transform.position;
+
+            //Set the player in the other tunnel
+            Player.GetComponent<MovingCamera>().transform.position = transform.position;
             RedCell.transform.position = RedCellTutorialLocation.transform.position;
-            Player.GetComponent<MovingCamera>().stopMoving = false;
+            Player.GetComponent<MovingCamera>().stopMoving = true;
         }
     }
 
     void Update()
     {
         //Trigger Events
-        switch ((int)Subtitles.GetComponent<SubstitlesScript>().theTimer)
+        if (MovingCamera.TutorialMode == true)
         {
-            //Show them the red cell and then fade it back to where the orignal postion is
-            case 6:
-                Subtitles.GetComponent<SubstitlesScript>().Stop();
-                break;
+            switch ((int)Subtitles.GetComponent<SubstitlesScript>().theTimer)
+            {
+                //Show them the red cell and then fade it back to where the orignal postion is
+                case 10:
+                    Subtitles.GetComponent<SubstitlesScript>().Stop();
+                    RedCell.transform.position = Vector3.MoveTowards(RedCell.transform.position, SavedRedCellPosition, 8.0f);
+                    if (RedCell.transform.position == SavedRedCellPosition)
+                    {
+                        Subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
+                        Subtitles.GetComponent<SubstitlesScript>().Continue();
+                    }
+                    break;
 
-            //Add the line "You must avoid the white cells or they will reset you back to the beginning
+                //Bring the white cell in view
+                case 16:
+                    Subtitles.GetComponent<SubstitlesScript>().Stop();
+                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, RedCellTutorialLocation.transform.position, 2.0f);
 
-            //Demonstrate this by allowing the player to only move forward into a white cell
+                    if (WhiteCell.transform.position == RedCellTutorialLocation.transform.position)
+                    {
+                        Subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
+                        Subtitles.GetComponent<SubstitlesScript>().Continue();
+                    }
+                    break;
 
-            //Freeze their movemnt again
+                //Move player and white cell towards each other
+                case 20:
+                    Subtitles.GetComponent<SubstitlesScript>().Stop();
+                    Player.GetComponent<MovingCamera>().stopMoving = false;
+                    Player.GetComponent<MovingCamera>().speed = 10.0f;
+                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.GetComponent<MovingCamera>().transform.position, 1.0f);
+                    break;
 
-            //Explain the rest and let them play with fewer white cells and only complete one level
-            default:
-                break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    //Function was made to be called after player collides with white cell
+    public void MoveStoy()
+    {
+        Destroy(WhiteCell);
+        Player.GetComponent<MovingCamera>().speed = 0.0f;
+        Subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
+        Subtitles.GetComponent<SubstitlesScript>().Continue();
+        DisplayWhiteCells();
+    }
+
+    void DisplayWhiteCells()
+    {
+        for (int i = 0; i < WhiteCellsToActivate.Count; i++)
+        {
+            WhiteCellsToActivate[i].gameObject.SetActive(true);
         }
     }
 }
