@@ -32,6 +32,11 @@ public class StrategyCellScript : MonoBehaviour
     public StrategyCellManagerScript parent;
 
     private float tImmunity;
+
+    private MoveCamera mainCamera;
+    private float camOffset = 5.0f;
+    private float scaledDistance = 1.3f;
+
     public enum Proteins
     {
         None,
@@ -54,12 +59,16 @@ public class StrategyCellScript : MonoBehaviour
             i = arr[5];
             p = arr[6];
 
-            Debug.Log("TextMesh Set");
+            Debug.Log("Cell TextMesh Set");
         }
     }
 
     void Start()
     {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main.GetComponent<MoveCamera>();
+        }
         turnSpawned = parent.turnNumber;
         parent.cells.Add(this);
         parent.cellsSpawned++;
@@ -159,7 +168,6 @@ public class StrategyCellScript : MonoBehaviour
         {
             protein = (Proteins)Random.Range(1, 7);
             p.text = "Protein: " + protein.ToString();
-            Debug.Log("Cell gained protein " + protein.ToString());
         }
         if (i)
         {
@@ -178,9 +186,7 @@ public class StrategyCellScript : MonoBehaviour
         {
             protein = (Proteins)Random.Range(1, 7);
             p.text = "Protein: " + protein.ToString();
-            Debug.Log("Cell gained protein " + protein.ToString());
         }
-        Debug.Log("Cell gained protein " + protein.ToString());
         if (i)
         {
             i.text = "Immunity: " + (int)immunity;
@@ -256,7 +262,6 @@ public class StrategyCellScript : MonoBehaviour
                 protein = (Proteins)Random.Range(1, 7);
             }
             p.text = "Protein: " + protein.ToString();
-            Debug.Log("Cell gained protein " + protein.ToString());
             RefreshUI();
         }
     }
@@ -357,7 +362,7 @@ public class StrategyCellScript : MonoBehaviour
             if (render.material.color != Color.green)
             {
                 StopCoroutine("ChangeColorOverTime");
-                StartCoroutine(ChangeColorOverTime(Color.green));
+                StartCoroutine(ChangeColorOverTime(Color.grey));
             }
         }
         else
@@ -365,7 +370,7 @@ public class StrategyCellScript : MonoBehaviour
             if (render.material.color != Color.grey)
             {
                 StopCoroutine("ChangeColorOverTime");
-                StartCoroutine(ChangeColorOverTime(Color.grey));
+                StartCoroutine(ChangeColorOverTime(Color.white));
             }
         }
 
@@ -398,5 +403,49 @@ public class StrategyCellScript : MonoBehaviour
             yield return 0;
         }
         render.material.color = c;
+    }
+
+
+    public void MoveTo()
+    {
+        if ((parent.viewingStats && parent.selected != transform.GetComponent<StrategyCellScript>().key) || (!parent.viewingStats && parent.selected == transform.GetComponent<StrategyCellScript>().key))
+        {
+            //Get the direction of the player from the cell
+            Vector3 heading = mainCamera.transform.position - transform.position;
+            //Don't change y value
+            heading.y = 0;
+            //Find normalized direction
+            float distance = Mathf.Max(heading.magnitude, .001f);
+            Vector3 direction = heading / distance;
+            if (direction.magnitude < 0.01f)
+            {
+                direction = new Vector3(0.0f, 0.0f, 1.0f);
+            }
+            //Scale it to 1.5
+            direction *= scaledDistance;
+
+            Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
+
+            transform.GetChild(0).transform.LookAt(finalPos);
+
+            //This is the new target position
+            mainCamera.SetDestination(finalPos);
+            parent.SetSelected(transform.GetComponent<StrategyCellScript>().key);
+            gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
+            parent.viewingStats = true;
+        }
+        else if (!parent.viewingStats)
+        {
+            mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
+            parent.SetSelected(transform.GetComponent<StrategyCellScript>().key);
+            parent.viewingStats = false;
+        }
+    }
+
+    public void Back()
+    {
+        mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
+        parent.SetSelected(transform.GetComponent<StrategyCellScript>().key);
+        parent.viewingStats = false;
     }
 }

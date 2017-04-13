@@ -16,14 +16,26 @@ public class StrategyVirusScript : MonoBehaviour
     public Vector3 startingPosition, prevPosition, nextPosition;
 
     public StrategyCellManagerScript parent;
+    public TMPro.TextMeshPro attack, speed, immunity;
 
     private float distance = .1f;
     private float startTime = 0.0f;
     private bool trav = false;
+    private Vector2 key = new Vector2(500, 500);
+
+    private MoveCamera mainCamera;
+    private float camOffset = 5.0f;
+    private float scaledDistance = 1.3f;
+
 
     // Use this for initialization
     void Start()
     {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main.GetComponent<MoveCamera>();
+        }
+
         if (target)
         {
             target.targeted = true;
@@ -148,11 +160,6 @@ public class StrategyVirusScript : MonoBehaviour
                     return;
                 }
             }
-
-            if (GetComponent<Collider>().enabled)
-            {
-                GetComponent<Collider>().enabled = false;
-            }
             target.hosted = true;
             target.virus = gameObject;
         }
@@ -198,12 +205,73 @@ public class StrategyVirusScript : MonoBehaviour
         Destroy(gameObject);
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (target && collision.transform.parent.transform == target.transform)
+        {
+            nextPosition = transform.position;
+            collision.transform.GetComponent<Rotate>().enabled = false;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+    }
+
+    public void MoveTo()
+    {
+        if (key != parent.selected)
+        {
+            //Get the direction of the player from the cell
+            Vector3 heading = mainCamera.transform.position - transform.position;
+            //Don't change y value
+            heading.y = 0;
+            //Find normalized direction
+            float distance = Mathf.Max(heading.magnitude, .001f);
+            Vector3 direction = heading / distance;
+            if (direction.magnitude < 0.01f)
+            {
+                direction = new Vector3(0.0f, 0.0f, 1.0f);
+            }
+            //Scale it to 1.5
+            direction *= scaledDistance;
+
+            Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
+
+            transform.GetChild(0).transform.LookAt(finalPos);
+
+            //This is the new target position
+            mainCamera.SetDestination(finalPos);
+            parent.SetSelected(key);
+            ToggleUI(true);
+            parent.viewingStats = true;
+        }
+    }
+
+    public void ToggleUI(bool b)
+    {
+        if (b)
+        {
+            if (!attack || !speed || !immunity)
+            {
+                TMPro.TextMeshPro[] arr = GetComponentsInChildren<TMPro.TextMeshPro>(true);
+                attack = arr[0];
+                speed = arr[1];
+                immunity = arr[2];
+
+                Debug.Log("Virus TextMesh Set");
+            }
+            attack.text = "Attack: " + (int)(attackValue * 100);
+            speed.text = "Speed: " + (int)(turnSpeed * 100);
+            immunity.text = "Immunity To Kill: " + Mathf.CeilToInt(health);
+        }
+        transform.GetChild(0).gameObject.SetActive(b);
+    }
+
     public void OnDestroy()
     {
         if (target)
         {
             target.hosted = false;
             target.targeted = false;
+            target.transform.GetChild(1).GetComponent<Rotate>().enabled = true;
             target.RefreshUI();
         }
         parent.virusKills++;

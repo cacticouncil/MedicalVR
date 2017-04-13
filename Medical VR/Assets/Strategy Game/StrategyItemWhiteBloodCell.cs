@@ -41,15 +41,10 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
     IEnumerator Leave()
     {
         float startTime = Time.time;
-        Vector3 scale = transform.localScale;
-        float t = (Time.time - startTime) * .5f;
-        while (t < 1.0f)
-        {
-            t = (Time.time - startTime) * .5f;
-            transform.localScale = Vector3.Lerp(scale, Vector3.zero, t);
-            yield return 0;
-        }
-
+        Vector3 pos = transform.position;
+        Vector3 direction = transform.position - spawnLocation;
+        direction *= 2.0f;
+        direction.y = 10.0f;
         Vector3 camPos = Camera.main.GetComponent<Transform>().position;
         Vector3 dir = transform.position - camPos;
         dir.Normalize();
@@ -57,6 +52,14 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
 
         cell.RefreshUI();
         cell.ToggleUI(true);
+        float t = 0;
+        while (t < 10.0f)
+        {
+            t = Time.time - startTime;
+            transform.position = pos + direction * t;
+            yield return 0;
+        }
+
         Destroy(gameObject);
     }
 }

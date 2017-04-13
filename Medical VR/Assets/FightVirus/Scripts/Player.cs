@@ -6,6 +6,8 @@ using System;
 
 public class Player : MonoBehaviour, TimedInputHandler
 {
+    public static bool ArcadeMode = true;
+
     //Variables for tutorial
     public static bool TutorialMode = true;
     float TutorialTimer = 0.0f;
@@ -22,6 +24,7 @@ public class Player : MonoBehaviour, TimedInputHandler
     float Wave2Timer = 0.0f;
     float Wave3Timer = 0.0f;
     float Wave4Timer = 0.0f;
+    float BeatGameTimer = 0.0f;
 
     bool DisplayRules;
     public bool isGameOver;
@@ -116,12 +119,41 @@ public class Player : MonoBehaviour, TimedInputHandler
                 RuleTimer += Time.deltaTime;
             }
 
-            if (VirusLeaveCount == 10)
+            if (ArcadeMode == true)
             {
-                isGameOver = true;
-                //ScoreBoard.SetActive(true);
-                //ScoreBoard.transform.position = new Vector3(transform.position.x - 1.5f, transform.position.y, transform.position.z + 35);
-                //ScoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
+                //If you lose arcade bring up scorebaord
+                if (VirusLeaveCount == 10)
+                {
+                    isGameOver = true;
+                    CenterScreenObj.GetComponent<TextMeshPro>().text = "You lose arcade mode";
+                }
+
+                //If you win arcade bring up score board
+                if (EnemyManger.GetComponent<VirusManager>().WaveNumber >= 5 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0 && VirusLeaveCount < 10)
+                {
+                    isGameOver = true;
+                    CenterScreenObj.GetComponent<TextMeshPro>().text = "You win arcade mode";
+                }
+            }
+
+            else if (ArcadeMode == false)
+            {
+                //If you lose story mode keep making them play until they beat it
+                if (VirusLeaveCount == 8)
+                {
+                    isGameOver = true;
+                    CenterScreenObj.GetComponent<TextMeshPro>().text = "You lose story mode";
+                    TutorialMode = false;
+                    ArcadeMode = false;
+                    SceneManager.LoadScene("FightVirus");
+                }
+
+                //If you win story mode continue to next scene
+                if (EnemyManger.GetComponent<VirusManager>().WaveNumber >= 5 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
+                {
+                    isGameOver = true;
+                    CenterScreenObj.GetComponent<TextMeshPro>().text = "You win story mode";
+                }
             }
         }
 
@@ -202,7 +234,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Don't let more than ten leave";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Don't let any leave";
 
                     if (VirusLeaveCount == 1)
                     {
@@ -262,6 +294,31 @@ public class Player : MonoBehaviour, TimedInputHandler
                 default:
                     CenterScreenObj.GetComponent<TextMeshPro>().text = " ";
                     break;
+            }
+        }
+
+        //For tutorial only it will either transition to story mode or only play once
+        if (WhatToRead >= 9 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
+        {
+            BeatGameTimer += Time.deltaTime;
+            CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now your ready to play";
+
+            if (BeatGameTimer >= 3.5)
+            {
+                //if ()
+                //{
+                //Story mode verion will play after completing
+
+                //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
+                TutorialMode = false;
+                ArcadeMode = false;
+                SceneManager.LoadScene("FightVirus");
+                //}
+
+                //    else if ()
+                //    {
+                //        //Just play tutorial once and go back to main menu
+                //    }
             }
         }
     }

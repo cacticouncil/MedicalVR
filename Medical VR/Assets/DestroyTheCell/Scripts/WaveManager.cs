@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class WaveManager : MonoBehaviour
 {
     public GameObject Player;
-    public GameObject AntiViralProteinRotation;
 
     int WhatColorProtein;
     public GameObject TheOGProtien;
@@ -56,18 +55,36 @@ public class WaveManager : MonoBehaviour
                             break;
 
                         case 2:
-                            CellReceptorCount = 1;
-                            AntiViralProteinCount = 1;
+                            CellReceptorCount = 3;
+                            AntiViralProteinCount = 2;
                             break;
 
                         case 3:
-                            CellReceptorCount = 1;
-                            AntiViralProteinCount = 1;
+                            if (VirusPlayer.ArcadeMode == true)
+                            {
+                                CellReceptorCount = 7;
+                                AntiViralProteinCount = 4;
+                            }
+
+                            else if (VirusPlayer.ArcadeMode == false)
+                            {
+                                CellReceptorCount = 5;
+                                AntiViralProteinCount = 2;
+                            }
                             break;
 
                         case 4:
-                            CellReceptorCount = 1;
-                            AntiViralProteinCount = 1;
+                            if (VirusPlayer.ArcadeMode == true)
+                            {
+                                CellReceptorCount = 9;
+                                AntiViralProteinCount = 5;
+                            }
+
+                            else if (VirusPlayer.ArcadeMode == false)
+                            {
+                                CellReceptorCount = 5;
+                                AntiViralProteinCount = 4;
+                            }
                             break;
 
                         default:
@@ -79,7 +96,7 @@ public class WaveManager : MonoBehaviour
                     Player.GetComponent<VirusPlayer>().PlayerSpeed = 0.0f;
                     Player.GetComponent<VirusPlayer>().WaveStarted = true;
                     CanDestroyProteins = false;
-                    Invoke("CreateAntiViralProteinWave", 6);
+                    Invoke("CreateAntiViralProteinWave", 5);
                 }
             }
 
@@ -133,13 +150,9 @@ public class WaveManager : MonoBehaviour
     {
         for (int i = 0; i < CellReceptorCount; i++)
         {
-            //if (VirusPlayer.TutorialMode == false)
-                CellReceptorLocation = Random.onUnitSphere * 7.0f;
-
-            //else if (VirusPlayer.TutorialMode == true)
-            //    CellReceptorLocation = Random.onUnitSphere * 4.5f;
-
+            CellReceptorLocation = Random.onUnitSphere * 7.0f;
             WhatColorCellReceptor = Random.Range(1, 3);
+
             switch (WhatColorCellReceptor)
             {
                 case 1:
@@ -199,7 +212,7 @@ public class WaveManager : MonoBehaviour
 
         if (VirusPlayer.TutorialMode == false)
         {
-            Player.GetComponent<VirusPlayer>().PlayerSpeed = .01f;
+            Player.GetComponent<VirusPlayer>().PlayerSpeed = .02f;
             CanDestroyProteins = true;
         }
     }

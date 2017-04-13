@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Virus_CellGameplayScript : MonoBehaviour {
 
     public List<GameObject> places;
-    public GameObject subtitltes, virusWithMesh, capsid, dna;
+    public GameObject subtitles, virusWithMesh, capsid, dna;
 
     delegate void Func();
     Func doAction;
@@ -61,7 +61,7 @@ public class Virus_CellGameplayScript : MonoBehaviour {
     }
     void CheckCaases()
     {
-        switch ((int)subtitltes.GetComponent<SubstitlesScript>().theTimer)
+        switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
             case (17):
                 I = 1;
@@ -81,13 +81,13 @@ public class Virus_CellGameplayScript : MonoBehaviour {
                 transform.position = places[I].transform.position;
                 virusWithMesh.SetActive(false);
                 break;
-            case (192):
+            case (31):
                 doAction = fadeCapsid;
                 break;
-            case (195):
+            case (35):
                 capsid.SetActive(false);
                 doAction = NullFunction;
-                I = 6;
+                I = 5;
                 moveSpeed = 50;
                 break;
             case (227):

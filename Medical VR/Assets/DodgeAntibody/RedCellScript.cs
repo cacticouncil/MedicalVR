@@ -2,24 +2,25 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class RedCellScript : MonoBehaviour {
-
+public class RedCellScript : MonoBehaviour
+{
+    public GameObject TutorialGameObject;
     // Use this for initialization
     public float speed;
     public GameObject virus, spawner, banner, blackCurtain;
     bool fade = false;
     float timer = 0;
-	void Start ()
+    void Start()
     {
-       if(MovingCamera.arcadeMode == true)
+        if (MovingCamera.arcadeMode == true)
         {
             blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
             GetComponent<BoxCollider>().size = new Vector3(GetComponent<BoxCollider>().size.x, 0.5f, GetComponent<BoxCollider>().size.z);
         }
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         if (fade)
         {
@@ -30,8 +31,26 @@ public class RedCellScript : MonoBehaviour {
             blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
             if (timer > 1)
             {
-                VirusGameplayScript.loadCase = 1;
-                SceneManager.LoadScene("Virus Gameplay Scene");
+                //For tutorial and story mode
+                if (MovingCamera.arcadeMode == false)
+                {
+                    //When you beat tutorial mode, go to story mode
+                    if (MovingCamera.TutorialMode == true)
+                    {
+                        MovingCamera.TutorialMode = false;
+                        VirusGameplayScript.loadCase = 1;
+                        SceneManager.LoadScene("DodgeAnitbodies");
+                    }
+
+                    //When you beat tutorial mode only once
+
+                    //When you beat story mode, go to next scene
+                    else if (MovingCamera.TutorialMode == false)
+                    {
+                        VirusGameplayScript.loadCase = 1;
+                        SceneManager.LoadScene("Virus Gameplay Scene");
+                    }
+                }
             }
         }
         else
@@ -45,12 +64,12 @@ public class RedCellScript : MonoBehaviour {
     {
         if (other.tag == "virus")
         {
-            if(MovingCamera.arcadeMode == true)
+            if (MovingCamera.arcadeMode == true)
             {
                 virus.GetComponent<MovingCamera>().WinresetPos();
                 virus.GetComponent<MovingCamera>().speed++;
                 spawner.GetComponent<AnitbodySpawnerScript>().GenerateObstacles();
-                
+
             }
             else
             {
