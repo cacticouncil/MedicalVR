@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Sting_CellGameplayScript : MonoBehaviour {
 
     public List<GameObject> places = new List<GameObject>();
-    public GameObject sting_pic, subtitles, cGAMP;
+    public GameObject sting_pic, subtitles, cGAMP, leftP, rightP;
     // Use this for initialization
     float moveSpeed = 0;
     int I = 0;
@@ -29,6 +29,10 @@ public class Sting_CellGameplayScript : MonoBehaviour {
                 break;
             case 68:
                 I = 1;
+                moveSpeed = 200;
+                break;
+            case 80:
+                I = 2;
                 moveSpeed = 200;
                 break;
             default:
