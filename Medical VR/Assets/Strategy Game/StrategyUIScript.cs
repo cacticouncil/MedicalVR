@@ -22,18 +22,14 @@ public class StrategyUIScript : MonoBehaviour
     {
         if (transform.parent.GetComponent<StrategyCellScript>().hosted)
         {
+            foreach (GameObject item in items)
+            {
+                item.SetActive(false);
+            }
             if (inventory[inventory.Count - 1].count > 0)
             {
                 items[inventory.Count - 1].SetActive(true);
                 items[inventory.Count - 1].GetComponentInChildren<TMPro.TextMeshPro>().text = inventory[inventory.Count - 1].count.ToString();
-            }
-            else
-            {
-                items[inventory.Count - 1].SetActive(false);
-            }
-            for (int i = 0; i < items.Length - 2; i++)
-            {
-                items[i].SetActive(false);
             }
         }
         else

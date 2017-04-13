@@ -35,7 +35,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     public GameObject victory;
     public GameObject particleToTarget;
 
-    private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500);
+    private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500), virusIndex = new Vector2(-500, 500);
 
     private int easy = 0, medium = 1, hard = 2;
 
@@ -149,6 +149,10 @@ public class StrategyCellManagerScript : MonoBehaviour
         {
             mysteryBox.ToggleUI();
         }
+        else if (selected == virusIndex)
+        {
+
+        }
         else if (selected == victoryIndex && victory)
         {
             victory.GetComponent<Destroy>().Kill();
@@ -179,7 +183,6 @@ public class StrategyCellManagerScript : MonoBehaviour
 
     IEnumerator TurnUpdate()
     {
-        Debug.Log("Turn Updating");
         turnNumber++;
         sun.TurnUpdate();
 

@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Rotate : MonoBehaviour
 {
-    public bool x, y, z;
-    public Vector3 rotation;
+    public bool x = true, y = true, z = true;
+    public Vector3 rotation = new Vector3(-15, 10, 5);
 
     void Update()
     {

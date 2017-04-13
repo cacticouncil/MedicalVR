@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class MovingCamera : MonoBehaviour, TimedInputHandler
 {
+    public static bool TutorialMode = true;
 
     public GameObject subtitles;
     public float speed;
     public GameObject theScore, theLives, scoreBoard, UI, MenuButton;
-    // Use this for initialization
     public float score = 0;
     public Color fogColor;
     public static bool arcadeMode = false;
