@@ -12,18 +12,30 @@ public class StrategyVirusScript : MonoBehaviour
     public float percentTraveled = 0.0f;
     public bool standby = false;
     public bool targeted = false;
+    public bool selected = false;
 
     public Vector3 startingPosition, prevPosition, nextPosition;
 
     public StrategyCellManagerScript parent;
+    public TMPro.TextMeshPro attack, speed, immunity;
 
     private float distance = .1f;
     private float startTime = 0.0f;
     private bool trav = false;
+    private Vector2 key = new Vector2(-500, 500);
+
+    private MoveCamera mainCamera;
+    private float camOffset = 5.0f;
+    private float scaledDistance = 1.3f;
 
     // Use this for initialization
     void Start()
     {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main.GetComponent<MoveCamera>();
+        }
+
         if (target)
         {
             target.targeted = true;
@@ -139,7 +151,7 @@ public class StrategyVirusScript : MonoBehaviour
 
         if (percentTraveled >= 1.0f && !target.hosted)
         {
-            if (target.protein == StrategyCellScript.Proteins.CH25H)
+            if (target.protein == Proteins.CH25H)
             {
                 if (Random.Range(0.0f, 100.0f) < 90)
                 {
@@ -148,31 +160,22 @@ public class StrategyVirusScript : MonoBehaviour
                     return;
                 }
             }
-
-            if (GetComponent<Collider>().enabled)
-            {
-                GetComponent<Collider>().enabled = false;
-            }
             target.hosted = true;
             target.virus = gameObject;
         }
 
         if (percentTraveled > 1.0f)
         {
-            if (target.protein != StrategyCellScript.Proteins.Mx1 || (target.protein == StrategyCellScript.Proteins.Mx1 && Random.Range(0.0f, 100.0f) <= 50))
+            if (target.protein != Proteins.Mx1 || (target.protein == Proteins.Mx1 && Random.Range(0.0f, 100.0f) <= 50))
             {
                 attackDuration += attackValue;
+                if (target.immunity > health)
+                {
+                    target.immunity -= health;
+                    Destroy(gameObject);
+                }
                 if (attackDuration >= Mathf.Sqrt(target.defense * 5))
                 {
-                    float t = health;
-                    health -= target.immunity;
-                    target.immunity -= t;
-                    target.immunity = Mathf.Max(0.0f, target.immunity);
-                    if (health <= 0)
-                    {
-                        Destroy(gameObject);
-                        return;
-                    }
                     Attack();
                 }
             }
@@ -183,19 +186,80 @@ public class StrategyVirusScript : MonoBehaviour
     public virtual void Attack()
     {
         bool spawned = false;
-        if (target.protein == StrategyCellScript.Proteins.None || target.protein == StrategyCellScript.Proteins.CH25H || target.protein == StrategyCellScript.Proteins.Mx1)
+        if (target.protein == Proteins.None || target.protein == Proteins.CH25H || target.protein == Proteins.Mx1)
         {
             spawned = true;
             parent.SpawnVirusSingleAdjacent(target.key, transform.position);
             parent.SpawnVirusSingleAdjacent(target.key, transform.position);
         }
         if (spawned ||
-            target.protein == StrategyCellScript.Proteins.RNase_L ||
-            target.protein == StrategyCellScript.Proteins.PKR ||
-            target.protein == StrategyCellScript.Proteins.TRIM22 ||
-            (target.protein == StrategyCellScript.Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
+            target.protein == Proteins.RNase_L ||
+            target.protein == Proteins.PKR ||
+            target.protein == Proteins.TRIM22 ||
+            (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
             parent.KillCell(target.key);
         Destroy(gameObject);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (target && collision.transform.parent && collision.transform.parent.transform == target.transform)
+        {
+            nextPosition = transform.position;
+            collision.transform.GetComponent<Rotate>().enabled = false;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+    }
+
+    public void MoveTo()
+    {
+        if (!selected)
+        {
+            //Get the direction of the player from the cell
+            Vector3 heading = mainCamera.transform.position - transform.position;
+            //Don't change y value
+            heading.y = 0;
+            //Find normalized direction
+            float distance = Mathf.Max(heading.magnitude, .001f);
+            Vector3 direction = heading / distance;
+            if (direction.magnitude < 0.01f)
+            {
+                direction = new Vector3(0.0f, 0.0f, 1.0f);
+            }
+            //Scale it to 1.5
+            direction *= scaledDistance;
+
+            Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
+
+            transform.GetChild(0).transform.LookAt(finalPos);
+
+            //This is the new target position
+            mainCamera.SetDestination(finalPos);
+            parent.SetSelected(key);
+            ToggleUI(true);
+            parent.viewingStats = true;
+        }
+    }
+
+    public void ToggleUI(bool b)
+    {
+        if (b)
+        {
+            if (!attack || !speed || !immunity)
+            {
+                TMPro.TextMeshPro[] arr = GetComponentsInChildren<TMPro.TextMeshPro>(true);
+                attack = arr[0];
+                speed = arr[1];
+                immunity = arr[2];
+
+                Debug.Log("Virus TextMesh Set");
+            }
+            attack.text = "Attack: " + (int)(attackValue * 100);
+            speed.text = "Speed: " + (int)(turnSpeed * 100);
+            immunity.text = "Immunity To Kill: " + Mathf.CeilToInt(health);
+        }
+        selected = b;
+        transform.GetChild(0).gameObject.SetActive(b);
     }
 
     public void OnDestroy()
@@ -204,7 +268,7 @@ public class StrategyVirusScript : MonoBehaviour
         {
             target.hosted = false;
             target.targeted = false;
-            target.RefreshUI();
+            target.transform.GetChild(1).GetComponent<Rotate>().enabled = true;
         }
         parent.virusKills++;
         parent.viruses.Remove(this);

@@ -35,7 +35,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     public GameObject victory;
     public GameObject particleToTarget;
 
-    private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500);
+    private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500), virusIndex = new Vector2(-500, 500);
 
     private int easy = 0, medium = 1, hard = 2;
 
@@ -133,6 +133,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         t.GetComponent<StrategyCellScript>().immunity = 1;
         t.GetComponent<StrategyCellScript>().enabled = true;
         t.GetComponent<Collider>().enabled = true;
+        t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
 
         inventory = mysteryBox.items;
     }
@@ -148,6 +149,16 @@ public class StrategyCellManagerScript : MonoBehaviour
         else if (selected == mysteryBoxIndex)
         {
             mysteryBox.ToggleUI();
+        }
+        else if (selected == virusIndex)
+        {
+            foreach (StrategyVirusScript virus in viruses)
+            {
+                if (virus.selected)
+                {
+                    virus.ToggleUI(false);
+                }
+            }
         }
         else if (selected == victoryIndex && victory)
         {
@@ -179,7 +190,6 @@ public class StrategyCellManagerScript : MonoBehaviour
 
     IEnumerator TurnUpdate()
     {
-        Debug.Log("Turn Updating");
         turnNumber++;
         sun.TurnUpdate();
 
@@ -263,7 +273,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             c.GetComponent<StrategyCellScript>().reproduction = (int)spawnCellStats.x;
             c.GetComponent<StrategyCellScript>().defense = (int)spawnCellStats.y;
             c.GetComponent<StrategyCellScript>().immunity = (int)spawnCellStats.z;
-            c.GetComponent<StrategyCellScript>().protein = (StrategyCellScript.Proteins)((int)spawnCellStats.w);
+            c.GetComponent<StrategyCellScript>().protein = (Proteins)((int)spawnCellStats.w);
             spawnCellStats = Vector4.zero;
         }
         else
