@@ -179,6 +179,7 @@ public class VirusGameplayScript : MonoBehaviour
                 break;
             case (131):
                 MovingCamera.arcadeMode = false;
+                MovingCamera.TutorialMode = true;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
