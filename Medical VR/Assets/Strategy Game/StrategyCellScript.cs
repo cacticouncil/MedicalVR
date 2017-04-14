@@ -163,10 +163,6 @@ public class StrategyCellScript : MonoBehaviour
     //Called from cell manager
     public void AddImmunity(float imm)
     {
-        if (hosted)
-        {
-            immunity += imm;
-        }
         immunity += imm;
         if (protein == Proteins.None && immunity >= 10f)
         {
@@ -221,7 +217,8 @@ public class StrategyCellScript : MonoBehaviour
         if (!hosted && parent.inventory[1].count > 0)
         {
             parent.inventory[1].count--;
-            parent.DuplicateCell(key, new Vector4(reproduction, defense, immunity, (int)protein));
+            parent.duplicate = true;
+            parent.SelectCellSpawn(key);
             RefreshUI();
         }
     }
@@ -326,9 +323,9 @@ public class StrategyCellScript : MonoBehaviour
         if (!hosted)
         {
             //spread immunity
-            float im = Mathf.Sqrt((tImmunity - .99f) * .01f);
-            if (!float.IsNaN(im))
+            if (tImmunity >= 1.0f)
             {
+                float im = tImmunity * .01f;
                 if (I2Dur > 0)
                 {
                     immunitySpread += parent.SpreadImmunity(key, im * 2.0f);
@@ -389,7 +386,9 @@ public class StrategyCellScript : MonoBehaviour
     {
         transform.GetChild(0).gameObject.SetActive(b);
         if (b)
+        {
             RefreshUI();
+        }
     }
 
     public void RefreshUI()
@@ -480,14 +479,11 @@ public class StrategyCellScript : MonoBehaviour
 
     public IEnumerator Die()
     {
-        parent.immunitySpread += immunitySpread;
-        parent.cells.Remove(this);
-
         float startTime = Time.time;
-        float t = 0;
         Color c = render.material.color;
         Color o = render.material.GetColor("_OutlineColor");
 
+        float t = 0;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
