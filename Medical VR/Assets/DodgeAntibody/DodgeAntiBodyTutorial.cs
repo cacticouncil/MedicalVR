@@ -18,10 +18,10 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
         {
             //Save red cell orginal position
             SavedRedCellPosition = RedCell.transform.position;
+            RedCell.transform.position = RedCellTutorialLocation.transform.position;
 
             //Set the player in the other tunnel
             Player.GetComponent<MovingCamera>().transform.position = transform.position;
-            RedCell.transform.position = RedCellTutorialLocation.transform.position;
             Player.GetComponent<MovingCamera>().stopMoving = true;
         }
     }

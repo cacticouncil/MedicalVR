@@ -363,6 +363,7 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (352):
+                VirusPlayer.TutorialMode = true;
                 VirusPlayer.ArcadeMode = false;
                 SceneManager.LoadScene("DestroyTheCell");
                 if (t > 352.5)

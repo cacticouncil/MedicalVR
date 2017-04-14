@@ -96,19 +96,22 @@ public class RnaMessengerScript : MonoBehaviour {
         }
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
-            case (6):
+            case (30):
                 if (simon.GetComponent<SimonSays>().lives == 0)
                 {
                     simon.GetComponent<SimonSays>().lives = 3;
                     simon.GetComponent<SimonSays>().sign.SetActive(true);
                     simon.GetComponent<SimonSays>().theLives.GetComponent<TMPro.TextMeshPro>().text = "Lives: " + 3;
+
+
+                    //Have to make a condition for tutorial mode and either progess to story or arcade mode
                 }
                 break;
             default:
                 break;
         }
     }
-    void AddNuclei()
+  public void AddNuclei()
     {
         wrongs++;
         GameObject nuclei = Instantiate(Refpolynuclei, Refpolynuclei.transform.position, Refpolynuclei.transform.rotation) as GameObject;
