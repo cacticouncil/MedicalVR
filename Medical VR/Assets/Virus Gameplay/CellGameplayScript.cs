@@ -212,6 +212,17 @@ public class CellGameplayScript : MonoBehaviour
                 I = 10;
                 moveSpeed = 175;
                 break;
+            case 104:
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case 105:
+               // SceneManager.LoadScene("MemoryGame");
+                break;
+            case (106):
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                break;
             //case (65):
             //    doAction = NullFunction;
             //    if (virus.activeSelf == false)
