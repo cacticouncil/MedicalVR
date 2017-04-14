@@ -101,8 +101,8 @@ public class VirusGameplayScript : MonoBehaviour
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
             case (1):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-001") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-001");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-001") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-001");
                 break;
             case (4):
                 doAction = RiseCurtain;
@@ -110,29 +110,29 @@ public class VirusGameplayScript : MonoBehaviour
                 break;
             case (16):
                 if (t > 16.23f)
-                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-002") == false)
-                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-002");
+                    if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-002") == false)
+                        SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-002");
                 break;
             case (24):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-003") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-003");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-003") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-003");
                 break;
             case (35):
                 doAction = NullFunction;
                 subtitles.GetComponent<SubstitlesScript>().Stop();
                 break;
             case (36):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-004") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-004");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-004") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-004");
                 break;
             case (48):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-005") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-005");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-005") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-005");
                 break;
             case (58):
                 if (t > 58.5f)
-                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-006") == false)
-                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-006");
+                    if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-006") == false)
+                        SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-006");
                 break;
             case (65):
                 doAction = NullFunction;
@@ -144,38 +144,38 @@ public class VirusGameplayScript : MonoBehaviour
                 }
                 break;
             case (66):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-007") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-007");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-007") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-007");
                 break;
             case (78):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-008") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-008");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-008") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-008");
                 break;
             case (87):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-009") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-009");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-009") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-009");
                 break;
             case (95):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-010") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-010");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-010") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-010");
                 break;
             case (100):
                 if ((t > 100.5f))
-                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-011_B") == false)
-                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-011_B");
+                    if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-011_B") == false)
+                        SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-011_B");
                 break;
             case (105):
                 if ((t > 105.5f))
-                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-011") == false)
-                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-011");
+                    if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-011") == false)
+                        SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-011");
 
                 doAction = NullFunction;
                 I = 1;
                 //moveSpeed = 30;
                 break;
             case (116):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-012") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-012");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-012") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-012");
                 break;
             case (131):
                 MovingCamera.arcadeMode = false;
@@ -188,34 +188,34 @@ public class VirusGameplayScript : MonoBehaviour
                     SceneManager.LoadScene("DodgeAnitbodies");
                 break;
             case (133):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-013") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-013");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-013") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-013");
                 break;
             case (146):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-014") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-014");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-014") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-014");
                 break;
             case (151):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-015") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-015");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-015") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-015");
                 I = 3;
                 moveSpeed = 100;
                 break;
             case (158):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-016") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-016");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-016") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-016");
                 break;
             case (162):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-017") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-017");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-017") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-017");
                 break;
             case (171):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-018") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-018");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-018") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-018");
                 break;
             case (177):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-019") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-019");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-019") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-019");
                 break;
             case (181):
                 doAction = LowerCurtain;
@@ -231,25 +231,25 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (183):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-020") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-020");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-020") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-020");
                 break;
             case (192):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-021") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-021");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-021") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-021");
                 break;
             case (198):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-022") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-022");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-022") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-022");
                 break;
             case (205):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-023") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-023");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-023") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-023");
                 break;
             case (216):
                 if ((t > 216.5f))
-                    if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-024") == false)
-                        SoundManager.PlayVoice("Medical_VR_Game_VO_Line-024");
+                    if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-024") == false)
+                        SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-024");
                 break;
             case (227):
                 doAction = NullFunction;
@@ -257,12 +257,12 @@ public class VirusGameplayScript : MonoBehaviour
                 moveSpeed = 250;
                 break;
             case (236):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-026") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-026");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-026") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-026");
                 break;
             case (246):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-027") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-027");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-027") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-027");
                 break;
             case (248):
                 doAction = LowerCurtain;
@@ -275,8 +275,8 @@ public class VirusGameplayScript : MonoBehaviour
                 theCamera.transform.position = places[I].transform.position;
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-028") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-028");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-028") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-028");
                 break;
             case (252):
                 doAction = NullFunction;
@@ -284,20 +284,20 @@ public class VirusGameplayScript : MonoBehaviour
                 moveSpeed = 50;
                 break;
             case (257):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-029") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-029");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-029") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-029");
                 break;
             case (262):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-030") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-030");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-030") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-030");
                 break;
             case (270):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-031") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-031");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-031") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-031");
                 break;
             case (277):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-032") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-032");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-032") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-032");
                 break;
             case (286):
                 SimonSays.arcadeMode = false;
@@ -309,8 +309,8 @@ public class VirusGameplayScript : MonoBehaviour
                     SceneManager.LoadScene("SimonDNA");
                 break;
             case (288):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-033") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-033");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-033") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-033");
                 rna.SetActive(true);
                 break;
             case (295):
@@ -325,20 +325,20 @@ public class VirusGameplayScript : MonoBehaviour
                 theCamera.transform.position = places[I].transform.position;
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-034") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-034");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-034") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-034");
                 break;
             case (297):
                 I = 9;
                 moveSpeed = 175;
                 break;
             case (303):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-035") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-035");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-035") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-035");
                 break;
             case (316):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-036") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-036");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-036") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-036");
                 break;
             case (322):
                 doAction = LowerCurtain;
@@ -347,16 +347,16 @@ public class VirusGameplayScript : MonoBehaviour
             case (323):
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-037") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-037");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-037") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-037");
                 break;
             case (331):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-038") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-038");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-038") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-038");
                 break;
             case (339):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-039") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-039");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-039") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-039");
                 break;
             case (351):
                 doAction = LowerCurtain;
@@ -374,12 +374,12 @@ public class VirusGameplayScript : MonoBehaviour
                 break;
             case (353):
 
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-040") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-040");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-040") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-040");
                 break;
             case (367):
-                if (SoundManager.IsVoicePlaying("Medical_VR_Game_VO_Line-041_A") == false)
-                    SoundManager.PlayVoice("Medical_VR_Game_VO_Line-041_A");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-041_A") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-041_A");
                 break;
             case (373):
                 doAction = LowerCurtain;

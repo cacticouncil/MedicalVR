@@ -39,9 +39,11 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
             case 3:
                 LoadScene("DodgeAnitbodies");
                 MovingCamera.arcadeMode = true;
+                MovingCamera.TutorialMode = false;
                 break;
             case 4:
                 SimonSays.arcadeMode = true;
+                SimonSays.TutorialMode = false;
                 LoadScene("SimonDNA");
                 break;
             case 5:
