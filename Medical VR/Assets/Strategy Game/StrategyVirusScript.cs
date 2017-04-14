@@ -25,7 +25,6 @@ public class StrategyVirusScript : MonoBehaviour
     private Vector2 key = new Vector2(-500, 500);
 
     private MoveCamera mainCamera;
-    private float camOffset = 5.0f;
     private float scaledDistance = 1.3f;
 
     // Use this for initialization
@@ -207,6 +206,7 @@ public class StrategyVirusScript : MonoBehaviour
         {
             nextPosition = transform.position;
             collision.transform.GetComponent<Rotate>().enabled = false;
+            transform.GetChild(1).GetComponent<Rotate>().enabled = false;
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
