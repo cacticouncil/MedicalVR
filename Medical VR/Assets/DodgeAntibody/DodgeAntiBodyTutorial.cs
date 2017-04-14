@@ -8,7 +8,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
     public GameObject RedCell;
     public GameObject RedCellTutorialLocation;
     public GameObject WhiteCell;
-
+   public bool WhiteCellHitsPlayerFirstTime = false;
     Vector3 SavedRedCellPosition;
     public List<GameObject> WhiteCellsToActivate;
 
@@ -16,13 +16,13 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
     {
         if (MovingCamera.TutorialMode == true)
         {
-            //Save red cell orginal position
-            SavedRedCellPosition = RedCell.transform.position;
-            RedCell.transform.position = RedCellTutorialLocation.transform.position;
-
             //Set the player in the other tunnel
             Player.GetComponent<MovingCamera>().transform.position = transform.position;
             Player.GetComponent<MovingCamera>().stopMoving = true;
+
+            //Save red cell orginal position
+            SavedRedCellPosition = RedCell.transform.position;
+            RedCell.transform.position = RedCellTutorialLocation.transform.position;
         }
     }
 
@@ -61,7 +61,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                     Subtitles.GetComponent<SubstitlesScript>().Stop();
                     Player.GetComponent<MovingCamera>().stopMoving = false;
                     Player.GetComponent<MovingCamera>().speed = 10.0f;
-                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.GetComponent<MovingCamera>().transform.position, 1.0f);
+                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.GetComponent<MovingCamera>().transform.position, 2.0f);
                     break;
 
                 default:
@@ -86,5 +86,12 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
         {
             WhiteCellsToActivate[i].gameObject.SetActive(true);
         }
+    }
+
+    public void RepawnPlayer()
+    {
+        //Player.GetComponent<MovingCamera>().stopMoving = false;
+        Player.GetComponent<MovingCamera>().speed = 10.0f;
+        Player.GetComponent<MovingCamera>().transform.position = transform.position;
     }
 }
