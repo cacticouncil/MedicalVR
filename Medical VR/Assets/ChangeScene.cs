@@ -32,6 +32,8 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 MemoryUI.arcadeMode = true;
                 break;
             case 2:
+                Player.ArcadeMode = true;
+                Player.TutorialMode = false;
                 LoadScene("FightVirus");
                 break;
             case 3:
@@ -39,6 +41,7 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 MovingCamera.arcadeMode = true;
                 break;
             case 4:
+                SimonSays.arcadeMode = true;
                 LoadScene("SimonDNA");
                 break;
             case 5:
@@ -66,6 +69,8 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("OptionsMenu");
                 break;
             case 13:
+                VirusPlayer.ArcadeMode = true;
+                VirusPlayer.TutorialMode = false;
                 LoadScene("DestroyTheCell");
                 break;
             case 14:
@@ -77,7 +82,6 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
     public void Highlight(int anything)
     {
         index = anything;
-       
     }
 
     public void HandleTimeInput()
