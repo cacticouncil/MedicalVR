@@ -7,7 +7,6 @@ public class WaveManager : MonoBehaviour
     public GameObject Player;
 
     int WhatColorProtein;
-    public GameObject TheOGProtien;
     public GameObject BlueAntiViralProtein;
     public GameObject RedAntiViralProtein;
     public GameObject YellowAntiViralProtein;
