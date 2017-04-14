@@ -14,6 +14,7 @@ public class _TGameController : MonoBehaviour
     public int scorePerEnzyme;
     public int score;
 
+    public GameObject viralEnzyme;
     public GameObject enzyme;
     public GameObject enzymeCollector;
     public int maxNumEnzymes;

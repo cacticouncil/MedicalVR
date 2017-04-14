@@ -9,6 +9,7 @@ public class StrategyBox : MonoBehaviour
     public List<StrategyItem> items = new List<StrategyItem>();
     public List<TMPro.TextMeshPro> text = new List<TMPro.TextMeshPro>();
 
+    public int actionsMax;
     public int actionsLeft;
     public TMPro.TextMeshPro actionText;
 
@@ -35,7 +36,7 @@ public class StrategyBox : MonoBehaviour
         cellmanager.ActionPreformed();
         if (actionsLeft == 0)
         {
-            actionsLeft = 4;
+            actionsLeft = actionsMax;
             actionText.text = "Actions Left: " + actionsLeft;
             int item = Random.Range(0, items.Count);
             AHighlighter.SetGazedAt(false);

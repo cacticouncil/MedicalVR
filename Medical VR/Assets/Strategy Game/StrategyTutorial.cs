@@ -422,14 +422,13 @@ public class StrategyTutorial : MonoBehaviour
         float startTime = Time.time;
         float percent = Time.time - startTime;
         Vector3 pos = mysteryBoxMesh.transform.position;
-        Vector3 des = new Vector3(1, 0, 0);
         while (percent < 1.0f)
         {
             percent = Time.time - startTime;
-            mysteryBoxMesh.transform.position = Vector3.Lerp(pos, des, percent);
+            mysteryBoxMesh.transform.position = Vector3.Lerp(pos, mysteryBox.transform.position, percent);
             yield return 0;
         }
-        mysteryBoxMesh.transform.position = des;
+        mysteryBoxMesh.transform.position = mysteryBox.transform.position;
     }
     #endregion
 }

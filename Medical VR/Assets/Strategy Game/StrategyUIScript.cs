@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class StrategyUIScript : MonoBehaviour
 {
-    public GameObject[] items;
+    public TMPro.TextMeshPro[] texts;
     [SerializeField]
     List<StrategyItem> inventory;
 
@@ -20,37 +20,28 @@ public class StrategyUIScript : MonoBehaviour
 
     public void Refresh()
     {
-        if (transform.parent.GetComponent<StrategyCellScript>().hosted)
+        for (int i = 0; i < texts.Length; i++)
         {
-            if (inventory[inventory.Count - 1].count > 0)
+            texts[i].text = inventory[i].count.ToString();
+            if (inventory[i].count > 0)
             {
-                items[inventory.Count - 1].SetActive(true);
-                items[inventory.Count - 1].GetComponentInChildren<TMPro.TextMeshPro>().text = inventory[inventory.Count - 1].count.ToString();
+                texts[i].color = Color.white;
             }
             else
             {
-                items[inventory.Count - 1].SetActive(false);
-            }
-            for (int i = 0; i < items.Length - 2; i++)
-            {
-                items[i].SetActive(false);
+                texts[i].color = Color.red;
             }
         }
-        else
+        if (transform.parent.GetComponent<StrategyCellScript>().hosted)
         {
-            for (int i = 0; i < items.Length - 1; i++)
+            foreach (TMPro.TextMeshPro text in texts)
             {
-                if (inventory[i].count > 0)
-                {
-                    items[i].SetActive(true);
-                    items[i].GetComponentInChildren<TMPro.TextMeshPro>().text = inventory[i].count.ToString();
-                }
-                else
-                {
-                    items[i].SetActive(false);
-                }
+                text.color = Color.red;
             }
-            items[inventory.Count - 1].SetActive(false);
+            if (inventory[inventory.Count - 1].count > 0)
+            {
+                texts[inventory.Count - 1].color = Color.white;
+            }
         }
     }
 }
