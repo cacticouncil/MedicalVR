@@ -133,6 +133,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         t.GetComponent<StrategyCellScript>().immunity = 1;
         t.GetComponent<StrategyCellScript>().enabled = true;
         t.GetComponent<Collider>().enabled = true;
+        t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
 
         inventory = mysteryBox.items;
     }
@@ -151,7 +152,13 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
         else if (selected == virusIndex)
         {
-
+            foreach (StrategyVirusScript virus in viruses)
+            {
+                if (virus.selected)
+                {
+                    virus.ToggleUI(false);
+                }
+            }
         }
         else if (selected == victoryIndex && victory)
         {
@@ -266,7 +273,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             c.GetComponent<StrategyCellScript>().reproduction = (int)spawnCellStats.x;
             c.GetComponent<StrategyCellScript>().defense = (int)spawnCellStats.y;
             c.GetComponent<StrategyCellScript>().immunity = (int)spawnCellStats.z;
-            c.GetComponent<StrategyCellScript>().protein = (StrategyCellScript.Proteins)((int)spawnCellStats.w);
+            c.GetComponent<StrategyCellScript>().protein = (Proteins)((int)spawnCellStats.w);
             spawnCellStats = Vector4.zero;
         }
         else

@@ -124,10 +124,10 @@ public class StrategyTutorialReproduce : MonoBehaviour
 
     void Shrink()
     {
-        while (children.Count > 0)
-        {
-            children[0].GetComponent<Shrink>().enabled = true;
-            children.RemoveAt(0);
-        }
+        //while (children.Count > 0)
+        //{
+        //    children[0].GetComponent<Shrink>().enabled = true;
+        //    children.RemoveAt(0);
+        //}
     }
 }

@@ -174,6 +174,55 @@ public class CellGameplayScript : MonoBehaviour
                 I = 5;
                 moveSpeed = 200;
                 break;
+            case (80):
+                I = 6;
+                moveSpeed = 200;
+                break;
+            case (85):
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case (86):
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
+                Sceneries[2].SetActive(false);
+                Sceneries[3].SetActive(true);
+                I = 7;
+                theCamera.transform.position = places[I].transform.position;
+                break;
+            case 90:
+                I = 8;
+                break;
+            case 94:
+                rna.SetActive(true);
+                break;
+            case 95:
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case 96:
+                Sceneries[2].SetActive(true);
+                Sceneries[3].SetActive(false);
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
+                I = 9;
+                theCamera.transform.position = places[I].transform.position;
+                break;
+            case 100:
+                I = 10;
+                moveSpeed = 175;
+                break;
+            case 104:
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case 105:
+               // SceneManager.LoadScene("MemoryGame");
+                break;
+            case (106):
+                doAction = LowerCurtain;
+                fadeSpeed = 1.5f;
+                break;
             //case (65):
             //    doAction = NullFunction;
             //    if (virus.activeSelf == false)
