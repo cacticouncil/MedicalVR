@@ -44,7 +44,7 @@ public class StrategyCellManagerScript : MonoBehaviour
 
     [System.NonSerialized]
     public List<StrategyItem> inventory;
-    private Vector4 spawnCellStats;
+    public bool duplicate;
     //private float xOffset = 1.0f;
     //private float yOffset = 1.0f;
     public float xOffset = 2.0f;
@@ -133,6 +133,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         t.GetComponent<StrategyCellScript>().immunity = 1;
         t.GetComponent<StrategyCellScript>().enabled = true;
         t.GetComponent<Collider>().enabled = true;
+        t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
 
         inventory = mysteryBox.items;
     }
@@ -151,7 +152,13 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
         else if (selected == virusIndex)
         {
-
+            foreach (StrategyVirusScript virus in viruses)
+            {
+                if (virus.selected)
+                {
+                    virus.ToggleUI(false);
+                }
+            }
         }
         else if (selected == victoryIndex && victory)
         {
@@ -256,23 +263,24 @@ public class StrategyCellManagerScript : MonoBehaviour
         Vector3 desination = new Vector3(k.y % 2 == 0 ? k.x * xOffset + xOffset * .5f : k.x * xOffset, CalculateY(k), k.y * yOffset);
         GameObject t = Instantiate(transporter, spawnLocation, Quaternion.identity, transform) as GameObject;
         t.GetComponent<StrategyTransporter>().destination = desination;
-        GameObject c = Instantiate(cellPrefab, spawnLocation, cellPrefab.transform.rotation, t.transform) as GameObject;
+        GameObject c;
+        if (duplicate)
+        {
+            c = Instantiate(tiles[p].gameObject, spawnLocation, cellPrefab.transform.rotation, t.transform) as GameObject;
+            c.GetComponent<StrategyCellScript>().immunitySpread = 0.0f;
+            c.GetComponent<StrategyCellScript>().childrenSpawned = 0;
+            c.GetComponent<StrategyCellScript>().ToggleUI(false);
+            duplicate = false;
+        }
+        else
+        {
+            c = Instantiate(cellPrefab, spawnLocation, cellPrefab.transform.rotation, t.transform) as GameObject;
+            c.GetComponent<StrategyCellScript>().defense = tiles[p].GetComponent<StrategyCellScript>().defense;
+        }
         c.GetComponent<StrategyCellScript>().key = k;
         AddToDictionary(c.GetComponent<StrategyCellScript>());
         c.name = "Cell" + k.x + "_" + k.y;
         c.GetComponent<StrategyCellScript>().parent = this;
-        if (spawnCellStats != Vector4.zero)
-        {
-            c.GetComponent<StrategyCellScript>().reproduction = (int)spawnCellStats.x;
-            c.GetComponent<StrategyCellScript>().defense = (int)spawnCellStats.y;
-            c.GetComponent<StrategyCellScript>().immunity = (int)spawnCellStats.z;
-            c.GetComponent<StrategyCellScript>().protein = (StrategyCellScript.Proteins)((int)spawnCellStats.w);
-            spawnCellStats = Vector4.zero;
-        }
-        else
-        {
-            c.GetComponent<StrategyCellScript>().defense = tiles[p].GetComponent<StrategyCellScript>().defense;
-        }
         t.GetComponent<StrategyTransporter>().enabled = true;
         c.GetComponent<StrategyCellScript>().enabled = true;
     }
@@ -429,12 +437,6 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
     }
 
-    public void DuplicateCell(Vector2 k, Vector4 stats)
-    {
-        spawnCellStats = stats;
-        SelectCellSpawn(k);
-    }
-
     float CalculateY(Vector2 k)
     {
         float avg = 0.0f;
@@ -568,14 +570,16 @@ public class StrategyCellManagerScript : MonoBehaviour
     public void KillCell(Vector2 k)
     {
         StrategyCellScript instance = tiles[k];
+        immunitySpread += instance.immunitySpread;
+        cells.Remove(instance);
         tiles.Remove(k);
-        Destroy(instance.gameObject);
+        StartCoroutine(instance.Die());
     }
 
     public float SpreadImmunity(Vector2 k, float imm)
     {
-        float immunitySpread = 0;
-
+        immunitySpread = 0;
+        float i;
         Vector2 check = k;
         if (check.y % 2 == 0)
         {
@@ -584,11 +588,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.y += 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
 
@@ -597,11 +604,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.x += 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
 
@@ -611,11 +621,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.y -= 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
 
@@ -624,11 +637,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.y -= 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
 
@@ -637,11 +653,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.x -= 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
 
@@ -650,11 +669,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.y += 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
         }
@@ -664,11 +686,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.y += 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
 
@@ -677,11 +702,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.x += 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
 
@@ -690,11 +718,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.y -= 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
 
@@ -704,11 +735,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.y -= 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
 
@@ -717,11 +751,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.x -= 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
 
@@ -731,11 +768,14 @@ public class StrategyCellManagerScript : MonoBehaviour
             check.y += 1;
             if (tiles.ContainsKey(check))
             {
-                tiles[check].AddImmunity(imm);
-                immunitySpread += imm;
+                i = imm;
+                if (tiles[check].hosted)
+                    i *= 2.0f;
+                tiles[check].AddImmunity(i);
+                immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.identity, transform) as GameObject;
                 p.GetComponent<TurnParticles>().target = tiles[check].transform.position;
-                p.GetComponent<TurnParticles>().immunity = imm;
+                p.GetComponent<TurnParticles>().immunity = i;
                 p.GetComponent<TurnParticles>().enabled = true;
             }
         }

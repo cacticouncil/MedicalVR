@@ -15,12 +15,6 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
         StartCoroutine(Arrive());
     }
 
-    void DestroyTarget()
-    {
-        Destroy(target.gameObject);
-        StartCoroutine(Leave());
-    }
-
     IEnumerator Arrive()
     {
         float startTime = Time.time;
@@ -30,12 +24,14 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
         {
             t = Time.time - startTime;
             transform.localScale = Vector3.Lerp(Vector3.zero, scale, t);
-            transform.position = Vector3.Lerp(spawnLocation, cell.transform.position, t);
+            transform.position = Vector3.Lerp(spawnLocation, target.transform.position, t);
             yield return 0;
         }
         transform.localScale = scale;
-        transform.position = cell.transform.position;
-        Invoke("DestroyTarget", 1);
+        transform.position = target.transform.position;
+        Destroy(target.gameObject);
+        yield return new WaitForSeconds(1.0f);
+        StartCoroutine(Leave());
     }
 
     IEnumerator Leave()
