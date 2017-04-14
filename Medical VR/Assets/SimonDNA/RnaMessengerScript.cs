@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class RnaMessengerScript : MonoBehaviour {
+public class RnaMessengerScript : MonoBehaviour
+{
 
     public GameObject Refpolynuclei, simon, subtitles, blackCurtain;
     Stack<GameObject> chain = new Stack<GameObject>();
@@ -13,24 +14,31 @@ public class RnaMessengerScript : MonoBehaviour {
     Vector3 target;
     float timer = 0, timer2 = 0;
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         tmpScore = simon.GetComponent<SimonSays>().score;
         tmpLives = simon.GetComponent<SimonSays>().lives;
-       if(SimonSays.arcadeMode == false)
+        if (SimonSays.arcadeMode == false)
         {
-            subtitles.SetActive(true);
+            subtitles.SetActive(false);
             subtitles.GetComponent<SubstitlesScript>().Stop();
             simon.GetComponent<SimonSays>().lives = 0;
             simon.GetComponent<SimonSays>().sign.SetActive(false);
+            if (SimonSays.arcadeMode == false && SimonSays.TutorialMode == false)
+            {
+                simon.GetComponent<SimonSays>().lives = 3;
+                simon.GetComponent<SimonSays>().sign.SetActive(true);
+                simon.GetComponent<SimonSays>().theLives.GetComponent<TMPro.TextMeshPro>().text = "Lives: " + 3;
+            }
         }
         else
         {
             blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+
         }
     }
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+    void Update()
     {
         StoryModeStuff();
         BreakAnimation();
@@ -40,21 +48,21 @@ public class RnaMessengerScript : MonoBehaviour {
             if (wrongs > 0)
             {
                 RemoveNuclei();
-               
+
             }
             simon.GetComponent<SimonSays>().makeNuclei = false;
             wrongs = 0;
         }
-       else if (simon.GetComponent<SimonSays>().makeNuclei == true)
+        else if (simon.GetComponent<SimonSays>().makeNuclei == true)
         {
             simon.GetComponent<SimonSays>().makeNuclei = false;
             AddNuclei();
-            
+
         }
-        
+
         MoveNuclei();
-        
-       
+
+
         if (tmpScore != simon.GetComponent<SimonSays>().score)
         {
             tmpScore = simon.GetComponent<SimonSays>().score;
@@ -80,7 +88,7 @@ public class RnaMessengerScript : MonoBehaviour {
             timer2 += Time.deltaTime;
             if (timer2 > 2.5f)
             {
-
+                //If you win story mode
                 VirusGameplayScript.loadCase = 2;
                 SceneManager.LoadScene("Virus Gameplay Scene");
             }
@@ -94,24 +102,10 @@ public class RnaMessengerScript : MonoBehaviour {
             }
 
         }
-        switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
-        {
-            case (30):
-                if (simon.GetComponent<SimonSays>().lives == 0)
-                {
-                    simon.GetComponent<SimonSays>().lives = 3;
-                    simon.GetComponent<SimonSays>().sign.SetActive(true);
-                    simon.GetComponent<SimonSays>().theLives.GetComponent<TMPro.TextMeshPro>().text = "Lives: " + 3;
-
-
-                    //Have to make a condition for tutorial mode and either progess to story or arcade mode
-                }
-                break;
-            default:
-                break;
-        }
+       
+      
     }
-  public void AddNuclei()
+    public void AddNuclei()
     {
         wrongs++;
         GameObject nuclei = Instantiate(Refpolynuclei, Refpolynuclei.transform.position, Refpolynuclei.transform.rotation) as GameObject;
@@ -138,8 +132,8 @@ public class RnaMessengerScript : MonoBehaviour {
                 break;
         }
         chain.Push(nuclei);
-       
-        target = new Vector3((float)(4.2 + prevPos.Count*-1), 36f, -53f);
+
+        target = new Vector3((float)(4.2 + prevPos.Count * -1), 36f, -53f);
         if (prevPos.Count < chain.Count)
             prevPos.Add(target);
     }
@@ -147,13 +141,13 @@ public class RnaMessengerScript : MonoBehaviour {
     {
         for (int i = 0; i < wrongs; i++)
         {
-            wrongChain.Push(chain.Pop());   
+            wrongChain.Push(chain.Pop());
         }
 
         foreach (GameObject i in wrongChain)
         {
-           i.GetComponent<Animator>().enabled = true;
-           i.GetComponent<Animator>().SetBool("DestroyNucle", true);
+            i.GetComponent<Animator>().enabled = true;
+            i.GetComponent<Animator>().SetBool("DestroyNucle", true);
         }
     }
     void MoveNuclei()
@@ -166,20 +160,18 @@ public class RnaMessengerScript : MonoBehaviour {
                 i.transform.position = Vector3.MoveTowards(i.transform.position, prevPos[idx], Time.deltaTime);
                 idx++;
             }
-            
-               
         }
     }
-    
+
     void BreakAnimation()
     {
         foreach (GameObject i in chain)
         {
             if (!i.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Polynuclei"))
             {
-                i.GetComponent<Animator>().enabled= false;
+                i.GetComponent<Animator>().enabled = false;
             }
-           
+
         }
         foreach (GameObject i in wrongChain)
         {
@@ -198,7 +190,7 @@ public class RnaMessengerScript : MonoBehaviour {
             Destroy(i);
         }
         chain.Clear();
-        foreach(GameObject i in wrongChain)
+        foreach (GameObject i in wrongChain)
         {
             Destroy(i);
         }
@@ -206,6 +198,6 @@ public class RnaMessengerScript : MonoBehaviour {
         prevPos.Clear();
         tmpScore = simon.GetComponent<SimonSays>().score;
         tmpLives = simon.GetComponent<SimonSays>().lives;
-        
+
     }
 }
