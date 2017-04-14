@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class SimonSays : MonoBehaviour {
+public class SimonSays : MonoBehaviour
+{
+    public static bool TutorialMode = true;
 
-    // Use this for initialization
     public GameObject yellow;
     public GameObject red;
     public GameObject blue;
@@ -20,8 +21,9 @@ public class SimonSays : MonoBehaviour {
     float timer = 3, theTimer;
 
     Vector3 orgPos;
-    public static bool arcadeMode = true;
+    public static bool arcadeMode = false;
     bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false;
+    ///[System.Serializable]
     public enum theColors
     {
         YELLOW,
@@ -169,6 +171,7 @@ public class SimonSays : MonoBehaviour {
         sign.GetComponent<MeshRenderer>().enabled = true;
         shownSign++;
     }
+
     void TakeInput()
     {
         if (buttonPressed)
@@ -199,6 +202,7 @@ public class SimonSays : MonoBehaviour {
             CheckInput();
         }          
     }
+
     void CheckInput()
     {
         bool correct = true;
@@ -307,7 +311,7 @@ public class SimonSays : MonoBehaviour {
             }
         }
     }
-    void TurnOffLights()
+  public void TurnOffLights()
     {
         yellow.GetComponent<Renderer>().material.color = cY;
         red.GetComponent<Renderer>().material.color = cR;
@@ -322,8 +326,8 @@ public class SimonSays : MonoBehaviour {
             buttonPressed = true;
             TurnOffLights();
         }
-       
     }
+
     public void selectRed()
     {
         if (makeInput)
@@ -333,6 +337,7 @@ public class SimonSays : MonoBehaviour {
             TurnOffLights();
         }
     }
+
     public void selectBlue()
     {
         if (makeInput)
@@ -342,6 +347,7 @@ public class SimonSays : MonoBehaviour {
             TurnOffLights();
         }
     }
+
     public void selectGreen()
     {
         if (makeInput)

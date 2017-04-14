@@ -42,7 +42,7 @@ public class RedCellScript : MonoBehaviour
                         SceneManager.LoadScene("DodgeAnitbodies");
                     }
 
-                    //When you beat tutorial mode only once
+                    //When you beat tutorial mode only once, go back to main menu
 
                     //When you beat story mode, go to next scene
                     else if (MovingCamera.TutorialMode == false)
