@@ -219,7 +219,7 @@ public static class SoundManager {
         }
     }
 
-    public static void PlayVoice(string _title)
+    public static void PlayVirusVoice(string _title)
     {
         if (Controller)
         {
@@ -234,7 +234,7 @@ public static class SoundManager {
             SFX.Add(source);
         }
     }
-    public static bool IsVoicePlaying(string _title)
+    public static bool IsVirusVoicePlaying(string _title)
     {
         if (Controller)
         {
@@ -249,12 +249,66 @@ public static class SoundManager {
         }
         return false;
     }
-    public static bool stopVoice(string _title, bool _all = false)
+    public static bool StopVirusVoice(string _title, bool _all = false)
     {
         bool stopped = false;
         if (Controller)
         {
             AudioClip c = (AudioClip)Resources.Load("SFX/Virus Gameplay Lines/" + _title);
+            for (int i = SFX.Count - 1; i >= 0; i--)
+            {
+                if (SFX[i].clip == c)
+                {
+                    SFX[i].Stop();
+                    if (!_all)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        stopped = true;
+                    }
+                }
+            }
+        }
+        return stopped;
+    }
+    public static void PlayCellVoice(string _title)
+    {
+        if (Controller)
+        {
+            AudioSource source = Controller.AddComponent<AudioSource>();
+            source.clip = (AudioClip)Resources.Load("SFX/Medical VR Cell Lines/" + _title);
+            if (source.clip == null)
+            {
+                Debug.Log("Sound '" + _title + "' was not found in the SFX folder!");
+            }
+            source.volume = MaxSFXVolume;
+            source.Play();
+            SFX.Add(source);
+        }
+    }
+    public static bool IsCellVoicePlaying(string _title)
+    {
+        if (Controller)
+        {
+            AudioClip c = (AudioClip)Resources.Load("SFX/Medical VR Cell Lines/" + _title);
+            for (int i = SFX.Count - 1; i >= 0; i--)
+            {
+                if (SFX[i].clip == c)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static bool StopCellVoice(string _title, bool _all = false)
+    {
+        bool stopped = false;
+        if (Controller)
+        {
+            AudioClip c = (AudioClip)Resources.Load("SFX/Medical VR Cell Lines/" + _title);
             for (int i = SFX.Count - 1; i >= 0; i--)
             {
                 if (SFX[i].clip == c)
