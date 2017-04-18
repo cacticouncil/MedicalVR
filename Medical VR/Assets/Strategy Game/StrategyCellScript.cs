@@ -37,11 +37,13 @@ public class StrategyCellScript : MonoBehaviour
     public int turnSpawned = 0;
     public int childrenSpawned = 0;
     public float immunitySpread = 0;
+    public float startSpeed = 15.0f;
 
     public int RDur = 0;
     public int I2Dur = 0;
 
     public StrategyCellManagerScript parent;
+    public ParticleSystem deathParticles;
 
     public TMPro.TextMeshPro[] texts;
 
@@ -79,6 +81,7 @@ public class StrategyCellScript : MonoBehaviour
         d.text = "Defense: " + defense;
         i.text = "Immunity: " + (int)immunity;
         p.text = "Protein: " + protein.ToString();
+        startSpeed = Random.Range(1.0f, 30.0f);
         tImmunity = immunity;
     }
 
@@ -479,9 +482,11 @@ public class StrategyCellScript : MonoBehaviour
 
     public IEnumerator Die()
     {
+        GetComponent<Collider>().enabled = false;
         float startTime = Time.time;
         Color c = render.material.color;
         Color o = render.material.GetColor("_OutlineColor");
+        deathParticles.Play();
 
         float t = 0;
         while (t < 1.0f)

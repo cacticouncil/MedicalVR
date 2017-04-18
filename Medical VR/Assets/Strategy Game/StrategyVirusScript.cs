@@ -16,6 +16,8 @@ public class StrategyVirusScript : MonoBehaviour
 
     public Vector3 startingPosition, prevPosition, nextPosition;
 
+    public Renderer render;
+    public ParticleSystem deathParticles;
     public StrategyCellManagerScript parent;
     public TMPro.TextMeshPro attack, speed, immunity;
 
@@ -39,14 +41,6 @@ public class StrategyVirusScript : MonoBehaviour
         {
             target.targeted = true;
             Vector3 lookRotation = target.transform.position - transform.position;
-            if (lookRotation != Vector3.zero)
-            {
-                GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(target.transform.position - transform.position));
-            }
-            else
-            {
-                GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
-            }
             startingPosition = prevPosition = nextPosition = transform.position;
             distance = Vector3.Distance(startingPosition, target.transform.position);
             Mathf.Max(distance, .001f);
@@ -69,7 +63,6 @@ public class StrategyVirusScript : MonoBehaviour
         //fracJourney = 0.0f;
         if (fracJourney >= 1.0f && (!target || (target && percentTraveled >= 1.0f)))
         {
-            GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
             if (trav)
             {
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -91,26 +84,10 @@ public class StrategyVirusScript : MonoBehaviour
             if (target)
             {
                 Vector3 lookRotation = target.transform.position - transform.position;
-                if (lookRotation != Vector3.zero)
-                {
-                    GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(lookRotation));
-                }
-                else
-                {
-                    GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
-                }
             }
             else
             {
                 Vector3 lookRotation = nextPosition - transform.position;
-                if (lookRotation != Vector3.zero)
-                {
-                    GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(lookRotation));
-                }
-                else
-                {
-                    GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
-                }
             }
             GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, nextPosition, fracJourney));
         }
@@ -135,7 +112,6 @@ public class StrategyVirusScript : MonoBehaviour
 
                 nextPosition = Vector3.Lerp(prevPosition, parent.RandomPositionAboveHex(), percentTraveled);
                 prevPosition = transform.position;
-                GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
                 distance = Vector3.Distance(prevPosition, nextPosition);
                 startTime = Time.time;
                 return;
@@ -197,12 +173,13 @@ public class StrategyVirusScript : MonoBehaviour
             target.protein == Proteins.TRIM22 ||
             (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
             parent.KillCell(target.key);
-        Destroy(gameObject);
+        parent.viruses.Remove(this);
+        StartCoroutine(Die());
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (target && collision.transform.parent && collision.transform.parent.transform == target.transform)
+        if (target && collision.transform.parent && collision.transform.parent.transform.GetComponent<StrategyCellScript>() && collision.transform.parent.transform.GetComponent<StrategyCellScript>().key == target.key)
         {
             nextPosition = transform.position;
             collision.transform.GetComponent<Rotate>().enabled = false;
@@ -260,6 +237,24 @@ public class StrategyVirusScript : MonoBehaviour
         }
         selected = b;
         transform.GetChild(0).gameObject.SetActive(b);
+    }
+
+    public IEnumerator Die()
+    {
+        float startTime = Time.time;
+        Color c = render.material.color;
+        Color o = render.material.GetColor("_OutlineColor");
+        deathParticles.Play();
+
+        float t = 0;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            c.a = Mathf.Lerp(1, 0, t);
+            o.a = Mathf.Lerp(1, 0, t);
+            yield return 0;
+        }
+        Destroy(gameObject);
     }
 
     public void OnDestroy()

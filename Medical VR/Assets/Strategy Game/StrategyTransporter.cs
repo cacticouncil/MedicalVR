@@ -24,6 +24,10 @@ public class StrategyTransporter : MonoBehaviour
         {
             if (transform.childCount > 0)
             {
+                if (transform.GetChild(0).GetComponent<StrategyVirusScript>())
+                {
+                    transform.GetChild(0).GetComponent<StrategyVirusScript>().enabled = true;
+                }
                 if (transform.GetChild(0).GetComponent<Collider>())
                 {
                     transform.GetChild(0).GetComponent<Collider>().enabled = true;
