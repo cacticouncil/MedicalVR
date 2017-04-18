@@ -15,21 +15,21 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(TextMesh))]
+[RequireComponent(typeof(TMPro.TextMeshPro))]
 public class GvrFPS : MonoBehaviour
 {
     private const string DISPLAY_TEXT_FORMAT = "{0} msf\n({1} FPS)";
     private const string MSF_FORMAT = "#.#";
     private const float MS_PER_SEC = 1000f;
 
-    private TextMesh textField;
+    private TMPro.TextMeshPro textField;
     private float fps = 60;
 
     public Camera cam;
 
     void Awake()
     {
-        textField = GetComponent<TextMesh>();
+        textField = GetComponent<TMPro.TextMeshPro>();
     }
 
     void Start()

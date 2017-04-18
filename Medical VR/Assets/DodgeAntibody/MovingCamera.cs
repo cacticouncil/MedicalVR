@@ -61,11 +61,15 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         originPos = transform.position;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         orgSpeed = speed;
-        if(arcadeMode == false)
+        if(arcadeMode == false && TutorialMode == true)
         {
             subtitles.SetActive(true);
             UI.SetActive(false);
             speed = 0;
+        }
+        if(arcadeMode == false)
+        {
+            UI.SetActive(false);
         }
     }
 	
