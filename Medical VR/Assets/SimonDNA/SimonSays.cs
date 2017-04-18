@@ -244,7 +244,7 @@ public class SimonSays : MonoBehaviour
        
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
-        scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
+        //scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
         transform.position = new Vector3(transform.position.x, transform.position.y, 10000);
         round = 1;
     }

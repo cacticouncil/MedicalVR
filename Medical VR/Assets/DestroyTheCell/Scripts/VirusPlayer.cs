@@ -238,13 +238,16 @@ public class VirusPlayer : MonoBehaviour
                 VirusAttackList.Remove(VirusAttackList[i]);
         }
 
-        ////After you beat tutorial if story mode bool is active transtion to story mode for this game
-        //if (TutorialModeCompleted == true)
-        //{
+        //After you beat tutorial if story mode bool is active transtion to story mode for this game
+        if (TutorialModeCompleted == true)
+        {
+            VirusGameplayScript.loadCase = 3;
+            TutorialMode = false;
+            ArcadeMode = false;
+            SceneManager.LoadScene("DestroyTheCell");
+        }
 
-        //}
-
-        ////Otherwise just play tutorial once and leave to  main menu
+        //Otherwise just play tutorial once and leave to  main menu
         //if (TutorialModeCompleted == true)
         //{
 

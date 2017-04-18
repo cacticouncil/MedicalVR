@@ -7,7 +7,7 @@ public class AntibodyScript : MonoBehaviour
     public GameObject Cam, Effects, banner;
     bool reswpawn = false;
     float saveSpeed;
-
+    
     public GameObject TutorialMode;
     // Use this for initialization
     void Start()
@@ -31,11 +31,16 @@ public class AntibodyScript : MonoBehaviour
             if (Effects.GetComponent<ParticleSystem>().isPlaying == false)
             {
                 reswpawn = false;
-                Cam.GetComponent<MovingCamera>().LoseresetPos();
-                Cam.GetComponent<MovingCamera>().speed = saveSpeed;
-
-                if (MovingCamera.TutorialMode == true)
-                    Cam.GetComponent<MovingCamera>().speed = 0;
+                if (TutorialMode == false)
+                {
+                    
+                    Cam.GetComponent<MovingCamera>().LoseresetPos();
+                    Cam.GetComponent<MovingCamera>().speed = saveSpeed;
+                }
+                else if (TutorialMode.GetComponent<DodgeAntiBodyTutorial>().WhiteCellHitsPlayerFirstTime == true)
+                {
+                    TutorialMode.GetComponent<DodgeAntiBodyTutorial>().RepawnPlayer();
+                }
             }
         }
     }
@@ -60,7 +65,16 @@ public class AntibodyScript : MonoBehaviour
             //For tutorial mode 
             if (MovingCamera.TutorialMode == true)
             {
-                TutorialMode.GetComponent<DodgeAntiBodyTutorial>().MoveStoy();
+                if (TutorialMode.GetComponent<DodgeAntiBodyTutorial>().WhiteCellHitsPlayerFirstTime == false)
+                {
+                    TutorialMode.GetComponent<DodgeAntiBodyTutorial>().MoveStoy();
+                    TutorialMode.GetComponent<DodgeAntiBodyTutorial>().WhiteCellHitsPlayerFirstTime = true;
+                }
+
+                //else if (TutorialMode.GetComponent<DodgeAntiBodyTutorial>().WhiteCellHitsPlayerFirstTime == true)
+                //{
+                //    TutorialMode.GetComponent<DodgeAntiBodyTutorial>().RepawnPlayer();
+                //}
             }
         }
     }

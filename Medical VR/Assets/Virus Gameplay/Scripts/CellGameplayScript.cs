@@ -234,6 +234,13 @@ public class CellGameplayScript : MonoBehaviour
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
+            case 125:
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
+                break;
+            case 126:
+                SceneManager.LoadScene("MainMenu");
+                break;
             default:
                 break;
         }
