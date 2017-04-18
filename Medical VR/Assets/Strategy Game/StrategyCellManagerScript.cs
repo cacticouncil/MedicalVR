@@ -219,7 +219,7 @@ public class StrategyCellManagerScript : MonoBehaviour
 
         if (/*turnNumber >= 30 &&*/ turnNumber % 15 == 0)
         {
-            //SpawnVirus();
+            SpawnVirus();
         }
 
         if (turnNumber % 50 == 0)
