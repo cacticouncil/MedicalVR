@@ -19,5 +19,7 @@ public class GetpointsER : MonoBehaviour {
         Storebullets.score += 25;
 
         Destroy(collision.gameObject);
+
+        transform.position = new Vector3(transform.position.x, transform.position.y + 20, transform.position.z);
     }
 }
