@@ -21,17 +21,20 @@ public class Sting_CellGameplayScript : MonoBehaviour {
         MoveTo();
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
-            case (57):
+            case (129):
                 sting_pic.SetActive(true);
                 break;
-            case 64:
+            case (130):
+                subtitles.GetComponent<SubstitlesScript>().Stop();
+                break;
+            case 145:
                 cGAMP.SetActive(true);
                 break;
-            case 68:
+            case 159:
                 I = 1;
                 moveSpeed = 200;
                 break;
-            case 80:
+            case 182:
                 I = 2;
                 moveSpeed = 200;
                 break;
@@ -47,7 +50,7 @@ public class Sting_CellGameplayScript : MonoBehaviour {
     }
     public void DoAction()
     {
-        if (((int)subtitles.GetComponent<SubstitlesScript>().theTimer == 58))
+        if (((int)subtitles.GetComponent<SubstitlesScript>().theTimer == 130))
         {
             subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
             subtitles.GetComponent<SubstitlesScript>().Continue();
