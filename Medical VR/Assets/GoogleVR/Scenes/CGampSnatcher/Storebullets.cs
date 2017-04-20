@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Storebullets : MonoBehaviour {
 
     public static int bulletamount;
-    public GameObject theScore, theLives, scoreBoard, UI, BulletAmount;
+    public static int  numberofstingsdone;
+    public static int neededstings = 5;
+    public GameObject theScore, theLives, scoreBoard, UI, BulletAmount, TheLevel;
     public static float score = 0;
-    public static bool arcadeMode = true;
+    public static bool arcadeMode = false;
     int lives = 3;
+    int level = 1;
 
     public GameObject shotSpawn;
 
@@ -37,6 +41,7 @@ public class Storebullets : MonoBehaviour {
         UI.SetActive(true);
         scoreBoard.SetActive(false);
         lives = 3;
+        level = 1;
         score = 0;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         //theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
@@ -46,6 +51,7 @@ public class Storebullets : MonoBehaviour {
         bulletamount = 0;
         BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+        TheLevel.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + level;
         if (arcadeMode == false)
         {
             UI.SetActive(false);
@@ -74,9 +80,14 @@ public class Storebullets : MonoBehaviour {
 
         if (arcadeMode == false)
         {
-
+            if (numberofstingsdone >= 1)
+            {
+                CellGameplayScript.loadCase = 3;
+                SceneManager.LoadScene("Cell Gameplay");
+            }
         }
 
+        
         if (lives < 1)
         {
             ShowScore();
@@ -84,6 +95,12 @@ public class Storebullets : MonoBehaviour {
 
         if (arcadeMode == true)
         {
+
+            if (numberofstingsdone >= neededstings)
+            {
+                TheLevel.GetComponent<TMPro.TextMeshPro>().text = "Level: " + level;
+                neededstings += 5;
+            }
             //score += Time.smoothDeltaTime;
             int tmp = (int)score;
             theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
