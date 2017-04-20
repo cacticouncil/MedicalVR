@@ -8,10 +8,11 @@ public class Storebullets : MonoBehaviour {
     public static int bulletamount;
     public static int  numberofstingsdone;
     public static int neededstings = 5;
-    public GameObject theScore, theLives, scoreBoard, UI, BulletAmount, TheLevel;
+    public GameObject theScore, scoreBoard, UI, BulletAmount, TheLevel;
+    public GameObject theLives;
     public static float score = 0;
-    public static bool arcadeMode = false;
-    int lives = 3;
+    public static bool arcadeMode = /*true;*/ false;////////////////////////////////////////////////////////////////////////////
+   public static int lives = 3;
     int level = 1;
 
     public GameObject shotSpawn;
@@ -20,20 +21,22 @@ public class Storebullets : MonoBehaviour {
     public GameObject bullet;
 
     private float nextFire;
-    public void LoseresetPos()
+    public static void LoseresetPos()
     {
         if (arcadeMode == true)
         {
             lives--;
-            theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+        }
+        else
+        {
+            lives--;
         }
     }
     void ShowScore()
     {
         UI.SetActive(false);
         scoreBoard.SetActive(true);
-        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
-        scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
+        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
         lives = 3;
     }
     public void RestartGame()
@@ -54,7 +57,8 @@ public class Storebullets : MonoBehaviour {
         TheLevel.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + level;
         if (arcadeMode == false)
         {
-            UI.SetActive(false);
+            TheLevel.SetActive(false);
+            theScore.SetActive(false);
         }
     }
 
@@ -76,36 +80,38 @@ public class Storebullets : MonoBehaviour {
     }
     void FixedUpdate()
     {
-    //    gameObject.transform.rotation = Camera.transform.rotation;
 
         if (arcadeMode == false)
         {
-            if (numberofstingsdone >= 1)
+            if (numberofstingsdone >= 30)
             {
-                CellGameplayScript.loadCase = 3;
+                CellGameplayScript.loadCase = 2;
                 SceneManager.LoadScene("Cell Gameplay");
             }
         }
 
-        
-        if (lives < 1)
-        {
-            ShowScore();
-        }
-
-        if (arcadeMode == true)
-        {
-
-            if (numberofstingsdone >= neededstings)
+            if (arcadeMode == true)
             {
-                TheLevel.GetComponent<TMPro.TextMeshPro>().text = "Level: " + level;
-                neededstings += 5;
+                 theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+                 if (lives < 1)
+                 {
+                     ShowScore();
+                 }
+                 if (numberofstingsdone >= neededstings)
+                     {
+                         TheLevel.GetComponent<TMPro.TextMeshPro>().text = "Level: " + level;
+                         neededstings += 5;
+                     }
+                     int tmp = (int)score;
+                     theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
             }
-            //score += Time.smoothDeltaTime;
-            int tmp = (int)score;
-            theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
-        }
+            else
+            {
+                theScore.GetComponent<TMPro.TextMeshPro>().text = "";
+                TheLevel.GetComponent<TMPro.TextMeshPro>().text = "";
+                theLives.GetComponent<TMPro.TextMeshPro>().text = "";
 
+        }
     }
    
     private void shootCGamp()

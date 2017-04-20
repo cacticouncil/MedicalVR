@@ -47,6 +47,7 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("SimonDNA");
                 break;
             case 5:
+                Storebullets.arcadeMode = true;
                 LoadScene("CGampSnatcher");
                 break;
             case 6:

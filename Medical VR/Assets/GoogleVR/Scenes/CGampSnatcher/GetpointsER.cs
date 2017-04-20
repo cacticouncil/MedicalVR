@@ -15,11 +15,13 @@ public class GetpointsER : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.transform.tag == "CBullet")
-        Storebullets.score += 25;
-        Storebullets.numberofstingsdone += 1;
-        Destroy(collision.gameObject);
+        if (collision.transform.tag == "CBullet")
+        {
+            Storebullets.score += 25;
+            Storebullets.numberofstingsdone += 1;
+            Destroy(collision.gameObject);
 
-        transform.position = new Vector3(transform.position.x, transform.position.y + 20, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y + 20, transform.position.z);
+        }
     }
 }
