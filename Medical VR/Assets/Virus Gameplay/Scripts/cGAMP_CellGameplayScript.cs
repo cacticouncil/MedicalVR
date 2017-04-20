@@ -16,16 +16,16 @@ public class cGAMP_CellGameplayScript : MonoBehaviour {
     {
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
-            case (46):
+            case (96):
                 body.SetActive(true);
                 break;
-            case (64):
+            case (145):
                 body.SetActive(false);
                 break;
             default:
                 break;
         }
-        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 48)
+        if (subtitles.GetComponent<SubstitlesScript>().theTimer >106)
         {
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * moveSpeed);
         }

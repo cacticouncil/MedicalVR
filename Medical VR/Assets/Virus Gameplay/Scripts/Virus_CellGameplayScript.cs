@@ -16,10 +16,12 @@ public class Virus_CellGameplayScript : MonoBehaviour {
     void Start()
     {
         doAction = NullFunction;
-        switch (VirusGameplayScript.loadCase)
+        switch (CellGameplayScript.loadCase)
         {
             case (1):
-                I = 2;
+                I = 5;
+                virusWithMesh.SetActive(false);
+                capsid.SetActive(false);
                 transform.position = places[I].transform.position;
                 break;
             default:
@@ -63,12 +65,12 @@ public class Virus_CellGameplayScript : MonoBehaviour {
     {
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
-            case (17):
+            case (24):
                 I = 1;
                 transform.position = places[I].transform.position;
                 moveSpeed = 50;
                 break;
-            case (20):
+            case (25):
                 I = 2;
                 moveSpeed = 50;
                 break;
@@ -76,40 +78,44 @@ public class Virus_CellGameplayScript : MonoBehaviour {
                 I = 3;
                 moveSpeed = 50;
                 break;
-            case (29):
+            case (31):
                 I = 4;
                 transform.position = places[I].transform.position;
                 virusWithMesh.SetActive(false);
                 break;
-            case (31):
+            case (32):
                 doAction = fadeCapsid;
                 break;
-            case (35):
+            case (33):
                 capsid.SetActive(false);
                 doAction = NullFunction;
                 I = 5;
-                moveSpeed = 50;
-                break;
-            case (227):
-                doAction = NullFunction;
-                I = 7;
                 moveSpeed = 250;
                 break;
-            case (249):
-                doAction = NullFunction;
-                I = 8;
-                transform.position = places[I].transform.position;
-                break;
-            case (252):
-                doAction = NullFunction;
-                I = 9;
-                moveSpeed = 50;
-                break;
-            case (256):
-                doAction = RotateTo;
-                I = 10;
-                moveSpeed = 50;
-                break;
+            //case 200:
+            //    I = 6;
+            //    moveSpeed = 250;
+            //    break;
+            //case (227):
+            //    doAction = NullFunction;
+            //    I = 7;
+            //    moveSpeed = 250;
+            //    break;
+            //case (249):
+            //    doAction = NullFunction;
+            //    I = 8;
+            //    transform.position = places[I].transform.position;
+            //    break;
+            //case (252):
+            //    doAction = NullFunction;
+            //    I = 9;
+            //    moveSpeed = 50;
+            //    break;
+            //case (256):
+            //    doAction = RotateTo;
+            //    I = 10;
+            //    moveSpeed = 50;
+            //    break;
             default:
                 break;
         }

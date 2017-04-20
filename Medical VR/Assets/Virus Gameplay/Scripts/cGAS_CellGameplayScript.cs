@@ -14,7 +14,16 @@ public class cGAS_CellGameplayScript : MonoBehaviour {
     void Start ()
     {
         cGAS_pic.SetActive(false);
-	}
+        switch (CellGameplayScript.loadCase)
+        {
+            case (1):
+                I = 1;
+                transform.position = places[I].transform.position;
+                break;
+            default:
+                break;
+        }
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -30,15 +39,17 @@ public class cGAS_CellGameplayScript : MonoBehaviour {
     }
     void CheckCase()
     {
+        float t = subtitles.GetComponent<SubstitlesScript>().theTimer;
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
-            case (37):
+            case (43):
                 cGAS_pic.SetActive(true);
                 break;
-            case (39):
+            case (44):
+                if(t >= 44.5)
                 subtitles.GetComponent<SubstitlesScript>().Stop();
                 break;
-            case (40):
+            case (46):
                 I = 1;
                 moveSpeed = 50;
                 break;
@@ -48,7 +59,7 @@ public class cGAS_CellGameplayScript : MonoBehaviour {
     }
     public void DoAction()
     {
-        if(((int)subtitles.GetComponent<SubstitlesScript>().theTimer == 39))
+        if(((int)subtitles.GetComponent<SubstitlesScript>().theTimer == 44))
         {
             subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
             subtitles.GetComponent<SubstitlesScript>().Continue();

@@ -20,11 +20,11 @@ public class IRF3_CellGameplayScript : MonoBehaviour {
         transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, Time.deltaTime * moveSpeed);
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
-            case 86:
+            case 191:
                 I = 1;
                 transform.position = places[I].transform.position;
                 break;
-            case 90:
+            case 194:
                 I = 2;
                 moveSpeed = 200;
                 break;
