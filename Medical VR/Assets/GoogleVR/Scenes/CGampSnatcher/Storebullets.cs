@@ -1,14 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Storebullets : MonoBehaviour {
 
     public static int bulletamount;
-    public GameObject theScore, theLives, scoreBoard, UI, BulletAmount;
+    public static int  numberofstingsdone;
+    public static int neededstings = 5;
+    public GameObject theScore, scoreBoard, UI, BulletAmount, TheLevel;
+    public GameObject theLives;
     public static float score = 0;
-    public static bool arcadeMode = true;
-    int lives = 3;
+    public static bool arcadeMode = /*true;*/ false;////////////////////////////////////////////////////////////////////////////
+   public static int lives = 3;
+    int level = 1;
 
     public GameObject shotSpawn;
 
@@ -16,20 +21,22 @@ public class Storebullets : MonoBehaviour {
     public GameObject bullet;
 
     private float nextFire;
-    public void LoseresetPos()
+    public static void LoseresetPos()
     {
         if (arcadeMode == true)
         {
             lives--;
-            theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+        }
+        else
+        {
+            lives--;
         }
     }
     void ShowScore()
     {
         UI.SetActive(false);
         scoreBoard.SetActive(true);
-        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
-        scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
+        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
         lives = 3;
     }
     public void RestartGame()
@@ -37,6 +44,7 @@ public class Storebullets : MonoBehaviour {
         UI.SetActive(true);
         scoreBoard.SetActive(false);
         lives = 3;
+        level = 1;
         score = 0;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         //theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
@@ -46,9 +54,11 @@ public class Storebullets : MonoBehaviour {
         bulletamount = 0;
         BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+        TheLevel.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + level;
         if (arcadeMode == false)
         {
-            UI.SetActive(false);
+            TheLevel.SetActive(false);
+            theScore.SetActive(false);
         }
     }
 
@@ -70,25 +80,38 @@ public class Storebullets : MonoBehaviour {
     }
     void FixedUpdate()
     {
-    //    gameObject.transform.rotation = Camera.transform.rotation;
 
         if (arcadeMode == false)
         {
-
+            if (numberofstingsdone >= 30)
+            {
+                CellGameplayScript.loadCase = 2;
+                SceneManager.LoadScene("Cell Gameplay");
+            }
         }
 
-        if (lives < 1)
-        {
-            ShowScore();
-        }
+            if (arcadeMode == true)
+            {
+                 theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+                 if (lives < 1)
+                 {
+                     ShowScore();
+                 }
+                 if (numberofstingsdone >= neededstings)
+                     {
+                         TheLevel.GetComponent<TMPro.TextMeshPro>().text = "Level: " + level;
+                         neededstings += 5;
+                     }
+                     int tmp = (int)score;
+                     theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
+            }
+            else
+            {
+                theScore.GetComponent<TMPro.TextMeshPro>().text = "";
+                TheLevel.GetComponent<TMPro.TextMeshPro>().text = "";
+                theLives.GetComponent<TMPro.TextMeshPro>().text = "";
 
-        if (arcadeMode == true)
-        {
-            //score += Time.smoothDeltaTime;
-            int tmp = (int)score;
-            theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
         }
-
     }
    
     private void shootCGamp()

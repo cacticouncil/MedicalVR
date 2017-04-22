@@ -141,7 +141,8 @@ public class Randomsphere : MonoBehaviour {
                 }
                 break;
             default:
-                SceneManager.LoadScene("MainMenu");
+                CellGameplayScript.loadCase = 3;
+                SceneManager.LoadScene("Cell Gameplay");
                 break;
         }
 
@@ -293,7 +294,8 @@ public class Randomsphere : MonoBehaviour {
                 }
                 break;
             default:
-                SceneManager.LoadScene("MainMenu");
+                CellGameplayScript.loadCase = 3;
+                SceneManager.LoadScene("Cell Gameplay");
                 break;
         }
 
