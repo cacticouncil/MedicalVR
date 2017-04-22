@@ -9,7 +9,7 @@ public class CellGameplayScript : MonoBehaviour
     public List<GameObject> places;
     public List<GameObject> Sceneries;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna;
-    public static int loadCase = 4;
+    public static int loadCase;
     // Use this for initialization
     delegate void Func();
     Func doAction;
@@ -214,7 +214,10 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (144):
-                //SceneManager.LoadScene("CGampSnatcher");
+                //cGAMP
+                Storebullets.arcadeMode = false;
+
+                SceneManager.LoadScene("CGampSnatcher");
                 break;
             case (145):
                 doAction = RiseCurtain;
@@ -298,7 +301,10 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case 230:
-                // SceneManager.LoadScene("MemoryGame");
+                //Memory Game
+                MemoryUI.arcadeMode = false;
+               
+                SceneManager.LoadScene("MemoryGame");
                 break;
             case (231):
                 doAction = RiseCurtain;
@@ -331,7 +337,10 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case 260:
-                // SceneManager.LoadScene("FightVirus");
+                //FightVirus
+                Player.ArcadeMode = false;
+                Player.TutorialMode = true;
+                SceneManager.LoadScene("FightVirus");
                 break;
             case 261:
                 doAction = RiseCurtain;
