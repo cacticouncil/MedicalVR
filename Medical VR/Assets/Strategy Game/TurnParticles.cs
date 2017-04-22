@@ -56,9 +56,34 @@ public class TurnParticles : MonoBehaviour
             // GetParticles is allocation free because we reuse the m_Particles buffer between updates
             int numParticlesAlive = p.GetParticles(particles);
 
+            if (target == null)
+            {
+                for (int i = 0; i < numParticlesAlive; i++)
+                {
+                    particles[i].lifetime = 0;
+                }
+
+                // Apply the particle changes to the particle system
+                p.SetParticles(particles, numParticlesAlive);
+                yield return 0;
+            }
+
             for (int i = 0; i < numParticlesAlive; i++)
             {
-                if (V3Equal(particles[i].position, target.position))
+                if (target == null)
+                {
+                    for (int j = 0; j < numParticlesAlive; j++)
+                    {
+                        particles[j].lifetime = 0;
+                    }
+
+                    // Apply the particle changes to the particle system
+                    p.SetParticles(particles, numParticlesAlive);
+                    yield return 0;
+                    Destroy(gameObject);
+                    yield break;
+                }
+                else if (V3Equal(particles[i].position, target.position))
                 {
                     particles[i].lifetime = 0.0f;
                 }

@@ -1342,7 +1342,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         {
             if (cells.Count > 0)
             {
-                StrategyCellScript temp = cells[Random.Range(0, cells.Count - 1)].GetComponent<StrategyCellScript>();
+                StrategyCellScript temp = cells[Random.Range(0, cells.Count)];
 
                 if (!temp.targeted)
                 {

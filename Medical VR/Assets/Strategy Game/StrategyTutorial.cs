@@ -13,6 +13,7 @@ public class StrategyTutorial : MonoBehaviour
     public GameObject cellManager;
     public GameObject mysteryBox;
     public Vector3 cellPosition;
+    public Vector3 virusEnd = new Vector3(0, 0, 0);
     public TMPro.TextMeshPro[] text;
 
     public GameObject[] cells = new GameObject[7];
@@ -79,37 +80,55 @@ public class StrategyTutorial : MonoBehaviour
                 StartCoroutine(TurnTextOn(3));
                 StartCoroutine(SpawnCell());
                 break;
-            case 15:
-                StartCoroutine(TurnTextOn(4));
-                plane.SetActive(true);
-                break;
             case 16:
-                StartCoroutine(TurnTextOn(5));
-                plane.SetActive(false);
+                StartCoroutine(TurnTextOn(4));
                 break;
-            case 17:
-                StartCoroutine(TurnTextOn(6));
-                planeDes.SetActive(true);
-                break;
-
-            //Mystery Box
             case 18:
-                StartCoroutine(TurnTextOn(7));
-                StartCoroutine(SpawnBox());
-                break;
-            case 19:
-                StartCoroutine(TurnTextOn(8));
+                StartCoroutine(TurnTextOn(5));
                 break;
             case 20:
+                StartCoroutine(TurnTextOn(6));
+                StartCoroutine(FadeInObject(plane));
+                break;
+            case 22:
+                StartCoroutine(TurnTextOn(7));
+                break;
+            case 24:
+                StartCoroutine(TurnTextOn(8));
+                break;
+            case 26:
                 StartCoroutine(TurnTextOn(9));
+                StartCoroutine(FadeOutObject(plane));
+                StartCoroutine(FadeInObject(planeDes));
+                break;
+
+            //Strategy Box
+            case 28:
+                StartCoroutine(TurnTextOn(10));
+                StartCoroutine(SpawnBox());
+                break;
+            case 30:
+                StartCoroutine(TurnTextOn(11));
+                break;
+            case 32:
+                StartCoroutine(TurnTextOn(12));
+                break;
+            case 34:
+                StartCoroutine(TurnTextOn(13));
+                break;
+            case 36:
+                StartCoroutine(TurnTextOn(14));
                 StartCoroutine(LeaveBox());
+                break;
+            case 38:
+                StartCoroutine(TurnTextOn(15));
                 break;
 
             //Clean Up 
-            case 21:
+            case 40:
                 cellManager.SetActive(true);
                 mysteryBox.SetActive(true);
-                StopCoroutine("ClickForMe");
+                StopCoroutine(ClickForMe());
                 Destroy(gameObject);
                 break;
 
@@ -128,6 +147,39 @@ public class StrategyTutorial : MonoBehaviour
         }
     }
 
+    IEnumerator FadeInObject(GameObject g)
+    {
+        g.SetActive(true);
+        Color start = g.GetComponent<Renderer>().material.color;
+        start.a = 0;
+        Color c = start;
+        float startTime = Time.time;
+        float t = 0.0f;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            c.a = t;
+            g.GetComponent<Renderer>().material.color = c;
+            yield return 0;
+        }
+    }
+
+    IEnumerator FadeOutObject(GameObject g)
+    {
+        Color start = g.GetComponent<Renderer>().material.color;
+        Color c = start;
+        float startTime = Time.time;
+        float t = 0.0f;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            c.a = 1.0f - t;
+            g.GetComponent<Renderer>().material.color = c;
+            yield return 0;
+        }
+        Destroy(g);
+    }
+
     #region Text
     IEnumerator StartText()
     {
@@ -135,11 +187,11 @@ public class StrategyTutorial : MonoBehaviour
         a.a = 0.0f;
         text[0].color = a;
         float startTime = Time.time;
-        float percent = 0.0f;
-        while (percent < 1.0f)
+        float t = 0.0f;
+        while (t < 1.0f)
         {
-            percent = (Time.time - startTime);
-            a.a = Mathf.Lerp(0.0f, 1.0f, percent);
+            t = Time.time - startTime;
+            a.a = t;
             text[0].color = a;
             yield return 0;
         }
@@ -151,11 +203,11 @@ public class StrategyTutorial : MonoBehaviour
     {
         Color a = text[index - 1].color;
         float startTime = Time.time;
-        float percent = 0.0f;
-        while (percent < 1.0f)
+        float t = 0.0f;
+        while (t < 1.0f)
         {
-            percent = (Time.time - startTime) * 2.0f;
-            a.a = Mathf.Lerp(1.0f, 0.0f, percent);
+            t = (Time.time - startTime) * 2.0f;
+            a.a = 1.0f - t;
             text[index - 1].color = a;
             yield return 0;
         }
@@ -168,11 +220,11 @@ public class StrategyTutorial : MonoBehaviour
         a.a = 0.0f;
         text[index].color = a;
         startTime = Time.time;
-        percent = (Time.time - startTime);
-        while (percent < 1.0f)
+        t = 0;
+        while (t < 1.0f)
         {
-            percent = (Time.time - startTime) * 2.0f;
-            a.a = Mathf.Lerp(0.0f, 1.0f, percent);
+            t = (Time.time - startTime) * 2.0f;
+            a.a = t;
             text[index].color = a;
             yield return 0;
         }
@@ -220,12 +272,13 @@ public class StrategyTutorial : MonoBehaviour
         rNum++;
 
         float startTime = Time.time;
-        float percent = Time.time - startTime;
-        while (percent < 1.0f)
+        float t = 0;
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
-            c.transform.position = Vector3.Lerp(cellPosition, desination, percent);
-            c.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent);
+            t = Time.time - startTime;
+            c.transform.position = Vector3.Lerp(cellPosition, desination, t);
+            t = Mathf.Min(1.0f, t);
+            c.transform.localScale = new Vector3(t, t, t);
             yield return 0;
         }
         c.transform.position = desination;
@@ -235,13 +288,15 @@ public class StrategyTutorial : MonoBehaviour
     IEnumerator ShrinkCells()
     {
         float startTime = Time.time;
-        float percent = Time.time - startTime;
-        while (percent < 1.0f)
+        float t = Time.time - startTime;
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
+            t = Time.time - startTime;
+            float s = 1.0f - t;
+            Mathf.Max(s, 0.0f);
             for (int i = 1; i < 7; i++)
             {
-                cells[i].transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, percent);
+                cells[i].transform.localScale = new Vector3(s, s, s);
             }
             yield return 0;
         }
@@ -256,24 +311,25 @@ public class StrategyTutorial : MonoBehaviour
     IEnumerator MoveVirus()
     {
         float startTime = Time.time;
-        float percent = 0;
+        float t = 0;
         Vector3 startPos = new Vector3(-5, 15, 0);
         viruses[0] = Instantiate(virus, startPos, virus.transform.rotation, transform) as GameObject;
         viruses[0].transform.localScale = Vector3.zero;
-        while (percent < 1.0f)
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
-            viruses[0].transform.position = Vector3.Lerp(startPos, cells[0].transform.position, percent);
-            viruses[0].transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent * 2.0f);
+            t = Time.time - startTime;
+            viruses[0].transform.position = Vector3.Lerp(startPos, virusEnd, t);
+            float temp = Mathf.Clamp01(t * 2.0f);
+            viruses[0].transform.localScale = new Vector3(temp, temp, temp);
             yield return 0;
         }
-        viruses[0].transform.position = cells[0].transform.position;
+        viruses[0].GetComponent<Rotate>().enabled = false;
+        cells[0].GetComponent<Rotate>().enabled = false;
     }
 
 
     IEnumerator VirusAttack()
     {
-        Debug.Log("Attacking");
         Color s = cells[0].GetComponent<Renderer>().material.color;
         Color f = new Color(s.r * .2f, s.g * .2f, s.b * .2f);
 
@@ -295,40 +351,48 @@ public class StrategyTutorial : MonoBehaviour
     IEnumerator Dying()
     {
         float startTime = Time.time;
-        float percent = 0;
-        Color s = cells[0].GetComponent<Renderer>().material.color;
+        float t = 0;
+        Color sc = cells[0].GetComponent<Renderer>().material.color;
+        Color sv = viruses[0].GetComponent<Renderer>().material.color;
+        Color b = Color.black;
+        viruses[0].transform.GetChild(0).GetComponent<ParticleSystem>().Play();
 
-        while (percent < 1.0f)
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
-            viruses[0].transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, percent);
-            cells[0].GetComponent<Renderer>().material.color = Color.Lerp(s, Color.black, percent);
+            t = Time.time - startTime;
+            sv.a = 1.0f - t;
+            viruses[0].GetComponent<Renderer>().material.color = sv;
+            b.a = 1.0f - t;
+            viruses[0].GetComponent<Renderer>().material.SetColor("_OutlineColor", b);
+            cells[0].GetComponent<Renderer>().material.color = Color.Lerp(sc, Color.black, t);
             yield return 0;
         }
+        viruses[0].SetActive(false);
     }
 
     IEnumerator Split()
     {
         float startTime = Time.time;
-        float percent = 0;
-        Color a = cells[0].GetComponent<Renderer>().material.color;
-        Color s = a;
-        a.a = 0.0f;
+        float t = 0;
+        Color sc = cells[0].GetComponent<Renderer>().material.color;
+        Color b = Color.black;
         cells[0].transform.GetChild(0).GetComponent<ParticleSystem>().Play();
         viruses[1] = Instantiate(virus, viruses[0].transform.position, virus.transform.rotation, transform) as GameObject;
         viruses[1].transform.localScale = Vector3.zero;
         viruses[2] = Instantiate(virus, viruses[0].transform.position, virus.transform.rotation, transform) as GameObject;
         viruses[2].transform.localScale = Vector3.zero;
 
-        while (percent < 1.0f)
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
-            cells[0].GetComponent<Renderer>().material.color = Color.Lerp(s, a, percent);
-            cells[0].GetComponent<Renderer>().material.SetColor("_OutlineColor", Color.Lerp(s, a, percent));
-            viruses[1].transform.position = Vector3.Lerp(cells[0].transform.position, cells[0].transform.position - offset, percent);
-            viruses[1].transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent);
-            viruses[2].transform.position = Vector3.Lerp(cells[0].transform.position, cells[0].transform.position + offset, percent);
-            viruses[2].transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent);
+            t = Time.time - startTime;
+            sc.a = 1.0f - t;
+            b.a = 1.0f - t;
+            cells[0].GetComponent<Renderer>().material.color = sc;
+            cells[0].GetComponent<Renderer>().material.SetColor("_OutlineColor", b);
+            viruses[1].transform.position = Vector3.Lerp(cells[0].transform.position, cells[0].transform.position - offset, t);
+            viruses[1].transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t);
+            viruses[2].transform.position = Vector3.Lerp(cells[0].transform.position, cells[0].transform.position + offset, t);
+            viruses[2].transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t);
             yield return 0;
         }
         cells[0].SetActive(false);
@@ -339,15 +403,15 @@ public class StrategyTutorial : MonoBehaviour
     IEnumerator ArriveWhiteCell()
     {
         float startTime = Time.time;
-        float percent = 0;
+        float t = 0;
         Vector3 startPos = new Vector3(5, 15, 0);
         whiteCell = Instantiate(whiteCell, startPos, virus.transform.rotation, transform) as GameObject;
         whiteCell.transform.localScale = Vector3.zero;
-        while (percent < 1.0f)
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
-            whiteCell.transform.position = Vector3.Lerp(startPos, viruses[2].transform.position, percent);
-            whiteCell.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent * 2.0f);
+            t = Time.time - startTime;
+            whiteCell.transform.position = Vector3.Lerp(startPos, viruses[2].transform.position, t);
+            whiteCell.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t * 2.0f);
             yield return 0;
         }
         whiteCell.transform.position = viruses[2].transform.position;
@@ -357,11 +421,11 @@ public class StrategyTutorial : MonoBehaviour
     IEnumerator MoveWhiteCell()
     {
         float startTime = Time.time;
-        float percent = 0;
-        while (percent < 1.0f)
+        float t = 0;
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
-            whiteCell.transform.position = Vector3.Lerp(viruses[2].transform.position, viruses[1].transform.position, percent);
+            t = Time.time - startTime;
+            whiteCell.transform.position = Vector3.Lerp(viruses[2].transform.position, viruses[1].transform.position, t);
             yield return 0;
         }
         whiteCell.transform.position = viruses[1].transform.position;
@@ -371,13 +435,14 @@ public class StrategyTutorial : MonoBehaviour
     IEnumerator LeaveWhiteCell()
     {
         float startTime = Time.time;
-        float percent = 0;
+        float t = 0;
         Vector3 endPos = new Vector3(-5, 15, 0);
-        while (percent < 1.0f)
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
-            whiteCell.transform.position = Vector3.Lerp(viruses[1].transform.position, endPos, percent);
-            whiteCell.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, (percent - .5f) * 2.0f);
+            t = Time.time - startTime;
+            whiteCell.transform.position = Vector3.Lerp(viruses[1].transform.position, endPos, t);
+            float temp = Mathf.Clamp01(1.0f - (t - .5f) * 2.0f);
+            whiteCell.transform.localScale = new Vector3(temp, temp, temp);
             yield return 0;
         }
         whiteCell.SetActive(false);
@@ -388,11 +453,11 @@ public class StrategyTutorial : MonoBehaviour
     IEnumerator SpawnCell()
     {
         float startTime = Time.time;
-        float percent = Time.time - startTime;
-        while (percent < 1.0f)
+        float t = Time.time - startTime;
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
-            yourCell.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent);
+            t = Time.time - startTime;
+            yourCell.transform.localScale = new Vector3(t, t, t);
             yield return 0;
         }
         yourCell.transform.localScale = Vector3.one;
@@ -403,14 +468,14 @@ public class StrategyTutorial : MonoBehaviour
     IEnumerator SpawnBox()
     {
         float startTime = Time.time;
-        float percent = Time.time - startTime;
+        float t = Time.time - startTime;
         Vector3 pos = yourCell.transform.position;
         Vector3 des = new Vector3(1, 0, 0);
-        while (percent < 1.0f)
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
-            yourCell.transform.position = Vector3.Lerp(pos, des, percent);
-            mysteryBoxMesh.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, percent);
+            t = Time.time - startTime;
+            yourCell.transform.position = Vector3.Lerp(pos, des, t);
+            mysteryBoxMesh.transform.localScale = new Vector3(t, t, t);
             yield return 0;
         }
         yourCell.transform.position = des;
@@ -420,12 +485,12 @@ public class StrategyTutorial : MonoBehaviour
     IEnumerator LeaveBox()
     {
         float startTime = Time.time;
-        float percent = Time.time - startTime;
+        float t = Time.time - startTime;
         Vector3 pos = mysteryBoxMesh.transform.position;
-        while (percent < 1.0f)
+        while (t < 1.0f)
         {
-            percent = Time.time - startTime;
-            mysteryBoxMesh.transform.position = Vector3.Lerp(pos, mysteryBox.transform.position, percent);
+            t = Time.time - startTime;
+            mysteryBoxMesh.transform.position = Vector3.Lerp(pos, mysteryBox.transform.position, t);
             yield return 0;
         }
         mysteryBoxMesh.transform.position = mysteryBox.transform.position;

@@ -9,8 +9,8 @@
 		_Outline("Outline Width", Range(.002, 0.03)) = .005
 		_MainTex("Color (RGB) Alpha (A)", 2D) = "white"
 		_BumpMap("Normal Map", 2D) = "bump" {}
-	_SpecularTex("Specular Map", 2D) = "gray" {}
-	_RampTex("Shading Ramp", 2D) = "white" {}
+		_SpecularTex("Specular Map", 2D) = "gray" {}
+		_RampTex("Shading Ramp", 2D) = "white" {}
 	}
 
 		SubShader
@@ -34,8 +34,8 @@
 	};
 
 	sampler2D _MainTex, _SpecularTex, _BumpMap, _RampTex;
-	float4 _RimColor;
-	float  _RimPower;
+	fixed4 _RimColor;
+	half  _RimPower;
 
 	inline fixed4 LightingTF2(SurfaceOutput s, fixed3 lightDir, fixed3 viewDir, fixed atten)
 	{
@@ -82,11 +82,11 @@
 	struct v2f
 	{
 		float4 pos : POSITION;
-		float4 color : COLOR;
+		fixed4 color : COLOR;
 	};
 
-	uniform float _Outline;
-	uniform float4 _OutlineColor;
+	uniform half _Outline;
+	uniform fixed4 _OutlineColor;
 	fixed4 _Color;
 
 	v2f vert(appdata v)
@@ -117,7 +117,7 @@
 		CGPROGRAM
 #pragma vertex vert
 #pragma fragment frag
-		half4 frag(v2f i) :COLOR{ return i.color; }
+		fixed4 frag(v2f i) :COLOR{ return i.color; }
 		ENDCG
 	}
 	}
