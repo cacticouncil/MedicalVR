@@ -2,9 +2,19 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using System;
+using TMPro;
+
 
 public class MemoryUI : MonoBehaviour {
+
+    public static bool TutorialMode = true;
+    float TutorialTimer = 0.0f;
+    int WhatToRead = 0;
+    float BeatGameTimer = 0.0f;
+    public GameObject CenterScreenObj;
+
 
     public GameObject theScore, theLives, theLevels, scoreBoard, UI, Spheres, Timer, Capsules;
     public GameObject Username, ProfilePic;
@@ -56,6 +66,144 @@ public class MemoryUI : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if (TutorialMode == false)
+        {
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Set up how turtorial will show players basic gameplay
+        else if (TutorialMode == true)
+        {
+            switch (WhatToRead)
+            {
+                case 0:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Welcome to the Transcription Memory Game";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 1:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Your objective is to " + "\n" + " Select three capsules that are the correct transcription to the code given above";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+                case 2:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 6.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = " A Transcripts to U, G to C, C to G, and T to A." /*+ "\n" + " Select three capsules that are the correct transcription to the code given above"*/;
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 3:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Select the correct ones and they will turn green, " + "\n" + "select a wrong one and it will turn red.";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 4:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = " Make sure you don't get 5 wrong or you will have to restart";
+                    else
+                    {
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "";
+                    }
+                    if (Randomsphere.correct == 1)
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 5:
+                    TutorialTimer += Time.deltaTime;
+
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Perfect " + "\n" + " Now get the others!";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 6:
+                    TutorialTimer += Time.deltaTime;
+
+                    if (TutorialTimer <= 4.0f && arcadeMode == true)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = " Make sure you do it before the timer ends";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 7:
+                    TutorialTimer += Time.deltaTime;
+
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = " Awesome ";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+
+                    break;
+
+                default:
+                    CenterScreenObj.GetComponent<TextMeshPro>().text = " ";
+                    break;
+            }
+        }
+
+        //For tutorial only it will either transition to story mode or only play once
+        if (WhatToRead >= 8 && (Randomsphere.correct == 3))
+        {
+            BeatGameTimer += Time.deltaTime;
+            CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now your ready to play";
+
+            if (BeatGameTimer >= 3.5)
+            {
+                //if ()
+                //{
+                //Story mode verion will play after completing
+
+                //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
+                TutorialMode = false;
+                arcadeMode = false;
+                SceneManager.LoadScene("MemoryGame");
+                //}
+
+                //    else if ()
+                //    {
+                //        //Just play tutorial once and go back to main menu
+                //    }
+            }
+        }
+
+
+
+
         AvoidBack();
 
         if (finnished)
