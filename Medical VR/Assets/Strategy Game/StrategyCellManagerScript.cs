@@ -7,13 +7,7 @@ using System.Collections.Generic;
 public class StrategyCellManagerScript : MonoBehaviour
 {
     #region Variables
-    public Dictionary<Vector2, StrategyCellScript> tiles = new Dictionary<Vector2, StrategyCellScript>(new Vector2Comparer());
-    [HideInInspector]
-    public List<StrategyCellScript> cells = new List<StrategyCellScript>();
-    [HideInInspector]
-    public List<StrategyVirusScript> viruses = new List<StrategyVirusScript>();
-    [HideInInspector]
-    public List<StrategyMigratingWhiteBloodCell> whiteCells = new List<StrategyMigratingWhiteBloodCell>();
+    [Header("Prefabs")]
     public GameObject cellPrefab;
     public GameObject whiteCellPrefab;
     public GameObject virusPrefab1;
@@ -22,33 +16,43 @@ public class StrategyCellManagerScript : MonoBehaviour
     public GameObject virusPrefab3;
     public float p3Modifier = .5f;
     public GameObject transporter;
+    public GameObject particleToTarget;
+    [Space(2)]
+
+    [Header("Instances")]
     public StrategyBox mysteryBox;
     public SimulateSun sun;
     public TextMesh screenUI;
-    public int turnNumber = 0;
-    public int cellNum = 1;
-    public int virNum = 0;
-    public Vector2 selected = new Vector2(0.0f, 0.0f);
-    public bool viewingStats = false;
-    public float randomRange = .5f;
-
     public GameObject victory;
-    public GameObject particleToTarget;
+    public StrategyTutorialReproduction str;
+    public StrategyTutorialDefense std;
+    public StrategyTutorialImmunity sti;
 
-    private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500), virusIndex = new Vector2(-500, 500);
-
-    private int easy = 0, medium = 1, hard = 2;
-
-    public int virusKills, cellsSpawned;
-    public float immunitySpread;
-
+    //Automatically not shown in inspector
+    public Dictionary<Vector2, StrategyCellScript> tiles = new Dictionary<Vector2, StrategyCellScript>(new Vector2Comparer());
+    [System.NonSerialized]
+    public List<StrategyCellScript> cells = new List<StrategyCellScript>();
+    [System.NonSerialized]
+    public List<StrategyVirusScript> viruses = new List<StrategyVirusScript>();
+    [System.NonSerialized]
+    public List<StrategyMigratingWhiteBloodCell> whiteCells = new List<StrategyMigratingWhiteBloodCell>();
     [System.NonSerialized]
     public List<StrategyItem> inventory;
-    public bool duplicate;
-    //private float xOffset = 1.0f;
-    //private float yOffset = 1.0f;
-    public float xOffset = 2.0f;
-    public float yOffset = 2.0f;
+    [System.NonSerialized]
+    public int turnNumber = 0, cellNum = 1, virNum = 0, virusKills = 0, cellsSpawned = 0;
+    [System.NonSerialized]
+    public float immunitySpread;
+    [System.NonSerialized]
+    public bool duplicate, viewingStats;
+    [System.NonSerialized]
+    public Vector2 selected = new Vector2(0.0f, 0.0f);
+
+    private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500), virusIndex = new Vector2(-500, 500);
+    private int easy = 0, medium = 1, hard = 2;
+    private float randomRange = .5f;
+
+    private float xOffset = 2.0f;
+    private float yOffset = 2.0f;
     #endregion
 
     #region VariablesWithGets&Sets

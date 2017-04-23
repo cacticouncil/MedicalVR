@@ -295,6 +295,21 @@ public class StrategyCellScript : MonoBehaviour
     }
     #endregion
 
+    #region Tutorials
+    public void Reproduction()
+    {
+        parent.str.enabled = true;
+    }
+    public void Defense()
+    {
+        parent.std.enabled = true;
+    }
+    public void Immunity()
+    {
+        parent.sti.enabled = true;
+    }
+    #endregion
+
     #region Turns
     public void TurnUpdate()
     {

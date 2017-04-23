@@ -1,10 +1,12 @@
-﻿Shader "Custom/Masked" {
+﻿Shader "Custom/Fade" {
 	Properties{
 		_Color("Main Color", Color) = (1,1,1,1)
 	}
 
 		SubShader{
-		Tags{ "Queue" = "Transparent-1" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
+		Tags{ "Queue" = "Overlay" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
+		Cull Front
+		ZTest Always
 		ZWrite Off
 		Blend SrcAlpha OneMinusSrcAlpha
 

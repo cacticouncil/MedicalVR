@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class StrategyTutorial : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class StrategyTutorial : MonoBehaviour
     public GameObject mysteryBox;
     public Vector3 cellPosition;
     public Vector3 virusEnd = new Vector3(0, 0, 0);
-    public TMPro.TextMeshPro[] text;
+    public List<TMPro.TextMeshPro> text = new List<TMPro.TextMeshPro>();
 
     public GameObject[] cells = new GameObject[7];
     public GameObject[] viruses = new GameObject[3];
@@ -126,6 +127,9 @@ public class StrategyTutorial : MonoBehaviour
 
             //Clean Up 
             case 40:
+                StartCoroutine(EndText());
+                break;
+            case 41:
                 cellManager.SetActive(true);
                 mysteryBox.SetActive(true);
                 StopCoroutine(ClickForMe());
@@ -147,6 +151,7 @@ public class StrategyTutorial : MonoBehaviour
         }
     }
 
+    #region Objects
     IEnumerator FadeInObject(GameObject g)
     {
         g.SetActive(true);
@@ -179,6 +184,7 @@ public class StrategyTutorial : MonoBehaviour
         }
         Destroy(g);
     }
+    #endregion
 
     #region Text
     IEnumerator StartText()
@@ -195,8 +201,6 @@ public class StrategyTutorial : MonoBehaviour
             text[0].color = a;
             yield return 0;
         }
-        a.a = 1.0f;
-        text[0].color = a;
     }
 
     IEnumerator TurnTextOn(int index)
@@ -211,8 +215,6 @@ public class StrategyTutorial : MonoBehaviour
             text[index - 1].color = a;
             yield return 0;
         }
-        a.a = 0.0f;
-        text[index - 1].color = a;
         yield return 0;
         text[index - 1].gameObject.SetActive(false);
         text[index].gameObject.SetActive(true);
@@ -228,8 +230,22 @@ public class StrategyTutorial : MonoBehaviour
             text[index].color = a;
             yield return 0;
         }
-        a.a = 1.0f;
-        text[index].color = a;
+    }
+
+    IEnumerator EndText()
+    {
+        int i = text.Count - 1;
+        Color a = text[i].color;
+        float startTime = Time.time;
+        float t = 0.0f;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            a.a = 1.0f - t;
+            text[i].color = a;
+            yield return 0;
+        }
+        text[i].gameObject.SetActive(false);
     }
     #endregion
 
