@@ -4,8 +4,9 @@
 	}
 
 		SubShader{
-		Tags{ "Queue" = "Transparent-1" }
-		ZWrite On
+		Tags{ "Queue" = "Transparent-1" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
+		ZWrite Off
+		Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass{
 		CGPROGRAM

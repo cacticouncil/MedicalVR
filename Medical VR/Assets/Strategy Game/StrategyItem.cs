@@ -9,8 +9,8 @@ public class StrategyItem
         CDK = 0,
         TGF,
         Fuzeon,
-        I,
-        I2,
+        Antigen,
+        Interferon,
         Protein,
         WhiteCell
     }

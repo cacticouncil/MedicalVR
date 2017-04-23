@@ -433,7 +433,6 @@ public class StrategyCellScript : MonoBehaviour
             render.material.color = Color.Lerp(start, c, t);
             yield return 0;
         }
-        render.material.color = c;
     }
 
 
@@ -493,7 +492,9 @@ public class StrategyCellScript : MonoBehaviour
         {
             t = Time.time - startTime;
             c.a = Mathf.Lerp(1, 0, t);
+            render.material.color = c;
             o.a = Mathf.Lerp(1, 0, t);
+            render.material.SetColor("_OutlineColor", o);
             yield return 0;
         }
         Destroy(gameObject);
