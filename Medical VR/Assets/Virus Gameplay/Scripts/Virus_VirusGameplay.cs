@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Virus_VirusGameplay : MonoBehaviour {
 
     public List<GameObject> places;
-    public GameObject subtitles, virusWithMesh, capsid, dna;
+    public GameObject subtitles, virusWithMesh, capsid, dna, virions;
 
     delegate void Func();
     Func doAction;
@@ -23,6 +23,7 @@ public class Virus_VirusGameplay : MonoBehaviour {
             default:
                 break;
         }
+        virions.SetActive(false);
     }
     void NullFunction()
     {
@@ -106,6 +107,9 @@ public class Virus_VirusGameplay : MonoBehaviour {
                 doAction = RotateTo;
                 I = 10;
                 moveSpeed = 50;
+                break;
+            case (323):
+                virions.SetActive(true);
                 break;
             default:
                 break;

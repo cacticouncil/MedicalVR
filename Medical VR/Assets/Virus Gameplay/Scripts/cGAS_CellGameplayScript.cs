@@ -10,6 +10,7 @@ public class cGAS_CellGameplayScript : MonoBehaviour {
     Func doAction;
     int I = 0;
     float moveSpeed;
+    bool doAct = false;
     // Use this for initialization
     void Start ()
     {
@@ -50,6 +51,7 @@ public class cGAS_CellGameplayScript : MonoBehaviour {
                 subtitles.GetComponent<SubstitlesScript>().Stop();
                 break;
             case (46):
+                if(doAct == true)
                 I = 1;
                 moveSpeed = 50;
                 break;
@@ -61,6 +63,7 @@ public class cGAS_CellGameplayScript : MonoBehaviour {
     {
         if(((int)subtitles.GetComponent<SubstitlesScript>().theTimer == 44))
         {
+            doAct = true;
             subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
             subtitles.GetComponent<SubstitlesScript>().Continue();
             cGAS_pic.SetActive(false);
