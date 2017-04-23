@@ -14,7 +14,7 @@ public class MemoryUI : MonoBehaviour {
     int WhatToRead = 0;
     float BeatGameTimer = 0.0f;
     public GameObject CenterScreenObj;
-
+    public GameObject EventSystem;
 
     public GameObject theScore, theLives, theLevels, scoreBoard, UI, Spheres, Timer, Capsules;
     public GameObject Username, ProfilePic;
@@ -73,10 +73,12 @@ public class MemoryUI : MonoBehaviour {
         //Set up how turtorial will show players basic gameplay
         else if (TutorialMode == true)
         {
+
             switch (WhatToRead)
             {
                 case 0:
                     TutorialTimer += Time.deltaTime;
+                    EventSystem.SetActive(false);
                     if (TutorialTimer <= 4.0f)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "  Welcome to the Transcription Memory Game";
                     else
@@ -109,7 +111,7 @@ public class MemoryUI : MonoBehaviour {
 
                 case 3:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 6.0f)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "  Select the correct ones and they will turn green, " + "\n" + "select a wrong one and it will turn red.";
                     else
                     {
@@ -125,6 +127,7 @@ public class MemoryUI : MonoBehaviour {
                     else
                     {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "";
+                        EventSystem.SetActive(true);
                     }
                     if (Randomsphere.correct == 1)
                     {

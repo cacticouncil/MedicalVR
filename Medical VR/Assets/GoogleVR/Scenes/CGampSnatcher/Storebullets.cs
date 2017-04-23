@@ -11,7 +11,7 @@ public class Storebullets : MonoBehaviour {
     int WhatToRead = 0;
     float BeatGameTimer = 0.0f;
 
-
+    public GameObject EventSystem;
     public static int bulletamount;
     public static int  numberofstingsdone;
     public static int neededstings = 5;
@@ -84,6 +84,7 @@ public class Storebullets : MonoBehaviour {
             {
                 case 0:
                     TutorialTimer += Time.deltaTime;
+                    EventSystem.SetActive(false);
                     if (TutorialTimer <= 4.0f)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "  Welcome to CGamp Snatcher";
                     else
@@ -119,8 +120,14 @@ public class Storebullets : MonoBehaviour {
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 4.0f)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = " Look at them to grab them. Try to get 10";
+                    else
+                    {
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "";
+                    }
+                    EventSystem.SetActive(true);
 
-                    if(bulletamount >= 10)
+
+                    if (bulletamount >= 10)
                     {
                         TutorialTimer = 0.0f;
                         WhatToRead += 1;
@@ -132,7 +139,6 @@ public class Storebullets : MonoBehaviour {
 
                     if (TutorialTimer <= 4.0f)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "  Perfect " + "\n" +" Now help them reach the stings by shooting them pesing the button ";
-
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -145,6 +151,10 @@ public class Storebullets : MonoBehaviour {
 
                     if (TutorialTimer <= 4.0f)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = " Make sure they don't collide with other objects";
+                    else
+                    {
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "";
+                    }
 
                     if (numberofstingsdone >= 15)
                     {
@@ -188,7 +198,7 @@ public class Storebullets : MonoBehaviour {
         }
 
         //For tutorial only it will either transition to story mode or only play once
-        if (WhatToRead >= 8/* && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0*/)
+        if (WhatToRead >= 8)
         {
             BeatGameTimer += Time.deltaTime;
             CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now your ready to play";
