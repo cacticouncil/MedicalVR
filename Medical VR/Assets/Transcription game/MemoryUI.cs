@@ -98,7 +98,7 @@ public class MemoryUI : MonoBehaviour {
                     break;
                 case 2:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 6.0f)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = " A Transcripts to U, G to C, C to G, and T to A." /*+ "\n" + " Select three capsules that are the correct transcription to the code given above"*/;
                     else
                     {
@@ -122,6 +122,10 @@ public class MemoryUI : MonoBehaviour {
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 4.0f)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = " Make sure you don't get 5 wrong or you will have to restart";
+                    else
+                    {
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "";
+                    }
                     if (Randomsphere.correct == 1)
                     {
                         TutorialTimer = 0.0f;
