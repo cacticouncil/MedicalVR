@@ -287,7 +287,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 213:
                 I = 10;
-                moveSpeed = 175;
+                moveSpeed = 300;
                 if(t >= 213.5f)
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line21") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line21");
