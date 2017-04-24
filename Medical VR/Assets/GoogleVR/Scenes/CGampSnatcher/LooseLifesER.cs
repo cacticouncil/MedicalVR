@@ -7,7 +7,7 @@ public class LooseLifesER : MonoBehaviour {
     {
         if (collision.transform.tag == "CBullet")
         {
-            Storebullets.score += 50;
+            Storebullets.score -= 50;
             Storebullets.LoseresetPos();
             Destroy(collision.gameObject);
         }
