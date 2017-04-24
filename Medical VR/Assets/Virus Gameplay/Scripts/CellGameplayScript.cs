@@ -216,7 +216,7 @@ public class CellGameplayScript : MonoBehaviour
             case (144):
                 //cGAMP
                 Storebullets.arcadeMode = false;
-
+                Storebullets.TutorialMode = true;
                 SceneManager.LoadScene("CGampSnatcher");
                 break;
             case (145):
@@ -303,7 +303,7 @@ public class CellGameplayScript : MonoBehaviour
             case 230:
                 //Memory Game
                 MemoryUI.arcadeMode = false;
-               
+                MemoryUI.TutorialMode = true;
                 SceneManager.LoadScene("MemoryGame");
                 break;
             case (231):
