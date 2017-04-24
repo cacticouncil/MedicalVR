@@ -16,6 +16,8 @@ public class StrategyVirusScript : MonoBehaviour
 
     public Vector3 startingPosition, prevPosition, nextPosition;
 
+    public Renderer render;
+    public ParticleSystem deathParticles;
     public StrategyCellManagerScript parent;
     public TMPro.TextMeshPro attack, speed, immunity;
 
@@ -35,25 +37,14 @@ public class StrategyVirusScript : MonoBehaviour
             mainCamera = Camera.main.GetComponent<MoveCamera>();
         }
 
+        startingPosition = prevPosition = nextPosition = transform.position;
         if (target)
         {
             target.targeted = true;
-            Vector3 lookRotation = target.transform.position - transform.position;
-            if (lookRotation != Vector3.zero)
-            {
-                GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(target.transform.position - transform.position));
-            }
-            else
-            {
-                GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
-            }
-            startingPosition = prevPosition = nextPosition = transform.position;
-            distance = Vector3.Distance(startingPosition, target.transform.position);
-            Mathf.Max(distance, .001f);
+            distance = Mathf.Max(Vector3.Distance(startingPosition, target.transform.position), .001f);
         }
         else
         {
-            startingPosition = prevPosition = nextPosition = transform.position;
             distance = .001f;
             standby = true;
         }
@@ -61,20 +52,14 @@ public class StrategyVirusScript : MonoBehaviour
         startTime = Time.time;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private IEnumerator Move()
     {
-        float disCovered = (Time.time - startTime) * movementSpeed;
-        float fracJourney = disCovered / distance;
-        //fracJourney = 0.0f;
-        if (fracJourney >= 1.0f && (!target || (target && percentTraveled >= 1.0f)))
+        while (!trav)
         {
-            GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
-            if (trav)
-            {
-                GetComponent<Rigidbody>().velocity = Vector3.zero;
-            }
-            else
+            float disCovered = (Time.time - startTime) * movementSpeed;
+            float fracJourney = disCovered / distance;
+
+            if (fracJourney >= 1.0f && (!target || (target && percentTraveled >= 1.0f)))
             {
                 if (Vector3.Distance(transform.position, nextPosition) < .1f)
                 {
@@ -85,35 +70,13 @@ public class StrategyVirusScript : MonoBehaviour
                     GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, nextPosition, 1));
                 }
             }
-        }
-        else
-        {
-            if (target)
-            {
-                Vector3 lookRotation = target.transform.position - transform.position;
-                if (lookRotation != Vector3.zero)
-                {
-                    GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(lookRotation));
-                }
-                else
-                {
-                    GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
-                }
-            }
             else
             {
-                Vector3 lookRotation = nextPosition - transform.position;
-                if (lookRotation != Vector3.zero)
-                {
-                    GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(lookRotation));
-                }
-                else
-                {
-                    GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
-                }
+                GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, nextPosition, fracJourney));
             }
-            GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(prevPosition, nextPosition, fracJourney));
+            yield return new WaitForFixedUpdate();
         }
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     public void TurnUpdate()
@@ -135,9 +98,10 @@ public class StrategyVirusScript : MonoBehaviour
 
                 nextPosition = Vector3.Lerp(prevPosition, parent.RandomPositionAboveHex(), percentTraveled);
                 prevPosition = transform.position;
-                GetComponent<Rigidbody>().MoveRotation(Quaternion.identity);
-                distance = Vector3.Distance(prevPosition, nextPosition);
+                distance = Mathf.Max(Vector3.Distance(prevPosition, nextPosition), .001f);
                 startTime = Time.time;
+                StopCoroutine(Move());
+                StartCoroutine(Move());
                 return;
             }
             startingPosition = transform.position;
@@ -179,6 +143,8 @@ public class StrategyVirusScript : MonoBehaviour
                 }
             }
         }
+        StopCoroutine(Move());
+        StartCoroutine(Move());
     }
 
     //This virus destroys the cell it is attacking, changes to a new cell, and spawns a virus
@@ -197,12 +163,13 @@ public class StrategyVirusScript : MonoBehaviour
             target.protein == Proteins.TRIM22 ||
             (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
             parent.KillCell(target.key);
-        Destroy(gameObject);
+        parent.viruses.Remove(this);
+        StartCoroutine(Die());
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (target && collision.transform.parent && collision.transform.parent.transform == target.transform)
+        if (target && collision.transform.parent && collision.transform.parent.transform.GetComponent<StrategyCellScript>() && collision.transform.parent.transform.GetComponent<StrategyCellScript>().key == target.key)
         {
             nextPosition = transform.position;
             collision.transform.GetComponent<Rotate>().enabled = false;
@@ -254,12 +221,32 @@ public class StrategyVirusScript : MonoBehaviour
 
                 Debug.Log("Virus TextMesh Set");
             }
-            attack.text = "Attack: " + (int)(attackValue * 100);
-            speed.text = "Speed: " + (int)(turnSpeed * 100);
+            attack.text = "Attack: " + (int)(attackValue * 10) * .1f;
+            speed.text = "Speed: " + (int)(turnSpeed * 10) * .1f;
             immunity.text = "Immunity To Kill: " + Mathf.CeilToInt(health);
         }
         selected = b;
         transform.GetChild(0).gameObject.SetActive(b);
+    }
+
+    public IEnumerator Die()
+    {
+        float startTime = Time.time;
+        Color c = render.material.color;
+        Color o = render.material.GetColor("_OutlineColor");
+        deathParticles.Play();
+
+        float t = 0;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            c.a = Mathf.Lerp(1, 0, t);
+            render.material.color = c;
+            o.a = Mathf.Lerp(1, 0, t);
+            render.material.SetColor("_OutlineColor", o);
+            yield return 0;
+        }
+        Destroy(gameObject);
     }
 
     public void OnDestroy()

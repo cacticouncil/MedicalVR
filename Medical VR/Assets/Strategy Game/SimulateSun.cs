@@ -19,6 +19,6 @@ public class SimulateSun : MonoBehaviour
     // Update is called once per frame
     public void TurnUpdate()
     {
-        turn += 1;
+        turn += .3f;
     }
 }

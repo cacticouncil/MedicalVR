@@ -37,11 +37,13 @@ public class StrategyCellScript : MonoBehaviour
     public int turnSpawned = 0;
     public int childrenSpawned = 0;
     public float immunitySpread = 0;
+    public float startSpeed = 15.0f;
 
     public int RDur = 0;
     public int I2Dur = 0;
 
     public StrategyCellManagerScript parent;
+    public ParticleSystem deathParticles;
 
     public TMPro.TextMeshPro[] texts;
 
@@ -79,6 +81,7 @@ public class StrategyCellScript : MonoBehaviour
         d.text = "Defense: " + defense;
         i.text = "Immunity: " + (int)immunity;
         p.text = "Protein: " + protein.ToString();
+        startSpeed = Random.Range(1.0f, 30.0f);
         tImmunity = immunity;
     }
 
@@ -292,6 +295,21 @@ public class StrategyCellScript : MonoBehaviour
     }
     #endregion
 
+    #region Tutorials
+    public void Reproduction()
+    {
+        parent.str.enabled = true;
+    }
+    public void Defense()
+    {
+        parent.std.enabled = true;
+    }
+    public void Immunity()
+    {
+        parent.sti.enabled = true;
+    }
+    #endregion
+
     #region Turns
     public void TurnUpdate()
     {
@@ -430,7 +448,6 @@ public class StrategyCellScript : MonoBehaviour
             render.material.color = Color.Lerp(start, c, t);
             yield return 0;
         }
-        render.material.color = c;
     }
 
 
@@ -479,16 +496,20 @@ public class StrategyCellScript : MonoBehaviour
 
     public IEnumerator Die()
     {
+        GetComponent<Collider>().enabled = false;
         float startTime = Time.time;
         Color c = render.material.color;
         Color o = render.material.GetColor("_OutlineColor");
+        deathParticles.Play();
 
         float t = 0;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
             c.a = Mathf.Lerp(1, 0, t);
+            render.material.color = c;
             o.a = Mathf.Lerp(1, 0, t);
+            render.material.SetColor("_OutlineColor", o);
             yield return 0;
         }
         Destroy(gameObject);

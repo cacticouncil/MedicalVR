@@ -28,8 +28,9 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("Strategy");
                 break;
             case 1:
-                LoadScene("MemoryGame");
                 MemoryUI.arcadeMode = true;
+                MemoryUI.TutorialMode = false;
+                LoadScene("MemoryGame");
                 break;
             case 2:
                 Player.ArcadeMode = true;
@@ -47,6 +48,8 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("SimonDNA");
                 break;
             case 5:
+                Storebullets.arcadeMode = true;
+                Storebullets.TutorialMode = false;
                 LoadScene("CGampSnatcher");
                 break;
             case 6:

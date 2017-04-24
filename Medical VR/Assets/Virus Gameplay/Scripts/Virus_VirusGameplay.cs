@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Virus_VirusGameplay : MonoBehaviour {
 
     public List<GameObject> places;
-    public GameObject subtitles, virusWithMesh, capsid, dna;
+    public GameObject subtitles, virusWithMesh, capsid, dna, virions;
 
     delegate void Func();
     Func doAction;
@@ -23,6 +23,7 @@ public class Virus_VirusGameplay : MonoBehaviour {
             default:
                 break;
         }
+        virions.SetActive(false);
     }
     void NullFunction()
     {
@@ -52,6 +53,11 @@ public class Virus_VirusGameplay : MonoBehaviour {
         float a = capsid.GetComponent<Renderer>().material.color.a;
         capsid.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - Time.deltaTime);
     }
+    void fadeEnvelope()
+    {
+        float a = virusWithMesh.GetComponent<Renderer>().material.color.a;
+        virusWithMesh.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - Time.deltaTime);
+    }
     void RotateTo()
     {
         if (I != places.Count)
@@ -69,9 +75,13 @@ public class Virus_VirusGameplay : MonoBehaviour {
                 I = 3;
                 moveSpeed = 50;
                 break;
+            case (173):
+                doAction = fadeEnvelope;
+                break;
             case (177):
                 I = 4;
                 moveSpeed = 50;
+                virusWithMesh.SetActive(false);
                 break;
             case (182):
                 I = 5;
@@ -106,6 +116,9 @@ public class Virus_VirusGameplay : MonoBehaviour {
                 doAction = RotateTo;
                 I = 10;
                 moveSpeed = 50;
+                break;
+            case (323):
+                virions.SetActive(true);
                 break;
             default:
                 break;

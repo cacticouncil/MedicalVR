@@ -11,9 +11,13 @@ public class Boundary
 
 public class _TGameController : MonoBehaviour
 {
+    public GameObject camera;
+    public GameObject scoreBoard;
     public int scorePerEnzyme;
-    public int score;
+    public int winScore;
 
+    [HideInInspector]
+    public int score;
     public GameObject viralEnzyme;
     public GameObject enzyme;
     public GameObject enzymeCollector;
@@ -30,6 +34,16 @@ public class _TGameController : MonoBehaviour
         score = 0;
         StartCoroutine(SpawnWaves());
     }
+
+ //   private void Update()
+ //   {
+ //       if (scoreBoard && winScore < score)
+ //       {
+ //           Debug.Log("Grabbing Scoreboard");
+ //           scoreBoard.SetActive(true);
+ //           scoreBoard.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y, camera.transform.position.z + 3);
+ //       }
+ //   }
 
     IEnumerator SpawnWaves()
     {

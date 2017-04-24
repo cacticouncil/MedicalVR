@@ -4,8 +4,9 @@
 	}
 
 		SubShader{
-		Tags{ "Queue" = "Transparent-1" }
-		ZWrite On
+		Tags{ "Queue" = "Transparent-1" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
+		ZWrite Off
+		Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass{
 		CGPROGRAM
@@ -28,7 +29,6 @@
 	v2f vert(appdata_t v)
 	{
 		v2f o;
-		UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 		o.vertex = UnityObjectToClipPos(v.vertex);
 		return o;
 	}

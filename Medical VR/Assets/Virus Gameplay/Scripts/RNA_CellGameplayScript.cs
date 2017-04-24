@@ -44,13 +44,13 @@ public class RNA_CellGameplayScript : MonoBehaviour {
     {
         switch ((int)subtitltes.GetComponent<SubstitlesScript>().theTimer)
         {          
-            case (96):
+            case (212):
                 I = 1;
                 transform.position = places[I].transform.position;
                 break;
-            case (100):
+            case (213):
                 I = 2;
-                moveSpeed = 175;
+                moveSpeed = 300;
                 break;
             default:
                 break;

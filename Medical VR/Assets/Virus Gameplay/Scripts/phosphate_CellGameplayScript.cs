@@ -16,7 +16,7 @@ public class phosphate_CellGameplayScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 83)
+        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 184)
         {
             transform.parent = IRF3.transform;
             moveSpeed = 200;
@@ -29,7 +29,7 @@ public class phosphate_CellGameplayScript : MonoBehaviour {
                 transform.position = Vector3.MoveTowards(transform.position, IRF3.GetComponent<IRF3_CellGameplayScript>().rightP.transform.position, Time.deltaTime * moveSpeed);
             }
         }
-        else if(subtitles.GetComponent<SubstitlesScript>().theTimer > 75)
+        else if(subtitles.GetComponent<SubstitlesScript>().theTimer > 180)
         {
             moveSpeed = 200;
             if(goLeft == true)

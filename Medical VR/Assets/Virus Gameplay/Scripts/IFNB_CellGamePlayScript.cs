@@ -10,21 +10,30 @@ public class IFNB_CellGamePlayScript : MonoBehaviour {
     {
         GetComponent<Renderer>().enabled = false;
         proteins.SetActive(false);
-	}
+        switch (CellGameplayScript.loadCase)
+        {
+            case 4:
+                proteins.SetActive(true);
+                break;
+            default:
+                break;
+        }
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 106)
+        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 231)
         {
             GetComponent<Renderer>().enabled = true;
         }
-        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 110)
+        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 244)
         {
             moveSpeed = 200;
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * moveSpeed);
         }
-        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 114)
+        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 250)
         {
             proteins.SetActive(true);
         }
