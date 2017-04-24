@@ -153,6 +153,13 @@ public class Player : MonoBehaviour, TimedInputHandler
                 {
                     isGameOver = true;
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You win story mode";
+                    BeatGameTimer += Time.deltaTime;
+
+                    if (BeatGameTimer >= 3.5f)
+                    {
+                        CellGameplayScript.loadCase = 4;
+                        SceneManager.LoadScene("Cell GamePlay");
+                    }
                 }
             }
         }
