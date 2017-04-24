@@ -56,7 +56,7 @@ public class VirusGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 Sceneries[3].SetActive(false);
                 RenderSettings.fogDensity = 0;
-                subtitles.GetComponent<SubstitlesScript>().theTimer = 352.5f;
+                subtitles.GetComponent<SubstitlesScript>().theTimer = 353f;
                 I = 9;
                 theCamera.transform.position = places[I].transform.position;
                 break;
@@ -366,14 +366,11 @@ public class VirusGameplayScript : MonoBehaviour
                 VirusPlayer.TutorialMode = true;
                 VirusPlayer.ArcadeMode = false;
                 SceneManager.LoadScene("DestroyTheCell");
-                if (t > 352.5)
-                {
-                    doAction = RiseCurtain;
-                    fadeSpeed = 1.5f;
-                }
+                
                 break;
             case (353):
-
+                doAction = RiseCurtain;
+                fadeSpeed = 1.5f;
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-040") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-040");
                 break;
