@@ -9,13 +9,13 @@ using UnityEngine.SceneManagement;
 public class VirusPlayer : MonoBehaviour
 {
     //Variables for Tutorial
-    public static bool TutorialMode = true;
+    public static bool TutorialMode = false;
     int WhatToRead = 1;
     bool CanIRead = true;
     public bool TutorialModeCompleted = false;
 
     //Variable for Arcade
-    public static bool ArcadeMode = false;
+    public static bool ArcadeMode = true;
 
     //Variables for Game
     public GameObject TimerText;

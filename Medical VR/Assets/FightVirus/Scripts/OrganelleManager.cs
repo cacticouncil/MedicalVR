@@ -27,7 +27,19 @@ public class OrganelleManager : MonoBehaviour
 
                 OrganelleList.Add(Instantiate(Organelle, SpawnRandomCell, Quaternion.identity, transform) as GameObject);
             }
+
+            //Quick fix
+            //Random range will be called everytime before spawning 
+            SpawnRandomCell = Random.insideUnitSphere * 6.0f;
+
+            if (SpawnRandomCell.y < 0)
+                SpawnRandomCell.y = Random.Range(0, 7);
             OrganelleList.Add(Instantiate(Nucleus, SpawnRandomCell, Quaternion.identity, transform) as GameObject);
+
+            SpawnRandomCell = Random.insideUnitSphere * 6.0f;
+
+            if (SpawnRandomCell.y < 0)
+                SpawnRandomCell.y = Random.Range(0, 7);
             OrganelleList.Add(Instantiate(Mitocondria, SpawnRandomCell, Quaternion.identity, transform) as GameObject);
         }
     }

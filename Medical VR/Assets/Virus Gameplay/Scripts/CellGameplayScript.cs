@@ -9,7 +9,7 @@ public class CellGameplayScript : MonoBehaviour
     public List<GameObject> places;
     public List<GameObject> Sceneries;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna;
-    public static int loadCase;
+    public static int loadCase = 3;
     // Use this for initialization
     delegate void Func();
     Func doAction;
@@ -216,7 +216,7 @@ public class CellGameplayScript : MonoBehaviour
             case (144):
                 //cGAMP
                 Storebullets.arcadeMode = false;
-
+                Storebullets.TutorialMode = true;
                 SceneManager.LoadScene("CGampSnatcher");
                 break;
             case (145):
@@ -303,7 +303,7 @@ public class CellGameplayScript : MonoBehaviour
             case 230:
                 //Memory Game
                 MemoryUI.arcadeMode = false;
-               
+                MemoryUI.TutorialMode = true;
                 SceneManager.LoadScene("MemoryGame");
                 break;
             case (231):
