@@ -598,10 +598,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
 
             //Right (+1, 0)
@@ -615,10 +615,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
 
             //Bottom Right (+1, -1)
@@ -633,10 +633,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
 
             //Bottom Left (0, -1)
@@ -650,10 +650,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
 
             //Left (-1, 0)
@@ -667,10 +667,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
 
             //Top Left (0, +1)
@@ -684,10 +684,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
         }
         else
@@ -702,10 +702,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
 
             //Right (+1, 0)
@@ -719,10 +719,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
 
             //Bottom Right (0, -1)
@@ -736,10 +736,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
 
             //Bottom Left (-1, -1)
@@ -754,10 +754,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
 
             //Left (-1, 0)
@@ -771,10 +771,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
 
             //Top Left (-1, +1)
@@ -789,10 +789,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 tiles[check].AddImmunity(i);
                 immunitySpread += i;
                 GameObject p = Instantiate(particleToTarget, tiles[k].transform.position, Quaternion.LookRotation(tiles[check].transform.position - tiles[k].transform.position), transform) as GameObject;
-                p.GetComponent<TurnParticles>().target = tiles[check].transform;
-                p.GetComponent<TurnParticles>().immunity = i;
-                p.GetComponent<TurnParticles>().startSpeed = tiles[k].startSpeed;
-                p.GetComponent<TurnParticles>().enabled = true;
+                p.GetComponent<ImmunityParticles>().target = tiles[check].transform;
+                p.GetComponent<ImmunityParticles>().immunity = i;
+                p.GetComponent<ImmunityParticles>().startSpeed = tiles[k].startSpeed;
+                p.GetComponent<ImmunityParticles>().enabled = true;
             }
         }
 
