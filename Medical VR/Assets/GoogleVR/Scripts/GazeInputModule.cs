@@ -250,14 +250,17 @@ public class GazeInputModule : BaseInputModule {
       ExecuteEvents.Execute(pointerData.pointerDrag, pointerData, ExecuteEvents.endDragHandler);
     }
 
-    // Clear the click state.
-    pointerData.pointerPress = null;
-    pointerData.rawPointerPress = null;
-    pointerData.eligibleForClick = false;
-    pointerData.clickCount = 0;
-    pointerData.clickTime = 0;
-    pointerData.pointerDrag = null;
-    pointerData.dragging = false;
+        // Clear the click state.
+        if (pointerData != null)
+        {
+            pointerData.pointerPress = null;
+            pointerData.rawPointerPress = null;
+            pointerData.eligibleForClick = false;
+            pointerData.clickCount = 0;
+            pointerData.clickTime = 0;
+            pointerData.pointerDrag = null;
+            pointerData.dragging = false;
+        }
   }
 
   private void HandleTrigger() {
