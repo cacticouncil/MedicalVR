@@ -8,16 +8,16 @@ public class Organelle : MonoBehaviour
     public GameObject FightVirusPlayer;
     public GameObject DestroyTheCellPlayer;
     public bool isDead;
-    OrganelleMovement CM;
-    Vector3 StartPos;
+    //OrganelleMovement CM;
+    //Vector3 StartPos;
     void Start()
     {
         OrganelleManager = gameObject.transform.parent.gameObject;
         FightVirusPlayer = OrganelleManager.GetComponent<OrganelleManager>().FightVirusPlayer;
         DestroyTheCellPlayer = OrganelleManager.GetComponent<OrganelleManager>().DestoryTheCellPlayer;
         isDead = false;
-        StartPos = transform.position;
-        CM = (OrganelleMovement)Random.Range(0, 4);
+        //StartPos = transform.position;
+        //CM = (OrganelleMovement)Random.Range(0, 4);
     }
 
     void Update()

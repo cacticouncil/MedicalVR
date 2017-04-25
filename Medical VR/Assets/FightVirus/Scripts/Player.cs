@@ -36,11 +36,14 @@ public class Player : MonoBehaviour, TimedInputHandler
     public GameObject EnemyManger;
     public GameObject ScoreBoard;
     public GameObject BulletSpawn;
+    public GameObject BlackCurtain;
 
     void Start()
     {
         DisplayRules = true;
         isGameOver = false;
+        if (TutorialMode == false)
+            BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
     }
 
     void Update()
@@ -148,11 +151,22 @@ public class Player : MonoBehaviour, TimedInputHandler
                     SceneManager.LoadScene("FightVirus");
                 }
 
-                //If you win story mode continue to next scene
+                //If you win story mode continue to next scene and don't forget to fade out
                 if (EnemyManger.GetComponent<VirusManager>().WaveNumber >= 5 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
                 {
                     isGameOver = true;
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You win story mode";
+                    BeatGameTimer += Time.deltaTime;
+                    float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
+                    if (a < 0)
+                        a = 0;
+                    BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
+
+                    if (BeatGameTimer >= 2.0f)
+                    {
+                        CellGameplayScript.loadCase = 4;
+                        SceneManager.LoadScene("Cell GamePlay");
+                    }
                 }
             }
         }
@@ -161,6 +175,10 @@ public class Player : MonoBehaviour, TimedInputHandler
         //Set up how turtorial will show players basic gameplay
         else if (TutorialMode == true)
         {
+            //Need to fade in
+            float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
+            BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
+
             switch (WhatToRead)
             {
                 case 0:
@@ -303,7 +321,7 @@ public class Player : MonoBehaviour, TimedInputHandler
             BeatGameTimer += Time.deltaTime;
             CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now your ready to play";
 
-            if (BeatGameTimer >= 3.5)
+            if (BeatGameTimer >= 2.0f)
             {
                 //if ()
                 //{

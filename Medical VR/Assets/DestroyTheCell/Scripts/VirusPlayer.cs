@@ -21,6 +21,7 @@ public class VirusPlayer : MonoBehaviour
     public GameObject TimerText;
     public GameObject Spawn;
     public GameObject WaveManager;
+    public GameObject BlackCurtain;
 
     public GameObject VirusAttack;
     public List<GameObject> VirusAttackList = new List<GameObject>();
@@ -47,7 +48,10 @@ public class VirusPlayer : MonoBehaviour
         Lives = 3;
 
         if (TutorialMode == false)
+        {
             StartCoroutine(DisplayText("Target the Cell Receptors" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
+            BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+        }
     }
 
     void Update()
@@ -125,20 +129,29 @@ public class VirusPlayer : MonoBehaviour
                 if (Lives != 0)
                 {
                     BeatGameTimer += Time.deltaTime;
-                    StartCoroutine(DisplayText("You Win", 3.5f));
+                    StartCoroutine(DisplayText("You Win", 2.0f));
+
+                    if (ArcadeMode == false)
+                    {
+                        float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
+                        if (a < 0)
+                            a = 0;
+                        BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
+                    }
                 }
 
-                else
+                else if (Lives == 0)
                 {
                     BeatGameTimer += Time.deltaTime;
-                    StartCoroutine(DisplayText("You Lose", 3.5f));
+                    StartCoroutine(DisplayText("You Lose", 2.0f));
                 }
 
-                if (BeatGameTimer >= 2.5f)
+                if (BeatGameTimer >= 2.0f)
                 {
                     //For story mode once you beat it proceed to the next story mode
                     if (ArcadeMode == false)
                     {
+                        TutorialModeCompleted = false;
                         VirusGameplayScript.loadCase = 3;
                         SceneManager.LoadScene("Virus Gameplay Scene");
                     }
@@ -154,6 +167,9 @@ public class VirusPlayer : MonoBehaviour
 
         else if (TutorialMode == true)
         {
+            float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
+            BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
+
             if (WhatToRead == 6 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0)
                 CanIRead = true;
 
@@ -241,7 +257,6 @@ public class VirusPlayer : MonoBehaviour
         //After you beat tutorial if story mode bool is active transtion to story mode for this game
         if (TutorialModeCompleted == true)
         {
-            VirusGameplayScript.loadCase = 3;
             TutorialMode = false;
             ArcadeMode = false;
             SceneManager.LoadScene("DestroyTheCell");
