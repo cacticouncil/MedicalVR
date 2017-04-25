@@ -155,9 +155,14 @@ public class StrategyTutorial : MonoBehaviour
     IEnumerator FadeInObject(GameObject g)
     {
         g.SetActive(true);
-        Color start = g.GetComponent<Renderer>().material.color;
-        start.a = 0;
-        Color c = start;
+        Color c = g.GetComponent<Renderer>().material.color;
+        Color outline = Color.black;
+        bool o = false;
+        if (g.GetComponent<Renderer>().material.HasProperty("_OutlineColor"))
+        {
+            o = true;
+            outline = g.GetComponent<Renderer>().material.GetColor("_OutlineColor");
+        }
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
@@ -165,14 +170,25 @@ public class StrategyTutorial : MonoBehaviour
             t = Time.time - startTime;
             c.a = t;
             g.GetComponent<Renderer>().material.color = c;
+            if (o)
+            {
+                outline.a = t;
+                g.GetComponent<Renderer>().material.SetColor("_OutlineColor", outline);
+            }
             yield return 0;
         }
     }
 
     IEnumerator FadeOutObject(GameObject g)
     {
-        Color start = g.GetComponent<Renderer>().material.color;
-        Color c = start;
+        Color c = g.GetComponent<Renderer>().material.color;
+        Color outline = Color.black;
+        bool o = false;
+        if (g.GetComponent<Renderer>().material.HasProperty("_OutlineColor"))
+        {
+            o = true;
+            outline = g.GetComponent<Renderer>().material.GetColor("_OutlineColor");
+        }
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
@@ -180,6 +196,11 @@ public class StrategyTutorial : MonoBehaviour
             t = Time.time - startTime;
             c.a = 1.0f - t;
             g.GetComponent<Renderer>().material.color = c;
+            if (o)
+            {
+                outline.a = 1.0f - t;
+                g.GetComponent<Renderer>().material.SetColor("_OutlineColor", outline);
+            }
             yield return 0;
         }
         Destroy(g);

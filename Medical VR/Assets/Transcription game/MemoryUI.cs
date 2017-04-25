@@ -90,7 +90,7 @@ public class MemoryUI : MonoBehaviour {
 
                 case 1:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 6.0f)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "  Your objective is to " + "\n" + " Select three capsules that are the correct transcription to the code given above";
                     else
                     {
@@ -100,8 +100,8 @@ public class MemoryUI : MonoBehaviour {
                     break;
                 case 2:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 6.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = " A Transcripts to U, G to C, C to G, and T to A." /*+ "\n" + " Select three capsules that are the correct transcription to the code given above"*/;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = " The Transcription is as follows: ";
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -111,8 +111,8 @@ public class MemoryUI : MonoBehaviour {
 
                 case 3:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 6.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Select the correct ones and they will turn green, " + "\n" + "select a wrong one and it will turn red.";
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "A transcripts to U,";
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -123,7 +123,62 @@ public class MemoryUI : MonoBehaviour {
                 case 4:
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = " Make sure you don't get 5 wrong or you will have to restart";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "G transcripts to C,";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 5:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "C transcripts to G,";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 6:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "and T transcripts to A.";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 7:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Select the correct ones and they will turn green, ";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 8:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "select a wrong one and it will turn red.";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 9:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Make sure you don't get 5 wrong or you will have to restart";
                     else
                     {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "";
@@ -136,11 +191,11 @@ public class MemoryUI : MonoBehaviour {
                     }
                     break;
 
-                case 5:
+                case 10:
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Perfect " + "\n" + " Now get the others!";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = " Perfect " + "\n" + " Now get the others!";
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -148,7 +203,7 @@ public class MemoryUI : MonoBehaviour {
                     }
                     break;
 
-                case 6:
+                case 11:
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f && arcadeMode == true)
@@ -160,7 +215,7 @@ public class MemoryUI : MonoBehaviour {
                     }
                     break;
 
-                case 7:
+                case 12:
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f)
@@ -180,7 +235,7 @@ public class MemoryUI : MonoBehaviour {
         }
 
         //For tutorial only it will either transition to story mode or only play once
-        if (WhatToRead >= 8 && (Randomsphere.correct == 3))
+        if (WhatToRead >= 13 && (Randomsphere.correct == 3))
         {
             BeatGameTimer += Time.deltaTime;
             CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now your ready to play";

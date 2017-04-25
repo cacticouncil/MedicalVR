@@ -466,10 +466,14 @@ public class StrategyCellScript : MonoBehaviour
             {
                 direction = new Vector3(0.0f, 0.0f, 1.0f);
             }
-            //Scale it to 1.5
+            //Scale it to 1.3
             direction *= scaledDistance;
 
             Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
+            if (Vector3.Distance(transform.position, finalPos) < 1)
+            {
+                finalPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1.3f);
+            }
 
             transform.GetChild(0).transform.LookAt(finalPos);
 
