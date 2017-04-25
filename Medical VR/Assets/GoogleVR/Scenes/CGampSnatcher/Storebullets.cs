@@ -37,7 +37,7 @@ public class Storebullets : MonoBehaviour {
         }
         else
         {
-            lives--;
+            
         }
     }
     void ShowScore()
@@ -156,7 +156,7 @@ public class Storebullets : MonoBehaviour {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "";
                     }
 
-                    if (numberofstingsdone >= 15)
+                    if (numberofstingsdone >= 10)
                     {
                         TutorialTimer = 0.0f;
                         WhatToRead += 1;
@@ -239,7 +239,7 @@ public class Storebullets : MonoBehaviour {
 
         if (arcadeMode == false)
         {
-            if (numberofstingsdone >= 30)
+            if (numberofstingsdone >= 20)
             {
                 CellGameplayScript.loadCase = 2;
                 SceneManager.LoadScene("Cell Gameplay");
