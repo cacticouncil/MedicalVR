@@ -78,7 +78,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
             StartCoroutine(FadeInObject(item));
             StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
         }
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(3.0f);
 
         //With at least 1 Immunity, cells will spread a portion of their Immunity to adjacent cells. 
         StartCoroutine(TurnTextOn(1));
@@ -92,7 +92,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
             p.GetComponent<ImmunityParticles>().startSpeed = 15;
             p.GetComponent<ImmunityParticles>().enabled = true;
         }
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //With only 1 Immunity, adjacent cells will receive 1 Immunity each in 100 turns. 
         StartCoroutine(TurnTextOn(2));
@@ -105,7 +105,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
             p.GetComponent<ImmunityParticles>().startSpeed = 15;
             p.GetComponent<ImmunityParticles>().enabled = true;
         }
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //1 cell surrounded by 6 cells with 1 immunity takes 16 turns to receive 1 Immunity. 
         StartCoroutine(TurnTextOn(3));
@@ -118,7 +118,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
             p.GetComponent<ImmunityParticles>().startSpeed = 15;
             p.GetComponent<ImmunityParticles>().enabled = true;
         }
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //At 10 Immunity, a cell spawns a random protein. 
         StartCoroutine(TurnTextOn(4));
@@ -127,30 +127,30 @@ public class StrategyTutorialImmunity : MonoBehaviour
         StartCoroutine(FadeInText(pro.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
         yield return new WaitForSeconds(1);
         immDes.text = "Immunity: 10";
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 
         //Most stop the virus from replicating when it kills the cell.
         StartCoroutine(TurnTextOn(5));
         yield return new WaitForSeconds(1);
         proDes.text = "Protein: PKR";
-        yield return new WaitForSeconds(.33f);
+        yield return new WaitForSeconds(.66f);
         proDes.text = "Protein: TRIM22";
-        yield return new WaitForSeconds(.33f);
+        yield return new WaitForSeconds(.66f);
         proDes.text = "Protein: IFIT";
-        yield return new WaitForSeconds(.34f);
+        yield return new WaitForSeconds(.68f);
 
         //But, you can get some that attempt to stop the virus before it kills the cell. 
         StartCoroutine(TurnTextOn(6));
         yield return new WaitForSeconds(.5f);
         proDes.text = "Protein: CH25H";
-        yield return new WaitForSeconds(.75f);
+        yield return new WaitForSeconds(1.5f);
         proDes.text = "Protein: Mx1";
-        yield return new WaitForSeconds(.75f);
+        yield return new WaitForSeconds(1.5f);
 
         //You can click on the Protein tab to see the list of proteins and what each does. 
         StartCoroutine(TurnTextOn(7));
         StartCoroutine(FadeInObject(proOutline));
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         //Each virus has an Immunity value that the cell’s immunity value must be higher than to kill the virus. 
         StartCoroutine(TurnTextOn(8));
@@ -159,7 +159,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
         StartCoroutine(FadeInObject(virusImm));
         yield return new WaitForSeconds(1);
         immDes.text = "Immunity: 20";
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 
         //When a virus is killed with Immunity that value is subtracted from the cell’s Immunity. 
         StartCoroutine(TurnTextOn(9));
@@ -169,12 +169,12 @@ public class StrategyTutorialImmunity : MonoBehaviour
         for (int i = 20; i > -1; i--)
         {
             immDes.text = "Immunity: " + i;
-            yield return new WaitForSeconds(.05f);
+            yield return new WaitForSeconds(.1f);
         }
 
         //The Immunity required to kill each virus increases as the game continues. 
         StartCoroutine(TurnTextOn(10));
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         //The Antigen powerup increases Immunity by 10. 
         StartCoroutine(TurnTextOn(11));
@@ -184,7 +184,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
         for (int i = 0; i < 11; i++)
         {
             immDes.text = "Immunity: " + i;
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.2f);
         }
 
         //The Interferon powerup doubles Immunity spread by that cell. 
@@ -200,7 +200,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
             p.GetComponent<ImmunityParticles>().startSpeed = 15;
             p.GetComponent<ImmunityParticles>().enabled = true;
         }
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 
         //The Protein powerup changes the protein to a random different protein. 
         StartCoroutine(TurnTextOn(13));
@@ -208,11 +208,11 @@ public class StrategyTutorialImmunity : MonoBehaviour
         yield return new WaitForSeconds(2);
         StartCoroutine(FadeOutObject(protein));
         proDes.text = "Protein: RNase L";
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 
         //Immunity is a very versatile stat and should be leveled in a variety of situations.  
         StartCoroutine(TurnTextOn(14));
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         StartCoroutine(EndText());
         yield return new WaitForSeconds(1.0f);

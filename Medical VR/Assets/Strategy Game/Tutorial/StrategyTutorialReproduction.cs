@@ -57,10 +57,9 @@ public class StrategyTutorialReproduction : MonoBehaviour
 
         //Start Text
         StartCoroutine(StartText());
-        //Give it 1 sec to come in, then 1 sec to read
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(SpawnRedCell());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //At 0 Reproduction, it takes 50 turns to reproduce. 
         StartCoroutine(TurnTextOn(1));
@@ -71,14 +70,14 @@ public class StrategyTutorialReproduction : MonoBehaviour
         }
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(SpawnRedCell());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //At 10 Reproduction, it takes 5 turns to reproduce. 
         StartCoroutine(TurnTextOn(2));
         yield return new WaitForSeconds(1.0f);
         repDes.text = "Reproduction: 10";
         StartCoroutine(SpawnRedCell());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //The CDK powerup temporarily adds 5 extra stat points.
         StartCoroutine(TurnTextOn(3));
@@ -86,11 +85,11 @@ public class StrategyTutorialReproduction : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         repDes.text = "Reproduction: 15";
         repDes.color = Color.blue;
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //These points aren’t depreciated in value. 
         StartCoroutine(TurnTextOn(4));
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
         StartCoroutine(FadeOutObject(CDK));
         foreach (GameObject item in bas)
         {
@@ -106,7 +105,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
             StartCoroutine(FadeInObject(item));
             StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
         }
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
         foreach (GameObject item in details)
         {
             StartCoroutine(FadeOutObject(item));
@@ -124,11 +123,11 @@ public class StrategyTutorialReproduction : MonoBehaviour
         StartCoroutine(FadeInObject(TGF));
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(SpawnRedCell());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //The child will also have the exact same stats. 
         StartCoroutine(TurnTextOn(7));
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
         StartCoroutine(FadeOutObject(TGF));
         yield return new WaitForSeconds(.5f);
 

@@ -75,30 +75,30 @@ public class StrategyTutorialDefense : MonoBehaviour
             StartCoroutine(FadeInObject(item));
             StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
         }
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(3.0f);
 
         //When a virus spawns, it targets a random cell. 
         StartCoroutine(TurnTextOn(1));
         yield return new WaitForSeconds(1.0f);
         viruses[0].transform.position = cells[0].transform.position + new Vector3(0, 2, 0);
         StartCoroutine(GrowInObject(viruses[0]));
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //When a cell is targeted, it turns black.
         StartCoroutine(TurnTextOn(2));
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(PaintItBlack(cells[0]));
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //Once the virus reaches the cell it enters a hosted state. 
         StartCoroutine(TurnTextOn(3));
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(MoveVirus());
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //During this time the virus attempts to penetrate the cell’s membrane. 
         StartCoroutine(TurnTextOn(4));
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         //You can’t upgrade the cell once it becomes hosted.
         StartCoroutine(TurnTextOn(5));
@@ -107,7 +107,7 @@ public class StrategyTutorialDefense : MonoBehaviour
             StartCoroutine(FadeOutObject(item));
             StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
         }
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         //But, other cells can spread immunity to it. 
         StartCoroutine(TurnTextOn(6));
@@ -136,12 +136,12 @@ public class StrategyTutorialDefense : MonoBehaviour
         {
             im += 2;
             immDes.text = "Immunity: " + im;
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.2f);
         }
 
         //During this time immunity is received at twice the value.  
         StartCoroutine(TurnTextOn(7));
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         //Defense is also the only stat that is copied to the child. 
         StartCoroutine(TurnTextOn(8));
@@ -155,15 +155,15 @@ public class StrategyTutorialDefense : MonoBehaviour
             StartCoroutine(FadeInObject(item));
             StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
         }
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         //Due to this, it is highly advised that you invest into this stat early on. 
         StartCoroutine(TurnTextOn(9));
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         //Alternatively, you could put points into a cell when it becomes targeted by a virus.
         StartCoroutine(TurnTextOn(10));
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         //The Fuzeon powerup permanently increases defense by 5.
         StartCoroutine(TurnTextOn(11));
@@ -173,18 +173,18 @@ public class StrategyTutorialDefense : MonoBehaviour
         StartCoroutine(ShrinkOutObject(viruses[0]));
         yield return new WaitForSeconds(1);
         defDes.text = "Defense: 5";
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 
         //If you are lucky enough you can get the Defense event.
         StartCoroutine(FadeOutObject(fuzeon));
         StartCoroutine(TurnTextOn(12));
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         //It raises all your cells defense to the max defense in your colony +5. 
         StartCoroutine(TurnTextOn(13));
         yield return new WaitForSeconds(1);
         defDes.text = "Defense: 10";
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 
         //Be careful, different viruses have different attack values. 
         StartCoroutine(TurnTextOn(14));
@@ -196,11 +196,11 @@ public class StrategyTutorialDefense : MonoBehaviour
         StartCoroutine(FadeInObject(viruses[1]));
         StartCoroutine(FadeInObject(viruses[2]));
         StartCoroutine(FadeInObject(viruses[3]));
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         //The attack values will also increase as the game continues. 
         StartCoroutine(TurnTextOn(15));
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         StartCoroutine(EndText());
         yield return new WaitForSeconds(1.0f);
