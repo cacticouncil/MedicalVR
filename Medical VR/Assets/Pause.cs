@@ -22,7 +22,8 @@ public class Pause : MonoBehaviour
                 {
                     ButtonHeldTimer = 0.0f;
                     MainMenu.SetActive(true);
-                    MainMenu.transform.position = Camera.main.transform.forward + Camera.main.transform.position;
+                    //MainMenu.transform.position = Camera.main.transform.forward + Camera.main.transform.position;
+                    MainMenu.transform.position = Player.transform.forward;
                     MainMenu.transform.LookAt(Player.transform.position);
                     MainMenu.transform.Rotate(new Vector3(0, 180, 0));
                     isPaused = true;
