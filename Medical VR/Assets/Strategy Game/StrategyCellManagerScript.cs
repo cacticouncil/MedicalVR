@@ -10,11 +10,8 @@ public class StrategyCellManagerScript : MonoBehaviour
     [Header("Prefabs")]
     public GameObject cellPrefab;
     public GameObject whiteCellPrefab;
-    public GameObject virusPrefab1;
-    public GameObject virusPrefab2;
-    public float p2Modifier = 1;
-    public GameObject virusPrefab3;
-    public float p3Modifier = .5f;
+    [SerializeField]
+    private GameObject virusPrefab1, virusPrefab2, virusPrefab3;
     public GameObject transporter;
     public GameObject particleToTarget;
     [Space(2)]
@@ -22,7 +19,6 @@ public class StrategyCellManagerScript : MonoBehaviour
     [Header("Instances")]
     public StrategyBox mysteryBox;
     public SimulateSun sun;
-    public TextMesh screenUI;
     public GameObject victory;
     public StrategyTutorialReproduction str;
     public StrategyTutorialDefense std;
@@ -48,8 +44,10 @@ public class StrategyCellManagerScript : MonoBehaviour
     public Vector2 selected = new Vector2(0.0f, 0.0f);
 
     private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500), virusIndex = new Vector2(-500, 500);
+    private GameObject virus1, virus2, virus3;
     private int easy = 0, medium = 1, hard = 2;
     private float randomRange = .5f;
+    private float p2Modifier = 1, p3Modifier = .5f;
 
     private float xOffset = 2.0f;
     private float yOffset = 2.0f;
@@ -66,15 +64,15 @@ public class StrategyCellManagerScript : MonoBehaviour
             float r = Random.Range(0.0f, 100.0f);
             if (r <= p1)
             {
-                return virusPrefab1;
+                return virus1;
             }
             else if (r <= p1 + p2)
             {
-                return virusPrefab2;
+                return virus2;
             }
             else
             {
-                return virusPrefab3;
+                return virus3;
             }
         }
     }
@@ -127,6 +125,12 @@ public class StrategyCellManagerScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        virus1 = Instantiate(virusPrefab1, new Vector3(-10000, -10000, -10000), Quaternion.identity) as GameObject;
+        virus2 = Instantiate(virusPrefab2, new Vector3(-10000, -10000, -10000), Quaternion.identity) as GameObject;
+        virus3 = Instantiate(virusPrefab3, new Vector3(-10000, -10000, -10000), Quaternion.identity) as GameObject;
+        p2Modifier = 1;
+        p3Modifier = .5f;
+
         GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
         t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
         AddToDictionary(t.GetComponent<StrategyCellScript>());
@@ -186,10 +190,6 @@ public class StrategyCellManagerScript : MonoBehaviour
     public void ActionPreformed()
     {
         StartCoroutine(TurnUpdate());
-        if (screenUI)
-        {
-            screenUI.text = "Turn Number: " + turnNumber + "\nCells Alive: " + cellNum + "\nViruses Alive: " + virNum;
-        }
     }
 
     IEnumerator TurnUpdate()
@@ -1436,19 +1436,19 @@ public class StrategyCellManagerScript : MonoBehaviour
 
     void StrengthenViruses()
     {
-        virusPrefab1.GetComponent<StrategyVirusScript>().health *= 1.5f;
-        virusPrefab1.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
-        virusPrefab2.GetComponent<StrategyVirusScript>().health *= 1.5f;
-        virusPrefab2.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
-        virusPrefab3.GetComponent<StrategyVirusScript>().health *= 1.5f;
-        virusPrefab3.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
+        virus1.GetComponent<StrategyVirusScript>().health *= 1.5f;
+        virus1.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
+        virus2.GetComponent<StrategyVirusScript>().health *= 1.5f;
+        virus2.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
+        virus3.GetComponent<StrategyVirusScript>().health *= 1.5f;
+        virus3.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
     }
 
     void SpeedUpViruses()
     {
-        virusPrefab1.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
-        virusPrefab2.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
-        virusPrefab3.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
+        virus1.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
+        virus2.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
+        virus3.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
     }
 
     void MutateViruses()
