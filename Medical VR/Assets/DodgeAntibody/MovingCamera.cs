@@ -5,14 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class MovingCamera : MonoBehaviour, TimedInputHandler
 {
-    public static bool TutorialMode = true;
+    public static bool TutorialMode = false;
 
     public GameObject subtitles;
     public float speed;
     public GameObject theScore, theLives, scoreBoard, UI, MenuButton;
     public float score = 0;
     public Color fogColor;
-    public static bool arcadeMode = false;
+    public static bool arcadeMode = true;
     Vector3 originPos;
     int lives = 3;
     float orgSpeed;
