@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class SimonSays : MonoBehaviour
 {
-    public static bool TutorialMode = true;
+    public static bool TutorialMode = false;
 
     public GameObject yellow;
     public GameObject red;
@@ -21,7 +21,7 @@ public class SimonSays : MonoBehaviour
     float timer = 3, theTimer;
 
     Vector3 orgPos;
-    public static bool arcadeMode = false;
+    public static bool arcadeMode = true;
     bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false;
     ///[System.Serializable]
     public enum theColors
