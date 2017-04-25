@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Boundary
@@ -9,8 +10,19 @@ public class Boundary
     public float zMin, zMax;
 }
 
+[System.Serializable]
+public class FacebookStuff
+{
+    public GameObject facebookPic;
+    public GameObject userName;
+
+    private int score;
+}
+
 public class _TGameController : MonoBehaviour
 {
+    public FacebookStuff fbManager;
+
     [HideInInspector]
     static public bool isArcadeMode;
 
@@ -35,20 +47,31 @@ public class _TGameController : MonoBehaviour
     public int maxNumHazards;
     public GameObject[] obsticles;
     public GameObject hazardCollector;
+    
+    private bool hasWon;
+
+    public bool HasWon() { return hasWon; }
 
     void Start ()
     {
+        hasWon = false;
         score = 0;
         StartCoroutine(SpawnWaves());
-    //    StartCoroutine(SpawnHazards());
-
+        StartCoroutine(SpawnHazards());
+        SetFacebook();
     }
 
     private void Update()
     {
-        if (scoreBoard && winScore < score && gameCamera)
+        if (winScore <= score && !hasWon)
         {
-            scoreBoard.SetActive(true);
+            hasWon = true;
+            StopCoroutine(SpawnWaves());
+            StopCoroutine(SpawnHazards());
+        }
+        if (scoreBoard && hasWon && gameCamera)
+        {
+            //scoreBoard.SetActive(true);
             scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
         }
     }
@@ -67,7 +90,7 @@ public class _TGameController : MonoBehaviour
                         Random.Range(spawnValues.yMin, spawnValues.yMax),
                         Random.Range(spawnValues.zMin, spawnValues.zMax));
                     Quaternion spawnRotation = Quaternion.identity;
-                    GameObject haz = Instantiate(obsticles[Random.Range(0, obsticles.Length - 1)], spawnPosition, spawnRotation, enzymeCollector.transform) as GameObject;
+                    GameObject haz = Instantiate(obsticles[Random.Range(0, obsticles.Length - 1)], spawnPosition, spawnRotation, hazardCollector.transform) as GameObject;
                 }
                 yield return new WaitForSeconds(spawnWait);
             }
@@ -104,8 +127,19 @@ public class _TGameController : MonoBehaviour
             yield return new WaitForSeconds(waveWait);
         }
     }
+
+    IEnumerator FinishGame()
+    {
+        yield return new WaitForSeconds(5);
+    }
     public void AddToScore(int _points)
     {
         score += _points;
+    }
+
+    void SetFacebook()
+    {        
+        fbManager.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + FacebookManager.Instance.GlobalScore;
+        fbManager.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
 }
