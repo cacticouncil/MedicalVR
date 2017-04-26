@@ -43,7 +43,7 @@ public class Virus : MonoBehaviour
         BossStartHealth = VirusManager.GetComponent<VirusManager>().BossVirusHealth;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (Player.TutorialMode == false)
         {

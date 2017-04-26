@@ -257,7 +257,10 @@ public class StrategyVirusScript : MonoBehaviour
             target.targeted = false;
             target.transform.GetChild(1).GetComponent<Rotate>().enabled = true;
         }
-        parent.virusKills++;
-        parent.viruses.Remove(this);
+        if (parent)
+        {
+            parent.virusKills++;
+            parent.viruses.Remove(this);
+        }
     }
 }
