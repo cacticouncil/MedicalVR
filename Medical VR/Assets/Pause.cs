@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Pause : MonoBehaviour
 {
-    public GameObject MainMenu;
+    public GameObject PauseManager;
+    public GameObject Buttons;
     public GameObject Player;
     public GameObject Unpause;
     public bool isPaused = false;
@@ -18,14 +19,13 @@ public class Pause : MonoBehaviour
             {
                 ButtonHeldTimer += Time.deltaTime;
 
-                if (ButtonHeldTimer >= 2.0f)
+                if (ButtonHeldTimer >= 1.5f)
                 {
                     ButtonHeldTimer = 0.0f;
-                    MainMenu.SetActive(true);
-                    //MainMenu.transform.position = Camera.main.transform.forward + Camera.main.transform.position;
-                    MainMenu.transform.position = Player.transform.forward;
-                    MainMenu.transform.LookAt(Player.transform.position);
-                    MainMenu.transform.Rotate(new Vector3(0, 180, 0));
+                    Buttons.SetActive(true);
+                    PauseManager.transform.position = Camera.main.transform.forward;
+                    PauseManager.transform.LookAt(Camera.main.transform.position);
+                    PauseManager.transform.Rotate(new Vector3(0, 180, 0));
                     isPaused = true;
                     Time.timeScale = 0;
                 }
