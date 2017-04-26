@@ -3,10 +3,13 @@ using System.Collections;
 
 public class _TRaycastTarget : MonoBehaviour
 {
+    public GameObject gameController;
     public GameObject gun;
     public GameObject LineSegments;
     public GameObject GVRReticle;
     public float LineSeparation;
+    [HideInInspector]
+    public bool hasWon;
 
     private Transform targetTransform;
     private bool rayOn;
@@ -15,18 +18,12 @@ public class _TRaycastTarget : MonoBehaviour
 
     void Start()
     {
+        hasWon = false;
         if (!gun)
             Debug.Log("failed to load Gun");
     }
 
-    //    void Update()
-    //    {
-    //       RaycastHit hit = new RaycastHit();
-    //       theRay.origin = gun.transform.position;
-    //       theRay.direction = gun.transform.TransformDirection(Vector3.forward);
-    //
-    //       if (Physics.Raycast(theRay, out hit) && )
-    //    }
+    
 
     public Vector3 PlotTrajectoryAtTime(Vector3 start, Vector3 startVelocity, float time)
     {
@@ -68,7 +65,7 @@ public class _TRaycastTarget : MonoBehaviour
 
         Physics.Raycast(gun.transform.position, gun.transform.TransformDirection(Vector3.forward), out hit);
 
-        if (hit.transform.CompareTag("Finish"))
+        if (hit.transform.CompareTag("Finish") || hasWon)
             rayOn = false;
         else
             rayOn = true;
