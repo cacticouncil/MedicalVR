@@ -33,7 +33,7 @@ ModelImporter:
     4300006: MitocondriaInside_low:Group4
     4300008: MitocondriaInside_low:MitocondriaInside_Low
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

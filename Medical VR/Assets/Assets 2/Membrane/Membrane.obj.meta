@@ -13,7 +13,7 @@ ModelImporter:
     3300000: WhiteCell_Low
     4300000: WhiteCell_Low
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

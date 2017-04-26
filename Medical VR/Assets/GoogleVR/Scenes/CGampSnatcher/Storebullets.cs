@@ -138,7 +138,7 @@ public class Storebullets : MonoBehaviour {
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Perfect " + "\n" +" Now help them reach the stings by shooting them pesing the button ";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Perfect " + "\n" +" Now help them reach the stings by shooting them pressing the button ";
                     else
                     {
                         TutorialTimer = 0.0f;
