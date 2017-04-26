@@ -13,7 +13,7 @@ ModelImporter:
     3300000: Ligan1_low:Group5501
     4300000: Ligan1_low:Group5501
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
