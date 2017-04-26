@@ -24,7 +24,7 @@ public class _TGameController : MonoBehaviour
     public FacebookStuff fbManager;
 
     [HideInInspector]
-    static public bool isArcadeMode;
+    public static bool isArcadeMode;
 
     public GameObject fadeScreen;
     public GameObject gameCamera;
@@ -47,17 +47,18 @@ public class _TGameController : MonoBehaviour
     public int maxNumHazards;
     public GameObject[] obsticles;
     public GameObject hazardCollector;
-    
+    public GameObject mitocondriaCollector;
+
     private bool hasWon;
 
     public bool HasWon() { return hasWon; }
 
-    void Start ()
+    void Start()
     {
         hasWon = false;
         score = 0;
-        StartCoroutine(SpawnWaves());
-        StartCoroutine(SpawnHazards());
+        StartCoroutine("SpawnWaves");
+        StartCoroutine("SpawnHazards");
         SetFacebook();
     }
 
@@ -66,14 +67,34 @@ public class _TGameController : MonoBehaviour
         if (winScore <= score && !hasWon)
         {
             hasWon = true;
-            StopCoroutine(SpawnWaves());
-            StopCoroutine(SpawnHazards());
+            StopCoroutine("SpawnWaves");
+            StopCoroutine("SpawnHazards");
+            if (scoreBoard && gameCamera)
+                scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
+            Invoke("ShrinkObjects", 2);
         }
-        if (scoreBoard && hasWon && gameCamera)
+    }
+
+    void ShrinkObjects()
+    {
+        foreach (Transform child in enzymeCollector.transform)
+            ShrinkChild(child);
+
+        foreach (Transform child in hazardCollector.transform)
+            ShrinkChild(child);
+
+        foreach (Transform child in mitocondriaCollector.transform)
+            child.GetComponent<_TSizeChange>().StartShrink();
+    }
+    void ShrinkChild(Transform child)
+    {
+        if (child.GetComponent<_TSizeChange>())
         {
-            //scoreBoard.SetActive(true);
-            scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
+            child.GetComponent<_TSizeChange>().StartShrink();
+            child.GetComponent<_TSizeChange>().StartDestroy(8);
         }
+        else
+            Debug.Log("Unable to retrieve StartShrink Script");
     }
 
     IEnumerator SpawnHazards()
@@ -90,7 +111,8 @@ public class _TGameController : MonoBehaviour
                         Random.Range(spawnValues.yMin, spawnValues.yMax),
                         Random.Range(spawnValues.zMin, spawnValues.zMax));
                     Quaternion spawnRotation = Quaternion.identity;
-                    GameObject haz = Instantiate(obsticles[Random.Range(0, obsticles.Length - 1)], spawnPosition, spawnRotation, hazardCollector.transform) as GameObject;
+                    // GameObject haz = Instantiate(obsticles[Random.Range(0, obsticles.Length - 1)], spawnPosition, spawnRotation, hazardCollector.transform) as GameObject;
+                    Instantiate(obsticles[Random.Range(0, obsticles.Length - 1)], spawnPosition, spawnRotation, hazardCollector.transform);
                 }
                 yield return new WaitForSeconds(spawnWait);
             }
@@ -104,7 +126,7 @@ public class _TGameController : MonoBehaviour
         while (true)
         {
             for (int i = 0; i < hazardCount; ++i)
-            { 
+            {
                 if (maxNumEnzymes > enzymeCollector.transform.childCount)
                 {
                     Vector3 spawnPosition = new Vector3(
@@ -119,7 +141,7 @@ public class _TGameController : MonoBehaviour
                     else
                         Debug.Log("Unable to access Enzyme Controller");
 
-                   // Debug.Log("Velocity:" haz.transform.G)
+                    // Debug.Log("Velocity:" haz.transform.G)
 
                 }
                 yield return new WaitForSeconds(spawnWait);
@@ -128,17 +150,13 @@ public class _TGameController : MonoBehaviour
         }
     }
 
-    IEnumerator FinishGame()
-    {
-        yield return new WaitForSeconds(5);
-    }
     public void AddToScore(int _points)
     {
         score += _points;
     }
 
     void SetFacebook()
-    {        
+    {
         fbManager.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + FacebookManager.Instance.GlobalScore;
         fbManager.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
