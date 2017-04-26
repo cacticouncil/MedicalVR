@@ -30,12 +30,21 @@ public class AntibodyScript : MonoBehaviour
         {
             if (Effects.GetComponent<ParticleSystem>().isPlaying == false)
             {
-                reswpawn = false;
+                Cam.GetComponent<MovingCamera>().stopMoving = true;
+                Cam.GetComponent<MovingCamera>().speed = -100;
+                Cam.GetComponent<SphereCollider>().enabled = false;
+               
                 if (TutorialMode == false)
                 {
-                    
-                    Cam.GetComponent<MovingCamera>().LoseresetPos();
-                    Cam.GetComponent<MovingCamera>().speed = saveSpeed;
+                    if (Cam.transform.position == Cam.GetComponent<MovingCamera>().originPos)
+                    {
+                        reswpawn = false;
+                        Cam.GetComponent<MovingCamera>().stopMoving = false;
+                        Cam.GetComponent<MovingCamera>().speed = saveSpeed;
+                        Cam.GetComponent<SphereCollider>().enabled = true;
+                    }
+                    // Cam.GetComponent<MovingCamera>().LoseresetPos();
+                    //Cam.GetComponent<MovingCamera>().speed = saveSpeed;
                 }
                 else if (TutorialMode.GetComponent<DodgeAntiBodyTutorial>().WhiteCellHitsPlayerFirstTime == true)
                 {
