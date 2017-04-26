@@ -3,14 +3,14 @@ using System.Collections;
 
 public class UnpauseScript : MonoBehaviour
 {
-    public GameObject MainMenu;
+    public GameObject PauseManager;
+    public GameObject Buttons;
     public GameObject Player;
-    public GameObject Pause;
 
     public void UnpauseGame()
     {
-        MainMenu.SetActive(false);
-        Pause.GetComponent<Pause>().isPaused = false;
+        Buttons.SetActive(false);
+        PauseManager.GetComponent<Pause>().isPaused = false;
         Time.timeScale = 1;
     }
 }
