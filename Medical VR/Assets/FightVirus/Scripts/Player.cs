@@ -37,7 +37,7 @@ public class Player : MonoBehaviour, TimedInputHandler
     public GameObject ScoreBoard;
     public GameObject BulletSpawn;
     public GameObject BlackCurtain;
-
+    public GameObject SkipTutorial;
     void Start()
     {
         DisplayRules = true;
@@ -50,6 +50,8 @@ public class Player : MonoBehaviour, TimedInputHandler
     {
         if (TutorialMode == false)
         {
+            SkipTutorial.SetActive(false);
+
             if (isGameOver == false)
             {
                 ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + Score.ToString();
@@ -323,20 +325,9 @@ public class Player : MonoBehaviour, TimedInputHandler
 
             if (BeatGameTimer >= 2.0f)
             {
-                //if ()
-                //{
-                //Story mode verion will play after completing
-
-                //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
                 TutorialMode = false;
                 ArcadeMode = false;
                 SceneManager.LoadScene("FightVirus");
-                //}
-
-                //    else if ()
-                //    {
-                //        //Just play tutorial once and go back to main menu
-                //    }
             }
         }
     }
