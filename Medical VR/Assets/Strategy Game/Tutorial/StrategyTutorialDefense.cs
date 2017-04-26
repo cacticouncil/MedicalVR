@@ -21,7 +21,7 @@ public class StrategyTutorialDefense : MonoBehaviour
     
     private Vector3 prevPos;
     private GameObject fade;
-    private int rNum = 0, im = 0;
+    private int im = 0;
 
     void OnEnable()
     {
@@ -223,8 +223,7 @@ public class StrategyTutorialDefense : MonoBehaviour
         {
             cell.SetActive(false);
         }
-
-        rNum = 0;
+        
         holder.SetActive(false);
         eventSystem.SetActive(true);
         Destroy(fade);
