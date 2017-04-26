@@ -64,7 +64,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                 }
 
                 if (DisplayRules)
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "  Defeat the Virus " + "\n" + "from leaving the cell";
+                    CenterScreenObj.GetComponent<TextMeshPro>().text = "  Prevent the Virus " + "\n" + "from leaving the cell";
                 else
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "";
 
@@ -266,7 +266,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                     BulletSpawn.GetComponent<BulletManager>().CanIShoot = true;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Click the button on the " + "\n" + "headset to detroy the viruses";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Click the button on the " + "\n" + "headset to destroy the viruses";
 
                     else
                     {
@@ -300,7 +300,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Remember that virses can spawn behind you";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Remember that viruses can spawn behind you";
 
                     else
                     {
@@ -319,7 +319,7 @@ public class Player : MonoBehaviour, TimedInputHandler
         if (WhatToRead >= 9 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
         {
             BeatGameTimer += Time.deltaTime;
-            CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now your ready to play";
+            CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now you're ready to play";
 
             if (BeatGameTimer >= 2.0f)
             {

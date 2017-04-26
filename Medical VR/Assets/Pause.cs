@@ -23,8 +23,8 @@ public class Pause : MonoBehaviour
                 {
                     ButtonHeldTimer = 0.0f;
                     Buttons.SetActive(true);
-                    PauseManager.transform.position = Camera.main.transform.forward;
-                    PauseManager.transform.LookAt(Camera.main.transform.position);
+                    PauseManager.transform.position = Player.transform.position + Player.transform.forward;
+                    PauseManager.transform.LookAt(Player.transform.position);
                     PauseManager.transform.Rotate(new Vector3(0, 180, 0));
                     isPaused = true;
                     Time.timeScale = 0;
