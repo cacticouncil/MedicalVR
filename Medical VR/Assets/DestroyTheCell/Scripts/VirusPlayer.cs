@@ -223,7 +223,7 @@ public class VirusPlayer : MonoBehaviour
                         break;
 
                     case 9:
-                        StartCoroutine(DisplayText("Now pratice targeting these cell receptors", 3.5f));
+                        StartCoroutine(DisplayText("Now practice targeting these cell receptors", 3.5f));
                         CanIMove = true;
                         PlayerSpeed = .02f;
                         WaveManager.GetComponent<WaveManager>().WaveNumber = 2;
@@ -232,7 +232,7 @@ public class VirusPlayer : MonoBehaviour
                         break;
 
                     case 10:
-                        StartCoroutine(DisplayText("Great now your ready to play", 3.5f));
+                        StartCoroutine(DisplayText("Great now you're ready to play", 3.5f));
                         TutorialModeCompleted = true;
                         break;
 

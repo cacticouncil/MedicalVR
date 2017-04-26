@@ -21,6 +21,7 @@ public class FacebookStuff
 
 public class _TGameController : MonoBehaviour
 {
+    public GameObject Player;
     public FacebookStuff fbManager;
 
     [HideInInspector]
@@ -71,8 +72,15 @@ public class _TGameController : MonoBehaviour
             StopCoroutine("SpawnHazards");
             if (scoreBoard && gameCamera)
                 scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
+            Invoke("DisplayScore", 3);
             Invoke("ShrinkObjects", 2);
         }
+    }
+
+    void DisplayScore()
+    {
+        Player.GetComponent<_TRaycastTarget>().hasWon = true;
+        scoreBoard.transform.GetComponent<_TSizeChange>().StartGrow();
     }
 
     void ShrinkObjects()
@@ -157,7 +165,7 @@ public class _TGameController : MonoBehaviour
 
     void SetFacebook()
     {
-        fbManager.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + FacebookManager.Instance.GlobalScore;
+        fbManager.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString()/*+ FacebookManager.Instance.GlobalScore*/;
         fbManager.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
 }
