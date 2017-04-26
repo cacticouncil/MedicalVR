@@ -1,4 +1,4 @@
-﻿Shader "Custom/ColorTextureUnlit"
+﻿Shader "Custom/ColorTextureOverlay"
 {
 	Properties
 	{
