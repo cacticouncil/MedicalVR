@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class AnitbodySpawnerScript : MonoBehaviour {
 
-    public GameObject redCell;
+    public GameObject platelet;
     public GameObject virus;
     public GameObject refAntiBody;
     public GameObject refPoint;
@@ -13,6 +13,7 @@ public class AnitbodySpawnerScript : MonoBehaviour {
     public GameObject theLevel, obsStart, obsEnd;
     List<GameObject> randPositions = new List<GameObject>();
     List<GameObject> points = new List<GameObject>();
+    List<GameObject> platelets = new List<GameObject>();
 
     // Use this for initialization
     void Start ()
@@ -47,15 +48,25 @@ public class AnitbodySpawnerScript : MonoBehaviour {
             }
             points.Clear();
         }
+        if (platelets.Count != 0)
+        {
+            for (int i = 0; i < platelets.Count; i++)
+            {
+                Destroy(platelets[i]);
+            }
+            platelets.Clear();
+        }
 
         for (int z =(int) obsStart.transform.position.z; z < obsEnd.transform.position.z; z += zGap)
         {
             List<GameObject> tmpNum = new List<GameObject>();
             List<GameObject> tmpPoints = new List<GameObject>();
+            List<GameObject> tmpPlats= new List<GameObject>();
             for (int i = 0; i < Obstacles.Count; i++)
             {
                 tmpNum.Add(Obstacles[i]);
-                if(MovingCamera.arcadeMode == true)
+                tmpPlats.Add(Obstacles[i]);
+                if (MovingCamera.arcadeMode == true)
                 tmpPoints.Add(Obstacles[i]);
             }
             for (int j = 0; j < Obstacles.Count; j++)
@@ -63,18 +74,27 @@ public class AnitbodySpawnerScript : MonoBehaviour {
                 int obNum = Random.Range(0, Obstacles.Count - 1 - j);
                 Vector3 tmpPos = new Vector3(tmpNum[obNum].transform.position.x, tmpNum[obNum].transform.position.y, z);
                 int sz = Random.Range(0, 3);
+                float sizE = 0;
                 if (sz == 0)
-                    sz = 0;
+                    sizE = 0.25f;
                 else if (sz == 1)
-                    sz = 0;
+                    sizE = 0;
                 else if (sz == 2)
-                    sz = -0;
+                    sizE = -0.25f;
                
                 tmpNum.Remove(tmpNum[obNum]);
                 GameObject tmp = Instantiate(refAntiBody, tmpPos, refAntiBody.transform.rotation) as GameObject;
-                tmp.transform.localScale = new Vector3(tmp.transform.localScale.x + sz, tmp.transform.localScale.y + sz, tmp.transform.localScale.z + sz);
+                tmp.transform.localScale = new Vector3(tmp.transform.localScale.x + sizE, tmp.transform.localScale.y + sizE, tmp.transform.localScale.z + sizE);
                 randPositions.Add(tmp);
-
+                if(j%7 == 0)
+                {
+                    obNum = Random.Range(0, Obstacles.Count - 1 - j);
+                    tmpPos = new Vector3(tmpPoints[obNum].transform.position.x, tmpPoints[obNum].transform.position.y, z);
+                    tmpPlats.Remove(tmpPoints[obNum]);
+                    tmp = Instantiate(platelet, tmpPos, platelet.transform.rotation) as GameObject;
+                    platelets.Add(tmp);
+                }
+                    
                 if(j%2 == 0 && MovingCamera.arcadeMode == true)
                 {
                     obNum = Random.Range(0, Obstacles.Count - 1 - j);
