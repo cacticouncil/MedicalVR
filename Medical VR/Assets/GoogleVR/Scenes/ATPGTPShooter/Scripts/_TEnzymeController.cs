@@ -35,6 +35,8 @@ public class _TEnzymeController : MonoBehaviour
             }
             else
                 Debug.Log("Unable to Access Game Controller");
+
+            transform.parent = null;
         }
     }
 }

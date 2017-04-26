@@ -13,7 +13,7 @@ ModelImporter:
     3300000: Virus_low:Group24078
     4300000: Virus_low:Group24078
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

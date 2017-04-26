@@ -1385,7 +1385,6 @@ public class StrategyCellManagerScript : MonoBehaviour
     #endregion
 
     #region Events
-
     void MigratingWhiteCells()
     {
         Vector3 ogDirection = Random.onUnitSphere;
