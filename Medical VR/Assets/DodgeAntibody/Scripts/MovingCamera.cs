@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MovingCamera : MonoBehaviour, TimedInputHandler
 {
@@ -9,7 +10,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
 
     public GameObject subtitles;
     public float speed;
-    public GameObject theScore, theLives, scoreBoard, UI, MenuButton;
+    public GameObject theScore, theLives, scoreBoard, UI, MenuButton, Username, ProfilePic;
     public float score = 0;
     public Color fogColor;
     public static bool arcadeMode = true;
@@ -42,7 +43,9 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         speed = 0;
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
-        scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
+        int tmp = (int)score;
+        Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + tmp.ToString();
+        ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
         lives = 3;
     }
 

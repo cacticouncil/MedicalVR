@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SimonSays : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class SimonSays : MonoBehaviour
     public GameObject red;
     public GameObject blue;
     public GameObject green;
-    public GameObject sign, UI, scoreBoard, theScore, theLives, polyLeft, GO, gameTimer;
+    public GameObject sign, UI, scoreBoard, theScore, theLives, polyLeft, GO, gameTimer, Username, ProfilePic;
 
     public int score = 0, polys = 0, polysDone;
     Color cY, cR, cB, cG;
@@ -246,6 +247,8 @@ public class SimonSays : MonoBehaviour
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
         //scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
         transform.position = new Vector3(transform.position.x, transform.position.y, 10000);
+        Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString(); //FacebookManager.Instance.GlobalScore;
+        ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
         round = 1;
     }
     void ResetStuff()
