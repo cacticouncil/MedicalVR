@@ -23,7 +23,6 @@ public class StrategyTutorialImmunity : MonoBehaviour
 
     private Vector3 prevPos;
     private GameObject fade;
-    private int rNum = 0, im = 0;
 
     void OnEnable()
     {
@@ -232,8 +231,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
             cell.SetActive(false);
         }
         virus.SetActive(false);
-
-        rNum = 0;
+        
         holder.SetActive(false);
         eventSystem.SetActive(true);
         Destroy(fade);

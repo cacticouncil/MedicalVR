@@ -33,8 +33,9 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("MemoryGame");
                 break;
             case 2:
-                Player.ArcadeMode = true;
-                Player.TutorialMode = false;
+                Player.TutorialMode = true;
+                SkipTutorial.GlobalPause = true;
+                Player.ArcadeMode = false;
                 LoadScene("FightVirus");
                 break;
             case 3:
