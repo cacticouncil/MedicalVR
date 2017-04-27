@@ -16,7 +16,6 @@ public class WaveManager : MonoBehaviour
     Vector3 AntiViralProteinLocation;
 
     int WhatColorCellReceptor;
-    public GameObject CellReceptors;
     public GameObject CellReceptor1;
     public GameObject CellReceptor2;
     public List<GameObject> CellReceptorsList = new List<GameObject>();
@@ -149,7 +148,7 @@ public class WaveManager : MonoBehaviour
     {
         for (int i = 0; i < CellReceptorCount; i++)
         {
-            CellReceptorLocation = Random.onUnitSphere * 7.0f;
+            CellReceptorLocation = Random.onUnitSphere * 10.5f;
             WhatColorCellReceptor = Random.Range(1, 3);
 
             switch (WhatColorCellReceptor)
