@@ -6,7 +6,7 @@ public class phosphate_CellGameplayScript : MonoBehaviour {
     public GameObject sting, subtitles, IRF3;
     public bool goLeft;
     float moveSpeed;
-    Vector3 target;
+    
 	// Use this for initialization
 	void Start ()
     {
@@ -14,7 +14,7 @@ public class phosphate_CellGameplayScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 184)
         {

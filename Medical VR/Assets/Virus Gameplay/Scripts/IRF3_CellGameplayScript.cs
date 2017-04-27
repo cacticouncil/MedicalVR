@@ -15,7 +15,7 @@ public class IRF3_CellGameplayScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, Time.deltaTime * moveSpeed);
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Facebook.Unity;
 using System;
+using TMPro;
 
 enum MiniGames
 {
@@ -85,7 +86,7 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
 
             if(FacebookManager.Instance.ProfileName != null)
             {
-                Text UserName = DialogUsername.GetComponent<Text>();
+                TextMeshPro UserName = DialogUsername.GetComponent<TextMeshPro>();
                 UserName.text = "Hi, " + FacebookManager.Instance.ProfileName;
             }
             else
