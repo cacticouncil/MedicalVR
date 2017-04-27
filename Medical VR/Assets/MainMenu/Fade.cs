@@ -8,7 +8,7 @@ public class Fade : MonoBehaviour
         StartCoroutine(TurnOn());
     }
 
-    public void FadeOut()
+    public void FadeOut(Fade next)
     {
         foreach (Renderer item in GetComponentsInChildren<Renderer>(true))
         {
@@ -20,7 +20,7 @@ public class Fade : MonoBehaviour
             StartCoroutine(FadeOutText(item));
         }
 
-        StartCoroutine(TurnOff());
+        StartCoroutine(TurnOff(next));
     }
 
     public void TypeIn()
@@ -160,7 +160,7 @@ public class Fade : MonoBehaviour
         }
     }
 
-    IEnumerator TurnOff()
+    IEnumerator TurnOff(Fade next)
     {
         yield return new WaitForSeconds(1.0f);
         foreach (Transform item in GetComponentsInChildren<Transform>(true))
@@ -168,6 +168,8 @@ public class Fade : MonoBehaviour
             if (item != transform)
                 item.gameObject.SetActive(false);
         }
+
+        next.FadeIn();
     }
 
     IEnumerator FadeInObject(Renderer g)

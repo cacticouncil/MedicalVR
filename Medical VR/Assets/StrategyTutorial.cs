@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class StrategyTutorial : MonoBehaviour
+public class StrategyTutorial : Tutorial
 {
     public GameObject redCell;
     public GameObject virus;
@@ -25,7 +25,17 @@ public class StrategyTutorial : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(ClickForMe());
+        if (tutorial)
+        {
+            StartCoroutine(ClickForMe());
+        }
+        else
+        {
+            cellManager.SetActive(true);
+            mysteryBox.SetActive(true);
+            StopCoroutine(ClickForMe());
+            Destroy(gameObject);
+        }
     }
 
     public void Click()
