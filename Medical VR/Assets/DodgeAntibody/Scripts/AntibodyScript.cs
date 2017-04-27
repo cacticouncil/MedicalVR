@@ -16,7 +16,7 @@ public class AntibodyScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Vector3.Distance(transform.position, Cam.transform.position) < 3000)
         {
@@ -70,7 +70,7 @@ public class AntibodyScript : MonoBehaviour
                 PlayerPrefs.SetInt("White Cell", 1);
                 SoundManager.PlaySFX("MenuEnter");
             }
-
+            Cam.GetComponent<MovingCamera>().LoseresetPos();
             //For tutorial mode 
             if (MovingCamera.TutorialMode == true)
             {

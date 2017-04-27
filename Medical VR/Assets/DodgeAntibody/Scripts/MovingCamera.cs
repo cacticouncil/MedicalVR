@@ -15,7 +15,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     public Color fogColor;
     public static bool arcadeMode = true;
     public Vector3 originPos;
-    int lives = 3;
+    public int lives = 3;
     float orgSpeed;
     public bool stopMoving = false, startSpeed = true;
     
@@ -26,7 +26,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
             lives--;
             theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         }
-        transform.position = originPos;
+        //transform.position = originPos;
         //MenuButton.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 100);
 
     }
@@ -46,7 +46,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         int tmp = (int)score;
         Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + tmp.ToString();
         ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
-        lives = 3;
+        
     }
 
    public void RestartGame()
@@ -114,7 +114,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         }
         else if(speed < 0)
         {
-            transform.position = Vector3.MoveTowards(transform.position, originPos, Time.deltaTime * 100);
+            transform.position = Vector3.MoveTowards(transform.position, originPos, Time.deltaTime * 5000);
         }
     }
 
@@ -126,7 +126,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
             //MenuButton.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z -100);
         }
 
-        else
+        else if( speed >=0)
             stopMoving = false; 
     }
 
