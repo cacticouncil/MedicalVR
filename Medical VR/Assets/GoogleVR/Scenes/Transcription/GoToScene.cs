@@ -12,7 +12,7 @@ public class GoToScene : MonoBehaviour {
         else
         MemoryUI.arcadeMode = true;
 
-        MemoryUI.TutorialMode = false;
+        MemoryUI.tutorial = false;
         SceneManager.LoadScene("MemoryGame");
     }
 
@@ -23,7 +23,7 @@ public class GoToScene : MonoBehaviour {
         else
             Storebullets.arcadeMode = true;
 
-        Storebullets.TutorialMode = false;
+        Storebullets.tutorial = false;
         SceneManager.LoadScene("CGampSnatcher");
     }
 
