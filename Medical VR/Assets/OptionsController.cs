@@ -69,4 +69,10 @@ public class OptionsController : MonoBehaviour {
         PlayerPrefs.SetFloat("InitialSFXVolume", SoundManager.MaxSFXVolume);
         PlayerPrefs.SetFloat("InitialBGMVolume", SoundManager.MaxBGMVolume);
     }
+
+    public void Exit()
+    {
+        SoundManager.MaxSFXVolume = InitialSFXVolume;
+        SoundManager.MaxBGMVolume = InitialBGMVolume;
+    }
 }
