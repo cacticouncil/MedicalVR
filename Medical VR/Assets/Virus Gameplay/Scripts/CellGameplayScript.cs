@@ -340,6 +340,7 @@ public class CellGameplayScript : MonoBehaviour
             case 260:
                 //FightVirus
                 Player.ArcadeMode = false;
+                Player.StoryMode = true;
                 SceneManager.LoadScene("FightVirus");
                 break;
             case 261:
