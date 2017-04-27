@@ -90,7 +90,7 @@ public class Virus : MonoBehaviour
 
                 else
                 {
-                    if (Health <= BossStartHealth * .75f)
+                    if (Health <= BossStartHealth * .85f)
                         SpawnSmallVirusTimer += Time.deltaTime;
 
                     if (BossSmallVirusCount > 0)
