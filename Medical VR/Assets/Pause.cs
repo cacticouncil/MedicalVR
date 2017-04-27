@@ -28,7 +28,7 @@ public class Pause : MonoBehaviour
                     PauseManager.transform.Rotate(new Vector3(0, 180, 0));
                     isPaused = true;
                     Time.timeScale = 0;
-                    SoundManager.Pause();
+                    SoundManager.PauseSFX();
                 }
             }
         }

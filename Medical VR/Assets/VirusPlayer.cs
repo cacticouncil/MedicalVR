@@ -17,7 +17,7 @@ public class VirusPlayer : Tutorial
     public static bool ArcadeMode = true;
 
     //Variables for Game
-    public GameObject TimerText;
+    public GameObject LivesGameobject;
     public GameObject Spawn;
     public GameObject WaveManager;
     public GameObject BlackCurtain;
@@ -26,7 +26,6 @@ public class VirusPlayer : Tutorial
     public List<GameObject> VirusAttackList = new List<GameObject>();
     Vector3 SpawnVirusAttack;
 
-    public float TimeLeft;
     public float PlayerSpeed;
     public int Lives;
     public bool isGameover = false;
@@ -34,15 +33,14 @@ public class VirusPlayer : Tutorial
     public GameObject Instructions;
     bool InstructionsDone = false;
 
+    public bool CanIMove = false;
     public bool WaveStarted = false;
     bool DelaySpawn = false;
     float DelayTimer = 0.0f;
-    public bool CanIMove = false;
     float BeatGameTimer = 0.0f;
+
     void Start()
     {
-        TimeLeft = 60.0f;
-        //PlayerSpeed = 0.0f;
         PlayerSpeed = .02f;
         Lives = 3;
 
@@ -60,12 +58,7 @@ public class VirusPlayer : Tutorial
         {
             if (ArcadeMode == true)
             {
-                TimeLeft -= Time.deltaTime;
-                TimerText.GetComponent<TextMeshPro>().text = "Timer: " + TimeLeft.ToString("f0") + "           Lives: " + Lives.ToString();
-
-                //Temporarily have the countdown stay at 0
-                if (TimeLeft <= 0.0f)
-                    TimeLeft = 0.0f;
+                LivesGameobject.GetComponent<TextMeshPro>().text = "           Lives: " + Lives.ToString();
             }
 
             //Display wave text
@@ -88,7 +81,7 @@ public class VirusPlayer : Tutorial
                             break;
 
                         case 4:
-                            StartCoroutine(DisplayText("Wave4", 2.3f));
+                            StartCoroutine(DisplayText("Final Wave", 2.3f));
                             break;
 
                         default:
