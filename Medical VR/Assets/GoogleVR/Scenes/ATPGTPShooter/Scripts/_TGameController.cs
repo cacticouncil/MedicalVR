@@ -1,6 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+
+[System.Serializable]
+public class ObjectsCollector
+{
+    public GameObject Player;
+    public GameObject shotsUI;
+    public GameObject hazardCollector;
+    public GameObject mitocondriaCollector;
+    public GameObject enzymeCollector;
+    public GameObject fadeScreen;
+
+}
 
 [System.Serializable]
 public class Boundary
@@ -21,13 +35,12 @@ public class FacebookStuff
 
 public class _TGameController : MonoBehaviour
 {
-    public GameObject Player;
+    public ObjectsCollector shrinkStuff;
     public FacebookStuff fbManager;
 
     [HideInInspector]
     public static bool isArcadeMode;
 
-    public GameObject fadeScreen;
     public GameObject gameCamera;
     public GameObject scoreBoard;
     public int scorePerEnzyme;
@@ -37,7 +50,6 @@ public class _TGameController : MonoBehaviour
     public int score;
     public int maxNumEnzymes;
     public GameObject enzyme;
-    public GameObject enzymeCollector;
     public GameObject nucleus;
     public Boundary spawnValues;
     public int hazardCount;
@@ -47,8 +59,6 @@ public class _TGameController : MonoBehaviour
 
     public int maxNumHazards;
     public GameObject[] obsticles;
-    public GameObject hazardCollector;
-    public GameObject mitocondriaCollector;
 
     private bool hasWon;
 
@@ -56,10 +66,10 @@ public class _TGameController : MonoBehaviour
 
     void Start()
     {
+        isArcadeMode = true;
         hasWon = false;
         score = 0;
-        StartCoroutine("SpawnWaves");
-        StartCoroutine("SpawnHazards");
+        Invoke("StartScene", 2);
         SetFacebook();
     }
 
@@ -72,27 +82,32 @@ public class _TGameController : MonoBehaviour
             StopCoroutine("SpawnHazards");
             if (scoreBoard && gameCamera)
                 scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
-            Invoke("DisplayScore", 3);
+            if (isArcadeMode)
+                Invoke("DisplayScore", 3);
+            else
+                Invoke("MoveToNewScene", 5);
             Invoke("ShrinkObjects", 2);
         }
     }
 
     void DisplayScore()
     {
-        Player.GetComponent<_TRaycastTarget>().hasWon = true;
+        shrinkStuff.Player.GetComponent<_TRaycastTarget>().hasWon = true;
         scoreBoard.transform.GetComponent<_TSizeChange>().StartGrow();
     }
 
     void ShrinkObjects()
     {
-        foreach (Transform child in enzymeCollector.transform)
+        foreach (Transform child in shrinkStuff.enzymeCollector.transform)
             ShrinkChild(child);
 
-        foreach (Transform child in hazardCollector.transform)
+        foreach (Transform child in shrinkStuff.hazardCollector.transform)
             ShrinkChild(child);
 
-        foreach (Transform child in mitocondriaCollector.transform)
+        foreach (Transform child in shrinkStuff.mitocondriaCollector.transform)
             child.GetComponent<_TSizeChange>().StartShrink();
+
+        shrinkStuff.shotsUI.GetComponent<_TSizeChange>().StartShrink();
     }
     void ShrinkChild(Transform child)
     {
@@ -112,7 +127,7 @@ public class _TGameController : MonoBehaviour
         {
             for (int i = 0; i < hazardCount; ++i)
             {
-                if (maxNumHazards > hazardCollector.transform.childCount)
+                if (maxNumHazards > shrinkStuff.hazardCollector.transform.childCount)
                 {
                     Vector3 spawnPosition = new Vector3(
                         Random.Range(spawnValues.xMin, spawnValues.xMax),
@@ -120,7 +135,7 @@ public class _TGameController : MonoBehaviour
                         Random.Range(spawnValues.zMin, spawnValues.zMax));
                     Quaternion spawnRotation = Quaternion.identity;
                     // GameObject haz = Instantiate(obsticles[Random.Range(0, obsticles.Length - 1)], spawnPosition, spawnRotation, hazardCollector.transform) as GameObject;
-                    Instantiate(obsticles[Random.Range(0, obsticles.Length - 1)], spawnPosition, spawnRotation, hazardCollector.transform);
+                    Instantiate(obsticles[Random.Range(0, obsticles.Length - 1)], spawnPosition, spawnRotation, shrinkStuff.hazardCollector.transform);
                 }
                 yield return new WaitForSeconds(spawnWait);
             }
@@ -135,14 +150,14 @@ public class _TGameController : MonoBehaviour
         {
             for (int i = 0; i < hazardCount; ++i)
             {
-                if (maxNumEnzymes > enzymeCollector.transform.childCount)
+                if (maxNumEnzymes > shrinkStuff.enzymeCollector.transform.childCount)
                 {
                     Vector3 spawnPosition = new Vector3(
                         Random.Range(spawnValues.xMin, spawnValues.xMax),
                         Random.Range(spawnValues.yMin, spawnValues.yMax),
                         Random.Range(spawnValues.zMin, spawnValues.zMax));
                     Quaternion spawnRotation = Quaternion.identity;
-                    GameObject haz = Instantiate(enzyme, spawnPosition, spawnRotation, enzymeCollector.transform) as GameObject;
+                    GameObject haz = Instantiate(enzyme, spawnPosition, spawnRotation, shrinkStuff.enzymeCollector.transform) as GameObject;
                     haz.GetComponent<_TTravelToNucleus>().nucleus = nucleus;
                     if (haz.GetComponent<_TEnzymeController>())
                         haz.GetComponent<_TEnzymeController>().pointsValue = scorePerEnzyme;
@@ -167,5 +182,17 @@ public class _TGameController : MonoBehaviour
     {
         fbManager.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString()/*+ FacebookManager.Instance.GlobalScore*/;
         fbManager.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
+    }
+
+    void MoveToNewScene()
+    {
+        CellGameplayScript.loadCase = 1;
+        SceneManager.LoadScene("Cell Gameplay");
+    }
+    void StartScene()
+    {
+        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
+        StartCoroutine("SpawnWaves");
+        StartCoroutine("SpawnHazards");
     }
 }

@@ -16,7 +16,7 @@ public static class SoundManager {
     // Fade over about 3 seconds.
     const float FADESPEED = 0.00555555555555555555555555555556f;
 
-
+    static bool isPaused = false;
     public static float MaxBGMVolume = 0.5f;
     public static float MaxSFXVolume = 1;
     public static bool Initialized = false;
@@ -134,7 +134,7 @@ public static class SoundManager {
 
         // Find and kill dead SFX audio components.
         for (int i = SFX.Count - 1; i >= 0; i--) {
-            if (!(SFX[i].isPlaying)) {
+            if (!(SFX[i].isPlaying) && isPaused == false) {
                 Object.Destroy(SFX[i]);
                 SFX.RemoveAt(i);
             }
@@ -218,7 +218,22 @@ public static class SoundManager {
             SFX.Add(source);
         }
     }
-
+    public static void PauseSFX()
+    {
+        for (int i = 0; i < SFX.Count; i++)
+        {
+            SFX[i].Pause();
+        }
+        isPaused = true;
+    }
+    public static void UnPauseSFX()
+    {
+        for (int i = 0; i < SFX.Count; i++)
+        {
+            SFX[i].UnPause();
+        }
+        isPaused = false;
+    }
     public static void PlayVirusVoice(string _title)
     {
         if (Controller)
