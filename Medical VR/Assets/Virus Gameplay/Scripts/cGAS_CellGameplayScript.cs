@@ -27,7 +27,7 @@ public class cGAS_CellGameplayScript : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         CheckCase();
         //doAction();

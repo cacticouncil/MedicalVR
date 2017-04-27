@@ -12,5 +12,6 @@ public class UnpauseScript : MonoBehaviour
         Buttons.SetActive(false);
         PauseManager.GetComponent<Pause>().isPaused = false;
         Time.timeScale = 1;
+        SoundManager.Resume();
     }
 }

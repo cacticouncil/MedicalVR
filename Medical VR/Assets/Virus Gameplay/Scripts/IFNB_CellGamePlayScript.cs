@@ -22,7 +22,7 @@ public class IFNB_CellGamePlayScript : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 231)
         {

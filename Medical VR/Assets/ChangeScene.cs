@@ -29,28 +29,22 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 break;
             case 1:
                 MemoryUI.arcadeMode = true;
-                MemoryUI.TutorialMode = false;
                 LoadScene("MemoryGame");
                 break;
             case 2:
-                Player.TutorialMode = true;
-                SkipTutorial.GlobalPause = true;
                 Player.ArcadeMode = false;
                 LoadScene("FightVirus");
                 break;
             case 3:
                 LoadScene("DodgeAnitbodies");
                 MovingCamera.arcadeMode = true;
-                MovingCamera.TutorialMode = false;
                 break;
             case 4:
                 SimonSays.arcadeMode = true;
-                SimonSays.TutorialMode = false;
                 LoadScene("SimonDNA");
                 break;
             case 5:
                 Storebullets.arcadeMode = true;
-                Storebullets.TutorialMode = false;
                 LoadScene("CGampSnatcher");
                 break;
             case 6:
@@ -76,7 +70,6 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 break;
             case 13:
                 VirusPlayer.ArcadeMode = true;
-                VirusPlayer.TutorialMode = false;
                 LoadScene("DestroyTheCell");
                 break;
             case 14:

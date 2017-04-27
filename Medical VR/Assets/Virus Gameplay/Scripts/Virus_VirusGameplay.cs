@@ -30,7 +30,7 @@ public class Virus_VirusGameplay : MonoBehaviour {
 
     }
     // Update is called once per frame
-    void Update ()
+    void FixedUpdate ()
     {
         CheckCaases();
         doAction();
