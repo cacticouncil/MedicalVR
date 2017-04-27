@@ -11,7 +11,6 @@ public class Virus_CellGameplayScript : MonoBehaviour {
     delegate void Func();
     Func doAction;
     public float moveSpeed;
-    float fadeSpeed;
     int I = 0;
     void Start()
     {
@@ -33,7 +32,7 @@ public class Virus_CellGameplayScript : MonoBehaviour {
 
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         CheckCaases();
         doAction();

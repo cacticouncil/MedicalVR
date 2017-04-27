@@ -8,8 +8,10 @@ public class Fade : MonoBehaviour
         StartCoroutine(TurnOn());
     }
 
-    public void FadeOut()
+    public void FadeOut(Fade next)
     {
+        SoundManager.PlaySFX("MenuEnter");
+
         foreach (Renderer item in GetComponentsInChildren<Renderer>(true))
         {
             StartCoroutine(FadeOutObject(item));
@@ -20,7 +22,7 @@ public class Fade : MonoBehaviour
             StartCoroutine(FadeOutText(item));
         }
 
-        StartCoroutine(TurnOff());
+        StartCoroutine(TurnOff(next));
     }
 
     public void TypeIn()
@@ -142,7 +144,6 @@ public class Fade : MonoBehaviour
 
     IEnumerator TurnOn()
     {
-        yield return new WaitForSeconds(1.0f);
         foreach (Renderer item in GetComponentsInChildren<Renderer>(true))
         {
             StartCoroutine(FadeInObject(item));
@@ -152,7 +153,7 @@ public class Fade : MonoBehaviour
             StartCoroutine(FadeInText(item));
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(.5f);
         foreach (Transform item in GetComponentsInChildren<Transform>(true))
         {
             if (item != transform)
@@ -160,14 +161,16 @@ public class Fade : MonoBehaviour
         }
     }
 
-    IEnumerator TurnOff()
+    IEnumerator TurnOff(Fade next)
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(.5f);
         foreach (Transform item in GetComponentsInChildren<Transform>(true))
         {
             if (item != transform)
                 item.gameObject.SetActive(false);
         }
+
+        next.FadeIn();
     }
 
     IEnumerator FadeInObject(Renderer g)
@@ -179,10 +182,10 @@ public class Fade : MonoBehaviour
             c.a = 0.0f;
             float startTime = Time.time;
             float t = 0.0f;
-            while (t < 1.0f)
+            while (t < .5f)
             {
                 t = Time.time - startTime;
-                c.a = t;
+                c.a = t * 2.0f;
                 g.material.color = c;
                 yield return 0;
             }
@@ -197,10 +200,10 @@ public class Fade : MonoBehaviour
             c.a = 1.0f;
             float startTime = Time.time;
             float t = 0.0f;
-            while (t < 1.0f)
+            while (t < .5f)
             {
                 t = Time.time - startTime;
-                c.a = 1.0f - t;
+                c.a = 1.0f - t * 2.0f;
                 g.material.color = c;
                 yield return 0;
             }
@@ -217,10 +220,10 @@ public class Fade : MonoBehaviour
         text.color = a;
         float startTime = Time.time;
         float t = 0.0f;
-        while (t < 1.0f)
+        while (t < .5f)
         {
             t = Time.time - startTime;
-            a.a = t;
+            a.a = t * 2.0f;
             text.color = a;
             yield return 0;
         }
@@ -228,14 +231,14 @@ public class Fade : MonoBehaviour
 
     IEnumerator FadeOutText(TMPro.TextMeshPro text)
     {
-        Color a = text.color;
+        Color c = text.color;
         float startTime = Time.time;
         float t = 0.0f;
-        while (t < 1.0f)
+        while (t < .5f)
         {
             t = Time.time - startTime;
-            a.a = 1.0f - t;
-            text.color = a;
+            c.a = 1.0f - t * 2.0f;
+            text.color = c;
             yield return 0;
         }
         text.gameObject.SetActive(false);

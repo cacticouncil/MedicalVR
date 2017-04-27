@@ -4,12 +4,11 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System;
 
-public class Player : MonoBehaviour, TimedInputHandler
+public class Player : Tutorial, TimedInputHandler
 {
     public static bool ArcadeMode = true;
 
     //Variables for tutorial
-    public static bool TutorialMode = true;
     float TutorialTimer = 0.0f;
     int WhatToRead = 0;
     bool SpawnWaveOnce = false;
@@ -42,13 +41,13 @@ public class Player : MonoBehaviour, TimedInputHandler
     {
         DisplayRules = true;
         isGameOver = false;
-        if (TutorialMode == false)
+        if (tutorial == false)
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
     }
 
     void Update()
     {
-        if (TutorialMode == false)
+        if (tutorial == false)
         {
             SkipTutorial.SetActive(false);
 
@@ -148,7 +147,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                 {
                     isGameOver = true;
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You lose story mode";
-                    TutorialMode = false;
+                    tutorial = false;
                     ArcadeMode = false;
                     SceneManager.LoadScene("FightVirus");
                 }
@@ -175,7 +174,7 @@ public class Player : MonoBehaviour, TimedInputHandler
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set up how turtorial will show players basic gameplay
-        else if (TutorialMode == true)
+        else if (tutorial == true)
         {
             //Need to fade in
             float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
@@ -325,7 +324,7 @@ public class Player : MonoBehaviour, TimedInputHandler
 
             if (BeatGameTimer >= 2.0f)
             {
-                TutorialMode = false;
+                tutorial = false;
                 ArcadeMode = false;
                 SceneManager.LoadScene("FightVirus");
             }

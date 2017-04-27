@@ -13,6 +13,10 @@ public class SubstitlesScript : MonoBehaviour {
     // Use this for initialization
     public List<Subtitle> theSubtitles = new List<Subtitle>();
     public float theTimer = 0;
+    public float textSpeed;
+    float textTimer =0;
+    string theText = "";
+    int textIdx = 0;
     int i = 0;
     bool stop = false, done = false;
 	void Start ()
@@ -32,16 +36,32 @@ public class SubstitlesScript : MonoBehaviour {
                 if(theTimer >= theSubtitles[i].end)
                 {
                     i++;
+                    textTimer = 0;
+                    textIdx = 0;
+                    theText = "";
                     if (i >= theSubtitles.Count)
                     {
                         stop = true;
-                        done = true;
+                        done = true;                        
                     }
                     GetComponent<TMPro.TextMeshPro>().text = "";
                 }
                 else
                 {
-                    GetComponent<TMPro.TextMeshPro>().text = theSubtitles[i].text;
+                    textTimer += Time.deltaTime;
+                    if(textTimer > textSpeed)
+                    {
+                        textTimer = 0;                                
+                        theText = theText + theSubtitles[i].text[textIdx];
+                        if (textIdx < theSubtitles[i].text.Length -1)
+                            textIdx++;
+
+                        else
+                            textTimer = -1000;
+
+                        GetComponent<TMPro.TextMeshPro>().text = theText;
+                    }
+                    
                 }
             }
             else
@@ -54,6 +74,7 @@ public class SubstitlesScript : MonoBehaviour {
         if(stop == true)
         {
             stop = false;
+            done = false;
             i = 0;
             theTimer = 0;
         }

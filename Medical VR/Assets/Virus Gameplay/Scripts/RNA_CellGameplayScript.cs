@@ -28,7 +28,7 @@ public class RNA_CellGameplayScript : MonoBehaviour {
 
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         CheckCaases();
         doAction();
