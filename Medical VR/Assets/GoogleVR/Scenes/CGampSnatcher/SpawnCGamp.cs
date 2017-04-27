@@ -33,7 +33,8 @@ public class SpawnCGamp : MonoBehaviour {
     public void SpawnC()
     {
         Vector3 pos = /*Center.transform.position + */Random.insideUnitSphere * size;
-        GameObject CGamp = Instantiate(Cgampprefab, pos, Quaternion.identity) as GameObject;
+        //GameObject CGamp = Instantiate(Cgampprefab, pos, Quaternion.identity) as GameObject;
+        Instantiate(Cgampprefab, pos, Quaternion.identity);
     }
 
     private void OnDrawGizmosSelected()

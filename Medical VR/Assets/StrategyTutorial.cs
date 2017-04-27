@@ -13,13 +13,14 @@ public class StrategyTutorial : Tutorial
     public GameObject mysteryBoxMesh;
     public GameObject cellManager;
     public GameObject mysteryBox;
-    public Vector3 cellPosition;
-    public Vector3 virusEnd = new Vector3(0, 0, 0);
+    public TMPro.TextMeshPro subtitles;
     public List<TMPro.TextMeshPro> text = new List<TMPro.TextMeshPro>();
-
     public GameObject[] cells = new GameObject[7];
     public GameObject[] viruses = new GameObject[3];
+
     private int cNum = -1;
+    private Vector3 cellPosition = new Vector3(1, 5, 0);
+    private Vector3 virusEnd = new Vector3(.6f, 5.7f, 0);
     private Vector3 offset = new Vector3(.5f, 0, 0);
     private int rNum = 0;
 
@@ -220,63 +221,63 @@ public class StrategyTutorial : Tutorial
     #region Text
     IEnumerator StartText()
     {
-        Color a = text[0].color;
+        subtitles.gameObject.SetActive(true);
+        subtitles.text = text[0].text;
+        Color a = subtitles.color;
         a.a = 0.0f;
-        text[0].color = a;
+        subtitles.color = a;
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
             a.a = t;
-            text[0].color = a;
+            subtitles.color = a;
             yield return 0;
         }
     }
 
     IEnumerator TurnTextOn(int index)
     {
-        Color a = text[index - 1].color;
+        Color a = subtitles.color;
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
         {
             t = (Time.time - startTime) * 2.0f;
             a.a = 1.0f - t;
-            text[index - 1].color = a;
+            subtitles.color = a;
             yield return 0;
         }
         yield return 0;
-        text[index - 1].gameObject.SetActive(false);
-        text[index].gameObject.SetActive(true);
-        a = text[index].color;
+        subtitles.text = text[index].text;
+        a = subtitles.color;
         a.a = 0.0f;
-        text[index].color = a;
+        subtitles.color = a;
         startTime = Time.time;
         t = 0;
         while (t < 1.0f)
         {
             t = (Time.time - startTime) * 2.0f;
             a.a = t;
-            text[index].color = a;
+            subtitles.color = a;
             yield return 0;
         }
     }
 
     IEnumerator EndText()
     {
-        int i = text.Count - 1;
-        Color a = text[i].color;
+        Color a = subtitles.color;
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
             a.a = 1.0f - t;
-            text[i].color = a;
+            subtitles.color = a;
             yield return 0;
         }
-        text[i].gameObject.SetActive(false);
+        subtitles.gameObject.SetActive(false);
     }
     #endregion
 

@@ -12,13 +12,15 @@ public class StrategyTutorialReproduction : MonoBehaviour
     public GameObject spawn;
     public GameObject holder;
     public GameObject objects;
-    public GameObject[] bas = new GameObject[0];
-    public GameObject[] details = new GameObject[0];
     public GameObject CDK, TGF;
     public TMPro.TextMeshPro repDes;
+    public TMPro.TextMeshPro subtitles;
+    public GameObject[] bas = new GameObject[0];
+    public GameObject[] details = new GameObject[0];
+    public GameObject[] cells = new GameObject[4];
+    public GameObject[] viruses = new GameObject[4];
     public List<TMPro.TextMeshPro> text = new List<TMPro.TextMeshPro>();
 
-    private GameObject[] cells = new GameObject[7];
     private Vector3 prevPos;
     private GameObject fade;
     private int rNum = 0;
@@ -58,7 +60,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
         //Start Text
         StartCoroutine(StartText());
         yield return new WaitForSeconds(1.0f);
-        StartCoroutine(SpawnRedCell());
+        StartCoroutine(MoveObject(cells[0], objects.transform.position));
         yield return new WaitForSeconds(2.0f);
 
         //At 0 Reproduction, it takes 50 turns to reproduce. 
@@ -69,14 +71,14 @@ public class StrategyTutorialReproduction : MonoBehaviour
             StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
         }
         yield return new WaitForSeconds(1.0f);
-        StartCoroutine(SpawnRedCell());
+        StartCoroutine(MoveObject(cells[1], objects.transform.position));
         yield return new WaitForSeconds(2.0f);
 
         //At 10 Reproduction, it takes 5 turns to reproduce. 
         StartCoroutine(TurnTextOn(2));
         yield return new WaitForSeconds(1.0f);
         repDes.text = "Reproduction: 10";
-        StartCoroutine(SpawnRedCell());
+        StartCoroutine(MoveObject(cells[2], objects.transform.position));
         yield return new WaitForSeconds(2.0f);
 
         //The CDK powerup temporarily adds 5 extra stat points.
@@ -122,7 +124,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
         }
         StartCoroutine(FadeInObject(TGF));
         yield return new WaitForSeconds(1.0f);
-        StartCoroutine(SpawnRedCell());
+        StartCoroutine(MoveObject(cells[3], objects.transform.position));
         yield return new WaitForSeconds(2.0f);
 
         //The child will also have the exact same stats. 
@@ -135,11 +137,20 @@ public class StrategyTutorialReproduction : MonoBehaviour
         StartCoroutine(TurnTextOn(8));
         spawn = pupleVirusPrefab;
         yield return new WaitForSeconds(1.0f);
-        StartCoroutine(SpawnRedCell());
+        cells[0].GetComponent<Renderer>().material.color = Color.black;
+        StartCoroutine(MoveObject(viruses[0], objects.transform.position + new Vector3(0, 10, 0)));
+
+        yield return new WaitForSeconds(1);
+
+        cells[0].GetComponent<Rotate>().enabled = false;
+        viruses[0].GetComponent<Rotate>().enabled = false;
+
+        yield return new WaitForSeconds(.5f);
+        StartCoroutine(MoveObject(viruses[1], objects.transform.position));
         yield return new WaitForSeconds(1.5f);
-        StartCoroutine(SpawnRedCell());
+        StartCoroutine(MoveObject(viruses[2], objects.transform.position));
         yield return new WaitForSeconds(1.5f);
-        StartCoroutine(SpawnRedCell());
+        StartCoroutine(MoveObject(viruses[3], objects.transform.position));
         yield return new WaitForSeconds(1.5f);
 
         StartCoroutine(EndText());
@@ -162,8 +173,15 @@ public class StrategyTutorialReproduction : MonoBehaviour
 
         foreach (GameObject cell in cells)
         {
-            Destroy(cell);
+            cell.SetActive(false);
         }
+        foreach (GameObject virus in viruses)
+        {
+            virus.SetActive(false);
+        }
+        cells[0].GetComponent<Rotate>().enabled = true;
+        viruses[0].GetComponent<Rotate>().enabled = true;
+        cells[0].GetComponent<Renderer>().material.color = Color.grey;
 
         rNum = 0;
         holder.SetActive(false);
@@ -226,51 +244,68 @@ public class StrategyTutorialReproduction : MonoBehaviour
         }
         g.SetActive(false);
     }
+
+    IEnumerator MoveObject(GameObject g, Vector3 startPos)
+    {
+        g.SetActive(true);
+        float startTime = Time.time;
+        float t = 0;
+        Vector3 des = g.transform.position;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            g.transform.position = Vector3.Lerp(startPos, des, t);
+            g.transform.localScale = new Vector3(t, t, t);
+            yield return 0;
+        }
+        g.transform.position = des;
+        g.transform.localScale = Vector3.one;
+    }
     #endregion
 
     #region Text
     IEnumerator StartText()
     {
-        text[0].gameObject.SetActive(true);
-        Color a = text[0].color;
+        subtitles.gameObject.SetActive(true);
+        subtitles.text = text[0].text;
+        Color a = subtitles.color;
         a.a = 0.0f;
-        text[0].color = a;
+        subtitles.color = a;
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
             a.a = t;
-            text[0].color = a;
+            subtitles.color = a;
             yield return 0;
         }
     }
 
     IEnumerator TurnTextOn(int index)
     {
-        Color a = text[index - 1].color;
+        Color a = subtitles.color;
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
         {
             t = (Time.time - startTime) * 2.0f;
             a.a = 1.0f - t;
-            text[index - 1].color = a;
+            subtitles.color = a;
             yield return 0;
         }
         yield return 0;
-        text[index - 1].gameObject.SetActive(false);
-        text[index].gameObject.SetActive(true);
-        a = text[index].color;
+        subtitles.text = text[index].text;
+        a = subtitles.color;
         a.a = 0.0f;
-        text[index].color = a;
+        subtitles.color = a;
         startTime = Time.time;
         t = 0;
         while (t < 1.0f)
         {
             t = (Time.time - startTime) * 2.0f;
             a.a = t;
-            text[index].color = a;
+            subtitles.color = a;
             yield return 0;
         }
     }
@@ -309,18 +344,17 @@ public class StrategyTutorialReproduction : MonoBehaviour
 
     IEnumerator EndText()
     {
-        int i = text.Count - 1;
-        Color a = text[i].color;
+        Color a = subtitles.color;
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
             a.a = 1.0f - t;
-            text[i].color = a;
+            subtitles.color = a;
             yield return 0;
         }
-        text[i].gameObject.SetActive(false);
+        subtitles.gameObject.SetActive(false);
     }
     #endregion
 

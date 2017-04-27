@@ -13,6 +13,7 @@ public class StrategyTutorialDefense : MonoBehaviour
     public GameObject fuzeon;
     public TMPro.TextMeshPro defDes;
     public TMPro.TextMeshPro immDes;
+    public TMPro.TextMeshPro subtitles;
     public GameObject[] def = new GameObject[0];
     public GameObject[] imm = new GameObject[0];
     public GameObject[] cells = new GameObject[7];
@@ -342,46 +343,46 @@ public class StrategyTutorialDefense : MonoBehaviour
     #region Text
     IEnumerator StartText()
     {
-        text[0].gameObject.SetActive(true);
-        Color a = text[0].color;
+        subtitles.gameObject.SetActive(true);
+        subtitles.text = text[0].text;
+        Color a = subtitles.color;
         a.a = 0.0f;
-        text[0].color = a;
+        subtitles.color = a;
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
             a.a = t;
-            text[0].color = a;
+            subtitles.color = a;
             yield return 0;
         }
     }
 
     IEnumerator TurnTextOn(int index)
     {
-        Color a = text[index - 1].color;
+        Color a = subtitles.color;
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
         {
             t = (Time.time - startTime) * 2.0f;
             a.a = 1.0f - t;
-            text[index - 1].color = a;
+            subtitles.color = a;
             yield return 0;
         }
         yield return 0;
-        text[index - 1].gameObject.SetActive(false);
-        text[index].gameObject.SetActive(true);
-        a = text[index].color;
+        subtitles.text = text[index].text;
+        a = subtitles.color;
         a.a = 0.0f;
-        text[index].color = a;
+        subtitles.color = a;
         startTime = Time.time;
         t = 0;
         while (t < 1.0f)
         {
             t = (Time.time - startTime) * 2.0f;
             a.a = t;
-            text[index].color = a;
+            subtitles.color = a;
             yield return 0;
         }
     }
@@ -420,18 +421,17 @@ public class StrategyTutorialDefense : MonoBehaviour
 
     IEnumerator EndText()
     {
-        int i = text.Count - 1;
-        Color a = text[i].color;
+        Color a = subtitles.color;
         float startTime = Time.time;
         float t = 0.0f;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
             a.a = 1.0f - t;
-            text[i].color = a;
+            subtitles.color = a;
             yield return 0;
         }
-        text[i].gameObject.SetActive(false);
+        subtitles.gameObject.SetActive(false);
     }
     #endregion
 
