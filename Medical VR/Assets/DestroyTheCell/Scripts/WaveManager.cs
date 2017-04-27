@@ -31,7 +31,7 @@ public class WaveManager : MonoBehaviour
     public bool CanISpawnCellReceptor = false;
     void Update()
     {
-        if (VirusPlayer.TutorialMode == false)
+        if (Tutorial.tutorial == false)
         {
             if (WaveNumber < 5)
             {
@@ -115,7 +115,7 @@ public class WaveManager : MonoBehaviour
             }
         }
 
-        else if (VirusPlayer.TutorialMode == true)
+        else if (Tutorial.tutorial == true)
         {
             switch (WaveNumber)
             {
@@ -171,10 +171,10 @@ public class WaveManager : MonoBehaviour
     {
         for (int i = 0; i < AntiViralProteinCount; i++)
         {
-            if (VirusPlayer.TutorialMode == false)
+            if (Tutorial.tutorial == false)
                 AntiViralProteinLocation = Random.onUnitSphere * 5.0f;
 
-            else if (VirusPlayer.TutorialMode == true)
+            else if (Tutorial.tutorial == true)
             {
                 if (WaveNumber == 1)
                     AntiViralProteinLocation = TutorialCellReceptor.transform.position;
@@ -208,7 +208,7 @@ public class WaveManager : MonoBehaviour
             }
         }
 
-        if (VirusPlayer.TutorialMode == false)
+        if (Tutorial.tutorial == false)
         {
             Player.GetComponent<VirusPlayer>().PlayerSpeed = .02f;
             CanDestroyProteins = true;

@@ -18,6 +18,7 @@ public class VirusGameplayScript : MonoBehaviour
     int I = 0;
     void Start()
     {
+        Tutorial.tutorial = true;
         doAction = NullFunction;
         virus.SetActive(false);
         Sceneries[1].SetActive(false);
@@ -363,7 +364,6 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (352):
-                VirusPlayer.TutorialMode = true;
                 VirusPlayer.ArcadeMode = false;
                 SceneManager.LoadScene("DestroyTheCell");
                 

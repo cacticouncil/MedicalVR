@@ -18,6 +18,7 @@ public class CellGameplayScript : MonoBehaviour
     int I = 0;
     void Start()
     {
+        Tutorial.tutorial = true;
         doAction = NullFunction;
         virus.SetActive(false);
         Sceneries[1].SetActive(false);
@@ -339,7 +340,6 @@ public class CellGameplayScript : MonoBehaviour
             case 260:
                 //FightVirus
                 Player.ArcadeMode = false;
-                Player.TutorialMode = true;
                 SceneManager.LoadScene("FightVirus");
                 break;
             case 261:

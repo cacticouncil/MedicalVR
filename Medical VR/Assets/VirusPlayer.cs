@@ -6,10 +6,9 @@ using System;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class VirusPlayer : MonoBehaviour
+public class VirusPlayer : Tutorial
 {
     //Variables for Tutorial
-    public static bool TutorialMode = false;
     int WhatToRead = 1;
     bool CanIRead = true;
     public bool TutorialModeCompleted = false;
@@ -47,7 +46,7 @@ public class VirusPlayer : MonoBehaviour
         PlayerSpeed = .02f;
         Lives = 3;
 
-        if (TutorialMode == false)
+        if (Tutorial.tutorial == false)
         {
             StartCoroutine(DisplayText("Target the Cell Receptors" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
@@ -57,7 +56,7 @@ public class VirusPlayer : MonoBehaviour
     void Update()
     {
         //For arcade and story mode
-        if (TutorialMode == false)
+        if (Tutorial.tutorial == false)
         {
             if (ArcadeMode == true)
             {
@@ -165,7 +164,7 @@ public class VirusPlayer : MonoBehaviour
             }
         }
 
-        else if (TutorialMode == true)
+        else if (Tutorial.tutorial == true)
         {
             float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
@@ -257,7 +256,7 @@ public class VirusPlayer : MonoBehaviour
         //After you beat tutorial if story mode bool is active transtion to story mode for this game
         if (TutorialModeCompleted == true)
         {
-            TutorialMode = false;
+            Tutorial.tutorial = false;
             ArcadeMode = false;
             SceneManager.LoadScene("DestroyTheCell");
         }
@@ -271,7 +270,7 @@ public class VirusPlayer : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (TutorialMode == false)
+        if (Tutorial.tutorial == false)
         {
             if (DelaySpawn == true)
             {
@@ -290,7 +289,7 @@ public class VirusPlayer : MonoBehaviour
             }
         }
 
-        if (TutorialMode == true)
+        if (Tutorial.tutorial == true)
         {
             if (CanIMove == true)
             {

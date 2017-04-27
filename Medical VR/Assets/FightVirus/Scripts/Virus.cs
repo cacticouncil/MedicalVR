@@ -45,7 +45,7 @@ public class Virus : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Player.TutorialMode == false)
+        if (Tutorial.tutorial == false)
         {
             if (transform.tag == "Virus")
             {
@@ -163,7 +163,7 @@ public class Virus : MonoBehaviour
             }
         }
 
-        else if (Player.TutorialMode == true)
+        else if (Tutorial.tutorial == true)
         {
             if (transform.tag == "Virus")
                 transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[0].Pos.transform.position, Speed);
