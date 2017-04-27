@@ -70,7 +70,7 @@ public class VirusGameplayScript : MonoBehaviour
 
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         CheckCaases();
         doAction();

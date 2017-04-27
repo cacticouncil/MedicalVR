@@ -47,7 +47,7 @@ public class _TSizeChange : MonoBehaviour
         isGrowing = true;
         smallSizeChange = true;
     }
-    void ResetToSmall()
+    public void ResetToSmall()
     {
         isShrinking = false;
         isGrowing = false;
@@ -55,7 +55,7 @@ public class _TSizeChange : MonoBehaviour
         transform.localScale = Vector3.zero;
         curShrink = 0;
     }
-    void ResetToNaturalSize()
+    public void ResetToNaturalSize()
     {
         isShrinking = false;
         isGrowing = false;

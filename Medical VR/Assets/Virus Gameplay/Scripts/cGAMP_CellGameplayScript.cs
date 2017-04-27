@@ -12,7 +12,7 @@ public class cGAMP_CellGameplayScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {

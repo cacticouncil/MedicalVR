@@ -12,7 +12,7 @@ public class DnaMove_Virus : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         switch ((int)subtitltes.GetComponent<SubstitlesScript>().theTimer)
         {
