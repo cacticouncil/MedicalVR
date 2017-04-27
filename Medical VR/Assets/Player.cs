@@ -7,6 +7,7 @@ using System;
 public class Player : Tutorial, TimedInputHandler
 {
     public static bool ArcadeMode = true;
+    public static bool StoryMode = false;
 
     //Variables for tutorial
     float TutorialTimer = 0.0f;
@@ -36,7 +37,7 @@ public class Player : Tutorial, TimedInputHandler
     public GameObject ScoreBoard;
     public GameObject BulletSpawn;
     public GameObject BlackCurtain;
-    public GameObject SkipTutorial;
+
     void Start()
     {
         DisplayRules = true;
@@ -49,11 +50,11 @@ public class Player : Tutorial, TimedInputHandler
     {
         if (tutorial == false)
         {
-            SkipTutorial.SetActive(false);
-
             if (isGameOver == false)
             {
-                ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + Score.ToString();
+                if (StoryMode == false)
+                    ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + Score.ToString();
+                
                 VirusCount.GetComponent<TextMeshPro>().text = "VirusCount: " + VirusLeaveCount.ToString();
 
 
@@ -324,9 +325,19 @@ public class Player : Tutorial, TimedInputHandler
 
             if (BeatGameTimer >= 2.0f)
             {
-                tutorial = false;
-                ArcadeMode = false;
-                SceneManager.LoadScene("FightVirus");
+                if (StoryMode == true)
+                {
+                    tutorial = false;
+                    ArcadeMode = false;
+                    SceneManager.LoadScene("FightVirus");
+                }
+
+                else
+                {
+                    tutorial = false;
+                    ArcadeMode = true;
+                    SceneManager.LoadScene("FightVirus");
+                }
             }
         }
     }
