@@ -9,8 +9,7 @@ public class Rna_VirusGameplayScript : MonoBehaviour {
 
     delegate void Func();
     Func doAction;
-    public float moveSpeed;
-    float fadeSpeed;
+    public float moveSpeed;   
     int I = 0;
     void Start()
     {
@@ -28,7 +27,7 @@ public class Rna_VirusGameplayScript : MonoBehaviour {
 
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         CheckCaases();
         doAction();

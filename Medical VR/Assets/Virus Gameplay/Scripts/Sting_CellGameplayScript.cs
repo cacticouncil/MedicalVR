@@ -16,7 +16,7 @@ public class Sting_CellGameplayScript : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         MoveTo();
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
