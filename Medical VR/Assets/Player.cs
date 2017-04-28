@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class Player : Tutorial, TimedInputHandler
+public class Player : MonoBehaviour, TimedInputHandler
 {
     public static bool ArcadeMode = true;
     public static bool StoryMode = false;
@@ -47,13 +47,13 @@ public class Player : Tutorial, TimedInputHandler
         isGameOver = false;
         SetFacebook();
 
-        if (tutorial == false)
+        if (GlobalVariables.tutorial == false)
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
     }
 
     void Update()
     {
-        if (tutorial == false)
+        if (GlobalVariables.tutorial == false)
         {
             if (isGameOver == false)
             {
@@ -182,7 +182,7 @@ public class Player : Tutorial, TimedInputHandler
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set up how turtorial will show players basic gameplay
-        else if (tutorial == true)
+        else if (GlobalVariables.tutorial == true)
         {
             //Need to fade in
             float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
@@ -354,21 +354,21 @@ public class Player : Tutorial, TimedInputHandler
 
     public void PlayArcade()
     {
-        tutorial = false;
+        GlobalVariables.tutorial = false;
         ArcadeMode = true;
         SceneManager.LoadScene("FightVirus");
     }
 
     public void PlayStory()
     {
-        tutorial = false;
+        GlobalVariables.tutorial = false;
         ArcadeMode = false;
         SceneManager.LoadScene("FightVirus");
     }
 
     public void PlayTutorial()
     {
-        tutorial = true;
+        GlobalVariables.tutorial = true;
         ArcadeMode = false;
         SceneManager.LoadScene("FightVirus");
     }
