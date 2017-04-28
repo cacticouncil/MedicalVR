@@ -187,7 +187,7 @@ public class _TGameController : MonoBehaviour
     void MoveToNewScene()
     {
         CellGameplayScript.loadCase = 1;
-        SceneManager.LoadScene("Cell Gameplay");
+        SceneManager.LoadScene("CellGameplay");
     }
     void StartScene()
     {
