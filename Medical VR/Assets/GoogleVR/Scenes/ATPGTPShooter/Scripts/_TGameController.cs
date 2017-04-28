@@ -66,7 +66,7 @@ public class _TGameController : MonoBehaviour
 
     void Start()
     {
-        isArcadeMode = true;
+        //isArcadeMode = true;
         hasWon = false;
         score = 0;
         Invoke("StartScene", 0);
