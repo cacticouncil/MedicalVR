@@ -21,7 +21,7 @@ public class MemoryUI : Tutorial{
     public int GlobalScore;
     // Use this for initialization
     public float score = 0;
-    int lives = 3;
+    int lives = 5;
     public int Level = 1;
     public float startTime = 60.0f;
     public bool finnished = false;
@@ -36,7 +36,7 @@ public class MemoryUI : Tutorial{
 
     void ShowScore()
     {
-        lives = 3;
+        lives = 5;
         UI.SetActive(false);
         Capsules.SetActive(false);
         Spheres.GetComponent<Randomsphere>().Getclonei().SetActive(false);
@@ -53,7 +53,7 @@ public class MemoryUI : Tutorial{
         finnished = false;
         UI.SetActive(true);
         scoreBoard.SetActive(false);
-        lives = 3;
+        lives = 5;
         score = 0;
         Level = 0;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
