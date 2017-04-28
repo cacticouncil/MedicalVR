@@ -38,7 +38,7 @@ public class VirusManager : MonoBehaviour
 
     void Update()
     {
-        if (CheckCount == true && Tutorial.tutorial == false)
+        if (CheckCount == true && GlobalVariables.tutorial == false)
         {
             if (VirusList.Count == 0)
             {
@@ -122,7 +122,7 @@ public class VirusManager : MonoBehaviour
             }
         }
 
-        if (Tutorial.tutorial == true)
+        if (GlobalVariables.tutorial == true)
         {
             if (CanISpawn == true)
             {

@@ -18,7 +18,7 @@ public class VirusGameplayScript : MonoBehaviour
     int I = 0;
     void Start()
     {
-        Tutorial.tutorial = true;
+        GlobalVariables.tutorial = true;
         doAction = NullFunction;
         virus.SetActive(false);
         Sceneries[1].SetActive(false);
