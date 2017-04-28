@@ -14,6 +14,8 @@ public class _TRaycastTarget : MonoBehaviour
     private Transform targetTransform;
     private bool rayOn;
 
+    float movementOffset;
+
     int DebugStuff;
 
     void Start()
@@ -21,6 +23,7 @@ public class _TRaycastTarget : MonoBehaviour
         hasWon = false;
         if (!gun)
             Debug.Log("failed to load Gun");
+        movementOffset = 0;
     }
 
     
@@ -33,18 +36,21 @@ public class _TRaycastTarget : MonoBehaviour
     public void PlotTrajectory(Vector3 start, Vector3 startVelocity, float timestep, float maxTime)
     {
         int LineSegmentCount = LineSegments.transform.childCount;
-        Vector3 prev = Vector3.zero;
+        
+        Vector3 prev = gun.transform.position;
         int i = 0;
         if (rayOn)
             while (i < LineSegmentCount)
             {                
                 LineSegments.transform.GetChild(i).gameObject.SetActive(true);
-                float t = timestep * i * 0.5f;
+                float t = timestep * i * 0.5f + movementOffset;
                 if (t > maxTime) break;
                 Vector3 pos = PlotTrajectoryAtTime(start, startVelocity, t);
+               
                 if (Physics.Linecast(prev, pos)) break;
 
                 LineSegments.transform.GetChild(i).transform.position = pos;
+                
                 LineSegments.transform.GetChild(i).transform.LookAt(prev);
 
                 prev = pos;
@@ -59,6 +65,9 @@ public class _TRaycastTarget : MonoBehaviour
 
     private void FixedUpdate()
     {
+        movementOffset += Time.fixedDeltaTime * .05f;
+        if (movementOffset >= .1f)
+            movementOffset = 0;
         PlotTrajectory(gun.transform.position, gun.transform.forward * 10, .2f, 1.0f);
 
         RaycastHit hit;
