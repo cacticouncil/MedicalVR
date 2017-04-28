@@ -4,12 +4,12 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System;
 
-public class Player : Tutorial, TimedInputHandler
+public class Player : MonoBehaviour, TimedInputHandler
 {
     public static bool ArcadeMode = true;
     public static bool StoryMode = false;
 
-    //Variables for tutorial
+    //Variables for GlobalVariables.tutorial
     float TutorialTimer = 0.0f;
     int WhatToRead = 0;
     bool SpawnWaveOnce = false;
@@ -42,13 +42,13 @@ public class Player : Tutorial, TimedInputHandler
     {
         DisplayRules = true;
         isGameOver = false;
-        if (tutorial == false)
+        if (GlobalVariables.tutorial == false)
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
     }
 
     void Update()
     {
-        if (tutorial == false)
+        if (GlobalVariables.tutorial == false)
         {
             if (isGameOver == false)
             {
@@ -148,7 +148,7 @@ public class Player : Tutorial, TimedInputHandler
                 {
                     isGameOver = true;
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You lose story mode";
-                    tutorial = false;
+                    GlobalVariables.tutorial = false;
                     ArcadeMode = false;
                     SceneManager.LoadScene("FightVirus");
                 }
@@ -175,7 +175,7 @@ public class Player : Tutorial, TimedInputHandler
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set up how turtorial will show players basic gameplay
-        else if (tutorial == true)
+        else if (GlobalVariables.tutorial == true)
         {
             //Need to fade in
             float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
@@ -317,7 +317,7 @@ public class Player : Tutorial, TimedInputHandler
             }
         }
 
-        //For tutorial only it will either transition to story mode or only play once
+        //For GlobalVariables.tutorial only it will either transition to story mode or only play once
         if (WhatToRead >= 9 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
         {
             BeatGameTimer += Time.deltaTime;
@@ -327,14 +327,14 @@ public class Player : Tutorial, TimedInputHandler
             {
                 if (StoryMode == true)
                 {
-                    tutorial = false;
+                    GlobalVariables.tutorial = false;
                     ArcadeMode = false;
                     SceneManager.LoadScene("FightVirus");
                 }
 
                 else
                 {
-                    tutorial = false;
+                    GlobalVariables.tutorial = false;
                     ArcadeMode = true;
                     SceneManager.LoadScene("FightVirus");
                 }

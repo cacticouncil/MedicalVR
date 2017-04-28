@@ -26,13 +26,13 @@ public class AntiViralProtein : MonoBehaviour
         MoveTimer = 0.0f;
         Speed = .004f;
 
-        if (Tutorial.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
+        if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
             Speed = 0.0f;
     }
 
     void Update()
     {
-        if (Tutorial.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
+        if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
         {
             AlwaysChasePlayer = true;
             Speed = .007f;

@@ -6,7 +6,7 @@ using System;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class VirusPlayer : Tutorial
+public class VirusPlayer : MonoBehaviour
 {
     //Variables for Tutorial
     int WhatToRead = 1;
@@ -44,7 +44,7 @@ public class VirusPlayer : Tutorial
         PlayerSpeed = .02f;
         Lives = 3;
 
-        if (Tutorial.tutorial == false)
+        if (GlobalVariables.tutorial == false)
         {
             StartCoroutine(DisplayText("Target the Cell Receptors" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
@@ -54,7 +54,7 @@ public class VirusPlayer : Tutorial
     void Update()
     {
         //For arcade and story mode
-        if (Tutorial.tutorial == false)
+        if (GlobalVariables.tutorial == false)
         {
             if (ArcadeMode == true)
             {
@@ -157,7 +157,7 @@ public class VirusPlayer : Tutorial
             }
         }
 
-        else if (Tutorial.tutorial == true)
+        else if (GlobalVariables.tutorial == true)
         {
             float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
@@ -249,7 +249,7 @@ public class VirusPlayer : Tutorial
         //After you beat tutorial if story mode bool is active transtion to story mode for this game
         if (TutorialModeCompleted == true)
         {
-            Tutorial.tutorial = false;
+            GlobalVariables.tutorial = false;
             ArcadeMode = false;
             SceneManager.LoadScene("DestroyTheCell");
         }
@@ -263,7 +263,7 @@ public class VirusPlayer : Tutorial
 
     void FixedUpdate()
     {
-        if (Tutorial.tutorial == false)
+        if (GlobalVariables.tutorial == false)
         {
             if (DelaySpawn == true)
             {
@@ -282,7 +282,7 @@ public class VirusPlayer : Tutorial
             }
         }
 
-        if (Tutorial.tutorial == true)
+        if (GlobalVariables.tutorial == true)
         {
             if (CanIMove == true)
             {
