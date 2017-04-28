@@ -2,38 +2,33 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class StrategyTutorial : Tutorial
+public class StrategyTutorial : MonoBehaviour
 {
-    public GameObject redCell;
-    public GameObject virus;
-    public GameObject whiteCell;
-    public GameObject yourCell;
     public GameObject plane;
     public GameObject planeDes;
-    public GameObject mysteryBoxMesh;
     public GameObject cellManager;
-    public GameObject mysteryBox;
+    public GameObject strategyBox;
+    public GameObject strategyBoxMesh;
     public TMPro.TextMeshPro subtitles;
-    public List<TMPro.TextMeshPro> text = new List<TMPro.TextMeshPro>();
-    public GameObject[] cells = new GameObject[7];
+    public GameObject objects;
+    public GameObject whiteCell;
+    public GameObject[] cells = new GameObject[8];
     public GameObject[] viruses = new GameObject[3];
+    public List<TMPro.TextMeshPro> text = new List<TMPro.TextMeshPro>();
 
     private int cNum = -1;
-    private Vector3 cellPosition = new Vector3(1, 5, 0);
-    private Vector3 virusEnd = new Vector3(.6f, 5.7f, 0);
-    private Vector3 offset = new Vector3(.5f, 0, 0);
-    private int rNum = 0;
+    private Vector3 cellPosition = new Vector3(1, 0, 0);
 
     void Start()
     {
-        if (tutorial)
+        if (GlobalVariables.tutorial)
         {
             StartCoroutine(ClickForMe());
         }
         else
         {
             cellManager.SetActive(true);
-            mysteryBox.SetActive(true);
+            strategyBox.SetActive(true);
             StopCoroutine(ClickForMe());
             Destroy(gameObject);
         }
@@ -48,21 +43,19 @@ public class StrategyTutorial : Tutorial
                 break;
             //Cells
             case 0:
-                StartCoroutine(SpawnRedCell());
-                break;
             case 1:
             case 2:
             case 3:
             case 4:
             case 5:
             case 6:
-                StartCoroutine(SpawnRedCell());
+                StartCoroutine(SpawnObject(cells[cNum], objects.transform.position));
                 break;
 
             //Virus
             case 7:
                 StartCoroutine(TurnTextOn(1));
-                StartCoroutine(MoveVirus());
+                StartCoroutine(SpawnObject(viruses[0], objects.transform.position + new Vector3(0, 10, 0)));
                 break;
             case 8:
                 StartCoroutine(VirusAttack());
@@ -71,7 +64,9 @@ public class StrategyTutorial : Tutorial
                 StartCoroutine(Dying());
                 break;
             case 10:
-                StartCoroutine(Split());
+                StartCoroutine(KillRedCell());
+                StartCoroutine(SpawnObject(viruses[1], objects.transform.position));
+                StartCoroutine(SpawnObject(viruses[2], objects.transform.position));
                 break;
 
             //White Cells
@@ -90,7 +85,7 @@ public class StrategyTutorial : Tutorial
             case 14:
                 StartCoroutine(ShrinkCells());
                 StartCoroutine(TurnTextOn(3));
-                StartCoroutine(SpawnCell());
+                StartCoroutine(SpawnObject(cells[7], objects.transform.position));
                 break;
             case 16:
                 StartCoroutine(TurnTextOn(4));
@@ -117,7 +112,8 @@ public class StrategyTutorial : Tutorial
             //Strategy Box
             case 28:
                 StartCoroutine(TurnTextOn(10));
-                StartCoroutine(SpawnBox());
+                StartCoroutine(SpawnObject(strategyBoxMesh, strategyBox.transform.position));
+                StartCoroutine(MoveObject(cells[7], cellPosition));
                 break;
             case 30:
                 StartCoroutine(TurnTextOn(11));
@@ -130,7 +126,7 @@ public class StrategyTutorial : Tutorial
                 break;
             case 36:
                 StartCoroutine(TurnTextOn(14));
-                StartCoroutine(LeaveBox());
+                StartCoroutine(MoveObject(strategyBoxMesh, strategyBox.transform.position));
                 break;
             case 38:
                 StartCoroutine(TurnTextOn(15));
@@ -142,7 +138,7 @@ public class StrategyTutorial : Tutorial
                 break;
             case 41:
                 cellManager.SetActive(true);
-                mysteryBox.SetActive(true);
+                strategyBox.SetActive(true);
                 StopCoroutine(ClickForMe());
                 Destroy(gameObject);
                 break;
@@ -216,24 +212,52 @@ public class StrategyTutorial : Tutorial
         }
         Destroy(g);
     }
+
+    IEnumerator SpawnObject(GameObject g, Vector3 startPos)
+    {
+        g.SetActive(true);
+        float startTime = Time.time;
+        float t = 0;
+        Vector3 des = g.transform.position;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            g.transform.position = Vector3.Lerp(startPos, des, t);
+            g.transform.localScale = new Vector3(t, t, t);
+            yield return 0;
+        }
+        g.transform.position = des;
+        g.transform.localScale = Vector3.one;
+    }
+
+    IEnumerator MoveObject(GameObject g, Vector3 endPos)
+    {
+        float startTime = Time.time;
+        float t = 0;
+        Vector3 startPos = g.transform.position;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            g.transform.position = Vector3.Lerp(startPos, endPos, t);
+            yield return 0;
+        }
+        g.transform.position = endPos;
+    }
     #endregion
 
     #region Text
     IEnumerator StartText()
     {
         subtitles.gameObject.SetActive(true);
-        subtitles.text = text[0].text;
-        Color a = subtitles.color;
-        a.a = 0.0f;
-        subtitles.color = a;
+        subtitles.color = Color.white;
+        subtitles.text = "_";
         float startTime = Time.time;
-        float t = 0.0f;
+        float t = 0;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
-            a.a = t;
-            subtitles.color = a;
-            yield return 0;
+            subtitles.text = text[0].text;
+            yield return new WaitForSeconds(GlobalVariables.textDelay);
         }
     }
 
@@ -282,56 +306,6 @@ public class StrategyTutorial : Tutorial
     #endregion
 
     #region RedCells
-    IEnumerator SpawnRedCell()
-    {
-        GameObject c = Instantiate(redCell, cellPosition, redCell.transform.rotation, transform) as GameObject;
-        Vector3 desination;
-        switch (rNum)
-        {
-            case 1:
-                //Top Right (1, 1)
-                desination = new Vector3(2, transform.position.y, 2);
-                break;
-            case 2:
-                //Right (1, 0)
-                desination = new Vector3(3, transform.position.y, 0);
-                break;
-            case 3:
-                //Bottom Right (1, -1)
-                desination = new Vector3(2, transform.position.y, -2);
-                break;
-            case 4:
-                //Bottom Left (0, -1)
-                desination = new Vector3(0, transform.position.y, -2);
-                break;
-            case 5:
-                //Left (-1, 0)
-                desination = new Vector3(-1, transform.position.y, 0);
-                break;
-            case 6:
-                //Top Left (0, 1)
-                desination = new Vector3(0, transform.position.y, 2);
-                break;
-            default:
-                desination = cellPosition;
-                break;
-        }
-        cells[rNum] = c;
-        rNum++;
-
-        float startTime = Time.time;
-        float t = 0;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            c.transform.position = Vector3.Lerp(cellPosition, desination, t);
-            t = Mathf.Min(1.0f, t);
-            c.transform.localScale = new Vector3(t, t, t);
-            yield return 0;
-        }
-        c.transform.position = desination;
-        c.transform.localScale = Vector3.one;
-    }
 
     IEnumerator ShrinkCells()
     {
@@ -356,28 +330,11 @@ public class StrategyTutorial : Tutorial
     #endregion
 
     #region Virus
-    IEnumerator MoveVirus()
-    {
-        float startTime = Time.time;
-        float t = 0;
-        Vector3 startPos = new Vector3(-5, 15, 0);
-        viruses[0] = Instantiate(virus, startPos, virus.transform.rotation, transform) as GameObject;
-        viruses[0].transform.localScale = Vector3.zero;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            viruses[0].transform.position = Vector3.Lerp(startPos, virusEnd, t);
-            float temp = Mathf.Clamp01(t * 2.0f);
-            viruses[0].transform.localScale = new Vector3(temp, temp, temp);
-            yield return 0;
-        }
-        viruses[0].GetComponent<Rotate>().enabled = false;
-        cells[0].GetComponent<Rotate>().enabled = false;
-    }
-
 
     IEnumerator VirusAttack()
     {
+        viruses[0].GetComponent<Rotate>().enabled = false;
+        cells[0].GetComponent<Rotate>().enabled = false;
         Color s = cells[0].GetComponent<Renderer>().material.color;
         Color f = new Color(s.r * .2f, s.g * .2f, s.b * .2f);
 
@@ -418,17 +375,13 @@ public class StrategyTutorial : Tutorial
         viruses[0].SetActive(false);
     }
 
-    IEnumerator Split()
+    IEnumerator KillRedCell()
     {
         float startTime = Time.time;
         float t = 0;
         Color sc = cells[0].GetComponent<Renderer>().material.color;
         Color b = Color.black;
         cells[0].transform.GetChild(0).GetComponent<ParticleSystem>().Play();
-        viruses[1] = Instantiate(virus, viruses[0].transform.position, virus.transform.rotation, transform) as GameObject;
-        viruses[1].transform.localScale = Vector3.zero;
-        viruses[2] = Instantiate(virus, viruses[0].transform.position, virus.transform.rotation, transform) as GameObject;
-        viruses[2].transform.localScale = Vector3.zero;
 
         while (t < 1.0f)
         {
@@ -437,10 +390,6 @@ public class StrategyTutorial : Tutorial
             b.a = 1.0f - t;
             cells[0].GetComponent<Renderer>().material.color = sc;
             cells[0].GetComponent<Renderer>().material.SetColor("_OutlineColor", b);
-            viruses[1].transform.position = Vector3.Lerp(cells[0].transform.position, cells[0].transform.position - offset, t);
-            viruses[1].transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t);
-            viruses[2].transform.position = Vector3.Lerp(cells[0].transform.position, cells[0].transform.position + offset, t);
-            viruses[2].transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t);
             yield return 0;
         }
         cells[0].SetActive(false);
@@ -453,7 +402,7 @@ public class StrategyTutorial : Tutorial
         float startTime = Time.time;
         float t = 0;
         Vector3 startPos = new Vector3(5, 15, 0);
-        whiteCell = Instantiate(whiteCell, startPos, virus.transform.rotation, transform) as GameObject;
+        whiteCell.SetActive(true);
         whiteCell.transform.localScale = Vector3.zero;
         while (t < 1.0f)
         {
@@ -494,54 +443,6 @@ public class StrategyTutorial : Tutorial
             yield return 0;
         }
         whiteCell.SetActive(false);
-    }
-    #endregion
-
-    #region YourCell
-    IEnumerator SpawnCell()
-    {
-        float startTime = Time.time;
-        float t = Time.time - startTime;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            yourCell.transform.localScale = new Vector3(t, t, t);
-            yield return 0;
-        }
-        yourCell.transform.localScale = Vector3.one;
-    }
-    #endregion
-
-    #region MysteryBox
-    IEnumerator SpawnBox()
-    {
-        float startTime = Time.time;
-        float t = Time.time - startTime;
-        Vector3 pos = yourCell.transform.position;
-        Vector3 des = new Vector3(1, 0, 0);
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            yourCell.transform.position = Vector3.Lerp(pos, des, t);
-            mysteryBoxMesh.transform.localScale = new Vector3(t, t, t);
-            yield return 0;
-        }
-        yourCell.transform.position = des;
-        mysteryBoxMesh.transform.localScale = Vector3.one;
-    }
-
-    IEnumerator LeaveBox()
-    {
-        float startTime = Time.time;
-        float t = Time.time - startTime;
-        Vector3 pos = mysteryBoxMesh.transform.position;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            mysteryBoxMesh.transform.position = Vector3.Lerp(pos, mysteryBox.transform.position, t);
-            yield return 0;
-        }
-        mysteryBoxMesh.transform.position = mysteryBox.transform.position;
     }
     #endregion
 }
