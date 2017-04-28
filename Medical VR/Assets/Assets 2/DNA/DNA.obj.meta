@@ -118,7 +118,7 @@ ModelImporter:
     4300040: polySurface12_polySurface34
     4300042: polySurface13_polySurface12
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
