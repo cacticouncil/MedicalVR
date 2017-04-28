@@ -5,6 +5,6 @@ public class SetBool : MonoBehaviour
 {
     public void SetBools(bool s)
     {
-        Tutorial.tutorial = s;
+        GlobalVariables.tutorial = s;
     }
 }

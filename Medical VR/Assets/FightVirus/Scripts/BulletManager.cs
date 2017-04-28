@@ -22,16 +22,16 @@ public class BulletManager : MonoBehaviour
         Time = 0;
         ChangeProtein = 0;
 
-        if (Tutorial.tutorial == false)
+        if (GlobalVariables.tutorial == false)
             isTriggered = true;
         
-        else if (Tutorial.tutorial == true)
+        else if (GlobalVariables.tutorial == true)
             isTriggered = false;
     }
 
     void Update()
     {
-        if (Tutorial.tutorial == false)
+        if (GlobalVariables.tutorial == false)
         {
             //Bullet Delay
             Time += UnityEngine.Time.deltaTime;
@@ -51,7 +51,7 @@ public class BulletManager : MonoBehaviour
         }
 
         //For tutorial mode dont have them shoot unless directed to
-        else if (Tutorial.tutorial == true && CanIShoot == true)
+        else if (GlobalVariables.tutorial == true && CanIShoot == true)
         {
             Time += UnityEngine.Time.deltaTime;
             if (isTriggered == true && Time >= .2f)
