@@ -181,7 +181,8 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (95):
-                //SceneManager.LoadScene("ATPGTPShooter");
+                _TGameController.isArcadeMode = false;
+                SceneManager.LoadScene("ATPGTPShooter");
                 break;
             case (96):
                 doAction = RiseCurtain;
@@ -217,7 +218,7 @@ public class CellGameplayScript : MonoBehaviour
             case (144):
                 //cGAMP
                 Storebullets.arcadeMode = false;
-                Storebullets.TutorialMode = true;
+                Storebullets.tutorial = true;
                 SceneManager.LoadScene("CGampSnatcher");
                 break;
             case (145):
@@ -304,7 +305,7 @@ public class CellGameplayScript : MonoBehaviour
             case 230:
                 //Memory Game
                 MemoryUI.arcadeMode = false;
-                MemoryUI.TutorialMode = true;
+                MemoryUI.tutorial = true;
                 SceneManager.LoadScene("MemoryGame");
                 break;
             case (231):

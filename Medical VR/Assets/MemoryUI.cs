@@ -7,9 +7,8 @@ using System;
 using TMPro;
 
 
-public class MemoryUI : MonoBehaviour {
+public class MemoryUI : Tutorial{
 
-    public static bool TutorialMode = true;
     float TutorialTimer = 0.0f;
     int WhatToRead = 0;
     float BeatGameTimer = 0.0f;
@@ -22,7 +21,7 @@ public class MemoryUI : MonoBehaviour {
     public int GlobalScore;
     // Use this for initialization
     public float score = 0;
-    int lives = 3;
+    int lives = 5;
     public int Level = 1;
     public float startTime = 60.0f;
     public bool finnished = false;
@@ -37,7 +36,7 @@ public class MemoryUI : MonoBehaviour {
 
     void ShowScore()
     {
-        lives = 3;
+        lives = 5;
         UI.SetActive(false);
         Capsules.SetActive(false);
         Spheres.GetComponent<Randomsphere>().Getclonei().SetActive(false);
@@ -54,7 +53,7 @@ public class MemoryUI : MonoBehaviour {
         finnished = false;
         UI.SetActive(true);
         scoreBoard.SetActive(false);
-        lives = 3;
+        lives = 5;
         score = 0;
         Level = 0;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
@@ -66,12 +65,12 @@ public class MemoryUI : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (TutorialMode == false)
+        if (tutorial == false)
         {
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set up how turtorial will show players basic gameplay
-        else if (TutorialMode == true)
+        else if (tutorial == true)
         {
 
             switch (WhatToRead)
@@ -247,7 +246,7 @@ public class MemoryUI : MonoBehaviour {
                 //Story mode verion will play after completing
 
                 //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
-                TutorialMode = false;
+                tutorial = false;
                 arcadeMode = false;
                 SceneManager.LoadScene("MemoryGame");
                 //}
