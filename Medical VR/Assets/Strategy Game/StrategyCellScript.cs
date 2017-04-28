@@ -50,7 +50,7 @@ public class StrategyCellScript : MonoBehaviour
     private float tImmunity;
 
     private MoveCamera mainCamera;
-    private float camOffset = 5.0f;
+    private float camOffset = 1.5f;
     private float scaledDistance = 1.3f;
 
 
@@ -455,25 +455,16 @@ public class StrategyCellScript : MonoBehaviour
     {
         if ((parent.viewingStats && parent.selected != transform.GetComponent<StrategyCellScript>().key) || (!parent.viewingStats && parent.selected == transform.GetComponent<StrategyCellScript>().key))
         {
-            //Get the direction of the player from the cell
-            Vector3 heading = mainCamera.transform.position - transform.position;
-            //Don't change y value
-            heading.y = 0;
-            //Find normalized direction
-            float distance = Mathf.Max(heading.magnitude, .001f);
-            Vector3 direction = heading / distance;
-            if (direction.magnitude < 0.01f)
-            {
-                direction = new Vector3(0.0f, 0.0f, 1.0f);
-            }
-            //Scale it to 1.3
+            Vector3 direction = mainCamera.transform.forward;
+            direction.y = 0;
+            direction.Normalize();
             direction *= scaledDistance;
-
-            Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
-            if (Vector3.Distance(transform.position, finalPos) < 1)
+            if (direction.magnitude == 0)
             {
-                finalPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1.3f);
+                direction = new Vector3(1.3f, 0, 0);
             }
+
+            Vector3 finalPos = transform.position - direction;
 
             transform.GetChild(0).transform.LookAt(finalPos);
 

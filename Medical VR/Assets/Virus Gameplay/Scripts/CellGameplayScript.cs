@@ -18,7 +18,7 @@ public class CellGameplayScript : MonoBehaviour
     int I = 0;
     void Start()
     {
-        Tutorial.tutorial = true;
+        GlobalVariables.tutorial = true;
         doAction = NullFunction;
         virus.SetActive(false);
         Sceneries[1].SetActive(false);
@@ -218,7 +218,7 @@ public class CellGameplayScript : MonoBehaviour
             case (144):
                 //cGAMP
                 Storebullets.arcadeMode = false;
-                Storebullets.TutorialMode = true;
+                Storebullets.tutorial = true;
                 SceneManager.LoadScene("CGampSnatcher");
                 break;
             case (145):
@@ -305,7 +305,7 @@ public class CellGameplayScript : MonoBehaviour
             case 230:
                 //Memory Game
                 MemoryUI.arcadeMode = false;
-                MemoryUI.TutorialMode = true;
+                MemoryUI.tutorial = true;
                 SceneManager.LoadScene("MemoryGame");
                 break;
             case (231):

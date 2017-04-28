@@ -69,7 +69,7 @@ public class _TGameController : MonoBehaviour
         isArcadeMode = true;
         hasWon = false;
         score = 0;
-        Invoke("StartScene", 2);
+        Invoke("StartScene", 0);
         SetFacebook();
     }
 

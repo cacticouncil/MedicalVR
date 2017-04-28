@@ -6,7 +6,8 @@ using System;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class VirusPlayer : Tutorial
+
+public class VirusPlayer : MonoBehaviour
 {
     //Variables for Tutorial
     int WhatToRead = 1;
@@ -15,12 +16,16 @@ public class VirusPlayer : Tutorial
 
     //Variable for Arcade
     public static bool ArcadeMode = true;
+    public static bool StoryMode = false;
 
     //Variables for Game
     public GameObject LivesGameobject;
     public GameObject Spawn;
     public GameObject WaveManager;
     public GameObject BlackCurtain;
+
+    public GameObject ScoreBoard;
+    public FacebookStuff FB;
 
     public GameObject VirusAttack;
     public List<GameObject> VirusAttackList = new List<GameObject>();
@@ -39,12 +44,14 @@ public class VirusPlayer : Tutorial
     float DelayTimer = 0.0f;
     float BeatGameTimer = 0.0f;
 
+    float Score = 0.0f;
     void Start()
     {
-        PlayerSpeed = .02f;
+        PlayerSpeed = .1f;
         Lives = 3;
+        SetFacebook();
 
-        if (Tutorial.tutorial == false)
+        if (GlobalVariables.tutorial == false)
         {
             StartCoroutine(DisplayText("Target the Cell Receptors" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
@@ -54,7 +61,7 @@ public class VirusPlayer : Tutorial
     void Update()
     {
         //For arcade and story mode
-        if (Tutorial.tutorial == false)
+        if (GlobalVariables.tutorial == false)
         {
             if (ArcadeMode == true)
             {
@@ -130,6 +137,12 @@ public class VirusPlayer : Tutorial
                             a = 0;
                         BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
                     }
+
+                    else if (ArcadeMode == true)
+                    {
+                        ScoreBoard.SetActive(true);
+                        ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
+                    }
                 }
 
                 else if (Lives == 0)
@@ -149,15 +162,16 @@ public class VirusPlayer : Tutorial
                     }
 
                     //For arcade mode once you beat it will bring up scoreboard 
-                    //else if (ArcadeMode == true)
-                    //{
-                    //
-                    //}
+                    else if (ArcadeMode == true)
+                    {
+                        ScoreBoard.SetActive(true);
+                        ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
+                    }
                 }
             }
         }
 
-        else if (Tutorial.tutorial == true)
+        else if (GlobalVariables.tutorial == true)
         {
             float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
@@ -249,21 +263,17 @@ public class VirusPlayer : Tutorial
         //After you beat tutorial if story mode bool is active transtion to story mode for this game
         if (TutorialModeCompleted == true)
         {
-            Tutorial.tutorial = false;
-            ArcadeMode = false;
-            SceneManager.LoadScene("DestroyTheCell");
+            if (StoryMode == true)
+                PlayStory();
+
+            else if (StoryMode == false)
+                PlayArcade();
         }
-
-        //Otherwise just play tutorial once and leave to  main menu
-        //if (TutorialModeCompleted == true)
-        //{
-
-        //}
     }
 
     void FixedUpdate()
     {
-        if (Tutorial.tutorial == false)
+        if (GlobalVariables.tutorial == false)
         {
             if (DelaySpawn == true)
             {
@@ -282,7 +292,7 @@ public class VirusPlayer : Tutorial
             }
         }
 
-        if (Tutorial.tutorial == true)
+        if (GlobalVariables.tutorial == true)
         {
             if (CanIMove == true)
             {
@@ -332,6 +342,33 @@ public class VirusPlayer : Tutorial
         V.GetComponent<AttackVirus>().MainCamera = this.gameObject;
         VirusAttackList.Add(V);
         V.GetComponent<AttackVirus>().enabled = true;
+    }
+
+    void SetFacebook()
+    {
+        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + Score.ToString(); /// + FacebookManager.Instance.GlobalScore /;
+        FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
+    }
+
+    public void PlayArcade()
+    {
+        GlobalVariables.tutorial = false;
+        ArcadeMode = true;
+        SceneManager.LoadScene("DestroyTheCell");
+    }
+
+    public void PlayStory()
+    {
+        GlobalVariables.tutorial = false;
+        ArcadeMode = false;
+        SceneManager.LoadScene("DestroyTheCell");
+    }
+
+    public void PlayTutorial()
+    {
+        GlobalVariables.tutorial = true;
+        ArcadeMode = false;
+        SceneManager.LoadScene("DestroyTheCell");
     }
 }
 
