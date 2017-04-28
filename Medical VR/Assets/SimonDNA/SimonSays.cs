@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SimonSays : MonoBehaviour
 {
     public static bool TutorialMode = false;
+    public static bool arcadeMode = true;
 
     public GameObject yellow;
     public GameObject red;
@@ -19,11 +20,10 @@ public class SimonSays : MonoBehaviour
 
     int round = 1, inputed = 0, shownSign = 0, scoreCombo = 1;
 
-    float timer = 3, theTimer;
+    float timer = 3, theTimer, goTimer =0;
 
     Vector3 orgPos;
-    public static bool arcadeMode = true;
-    bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false;
+    bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false, showGo = false;
     ///[System.Serializable]
     public enum theColors
     {
@@ -68,6 +68,7 @@ public class SimonSays : MonoBehaviour
             timer += Time.deltaTime;
             if(makeInput == true)
             {
+                if(showGo == false)
                 theTimer -= Time.deltaTime;
                 int tmp = (int)theTimer;
                 gameTimer.GetComponent<TMPro.TextMeshPro>().text = "TIMER: " + tmp.ToString();
@@ -82,7 +83,7 @@ public class SimonSays : MonoBehaviour
                 }
             }
             WaitForTime();
-
+            theGO();
             if (waitAsec == false)
             {
                 if (showStuff == false && makeInput == false)
@@ -109,12 +110,27 @@ public class SimonSays : MonoBehaviour
             {
                 makeInput = true;
                 showStuff = false;
-                GO.SetActive(true);
+                showGo = true;
+                goTimer = 0;
             }
             else
                 return;
         }
 
+    }
+    void theGO()
+    {
+        goTimer += Time.deltaTime;
+        if(goTimer >= 2 && showGo == true)
+        {
+            GO.SetActive(true);
+            goTimer = 0;
+            showGo = false;
+        }
+        else if(goTimer >= 1 && showGo == false)
+        {
+            GO.SetActive(false);
+        }
     }
     void ArcadeMode()
     {

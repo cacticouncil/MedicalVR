@@ -181,7 +181,8 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (95):
-                //SceneManager.LoadScene("ATPGTPShooter");
+                _TGameController.isArcadeMode = false;
+                SceneManager.LoadScene("ATPGTPShooter");
                 break;
             case (96):
                 doAction = RiseCurtain;

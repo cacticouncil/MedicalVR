@@ -48,6 +48,10 @@ public class AntibodyScript : MonoBehaviour
                 }
                 else if (TutorialMode.GetComponent<DodgeAntiBodyTutorial>().WhiteCellHitsPlayerFirstTime == true)
                 {
+                    Cam.GetComponent<MovingCamera>().stopMoving = false;
+                    Cam.GetComponent<MovingCamera>().speed =10;
+                    Cam.GetComponent<SphereCollider>().enabled = true;
+                    reswpawn = false;
                     TutorialMode.GetComponent<DodgeAntiBodyTutorial>().RepawnPlayer();
                 }
             }

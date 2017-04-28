@@ -86,7 +86,7 @@ public class AnitbodySpawnerScript : MonoBehaviour {
                 GameObject tmp = Instantiate(refAntiBody, tmpPos, refAntiBody.transform.rotation) as GameObject;
                 tmp.transform.localScale = new Vector3(tmp.transform.localScale.x + sizE, tmp.transform.localScale.y + sizE, tmp.transform.localScale.z + sizE);
                 randPositions.Add(tmp);
-                if(j%7 == 0)
+                if(j%7 == 0 && MovingCamera.arcadeMode == true)
                 {
                     obNum = Random.Range(0, Obstacles.Count - 1 - j);
                     tmpPos = new Vector3(tmpPoints[obNum].transform.position.x, tmpPoints[obNum].transform.position.y, z);
