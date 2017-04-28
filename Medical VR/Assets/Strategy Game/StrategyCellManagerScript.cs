@@ -11,7 +11,11 @@ public class StrategyCellManagerScript : MonoBehaviour
     public GameObject cellPrefab;
     public GameObject whiteCellPrefab;
     [SerializeField]
-    private GameObject virusPrefab1, virusPrefab2, virusPrefab3;
+    private GameObject virusPrefab1;
+    [SerializeField]
+    private GameObject virusPrefab2;
+    [SerializeField]
+    private GameObject virusPrefab3;
     public GameObject transporter;
     public GameObject particleToTarget;
     [Space(2)]
@@ -234,10 +238,8 @@ public class StrategyCellManagerScript : MonoBehaviour
         cellNum = cells.Count;
         virNum = viruses.Count;
 
-        if (cellNum >= 50)
+        if (cellNum >= 50 && victory)
         {
-            if (victory)
-            {
                 victory.SetActive(true);
                 foreach (StrategyCellScript child in cells.ToList())
                     immunitySpread += child.immunitySpread;
@@ -250,7 +252,21 @@ public class StrategyCellManagerScript : MonoBehaviour
                     "\nAt this point you can continue in sandbox mode, retry, or return to the main menu.";
                 Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(victory.transform.position.x, victory.transform.position.y, victory.transform.position.z - 1.5f));
                 SetSelected(new Vector2(-500, -500));
-            }
+        }
+        else if (virNum > cellNum && victory)
+        {
+                victory.SetActive(true);
+                foreach (StrategyCellScript child in cells.ToList())
+                    immunitySpread += child.immunitySpread;
+                victory.GetComponent<TMPro.TextMeshPro>().text = "At this point there are currently more viruses than cells." +
+                    "\nYou can continue if you want, but it is very unlikely that you will win." +
+                    "\nYou reached a colony size of " + cellNum + " cells." +
+                    "\nIt took you " + turnNumber + " turns." +
+                    "\nYou spawned " + cellsSpawned + " cells." +
+                    "\nYou spread " + (int)immunitySpread + " immunity." +
+                    "\nYou killed " + virusKills + " viruses.";
+                Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(victory.transform.position.x, victory.transform.position.y, victory.transform.position.z - 1.5f));
+                SetSelected(new Vector2(-500, -500));
         }
     }
     #endregion

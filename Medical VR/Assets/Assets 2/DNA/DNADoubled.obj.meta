@@ -208,7 +208,7 @@ ModelImporter:
     4300076: group3_pCylinder9
     4300078: pCylinder3_group3
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
