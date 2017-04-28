@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using TMPro;
 using System;
 
@@ -34,14 +35,18 @@ public class Player : Tutorial, TimedInputHandler
     public GameObject VirusCount;
     public GameObject CenterScreenObj;
     public GameObject EnemyManger;
-    public GameObject ScoreBoard;
     public GameObject BulletSpawn;
     public GameObject BlackCurtain;
+
+    public GameObject ScoreBoard;
+    public FacebookStuff FB;
 
     void Start()
     {
         DisplayRules = true;
         isGameOver = false;
+        SetFacebook();
+
         if (tutorial == false)
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
     }
@@ -54,7 +59,7 @@ public class Player : Tutorial, TimedInputHandler
             {
                 if (StoryMode == false)
                     ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + Score.ToString();
-                
+
                 VirusCount.GetComponent<TextMeshPro>().text = "VirusCount: " + VirusLeaveCount.ToString();
 
 
@@ -130,27 +135,29 @@ public class Player : Tutorial, TimedInputHandler
                 if (VirusLeaveCount == 10)
                 {
                     isGameOver = true;
+                    ScoreBoard.SetActive(true);
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You lose arcade mode";
+                    ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
                 }
 
                 //If you win arcade bring up score board
                 if (EnemyManger.GetComponent<VirusManager>().WaveNumber >= 5 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0 && VirusLeaveCount < 10)
                 {
                     isGameOver = true;
+                    ScoreBoard.SetActive(true);
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You win arcade mode";
+                    ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
                 }
             }
 
             else if (ArcadeMode == false)
             {
                 //If you lose story mode keep making them play until they beat it
-                if (VirusLeaveCount == 8)
+                if (VirusLeaveCount == 5)
                 {
                     isGameOver = true;
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You lose story mode";
-                    tutorial = false;
-                    ArcadeMode = false;
-                    SceneManager.LoadScene("FightVirus");
+                    PlayStory();
                 }
 
                 //If you win story mode continue to next scene and don't forget to fade out
@@ -326,18 +333,10 @@ public class Player : Tutorial, TimedInputHandler
             if (BeatGameTimer >= 2.0f)
             {
                 if (StoryMode == true)
-                {
-                    tutorial = false;
-                    ArcadeMode = false;
-                    SceneManager.LoadScene("FightVirus");
-                }
+                    PlayStory();
 
                 else
-                {
-                    tutorial = false;
-                    ArcadeMode = true;
-                    SceneManager.LoadScene("FightVirus");
-                }
+                    PlayArcade();
             }
         }
     }
@@ -345,5 +344,32 @@ public class Player : Tutorial, TimedInputHandler
     public void HandleTimeInput()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void SetFacebook()
+    {
+        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + Score.ToString(); /// + FacebookManager.Instance.GlobalScore /;
+        FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
+    }
+
+    public void PlayArcade()
+    {
+        tutorial = false;
+        ArcadeMode = true;
+        SceneManager.LoadScene("FightVirus");
+    }
+
+    public void PlayStory()
+    {
+        tutorial = false;
+        ArcadeMode = false;
+        SceneManager.LoadScene("FightVirus");
+    }
+
+    public void PlayTutorial()
+    {
+        tutorial = true;
+        ArcadeMode = false;
+        SceneManager.LoadScene("FightVirus");
     }
 }

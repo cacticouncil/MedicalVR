@@ -6,6 +6,7 @@ using System;
 using TMPro;
 using UnityEngine.SceneManagement;
 
+
 public class VirusPlayer : Tutorial
 {
     //Variables for Tutorial
@@ -21,6 +22,9 @@ public class VirusPlayer : Tutorial
     public GameObject Spawn;
     public GameObject WaveManager;
     public GameObject BlackCurtain;
+
+    public GameObject ScoreBoard;
+    public FacebookStuff FB;
 
     public GameObject VirusAttack;
     public List<GameObject> VirusAttackList = new List<GameObject>();
@@ -39,10 +43,12 @@ public class VirusPlayer : Tutorial
     float DelayTimer = 0.0f;
     float BeatGameTimer = 0.0f;
 
+    float Score = 0.0f;
     void Start()
     {
         PlayerSpeed = .02f;
         Lives = 3;
+        SetFacebook();
 
         if (Tutorial.tutorial == false)
         {
@@ -149,10 +155,10 @@ public class VirusPlayer : Tutorial
                     }
 
                     //For arcade mode once you beat it will bring up scoreboard 
-                    //else if (ArcadeMode == true)
-                    //{
-                    //
-                    //}
+                    else if (ArcadeMode == true)
+                    {
+                        ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
+                    }
                 }
             }
         }
@@ -332,6 +338,12 @@ public class VirusPlayer : Tutorial
         V.GetComponent<AttackVirus>().MainCamera = this.gameObject;
         VirusAttackList.Add(V);
         V.GetComponent<AttackVirus>().enabled = true;
+    }
+
+    void SetFacebook()
+    {
+        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + Score.ToString(); /// + FacebookManager.Instance.GlobalScore /;
+        FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
 }
 
