@@ -26,7 +26,6 @@ public class MemoryUI : MonoBehaviour
     public float startTime = 60.0f;
     public bool finnished = false;
     public float timeRemaining = 60.0f;
-    public static bool arcadeMode = false;
     public void LoseresetPos()
     {
             lives--;
@@ -206,7 +205,7 @@ public class MemoryUI : MonoBehaviour
                 case 11:
                     TutorialTimer += Time.deltaTime;
 
-                    if (TutorialTimer <= 4.0f && arcadeMode == true)
+                    if (TutorialTimer <= 4.0f && GlobalVariables.arcadeMode == true)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = " Make sure you do it before the timer ends";
                     else
                     {
@@ -248,15 +247,15 @@ public class MemoryUI : MonoBehaviour
 
                 //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
                 GlobalVariables.tutorial = false;
-                if (arcadeMode == true)
+                if (GlobalVariables.arcadeMode == true)
                 {
-                    arcadeMode = true;
+                    GlobalVariables.arcadeMode = true;
                     SceneManager.LoadScene("MemoryGame");
 
                 }
                 else
                 {
-                    arcadeMode = false;
+                    GlobalVariables.arcadeMode = false;
                     SceneManager.LoadScene("MemoryGame");
                 }
             }
@@ -270,7 +269,7 @@ public class MemoryUI : MonoBehaviour
         if (finnished)
             return;
 
-        if (arcadeMode == true)
+        if (GlobalVariables.arcadeMode == true)
         {
             if(!(Randomsphere.correct == 3))
             timeRemaining -= Time.deltaTime;
@@ -299,7 +298,7 @@ public class MemoryUI : MonoBehaviour
         }
         else
         {
-            if (arcadeMode == true)
+            if (GlobalVariables.arcadeMode == true)
             {
                 int tmp = (int)score;
                 theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();

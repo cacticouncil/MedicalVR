@@ -71,7 +71,7 @@ public class Randomsphere : MonoBehaviour {
         T1position = Spheres2[(int)Letters.T].transform.position;
         A2position = Spheres2[(int)Letters.A2].transform.position;
 
-        if (MemoryUI.arcadeMode == true)
+        if (GlobalVariables.arcadeMode == true)
             Genes = (GNE)Random.Range(0, 9);
         else
             Genes = 0;
@@ -217,7 +217,7 @@ public class Randomsphere : MonoBehaviour {
 
         GNE temp = Genes;
 
-        if (MemoryUI.arcadeMode == true)
+        if (GlobalVariables.arcadeMode == true)
         {
             Genes = (GNE)Random.Range(0, 9);
 

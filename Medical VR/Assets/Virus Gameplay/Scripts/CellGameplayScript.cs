@@ -181,7 +181,7 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (95):
-                _TGameController.isArcadeMode = false;
+                GlobalVariables.arcadeMode = false;
                 SceneManager.LoadScene("ATPGTPShooter");
                 break;
             case (96):
@@ -217,7 +217,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (144):
                 //cGAMP
-                Storebullets.arcadeMode = false;
+                GlobalVariables.arcadeMode = false;
                 SceneManager.LoadScene("CGampSnatcher");
                 break;
             case (145):
@@ -303,7 +303,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 230:
                 //Memory Game
-                MemoryUI.arcadeMode = false;
+                GlobalVariables.arcadeMode = false;
                 SceneManager.LoadScene("MemoryGame");
                 break;
             case (231):
@@ -338,8 +338,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 260:
                 //FightVirus
-                Player.ArcadeMode = false;
-                Player.StoryMode = true;
+                GlobalVariables.arcadeMode = false;
                 SceneManager.LoadScene("FightVirus");
                 break;
             case 261:

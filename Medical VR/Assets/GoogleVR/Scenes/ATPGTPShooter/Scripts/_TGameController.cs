@@ -13,7 +13,6 @@ public class ObjectsCollector
     public GameObject mitocondriaCollector;
     public GameObject enzymeCollector;
     public GameObject fadeScreen;
-
 }
 
 [System.Serializable]
@@ -37,9 +36,6 @@ public class _TGameController : MonoBehaviour
 {
     public ObjectsCollector shrinkStuff;
     public FacebookStuff fbManager;
-
-    [HideInInspector]
-    public static bool isArcadeMode;
 
     public GameObject gameCamera;
     public GameObject scoreBoard;
@@ -82,7 +78,7 @@ public class _TGameController : MonoBehaviour
             StopCoroutine("SpawnHazards");
             if (scoreBoard && gameCamera)
                 scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
-            if (isArcadeMode)
+            if (GlobalVariables.arcadeMode)
                 Invoke("DisplayScore", 3);
             else
                 Invoke("MoveToNewScene", 5);
