@@ -27,7 +27,6 @@ public class MemoryUI : MonoBehaviour
     public bool finnished = false;
     public float timeRemaining = 60.0f;
     public static bool arcadeMode = false;
-    public FBscript hi;
     public void LoseresetPos()
     {
             lives--;
@@ -65,6 +64,8 @@ public class MemoryUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+
         if (GlobalVariables.tutorial == false)
         {
         }
@@ -288,28 +289,30 @@ public class MemoryUI : MonoBehaviour
         finnished = true;
     }
 
-    
+
     void FixedUpdate()
     {
-        if (arcadeMode == true)
+
+        if (lives < 1 || timeRemaining < 0)
         {
-            if (lives < 1 || timeRemaining < 0)
-            {
-                ShowScore();
-            }
-            else
-            {
-                    int tmp = (int)score;
-                    theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();     
-            }
+            ShowScore();
         }
         else
         {
-            theScore.GetComponent<TMPro.TextMeshPro>().text = "";
+            if (arcadeMode == true)
+            {
+                int tmp = (int)score;
+                theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
+            }
+            else
+            {
+                theScore.GetComponent<TMPro.TextMeshPro>().text = "";
+            }
+            theLevels.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + Level.ToString();
         }
-        theLevels.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + Level.ToString();
+    }   
 
-    }
+    
 
     void AvoidBack()
     {
