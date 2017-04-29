@@ -66,7 +66,7 @@ public class Fade : MonoBehaviour
                 texts[i].text = strs[i];
             }
 
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(GlobalVariables.textDelay);
 
             left = texts.Length;
             for (int i = 0; i < texts.Length; i++)
@@ -112,7 +112,7 @@ public class Fade : MonoBehaviour
                 texts[i].text = strs[i];
             }
 
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(GlobalVariables.textDelay * .5f);
 
             left = texts.Length;
             for (int i = 0; i < texts.Length; i++)

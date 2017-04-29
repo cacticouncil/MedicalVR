@@ -7,9 +7,6 @@ public class StrategyTutorialReproduction : MonoBehaviour
     public GameObject cam;
     public GameObject eventSystem;
     public GameObject fadePrefab;
-    public GameObject redCellPrefab;
-    public GameObject pupleVirusPrefab;
-    public GameObject spawn;
     public GameObject holder;
     public GameObject objects;
     public GameObject CDK, TGF;
@@ -19,11 +16,13 @@ public class StrategyTutorialReproduction : MonoBehaviour
     public GameObject[] details = new GameObject[0];
     public GameObject[] cells = new GameObject[4];
     public GameObject[] viruses = new GameObject[4];
-    public List<TMPro.TextMeshPro> text = new List<TMPro.TextMeshPro>();
+    public List<TMPro.TextMeshPro> texts = new List<TMPro.TextMeshPro>();
 
     private Vector3 prevPos;
     private GameObject fade;
-    private int rNum = 0;
+    private bool last = false, text = false, finish = false, advance = false;
+    private List<Vector3> nextPos = new List<Vector3>();
+    private List<Coroutine> stop = new List<Coroutine>();
 
     void OnEnable()
     {
@@ -35,9 +34,25 @@ public class StrategyTutorialReproduction : MonoBehaviour
         StartCoroutine(Advance());
     }
 
+    void Update()
+    {
+        bool held = Input.GetButton("Fire1");
+        if (held && !last)
+        {
+            if (text)
+            {
+                finish = true;
+            }
+            else
+            {
+                advance = true;
+            }
+        }
+        last = held;
+    }
+
     IEnumerator Advance()
     {
-        spawn = redCellPrefab;
         //Fade to black
         fade = Instantiate(fadePrefab, cam.transform.position, cam.transform.rotation, cam.transform) as GameObject;
         yield return 0;
@@ -57,109 +72,253 @@ public class StrategyTutorialReproduction : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
 
-        //Start Text
-        StartCoroutine(StartText());
-        yield return new WaitForSeconds(1.0f);
-        StartCoroutine(MoveObject(cells[0], objects.transform.position));
-        yield return new WaitForSeconds(2.0f);
+        //The Reproduction stat is vital to growing your colony. 
+        StartCoroutine(TurnTextOn(0));
+        stop.Add(StartCoroutine(SpawnObject(cells[0], objects.transform.position)));
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        cells[0].transform.position = nextPos[0];
+        nextPos.Clear();
 
         //At 0 Reproduction, it takes 50 turns to reproduce. 
         StartCoroutine(TurnTextOn(1));
         foreach (GameObject item in bas)
         {
-            StartCoroutine(FadeInObject(item));
-            StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
+            stop.Add(StartCoroutine(FadeInObject(item)));
+            stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
         }
-        yield return new WaitForSeconds(1.0f);
-        StartCoroutine(MoveObject(cells[1], objects.transform.position));
-        yield return new WaitForSeconds(2.0f);
+        stop.Add(StartCoroutine(SpawnObject(cells[1], objects.transform.position)));
+        
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        foreach (GameObject item in bas)
+        {
+            Color c = item.GetComponent<Renderer>().material.color;
+            c.a = 1.0f;
+            item.GetComponent<Renderer>().material.color = c;
+            item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
+        }
+        cells[1].transform.position = nextPos[0];
+        nextPos.Clear();
 
         //At 10 Reproduction, it takes 5 turns to reproduce. 
         StartCoroutine(TurnTextOn(2));
-        yield return new WaitForSeconds(1.0f);
         repDes.text = "Reproduction: 10";
-        StartCoroutine(MoveObject(cells[2], objects.transform.position));
-        yield return new WaitForSeconds(2.0f);
+        stop.Add(StartCoroutine(SpawnObject(cells[2], objects.transform.position)));
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        cells[2].transform.position = nextPos[0];
+        nextPos.Clear();
 
         //The CDK powerup temporarily adds 5 extra stat points.
         StartCoroutine(TurnTextOn(3));
-        StartCoroutine(FadeInObject(CDK));
-        yield return new WaitForSeconds(1.0f);
+        stop.Add(StartCoroutine(FadeInObject(CDK)));
         repDes.text = "Reproduction: 15";
         repDes.color = Color.blue;
-        yield return new WaitForSeconds(2.0f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        CDK.GetComponent<Renderer>().material.color = Color.red;
 
         //These points aren’t depreciated in value. 
         StartCoroutine(TurnTextOn(4));
-        yield return new WaitForSeconds(2.5f);
-        StartCoroutine(FadeOutObject(CDK));
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        stop.Add(StartCoroutine(FadeOutObject(CDK)));
         foreach (GameObject item in bas)
         {
-            StartCoroutine(FadeOutObject(item));
-            StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
+            stop.Add(StartCoroutine(FadeOutObject(item)));
+            stop.Add(StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
         }
-        yield return new WaitForSeconds(.5f);
 
         //You can view how many turns left to reproduce in the cell’s details tab. 
         StartCoroutine(TurnTextOn(5));
         foreach (GameObject item in details)
         {
-            StartCoroutine(FadeInObject(item));
-            StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
+            stop.Add(StartCoroutine(FadeInObject(item)));
+            stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
         }
-        yield return new WaitForSeconds(2.5f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+
+        foreach (GameObject item in bas)
+        {
+            item.SetActive(false);
+        }
         foreach (GameObject item in details)
         {
-            StartCoroutine(FadeOutObject(item));
-            StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
+            Color c = item.GetComponent<Renderer>().material.color;
+            c.a = 1.0f;
+            item.GetComponent<Renderer>().material.color = c;
+            item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
         }
-        yield return new WaitForSeconds(.5f);
 
         //The TGF powerup forces a cell to immediately reproduce.
         StartCoroutine(TurnTextOn(6));
+        foreach (GameObject item in details)
+        {
+            stop.Add(StartCoroutine(FadeOutObject(item)));
+            stop.Add(StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
+        }
         foreach (GameObject item in bas)
         {
-            StartCoroutine(FadeInObject(item));
-            StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
+            stop.Add(StartCoroutine(FadeInObject(item)));
+            stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
         }
-        StartCoroutine(FadeInObject(TGF));
-        yield return new WaitForSeconds(1.0f);
-        StartCoroutine(MoveObject(cells[3], objects.transform.position));
-        yield return new WaitForSeconds(2.0f);
+        stop.Add(StartCoroutine(FadeInObject(TGF)));
+        stop.Add(StartCoroutine(SpawnObject(cells[3], objects.transform.position)));
+        
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+
+        foreach (GameObject item in details)
+        {
+            item.SetActive(false);
+        }
+        foreach (GameObject item in bas)
+        {
+            Color c = item.GetComponent<Renderer>().material.color;
+            c.a = 1.0f;
+            item.GetComponent<Renderer>().material.color = c;
+            item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
+        }
+
+        TGF.GetComponent<Renderer>().material.color = Color.red;
+        cells[3].transform.position = nextPos[0];
+        nextPos.Clear();
 
         //The child will also have the exact same stats. 
         StartCoroutine(TurnTextOn(7));
-        yield return new WaitForSeconds(2.5f);
-        StartCoroutine(FadeOutObject(TGF));
-        yield return new WaitForSeconds(.5f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
 
         //Be careful, purple viruses use the cell’s reproduction to reproduce more viruses. 
         StartCoroutine(TurnTextOn(8));
-        spawn = pupleVirusPrefab;
-        yield return new WaitForSeconds(1.0f);
-        cells[0].GetComponent<Renderer>().material.color = Color.black;
-        StartCoroutine(MoveObject(viruses[0], objects.transform.position + new Vector3(0, 10, 0)));
-
-        yield return new WaitForSeconds(1);
-
+        stop.Add(StartCoroutine(FadeOutObject(TGF)));
+        stop.Add(StartCoroutine(PaintItBlack(cells[0])));
+        stop.Add(StartCoroutine(SpawnObject(viruses[0], objects.transform.position + new Vector3(0, 10, 0))));
         cells[0].GetComponent<Rotate>().enabled = false;
         viruses[0].GetComponent<Rotate>().enabled = false;
 
-        yield return new WaitForSeconds(.5f);
-        StartCoroutine(MoveObject(viruses[1], objects.transform.position));
-        yield return new WaitForSeconds(1.5f);
-        StartCoroutine(MoveObject(viruses[2], objects.transform.position));
-        yield return new WaitForSeconds(1.5f);
-        StartCoroutine(MoveObject(viruses[3], objects.transform.position));
-        yield return new WaitForSeconds(1.5f);
+        while (!advance)
+            yield return 0;
+        advance = false;
 
-        StartCoroutine(EndText());
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        Color r = Color.red;
+        r.a = 0;
+        TGF.GetComponent<Renderer>().material.color = r;
+        cells[0].GetComponent<Renderer>().material.color = Color.black;
+        viruses[0].transform.position = nextPos[0];
+        nextPos.Clear();
+        viruses[0].transform.localScale = Vector3.one;
+        
+        stop.Add(StartCoroutine(SpawnObject(viruses[1], objects.transform.position)));
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        viruses[1].transform.position = nextPos[0];
+        nextPos.Clear();
+        viruses[1].transform.localScale = Vector3.one;
+        
+        stop.Add(StartCoroutine(SpawnObject(viruses[2], objects.transform.position)));
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        viruses[2].transform.position = nextPos[0];
+        nextPos.Clear();
+        viruses[2].transform.localScale = Vector3.one;
+
+        stop.Add(StartCoroutine(SpawnObject(viruses[3], objects.transform.position)));
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        viruses[3].transform.position = nextPos[0];
+        nextPos.Clear();
+        viruses[3].transform.localScale = Vector3.one;
+
+        subtitles.text = "";
         foreach (GameObject item in bas)
         {
             StartCoroutine(FadeOutObject(item));
             StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
         }
-        yield return new WaitForSeconds(1.0f);
 
 
         //Fade to black
@@ -183,7 +342,6 @@ public class StrategyTutorialReproduction : MonoBehaviour
         viruses[0].GetComponent<Rotate>().enabled = true;
         cells[0].GetComponent<Renderer>().material.color = Color.grey;
 
-        rNum = 0;
         holder.SetActive(false);
         eventSystem.SetActive(true);
         Destroy(fade);
@@ -245,69 +403,64 @@ public class StrategyTutorialReproduction : MonoBehaviour
         g.SetActive(false);
     }
 
-    IEnumerator MoveObject(GameObject g, Vector3 startPos)
+    IEnumerator SpawnObject(GameObject g, Vector3 startPos)
     {
         g.SetActive(true);
         float startTime = Time.time;
         float t = 0;
-        Vector3 des = g.transform.position;
+        nextPos.Add(g.transform.position);
+        int index = nextPos.Count - 1;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
-            g.transform.position = Vector3.Lerp(startPos, des, t);
+            g.transform.position = Vector3.Lerp(startPos, nextPos[index], t);
             g.transform.localScale = new Vector3(t, t, t);
             yield return 0;
         }
-        g.transform.position = des;
+        g.transform.position = nextPos[index];
         g.transform.localScale = Vector3.one;
+    }
+
+    IEnumerator PaintItBlack(GameObject g)
+    {
+        g.SetActive(true);
+        Color c = g.GetComponent<Renderer>().material.color;
+        float startTime = Time.time;
+        float t = 0.0f;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            g.GetComponent<Renderer>().material.color = Color.Lerp(c, Color.black, t);
+            yield return 0;
+        }
     }
     #endregion
 
     #region Text
-    IEnumerator StartText()
-    {
-        subtitles.gameObject.SetActive(true);
-        subtitles.text = text[0].text;
-        Color a = subtitles.color;
-        a.a = 0.0f;
-        subtitles.color = a;
-        float startTime = Time.time;
-        float t = 0.0f;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            a.a = t;
-            subtitles.color = a;
-            yield return 0;
-        }
-    }
-
     IEnumerator TurnTextOn(int index)
     {
-        Color a = subtitles.color;
-        float startTime = Time.time;
-        float t = 0.0f;
-        while (t < 1.0f)
-        {
-            t = (Time.time - startTime) * 2.0f;
-            a.a = 1.0f - t;
-            subtitles.color = a;
+        while (text)
             yield return 0;
-        }
-        yield return 0;
-        subtitles.text = text[index].text;
-        a = subtitles.color;
-        a.a = 0.0f;
-        subtitles.color = a;
-        startTime = Time.time;
-        t = 0;
-        while (t < 1.0f)
+
+        text = true;
+        subtitles.text = "_";
+
+        while (subtitles.text != texts[index].text && !finish)
         {
-            t = (Time.time - startTime) * 2.0f;
-            a.a = t;
-            subtitles.color = a;
-            yield return 0;
+            yield return new WaitForSeconds(GlobalVariables.textDelay);
+
+            if (subtitles.text.Length == texts[index].text.Length)
+            {
+                subtitles.text = texts[index].text;
+            }
+            else
+            {
+                subtitles.text = subtitles.text.Insert(subtitles.text.Length - 1, texts[index].text[subtitles.text.Length - 1].ToString());
+            }
         }
+        subtitles.text = texts[index].text;
+        finish = false;
+        text = false;
     }
 
     IEnumerator FadeInText(TMPro.TextMeshPro text)
@@ -340,87 +493,6 @@ public class StrategyTutorialReproduction : MonoBehaviour
             yield return 0;
         }
         text.gameObject.SetActive(false);
-    }
-
-    IEnumerator EndText()
-    {
-        Color a = subtitles.color;
-        float startTime = Time.time;
-        float t = 0.0f;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            a.a = 1.0f - t;
-            subtitles.color = a;
-            yield return 0;
-        }
-        subtitles.gameObject.SetActive(false);
-    }
-    #endregion
-
-    #region RedCells
-    IEnumerator SpawnRedCell()
-    {
-        GameObject c;
-        if (rNum == 4)
-        {
-            c = Instantiate(spawn, new Vector3(objects.transform.position.x, objects.transform.position.y + 10, objects.transform.position.z), redCellPrefab.transform.rotation, objects.transform) as GameObject;
-            cells[0].GetComponent<Renderer>().material.color = Color.black;
-        }
-        else
-            c = Instantiate(spawn, objects.transform.position, redCellPrefab.transform.rotation, objects.transform) as GameObject;
-        Vector3 desination;
-        switch (rNum)
-        {
-            case 1:
-                //Top Right (1, 1)
-                desination = new Vector3(objects.transform.position.x + 2, objects.transform.position.y, objects.transform.position.z + 2);
-                break;
-            case 2:
-                //Right (1, 0)
-                desination = new Vector3(objects.transform.position.x + 3, objects.transform.position.y, objects.transform.position.z);
-                break;
-            case 3:
-                //Bottom Right (1, -1)
-                desination = new Vector3(objects.transform.position.x + 2, objects.transform.position.y, objects.transform.position.z + -2);
-                break;
-            case 4:
-                //UP
-                desination = new Vector3(objects.transform.position.x, objects.transform.position.y + .9f, objects.transform.position.z);
-                break;
-            case 5:
-                //Top Right (1, 1)
-                desination = new Vector3(objects.transform.position.x + 1, objects.transform.position.y, objects.transform.position.z + 1);
-                break;
-            case 6:
-                //Right (1, 0)
-                desination = new Vector3(objects.transform.position.x + 1.5f, objects.transform.position.y, objects.transform.position.z);
-                break;
-            default:
-                desination = objects.transform.position;
-                break;
-        }
-        cells[rNum] = c;
-
-        float startTime = Time.time;
-        float t = 0;
-        Vector3 startPos = c.transform.position;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            c.transform.position = Vector3.Lerp(startPos, desination, t);
-            t = Mathf.Min(1.0f, t);
-            c.transform.localScale = new Vector3(t, t, t);
-            yield return 0;
-        }
-        if (rNum == 4)
-        {
-            cells[0].GetComponent<Rotate>().enabled = false;
-            cells[4].GetComponent<Rotate>().enabled = false;
-        }
-        c.transform.position = desination;
-        c.transform.localScale = Vector3.one;
-        rNum++;
     }
     #endregion
 }
