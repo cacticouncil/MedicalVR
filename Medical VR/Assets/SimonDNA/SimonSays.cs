@@ -50,7 +50,7 @@ public class SimonSays : MonoBehaviour
         theLives.GetComponent<TMPro.TextMeshPro>().text = "Lives: " + lives.ToString();
        gameTimer.GetComponent<TMPro.TextMeshPro>().text = "TIMER " + theTimer.ToString();
         theTimer = 30;
-        polys = 36;
+        polys = 21;
         polysDone = 0;
         if(arcadeMode == false)
         {
