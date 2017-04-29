@@ -91,7 +91,7 @@ public class WaveManager : MonoBehaviour
 
                     CreateCellReceptorWave();
                     Player.GetComponent<VirusPlayer>().Respawn();
-                    Player.GetComponent<VirusPlayer>().PlayerSpeed = 0.0f;
+                    Player.GetComponent<VirusPlayer>().currSpeed = 0.0f;
                     Player.GetComponent<VirusPlayer>().WaveStarted = true;
                     CanDestroyProteins = false;
                     Invoke("CreateAntiViralProteinWave", 5);
@@ -104,7 +104,7 @@ public class WaveManager : MonoBehaviour
                 if (CellReceptorCount == 0 && CellReceptorsList.Count == 0 && Player.GetComponent<VirusPlayer>().WaveStarted == false)
                 {
                     Player.GetComponent<VirusPlayer>().isGameover = true;
-                    Player.GetComponent<VirusPlayer>().PlayerSpeed = 0.0f;
+                    Player.GetComponent<VirusPlayer>().currSpeed = 0.0f;
                 }
             }
 
@@ -210,7 +210,7 @@ public class WaveManager : MonoBehaviour
 
         if (GlobalVariables.tutorial == false)
         {
-            Player.GetComponent<VirusPlayer>().PlayerSpeed = .02f;
+            Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
             CanDestroyProteins = true;
         }
     }

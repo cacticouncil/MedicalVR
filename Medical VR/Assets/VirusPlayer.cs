@@ -28,10 +28,11 @@ public class VirusPlayer : MonoBehaviour
     public FacebookStuff FB;
 
     public GameObject VirusAttack;
-    public List<GameObject> VirusAttackList = new List<GameObject>();
     Vector3 SpawnVirusAttack;
 
-    public float PlayerSpeed;
+    public float currSpeed;
+    [System.NonSerialized]
+    public float baseSpeed = .04f;
     public int Lives;
     public bool isGameover = false;
 
@@ -47,7 +48,7 @@ public class VirusPlayer : MonoBehaviour
     float Score = 0.0f;
     void Start()
     {
-        PlayerSpeed = .1f;
+        currSpeed = baseSpeed;
         Lives = 3;
         SetFacebook();
 
@@ -204,7 +205,7 @@ public class VirusPlayer : MonoBehaviour
                     case 4:
                         StartCoroutine(DisplayText("And using your reticle to destroy them", 3.5f));
                         CanIMove = true;
-                        PlayerSpeed = .02f;
+                        currSpeed = baseSpeed;
                         WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
                         break;
 
@@ -231,7 +232,7 @@ public class VirusPlayer : MonoBehaviour
                     case 9:
                         StartCoroutine(DisplayText("Now practice targeting these cell receptors", 3.5f));
                         CanIMove = true;
-                        PlayerSpeed = .02f;
+                        currSpeed = baseSpeed;
                         WaveManager.GetComponent<WaveManager>().WaveNumber = 2;
                         WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
                         WaveManager.GetComponent<WaveManager>().CanISpawnAntiViralProtein = true;
@@ -251,13 +252,6 @@ public class VirusPlayer : MonoBehaviour
                 CanIRead = false;
                 WhatToRead += 1;
             }
-        }
-
-        //For both tutorial and gameplay delete null virus attack
-        for (int i = 0; i < VirusAttackList.Count; i++)
-        {
-            if (VirusAttackList[i].gameObject == null)
-                VirusAttackList.Remove(VirusAttackList[i]);
         }
 
         //After you beat tutorial if story mode bool is active transtion to story mode for this game
@@ -287,8 +281,8 @@ public class VirusPlayer : MonoBehaviour
 
             else if (DelaySpawn == false)
             {
-                transform.position += transform.forward * PlayerSpeed;
-                GetComponent<Rigidbody>().velocity *= PlayerSpeed;
+                transform.position += transform.forward * currSpeed;
+                GetComponent<Rigidbody>().velocity *= currSpeed;
             }
         }
 
@@ -296,8 +290,8 @@ public class VirusPlayer : MonoBehaviour
         {
             if (CanIMove == true)
             {
-                transform.position += transform.forward * PlayerSpeed;
-                GetComponent<Rigidbody>().velocity *= PlayerSpeed;
+                transform.position += transform.forward * currSpeed;
+                GetComponent<Rigidbody>().velocity *= currSpeed;
             }
         }
     }
@@ -333,15 +327,6 @@ public class VirusPlayer : MonoBehaviour
     {
         transform.position = Spawn.transform.position;
         DelaySpawn = true;
-    }
-
-    public void SpawnAttackViruses()
-    {
-        SpawnVirusAttack = transform.position;
-        GameObject V = Instantiate(VirusAttack, SpawnVirusAttack, Quaternion.identity) as GameObject;
-        V.GetComponent<AttackVirus>().MainCamera = this.gameObject;
-        VirusAttackList.Add(V);
-        V.GetComponent<AttackVirus>().enabled = true;
     }
 
     void SetFacebook()

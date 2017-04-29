@@ -47,7 +47,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                 //Bring the white cell in view
                 case 16:
                     Subtitles.GetComponent<SubstitlesScript>().Stop();
-                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, RedCellTutorialLocation.transform.position, 2.0f);
+                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, RedCellTutorialLocation.transform.position, 10.0f);
 
                     if (WhiteCell.transform.position == RedCellTutorialLocation.transform.position)
                     {
@@ -62,7 +62,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                     Player.GetComponent<MovingCamera>().stopMoving = false;
                     Player.GetComponent<MovingCamera>().speed = 10.0f;
                     if (WhiteCell)
-                        WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.GetComponent<MovingCamera>().transform.position, 0.0f);
+                        WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.transform.position, 10.0f);
                     break;
 
                 default:

@@ -4,17 +4,19 @@ using System;
 
 public class CellReceptors : MonoBehaviour, TimedInputHandler
 {
+    public GameObject VirusAttack;
     GameObject WaveManager;
     GameObject Player;
-    public bool AttackMe = false;
     bool SpawnFiveAttackVirus = false;
     float SpawnTimer;
     int Count = 5;
+    public int health = 5;
     void Start()
     {
         SpawnTimer = 0.0f;
         WaveManager = gameObject.transform.parent.gameObject;
         Player = WaveManager.GetComponent<WaveManager>().Player;
+        GetComponent<Rigidbody>().AddForce(new Vector3(100, 100, 100));
     }
 
     void Update()
@@ -23,11 +25,13 @@ public class CellReceptors : MonoBehaviour, TimedInputHandler
         {
             SpawnTimer += Time.deltaTime;
 
-            if (SpawnTimer >= .2f)
+            if (SpawnTimer >= .3f)
             {
                 SpawnTimer = 0.0f;
-                Player.GetComponent<VirusPlayer>().SpawnAttackViruses();
+                SpawnAttackVirus();
                 Count -= 1;
+                if (Count == 0)
+                    Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
             }
         }
 
@@ -35,14 +39,24 @@ public class CellReceptors : MonoBehaviour, TimedInputHandler
             Destroy(this.gameObject);
     }
 
+    public void SpawnAttackVirus()
+    {
+        GameObject V = Instantiate(VirusAttack, Player.transform.position, Quaternion.identity) as GameObject;
+        V.GetComponent<AttackVirus>().MainCamera = Player;
+        V.GetComponent<AttackVirus>().target = gameObject;
+        V.GetComponent<AttackVirus>().enabled = true;
+    }
+
     public void OnGazeEnter()
     {
-        Player.GetComponent<VirusPlayer>().PlayerSpeed = 0;
+        if (Count > 0)
+            Player.GetComponent<VirusPlayer>().currSpeed = 0;
     }
 
     public void OnGazeExit()
     {
-        Player.GetComponent<VirusPlayer>().PlayerSpeed = .02f;
+        Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
+        SpawnFiveAttackVirus = false;
     }
 
     public void HandleTimeInput()
@@ -50,7 +64,6 @@ public class CellReceptors : MonoBehaviour, TimedInputHandler
         if (WaveManager.GetComponent<WaveManager>().CanDestroyProteins == true)
         {
             SpawnFiveAttackVirus = true;
-            AttackMe = true;
         }
     }
 
