@@ -141,6 +141,17 @@ public static class SoundManager {
         }
     }
 
+    public static void DestroySFX()
+    {
+        for (int i = SFX.Count - 1; i >= 0; i--)
+        {
+           // if (!(SFX[i].isPlaying) && isPaused == false)
+            {
+                Object.Destroy(SFX[i]);
+                SFX.RemoveAt(i);
+            }
+        }
+    }
     public static void Play(string _title) {
         if (!Controller) {
             return;

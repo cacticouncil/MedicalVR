@@ -48,9 +48,11 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("CGampSnatcher");
                 break;
             case 6:
+                _TGameController.isArcadeMode = true;
                 LoadScene("ATPGTPShooter");
                 break;
             case 7:
+                SoundManager.DestroySFX();
                 LoadScene("MainMenu");
                 break;
             case 8:
@@ -73,9 +75,11 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("DestroyTheCell");
                 break;
             case 14:
+                VirusGameplayScript.loadCase = 0;
                 LoadScene("VirusGameplay");
                 break;
             case 15:
+                CellGameplayScript.loadCase = 0;
                 LoadScene("CellGameplay");
                 break;
         }
