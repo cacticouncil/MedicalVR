@@ -22,7 +22,7 @@ public class SimonDNATutorial : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (SimonSays.TutorialMode == true)
         {

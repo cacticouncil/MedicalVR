@@ -26,7 +26,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //Trigger Events
         if (MovingCamera.TutorialMode == true)
