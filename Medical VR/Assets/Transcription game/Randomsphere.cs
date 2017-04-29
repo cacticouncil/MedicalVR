@@ -13,6 +13,7 @@ public enum GNE
 }
 
 public class Randomsphere : MonoBehaviour {
+    public GameObject EventSystem;
     public GameObject memoryui;
     public GameObject victoryeffect, NextLevel;
     public GameObject[] Spheres;
@@ -142,7 +143,7 @@ public class Randomsphere : MonoBehaviour {
                 break;
             default:
                 CellGameplayScript.loadCase = 3;
-                SceneManager.LoadScene("Cell Gameplay");
+                SceneManager.LoadScene("CellGameplay");
                 break;
         }
 
@@ -182,12 +183,14 @@ public class Randomsphere : MonoBehaviour {
                 NextLevel.SetActive(true);
                 NextLevel.GetComponent<TMPro.TextMeshPro>().text = "Next Level";
                 victoryeffect.GetComponent<ParticleSystem>().Play();
+                EventSystem.SetActive(false);
                 playfx = true;
             }
 
             if (victoryeffect.GetComponent<ParticleSystem>().isPlaying == false)
             {
                 NextLevel.SetActive(false);
+                EventSystem.SetActive(true);
                 playfx = false;
                 Reset();
                 memoryui.GetComponent<MemoryUI>().Level += 1;
@@ -295,7 +298,7 @@ public class Randomsphere : MonoBehaviour {
                 break;
             default:
                 CellGameplayScript.loadCase = 3;
-                SceneManager.LoadScene("Cell Gameplay");
+                SceneManager.LoadScene("CellGameplay");
                 break;
         }
 
