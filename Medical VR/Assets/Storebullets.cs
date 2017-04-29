@@ -210,8 +210,18 @@ public class Storebullets : MonoBehaviour {
 
                 //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
                 GlobalVariables.tutorial = false;
-                arcadeMode = false;
-                SceneManager.LoadScene("CGampSnatcher");
+                if(arcadeMode == true)
+                    {
+                    arcadeMode = true;
+                    SceneManager.LoadScene("CGampSnatcher");
+
+                }
+                else
+                {
+                    arcadeMode = false;
+                    SceneManager.LoadScene("CGampSnatcher");
+                }
+               
                 //}
 
                 //    else if ()

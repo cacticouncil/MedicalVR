@@ -74,11 +74,11 @@ public static class SoundManager {
         EventManager.OnUnpause += Resume;
 
         // Manually add the loop information beause configuration files are hard.
-        if (!Loops.ContainsKey("Boss1")) {
-            Loops.Add("Boss1", new LoopData(782664, 1940833));
-            Loops.Add("Boss2", new LoopData(317732, 2570388));
-            Loops.Add("Boss3-1", new LoopData(709131, 2515920));
-            Loops.Add("Boss3-2", new LoopData(0, 2094594));
+        if (!Loops.ContainsKey("AMBIANCE")) {
+            Loops.Add("AMBIANCE", new LoopData(782664, 1940833));
+            Loops.Add("DRUMS", new LoopData(317732, 2570388));
+            Loops.Add("SYNTHS", new LoopData(709131, 2515920));
+            Loops.Add("WEIRD N BASS", new LoopData(0, 2094594));
             Loops.Add("Boss3-3", new LoopData(194755, 2404985));
             Loops.Add("Title", new LoopData(351905, 1056500));
             Loops.Add("World1", new LoopData(990062, 2227651));

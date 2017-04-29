@@ -247,14 +247,17 @@ public class MemoryUI : MonoBehaviour
 
                 //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
                 GlobalVariables.tutorial = false;
-                arcadeMode = false;
-                SceneManager.LoadScene("MemoryGame");
-                //}
+                if (arcadeMode == true)
+                {
+                    arcadeMode = true;
+                    SceneManager.LoadScene("MemoryGame");
 
-                //    else if ()
-                //    {
-                //        //Just play tutorial once and go back to main menu
-                //    }
+                }
+                else
+                {
+                    arcadeMode = false;
+                    SceneManager.LoadScene("MemoryGame");
+                }
             }
         }
 
@@ -288,24 +291,23 @@ public class MemoryUI : MonoBehaviour
     
     void FixedUpdate()
     {
-
-        if (lives < 1 || timeRemaining < 0)
+        if (arcadeMode == true)
         {
-            ShowScore();
-        }
-        else
-        {
-            if (arcadeMode == true)
+            if (lives < 1 || timeRemaining < 0)
             {
-                int tmp = (int)score;
-                theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
+                ShowScore();
             }
             else
             {
-                theScore.GetComponent<TMPro.TextMeshPro>().text = "";
+                    int tmp = (int)score;
+                    theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();     
             }
-            theLevels.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + Level.ToString();
         }
+        else
+        {
+            theScore.GetComponent<TMPro.TextMeshPro>().text = "";
+        }
+        theLevels.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + Level.ToString();
 
     }
 
