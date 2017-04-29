@@ -73,9 +73,11 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("DestroyTheCell");
                 break;
             case 14:
+                VirusGameplayScript.loadCase = 0;
                 LoadScene("VirusGameplay");
                 break;
             case 15:
+                CellGameplayScript.loadCase = 0;
                 LoadScene("CellGameplay");
                 break;
         }

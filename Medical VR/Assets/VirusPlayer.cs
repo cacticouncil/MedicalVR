@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
-using System;
 using TMPro;
 using UnityEngine.SceneManagement;
 
@@ -28,7 +26,6 @@ public class VirusPlayer : MonoBehaviour
     public FacebookStuff FB;
 
     public GameObject VirusAttack;
-    Vector3 SpawnVirusAttack;
 
     public float currSpeed;
     [System.NonSerialized]
@@ -159,7 +156,7 @@ public class VirusPlayer : MonoBehaviour
                     {
                         TutorialModeCompleted = false;
                         VirusGameplayScript.loadCase = 3;
-                        SceneManager.LoadScene("Virus Gameplay Scene");
+                        SceneManager.LoadScene("VirusGameplay");
                     }
 
                     //For arcade mode once you beat it will bring up scoreboard 

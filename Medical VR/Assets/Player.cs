@@ -174,7 +174,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                     if (BeatGameTimer >= 2.0f)
                     {
                         CellGameplayScript.loadCase = 4;
-                        SceneManager.LoadScene("Cell GamePlay");
+                        SceneManager.LoadScene("CellGameplay");
                     }
                 }
             }
