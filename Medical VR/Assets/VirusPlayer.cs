@@ -250,7 +250,7 @@ public class VirusPlayer : MonoBehaviour
         if (TutorialModeCompleted == true)
         {
             GlobalVariables.tutorial = false;
-            SceneManager.LoadScene("DestroyCell");
+            SceneManager.LoadScene("DestroyTheCell");
         }
     }
 
