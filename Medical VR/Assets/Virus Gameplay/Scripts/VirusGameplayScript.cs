@@ -8,7 +8,7 @@ public class VirusGameplayScript : MonoBehaviour
     public List<GameObject> places;
     public List<GameObject> Sceneries;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna;
-    public static int loadCase = 2;
+    public static int loadCase;
     // Use this for initialization
     delegate void Func();
     Func doAction;
