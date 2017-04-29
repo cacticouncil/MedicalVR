@@ -6,7 +6,6 @@ using TMPro;
 
 public class Storebullets : MonoBehaviour {
 
-    public static bool TutorialMode = true;
     float TutorialTimer = 0.0f;
     int WhatToRead = 0;
     float BeatGameTimer = 0.0f;
@@ -73,12 +72,12 @@ public class Storebullets : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (TutorialMode == false)
+        if (GlobalVariables.tutorial == false)
         {
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set up how turtorial will show players basic gameplay
-        else if (TutorialMode == true)
+        else if (GlobalVariables.tutorial == true)
         {
             switch (WhatToRead)
             {
@@ -210,7 +209,7 @@ public class Storebullets : MonoBehaviour {
                 //Story mode verion will play after completing
 
                 //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
-                TutorialMode = false;
+                GlobalVariables.tutorial = false;
                 arcadeMode = false;
                 SceneManager.LoadScene("CGampSnatcher");
                 //}
@@ -242,7 +241,7 @@ public class Storebullets : MonoBehaviour {
             if (numberofstingsdone >= 20)
             {
                 CellGameplayScript.loadCase = 2;
-                SceneManager.LoadScene("Cell Gameplay");
+                SceneManager.LoadScene("CellGameplay");
             }
         }
 

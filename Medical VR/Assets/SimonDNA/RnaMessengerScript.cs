@@ -90,7 +90,7 @@ public class RnaMessengerScript : MonoBehaviour
             {
                 //If you win story mode
                 VirusGameplayScript.loadCase = 2;
-                SceneManager.LoadScene("Virus Gameplay Scene");
+                SceneManager.LoadScene("VirusGameplay");
             }
             if (timer2 > 1.5f)
             {

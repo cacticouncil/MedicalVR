@@ -91,12 +91,12 @@ public class Fade : MonoBehaviour
     {
         TMPro.TextMeshPro[] texts = GetComponentsInChildren<TMPro.TextMeshPro>(true);
         string[] strs = new string[texts.Length];
+        string[] org = new string[texts.Length];
         for (int i = 0; i < texts.Length; i++)
         {
             strs[i] = texts[i].text;
+            org[i] = texts[i].text;
         }
-
-        string[] org = strs;
 
         for (int i = 0; i < texts.Length; i++)
         {

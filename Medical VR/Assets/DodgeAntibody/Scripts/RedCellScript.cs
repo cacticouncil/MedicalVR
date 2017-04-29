@@ -48,7 +48,7 @@ public class RedCellScript : MonoBehaviour
                     else if (MovingCamera.TutorialMode == false)
                     {
                         VirusGameplayScript.loadCase = 1;
-                        SceneManager.LoadScene("Virus Gameplay Scene");
+                        SceneManager.LoadScene("VirusGameplay");
                     }
                 }
             }

@@ -8,7 +8,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
     public GameObject RedCell;
     public GameObject RedCellTutorialLocation;
     public GameObject WhiteCell;
-   public bool WhiteCellHitsPlayerFirstTime = false;
+    public bool WhiteCellHitsPlayerFirstTime = false;
     Vector3 SavedRedCellPosition;
     public List<GameObject> WhiteCellsToActivate;
 
@@ -61,7 +61,8 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                     Subtitles.GetComponent<SubstitlesScript>().Stop();
                     Player.GetComponent<MovingCamera>().stopMoving = false;
                     Player.GetComponent<MovingCamera>().speed = 10.0f;
-                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.GetComponent<MovingCamera>().transform.position, 2.0f);
+                    if (WhiteCell)
+                        WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.GetComponent<MovingCamera>().transform.position, 0.0f);
                     break;
 
                 default:

@@ -66,10 +66,10 @@ public class _TGameController : MonoBehaviour
 
     void Start()
     {
-        isArcadeMode = true;
+        //isArcadeMode = true;
         hasWon = false;
         score = 0;
-        Invoke("StartScene", 2);
+        Invoke("StartScene", 0);
         SetFacebook();
     }
 
@@ -187,7 +187,7 @@ public class _TGameController : MonoBehaviour
     void MoveToNewScene()
     {
         CellGameplayScript.loadCase = 1;
-        SceneManager.LoadScene("Cell Gameplay");
+        SceneManager.LoadScene("CellGameplay");
     }
     void StartScene()
     {
