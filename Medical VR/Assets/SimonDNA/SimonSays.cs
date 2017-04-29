@@ -20,7 +20,7 @@ public class SimonSays : MonoBehaviour
 
     int round = 1, inputed = 0, shownSign = 0, scoreCombo = 1;
 
-    float timer = 3, theTimer, goTimer =0;
+    float timer = 0, theTimer, goTimer =0;
 
     Vector3 orgPos;
     bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false, showGo = false;
@@ -40,6 +40,8 @@ public class SimonSays : MonoBehaviour
     List<theColors> inputedColors = new List<theColors>();
     void Start ()
     {
+        sign.GetComponent<MeshRenderer>().enabled = false;
+        sign.GetComponentInChildren<TMPro.TextMeshPro>().text = " ";
         orgPos = transform.position;
         cY = yellow.GetComponent<Renderer>().material.color;
         cR = red.GetComponent<Renderer>().material.color;
@@ -86,7 +88,7 @@ public class SimonSays : MonoBehaviour
             theGO();
             if (waitAsec == false)
             {
-                if (showStuff == false && makeInput == false)
+                if (showStuff == false && makeInput == false && timer > 3)
                 {
                     ResetStuff();
                     GeneratePattern();
@@ -132,10 +134,7 @@ public class SimonSays : MonoBehaviour
             GO.SetActive(false);
         }
     }
-    void ArcadeMode()
-    {
-        
-    }
+   
     void WaitForTime()
     {
         if(waitAsec)
@@ -278,12 +277,7 @@ public class SimonSays : MonoBehaviour
     }
    public void ResetGame()
     {
-        ResetStuff();
-        UI.SetActive(true);
-        scoreBoard.SetActive(false);
-        transform.position = orgPos;
-        lives = 3;
-        score = 0;
+        SceneManager.LoadScene("SimonDNA");
     }
     void SignalIncorrect()
     {

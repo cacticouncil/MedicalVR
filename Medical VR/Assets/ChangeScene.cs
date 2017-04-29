@@ -48,9 +48,11 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("CGampSnatcher");
                 break;
             case 6:
+                _TGameController.isArcadeMode = true;
                 LoadScene("ATPGTPShooter");
                 break;
             case 7:
+                SoundManager.DestroySFX();
                 LoadScene("MainMenu");
                 break;
             case 8:
