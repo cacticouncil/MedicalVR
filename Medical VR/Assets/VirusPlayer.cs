@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
-using System;
 using TMPro;
 using UnityEngine.SceneManagement;
 
@@ -14,10 +12,6 @@ public class VirusPlayer : MonoBehaviour
     bool CanIRead = true;
     public bool TutorialModeCompleted = false;
 
-    //Variable for Arcade
-    public static bool ArcadeMode = true;
-    public static bool StoryMode = false;
-
     //Variables for Game
     public GameObject LivesGameobject;
     public GameObject Spawn;
@@ -28,10 +22,10 @@ public class VirusPlayer : MonoBehaviour
     public FacebookStuff FB;
 
     public GameObject VirusAttack;
-    public List<GameObject> VirusAttackList = new List<GameObject>();
-    Vector3 SpawnVirusAttack;
 
-    public float PlayerSpeed;
+    public float currSpeed;
+    [System.NonSerialized]
+    public float baseSpeed = .04f;
     public int Lives;
     public bool isGameover = false;
 
@@ -47,7 +41,7 @@ public class VirusPlayer : MonoBehaviour
     float Score = 0.0f;
     void Start()
     {
-        PlayerSpeed = .1f;
+        currSpeed = baseSpeed;
         Lives = 3;
         SetFacebook();
 
@@ -63,7 +57,7 @@ public class VirusPlayer : MonoBehaviour
         //For arcade and story mode
         if (GlobalVariables.tutorial == false)
         {
-            if (ArcadeMode == true)
+            if (GlobalVariables.arcadeMode)
             {
                 LivesGameobject.GetComponent<TextMeshPro>().text = "           Lives: " + Lives.ToString();
             }
@@ -117,7 +111,7 @@ public class VirusPlayer : MonoBehaviour
             }
 
             //Gameover
-            if (ArcadeMode == true)
+            if (GlobalVariables.arcadeMode)
             {
                 if (Lives == 0)
                     isGameover = true;
@@ -130,15 +124,14 @@ public class VirusPlayer : MonoBehaviour
                     BeatGameTimer += Time.deltaTime;
                     StartCoroutine(DisplayText("You Win", 2.0f));
 
-                    if (ArcadeMode == false)
+                    if (!GlobalVariables.arcadeMode)
                     {
                         float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
                         if (a < 0)
                             a = 0;
                         BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
                     }
-
-                    else if (ArcadeMode == true)
+                    else
                     {
                         ScoreBoard.SetActive(true);
                         ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
@@ -154,15 +147,15 @@ public class VirusPlayer : MonoBehaviour
                 if (BeatGameTimer >= 2.0f)
                 {
                     //For story mode once you beat it proceed to the next story mode
-                    if (ArcadeMode == false)
+                    if (!GlobalVariables.arcadeMode)
                     {
                         TutorialModeCompleted = false;
                         VirusGameplayScript.loadCase = 3;
-                        SceneManager.LoadScene("Virus Gameplay Scene");
+                        SceneManager.LoadScene("VirusGameplay");
                     }
 
                     //For arcade mode once you beat it will bring up scoreboard 
-                    else if (ArcadeMode == true)
+                    else
                     {
                         ScoreBoard.SetActive(true);
                         ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
@@ -204,7 +197,7 @@ public class VirusPlayer : MonoBehaviour
                     case 4:
                         StartCoroutine(DisplayText("And using your reticle to destroy them", 3.5f));
                         CanIMove = true;
-                        PlayerSpeed = .02f;
+                        currSpeed = baseSpeed;
                         WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
                         break;
 
@@ -231,7 +224,7 @@ public class VirusPlayer : MonoBehaviour
                     case 9:
                         StartCoroutine(DisplayText("Now practice targeting these cell receptors", 3.5f));
                         CanIMove = true;
-                        PlayerSpeed = .02f;
+                        currSpeed = baseSpeed;
                         WaveManager.GetComponent<WaveManager>().WaveNumber = 2;
                         WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
                         WaveManager.GetComponent<WaveManager>().CanISpawnAntiViralProtein = true;
@@ -253,21 +246,11 @@ public class VirusPlayer : MonoBehaviour
             }
         }
 
-        //For both tutorial and gameplay delete null virus attack
-        for (int i = 0; i < VirusAttackList.Count; i++)
-        {
-            if (VirusAttackList[i].gameObject == null)
-                VirusAttackList.Remove(VirusAttackList[i]);
-        }
-
         //After you beat tutorial if story mode bool is active transtion to story mode for this game
         if (TutorialModeCompleted == true)
         {
-            if (StoryMode == true)
-                PlayStory();
-
-            else if (StoryMode == false)
-                PlayArcade();
+            GlobalVariables.tutorial = false;
+            SceneManager.LoadScene("DestroyTheCell");
         }
     }
 
@@ -287,8 +270,8 @@ public class VirusPlayer : MonoBehaviour
 
             else if (DelaySpawn == false)
             {
-                transform.position += transform.forward * PlayerSpeed;
-                GetComponent<Rigidbody>().velocity *= PlayerSpeed;
+                transform.position += transform.forward * currSpeed;
+                GetComponent<Rigidbody>().velocity *= currSpeed;
             }
         }
 
@@ -296,8 +279,8 @@ public class VirusPlayer : MonoBehaviour
         {
             if (CanIMove == true)
             {
-                transform.position += transform.forward * PlayerSpeed;
-                GetComponent<Rigidbody>().velocity *= PlayerSpeed;
+                transform.position += transform.forward * currSpeed;
+                GetComponent<Rigidbody>().velocity *= currSpeed;
             }
         }
     }
@@ -335,40 +318,10 @@ public class VirusPlayer : MonoBehaviour
         DelaySpawn = true;
     }
 
-    public void SpawnAttackViruses()
-    {
-        SpawnVirusAttack = transform.position;
-        GameObject V = Instantiate(VirusAttack, SpawnVirusAttack, Quaternion.identity) as GameObject;
-        V.GetComponent<AttackVirus>().MainCamera = this.gameObject;
-        VirusAttackList.Add(V);
-        V.GetComponent<AttackVirus>().enabled = true;
-    }
-
     void SetFacebook()
     {
         FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + Score.ToString(); /// + FacebookManager.Instance.GlobalScore /;
         FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
-    }
-
-    public void PlayArcade()
-    {
-        GlobalVariables.tutorial = false;
-        ArcadeMode = true;
-        SceneManager.LoadScene("DestroyTheCell");
-    }
-
-    public void PlayStory()
-    {
-        GlobalVariables.tutorial = false;
-        ArcadeMode = false;
-        SceneManager.LoadScene("DestroyTheCell");
-    }
-
-    public void PlayTutorial()
-    {
-        GlobalVariables.tutorial = true;
-        ArcadeMode = false;
-        SceneManager.LoadScene("DestroyTheCell");
     }
 }
 

@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class VirusGameplayScript : MonoBehaviour
 {
-
     public List<GameObject> places;
     public List<GameObject> Sceneries;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna;
@@ -179,8 +178,8 @@ public class VirusGameplayScript : MonoBehaviour
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-012");
                 break;
             case (131):
-                MovingCamera.arcadeMode = false;
-                MovingCamera.TutorialMode = true;
+                GlobalVariables.arcadeMode = false;
+                GlobalVariables.tutorial = true;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
@@ -301,7 +300,7 @@ public class VirusGameplayScript : MonoBehaviour
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-032");
                 break;
             case (286):
-                SimonSays.arcadeMode = false;
+                GlobalVariables.arcadeMode = false;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
@@ -364,7 +363,7 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (352):
-                VirusPlayer.ArcadeMode = false;
+                GlobalVariables.arcadeMode = false;
                 SceneManager.LoadScene("DestroyTheCell");
                 
                 break;

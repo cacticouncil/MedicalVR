@@ -4,22 +4,21 @@ using System;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class Storebullets : Tutorial {
-
+public class Storebullets : MonoBehaviour
+{
     float TutorialTimer = 0.0f;
     int WhatToRead = 0;
     float BeatGameTimer = 0.0f;
 
     public GameObject EventSystem;
     public static int bulletamount;
-    public static int  numberofstingsdone;
+    public static int numberofstingsdone;
     public static int neededstings = 5;
     public GameObject theScore, scoreBoard, UI, BulletAmount, TheLevel;
     public GameObject theLives;
     public GameObject CenterScreenObj;
     public static float score = 0;
-    public static bool arcadeMode = /*true;*/ false;////////////////////////////////////////////////////////////////////////////
-   public static int lives = 3;
+    public static int lives = 3;
     int level = 1;
 
     public GameObject shotSpawn;
@@ -30,13 +29,13 @@ public class Storebullets : Tutorial {
     private float nextFire;
     public static void LoseresetPos()
     {
-        if (arcadeMode == true)
+        if (GlobalVariables.arcadeMode == true)
         {
             lives--;
         }
         else
         {
-            
+
         }
     }
     void ShowScore()
@@ -62,7 +61,7 @@ public class Storebullets : Tutorial {
         BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         TheLevel.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + level;
-        if (arcadeMode == false)
+        if (GlobalVariables.arcadeMode == false)
         {
             TheLevel.SetActive(false);
             theScore.SetActive(false);
@@ -72,12 +71,12 @@ public class Storebullets : Tutorial {
     // Update is called once per frame
     void Update()
     {
-        if (tutorial == false)
+        if (GlobalVariables.tutorial == false)
         {
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set up how turtorial will show players basic gameplay
-        else if (tutorial == true)
+        else if (GlobalVariables.tutorial == true)
         {
             switch (WhatToRead)
             {
@@ -137,7 +136,7 @@ public class Storebullets : Tutorial {
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Perfect " + "\n" +" Now help them reach the stings by shooting them pressing the button ";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Perfect " + "\n" + " Now help them reach the stings by shooting them pressing the button ";
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -209,9 +208,19 @@ public class Storebullets : Tutorial {
                 //Story mode verion will play after completing
 
                 //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
-                tutorial = false;
-                arcadeMode = false;
-                SceneManager.LoadScene("CGampSnatcher");
+                GlobalVariables.tutorial = false;
+                if (GlobalVariables.arcadeMode == true)
+                {
+                    GlobalVariables.arcadeMode = true;
+                    SceneManager.LoadScene("CGampSnatcher");
+
+                }
+                else
+                {
+                    GlobalVariables.arcadeMode = false;
+                    SceneManager.LoadScene("CGampSnatcher");
+                }
+
                 //}
 
                 //    else if ()
@@ -220,8 +229,8 @@ public class Storebullets : Tutorial {
                 //    }
             }
         }
-    
-    BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + Storebullets.bulletamount;
+
+        BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + Storebullets.bulletamount;
         bool bPressed = Input.GetButtonDown("Fire1");
         //     bool bHeld = Input.GetButton("Fire1");
         //     bool bUp = Input.GetButtonUp("Fire1");
@@ -236,39 +245,39 @@ public class Storebullets : Tutorial {
     void FixedUpdate()
     {
 
-        if (arcadeMode == false)
+        if (GlobalVariables.arcadeMode == false)
         {
             if (numberofstingsdone >= 20)
             {
                 CellGameplayScript.loadCase = 2;
-                SceneManager.LoadScene("Cell Gameplay");
+                SceneManager.LoadScene("CellGameplay");
             }
         }
 
-            if (arcadeMode == true)
+        if (GlobalVariables.arcadeMode == true)
+        {
+            theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+            if (lives < 1)
             {
-                 theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
-                 if (lives < 1)
-                 {
-                     ShowScore();
-                 }
-                 if (numberofstingsdone >= neededstings)
-                     {
-                         TheLevel.GetComponent<TMPro.TextMeshPro>().text = "Level: " + level;
-                         neededstings += 5;
-                     }
-                     int tmp = (int)score;
-                     theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
+                ShowScore();
             }
-            else
+            if (numberofstingsdone >= neededstings)
             {
-                theScore.GetComponent<TMPro.TextMeshPro>().text = "";
-                TheLevel.GetComponent<TMPro.TextMeshPro>().text = "";
-                theLives.GetComponent<TMPro.TextMeshPro>().text = "";
+                TheLevel.GetComponent<TMPro.TextMeshPro>().text = "Level: " + level;
+                neededstings += 5;
+            }
+            int tmp = (int)score;
+            theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
+        }
+        else
+        {
+            theScore.GetComponent<TMPro.TextMeshPro>().text = "";
+            TheLevel.GetComponent<TMPro.TextMeshPro>().text = "";
+            theLives.GetComponent<TMPro.TextMeshPro>().text = "";
 
         }
     }
-   
+
     private void shootCGamp()
     {
         if (bullet)

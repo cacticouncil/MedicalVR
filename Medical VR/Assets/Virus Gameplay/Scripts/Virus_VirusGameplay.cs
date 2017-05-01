@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Virus_VirusGameplay : MonoBehaviour {
-
+public class Virus_VirusGameplay : MonoBehaviour
+{
     public List<GameObject> places;
     public GameObject subtitles, virusWithMesh, capsid, dna, virions;
 
@@ -12,7 +12,8 @@ public class Virus_VirusGameplay : MonoBehaviour {
     public float moveSpeed;
     float fadeSpeed;
     int I = 0;
-    void Start () {
+    void Start()
+    {
         doAction = NullFunction;
         switch (VirusGameplayScript.loadCase)
         {
@@ -30,7 +31,7 @@ public class Virus_VirusGameplay : MonoBehaviour {
 
     }
     // Update is called once per frame
-    void FixedUpdate ()
+    void FixedUpdate()
     {
         CheckCaases();
         doAction();
@@ -61,7 +62,7 @@ public class Virus_VirusGameplay : MonoBehaviour {
     void RotateTo()
     {
         if (I != places.Count)
-            dna.transform.rotation = Quaternion.RotateTowards(dna.transform.rotation, places[I].transform.rotation, 100* Time.deltaTime);
+            dna.transform.rotation = Quaternion.RotateTowards(dna.transform.rotation, places[I].transform.rotation, 100 * Time.deltaTime);
     }
     void CheckCaases()
     {

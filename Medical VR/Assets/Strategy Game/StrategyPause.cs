@@ -32,7 +32,6 @@ public class StrategyPause : MonoBehaviour
                 }
             }
         }
-
         else
         {
             ButtonHeldTimer = 0;

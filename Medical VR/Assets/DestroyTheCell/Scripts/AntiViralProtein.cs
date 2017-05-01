@@ -12,7 +12,10 @@ public class AntiViralProtein : MonoBehaviour
     bool isRotating;
     float RotateTimer;
     float MoveTimer;
-    public float Speed;
+    [System.NonSerialized]
+    public float patrolSpeed = .4f;
+    [System.NonSerialized]
+    public float chaceSpeed = .6f;
 
     void Start()
     {
@@ -24,10 +27,6 @@ public class AntiViralProtein : MonoBehaviour
         isRotating = false;
         RotateTimer = 0.0f;
         MoveTimer = 0.0f;
-        Speed = .004f;
-
-        if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
-            Speed = 0.0f;
     }
 
     void Update()
@@ -35,9 +34,8 @@ public class AntiViralProtein : MonoBehaviour
         if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
         {
             AlwaysChasePlayer = true;
-            Speed = .007f;
-            transform.LookAt(Player.transform);
-            transform.position = Vector3.MoveTowards(transform.position, Player.GetComponent<VirusPlayer>().transform.position, Speed);
+            GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(Player.transform.position - transform.position));
+            GetComponent<Rigidbody>().MovePosition(transform.position + (Player.GetComponent<VirusPlayer>().transform.position - transform.position) * patrolSpeed * Time.deltaTime);
         }
 
         else
@@ -52,35 +50,35 @@ public class AntiViralProtein : MonoBehaviour
                     switch (M)
                     {
                         case Movements.XAxis:
-                            transform.Rotate(.05f, 0, 0);
+                            GetComponent<Rigidbody>().AddRelativeTorque(.05f, 0, 0);
                             break;
 
                         case Movements.YAxis:
-                            transform.Rotate(0, .05f, 0);
+                            GetComponent<Rigidbody>().AddRelativeTorque(0, .05f, 0);
                             break;
 
                         case Movements.XYAxis:
-                            transform.Rotate(.05f, .05f, 0);
+                            GetComponent<Rigidbody>().AddRelativeTorque(.05f, .05f, 0);
                             break;
 
                         case Movements.NXAxis:
-                            transform.Rotate(-.05f, 0, 0);
+                            GetComponent<Rigidbody>().AddRelativeTorque(-.05f, 0, 0);
                             break;
 
                         case Movements.NYAxis:
-                            transform.Rotate(0, -.05f, 0);
+                            GetComponent<Rigidbody>().AddRelativeTorque(0, -.05f, 0);
                             break;
 
                         case Movements.NXNYAxis:
-                            transform.Rotate(-.05f, -.05f, 0);
+                            GetComponent<Rigidbody>().AddRelativeTorque(-.05f, -.05f, 0);
                             break;
 
                         case Movements.XNYAxis:
-                            transform.Rotate(.05f, -.05f, 0);
+                            GetComponent<Rigidbody>().AddRelativeTorque(.05f, -.05f, 0);
                             break;
 
                         case Movements.NXYAxis:
-                            transform.Rotate(-.05f, .05f, 0);
+                            GetComponent<Rigidbody>().AddRelativeTorque(-.05f, .05f, 0);
                             break;
                         default:
                             break;
@@ -98,9 +96,8 @@ public class AntiViralProtein : MonoBehaviour
                 else if (isRotating == false)
                 {
                     MoveTimer += Time.deltaTime;
-
-                    transform.position += transform.forward * Speed;
-                    GetComponent<Rigidbody>().velocity *= Speed;
+                    
+                    GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, 0, 1) * patrolSpeed);
 
                     if (MoveTimer >= 5.5f)
                     {
@@ -113,8 +110,8 @@ public class AntiViralProtein : MonoBehaviour
             else if (AlwaysChasePlayer == true)
             {
                 //Chase the player
-                transform.LookAt(Player.GetComponent<VirusPlayer>().transform.position);
-                transform.position = Vector3.MoveTowards(transform.position, Player.GetComponent<VirusPlayer>().transform.position, Speed);
+                GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(Player.transform.position - transform.position));
+                GetComponent<Rigidbody>().MovePosition(transform.position + (Player.GetComponent<VirusPlayer>().transform.position - transform.position) * chaceSpeed * Time.deltaTime);
             }
 
         }

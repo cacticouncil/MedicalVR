@@ -20,10 +20,13 @@ public class StrategyTutorialImmunity : MonoBehaviour
     public TMPro.TextMeshPro subtitles;
     public GameObject[] imm = new GameObject[0];
     public GameObject[] cells = new GameObject[7];
-    public List<TMPro.TextMeshPro> text = new List<TMPro.TextMeshPro>();
+    public List<TMPro.TextMeshPro> texts = new List<TMPro.TextMeshPro>();
 
     private Vector3 prevPos;
     private GameObject fade;
+    private bool last = false, text = false, finish = false, advance = false;
+    private List<Vector3> nextPos = new List<Vector3>();
+    private List<Coroutine> stop = new List<Coroutine>();
 
     void OnEnable()
     {
@@ -33,6 +36,23 @@ public class StrategyTutorialImmunity : MonoBehaviour
 
         prevPos = cam.transform.position;
         StartCoroutine(Advance());
+    }
+
+    void Update()
+    {
+        bool held = Input.GetButton("Fire1");
+        if (held && !last)
+        {
+            if (text)
+            {
+                finish = true;
+            }
+            else
+            {
+                advance = true;
+            }
+        }
+        last = held;
     }
 
     IEnumerator Advance()
@@ -52,37 +72,49 @@ public class StrategyTutorialImmunity : MonoBehaviour
         holder.transform.LookAt(cam.transform);
         holder.SetActive(true);
         immDes.text = "Immunity: 0";
-        Vector3 offset = cells[0].transform.localPosition;
-        cells[0].transform.localPosition = Vector3.zero;
-        cells[1].transform.localPosition -= offset;
-        cells[2].transform.localPosition -= offset;
-        cells[3].transform.localPosition -= offset;
-        cells[4].transform.localPosition -= offset;
-        cells[5].transform.localPosition -= offset;
-        cells[6].transform.localPosition -= offset;
 
         StartCoroutine(FadeOutObject(fade));
         yield return new WaitForSeconds(1.0f);
 
         //Immunity spreads from cell to cell and helps you fight back against viruses in multiple ways. 
-        StartCoroutine(StartText());
-        StartCoroutine(GrowInObject(cells[0]));
-        StartCoroutine(GrowInObject(cells[1]));
-        StartCoroutine(GrowInObject(cells[2]));
-        StartCoroutine(GrowInObject(cells[3]));
-        StartCoroutine(GrowInObject(cells[4]));
-        StartCoroutine(GrowInObject(cells[5]));
-        StartCoroutine(GrowInObject(cells[6]));
+        StartCoroutine(TurnTextOn(0));
+        stop.Add(StartCoroutine(GrowInObject(cells[0])));
+        stop.Add(StartCoroutine(GrowInObject(cells[1])));
+        stop.Add(StartCoroutine(GrowInObject(cells[2])));
+        stop.Add(StartCoroutine(GrowInObject(cells[3])));
+        stop.Add(StartCoroutine(GrowInObject(cells[4])));
+        stop.Add(StartCoroutine(GrowInObject(cells[5])));
+        stop.Add(StartCoroutine(GrowInObject(cells[6])));
         foreach (GameObject item in imm)
         {
-            StartCoroutine(FadeInObject(item));
-            StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
+            stop.Add(StartCoroutine(FadeInObject(item)));
+            stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
         }
-        yield return new WaitForSeconds(3.0f);
+        
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+
+        for (int i = 0; i < 7; i++)
+        {
+            cells[i].transform.localScale = Vector3.one;
+        }
+        foreach (GameObject item in imm)
+        {
+            Color c = item.GetComponent<Renderer>().material.color;
+            c.a = 1;
+            item.GetComponent<Renderer>().material.color = c;
+            item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
+        }
 
         //With at least 1 Immunity, cells will spread a portion of their Immunity to adjacent cells. 
         StartCoroutine(TurnTextOn(1));
-        yield return new WaitForSeconds(1.0f);
         immDes.text = "Immunity: 1";
         for (int i = 1; i < cells.Length; i++)
         {
@@ -92,11 +124,13 @@ public class StrategyTutorialImmunity : MonoBehaviour
             p.GetComponent<ImmunityParticles>().startSpeed = 15;
             p.GetComponent<ImmunityParticles>().enabled = true;
         }
-        yield return new WaitForSeconds(2.0f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
 
         //With only 1 Immunity, adjacent cells will receive 1 Immunity each in 100 turns. 
         StartCoroutine(TurnTextOn(2));
-        yield return new WaitForSeconds(1.0f);
         for (int i = 1; i < cells.Length; i++)
         {
             GameObject p = Instantiate(immunityParticles, cells[0].transform.position, Quaternion.LookRotation(cells[i].transform.position - cells[0].transform.position), objects.transform) as GameObject;
@@ -105,7 +139,10 @@ public class StrategyTutorialImmunity : MonoBehaviour
             p.GetComponent<ImmunityParticles>().startSpeed = 15;
             p.GetComponent<ImmunityParticles>().enabled = true;
         }
-        yield return new WaitForSeconds(2.0f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
 
         //1 cell surrounded by 6 cells with 1 immunity takes 16 turns to receive 1 Immunity. 
         StartCoroutine(TurnTextOn(3));
@@ -118,80 +155,178 @@ public class StrategyTutorialImmunity : MonoBehaviour
             p.GetComponent<ImmunityParticles>().startSpeed = 15;
             p.GetComponent<ImmunityParticles>().enabled = true;
         }
-        yield return new WaitForSeconds(2.0f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
 
         //At 10 Immunity, a cell spawns a random protein. 
         StartCoroutine(TurnTextOn(4));
         proDes.text = "Protein: RNase L";
-        StartCoroutine(FadeInObject(pro));
-        StartCoroutine(FadeInText(pro.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
-        yield return new WaitForSeconds(1);
+        stop.Add(StartCoroutine(FadeInObject(pro)));
+        stop.Add(StartCoroutine(FadeInText(pro.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
         immDes.text = "Immunity: 10";
-        yield return new WaitForSeconds(2);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+
+        Color col = pro.GetComponent<Renderer>().material.color;
+        col.a = 1;
+        pro.GetComponent<Renderer>().material.color = col;
+        pro.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
 
         //Most stop the virus from replicating when it kills the cell.
         StartCoroutine(TurnTextOn(5));
-        yield return new WaitForSeconds(1);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
         proDes.text = "Protein: PKR";
-        yield return new WaitForSeconds(.66f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
         proDes.text = "Protein: TRIM22";
-        yield return new WaitForSeconds(.66f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
         proDes.text = "Protein: IFIT";
-        yield return new WaitForSeconds(.68f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
 
         //But, you can get some that attempt to stop the virus before it kills the cell. 
         StartCoroutine(TurnTextOn(6));
-        yield return new WaitForSeconds(.5f);
         proDes.text = "Protein: CH25H";
-        yield return new WaitForSeconds(1.5f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
         proDes.text = "Protein: Mx1";
-        yield return new WaitForSeconds(1.5f);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
 
         //You can click on the Protein tab to see the list of proteins and what each does. 
         StartCoroutine(TurnTextOn(7));
-        StartCoroutine(FadeInObject(proOutline));
-        yield return new WaitForSeconds(3);
+        stop.Add(StartCoroutine(FadeInObject(proOutline)));
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+
+        proOutline.GetComponent<Renderer>().material.color = Color.red;
 
         //Each virus has an Immunity value that the cell’s immunity value must be higher than to kill the virus. 
         StartCoroutine(TurnTextOn(8));
-        StartCoroutine(FadeOutObject(proOutline));
-        StartCoroutine(FadeInObject(virus));
-        StartCoroutine(FadeInObject(virusImm));
-        yield return new WaitForSeconds(1);
+        stop.Add(StartCoroutine(FadeOutObject(proOutline)));
+        stop.Add(StartCoroutine(FadeInObject(virus)));
+        stop.Add(StartCoroutine(FadeInObject(virusImm)));
         immDes.text = "Immunity: 20";
-        yield return new WaitForSeconds(2);
+        
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+
+        proOutline.SetActive(false);
+        col = virus.GetComponent<Renderer>().material.color;
+        col.a = 1;
+        virus.GetComponent<Renderer>().material.color = col;
+        virus.GetComponent<Renderer>().material.SetColor("_Outline", Color.black);
+        col = virusImm.GetComponent<Renderer>().material.color;
+        col.a = 1;
+        virusImm.GetComponent<Renderer>().material.color = col;
 
         //When a virus is killed with Immunity that value is subtracted from the cell’s Immunity. 
         StartCoroutine(TurnTextOn(9));
-        yield return new WaitForSeconds(1);
-        StartCoroutine(FadeOutObject(virus));
-        StartCoroutine(FadeOutObject(virusImm));
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        stop.Add(StartCoroutine(FadeOutObject(virus)));
+        stop.Add(StartCoroutine(FadeOutObject(virusImm)));
         for (int i = 20; i > -1; i--)
         {
             immDes.text = "Immunity: " + i;
             yield return new WaitForSeconds(.1f);
+            if (advance)
+                break;
         }
+
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        
+        immDes.text = "Immunity: 0";
+        virus.SetActive(false);
+        virusImm.SetActive(false);
 
         //The Immunity required to kill each virus increases as the game continues. 
         StartCoroutine(TurnTextOn(10));
-        yield return new WaitForSeconds(3);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
 
         //The Antigen powerup increases Immunity by 10. 
         StartCoroutine(TurnTextOn(11));
-        StartCoroutine(FadeInObject(antigen));
-        yield return new WaitForSeconds(2);
-        StartCoroutine(FadeOutObject(antigen));
-        for (int i = 0; i < 11; i++)
+        stop.Add(StartCoroutine(FadeInObject(antigen)));
+        immDes.text = "Immunity: 10";
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
         {
-            immDes.text = "Immunity: " + i;
-            yield return new WaitForSeconds(.2f);
+            StopCoroutine(co);
         }
+        stop.Clear();
+
+        col = antigen.GetComponent<Renderer>().material.color;
+        col.a = 1;
+        antigen.GetComponent<Renderer>().material.color = col;
+
 
         //The Interferon powerup doubles Immunity spread by that cell. 
         StartCoroutine(TurnTextOn(12));
-        StartCoroutine(FadeInObject(interferon));
-        yield return new WaitForSeconds(2);
-        StartCoroutine(FadeOutObject(interferon));
+        stop.Add(StartCoroutine(FadeOutObject(antigen)));
+        stop.Add(StartCoroutine(FadeInObject(interferon)));
+
         for (int i = 1; i < cells.Length; i++)
         {
             GameObject p = Instantiate(immunityParticles, cells[0].transform.position, Quaternion.LookRotation(cells[i].transform.position - cells[0].transform.position), objects.transform) as GameObject;
@@ -200,23 +335,57 @@ public class StrategyTutorialImmunity : MonoBehaviour
             p.GetComponent<ImmunityParticles>().startSpeed = 15;
             p.GetComponent<ImmunityParticles>().enabled = true;
         }
-        yield return new WaitForSeconds(2);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+
+        antigen.SetActive(false);
+        col = interferon.GetComponent<Renderer>().material.color;
+        col.a = 1;
+        interferon.GetComponent<Renderer>().material.color = col;
 
         //The Protein powerup changes the protein to a random different protein. 
         StartCoroutine(TurnTextOn(13));
-        StartCoroutine(FadeInObject(protein));
-        yield return new WaitForSeconds(2);
-        StartCoroutine(FadeOutObject(protein));
+        stop.Add(StartCoroutine(FadeOutObject(interferon)));
+        stop.Add(StartCoroutine(FadeInObject(protein)));
         proDes.text = "Protein: RNase L";
-        yield return new WaitForSeconds(2);
+
+        while (!advance)
+            yield return 0;
+        advance = false;
+
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+
+        interferon.SetActive(false);
+        col = protein.GetComponent<Renderer>().material.color;
+        col.a = 1;
+        protein.GetComponent<Renderer>().material.color = col;
 
         //Immunity is a very versatile stat and should be leveled in a variety of situations.  
         StartCoroutine(TurnTextOn(14));
-        yield return new WaitForSeconds(3);
+        stop.Add(StartCoroutine(FadeOutObject(protein)));
 
-        StartCoroutine(EndText());
-        yield return new WaitForSeconds(1.0f);
+        while (!advance)
+            yield return 0;
+        advance = false;
 
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        protein.SetActive(false);
 
         //Fade to black
         StartCoroutine(FadeInObject(fade));
@@ -232,7 +401,12 @@ public class StrategyTutorialImmunity : MonoBehaviour
             cell.SetActive(false);
         }
         virus.SetActive(false);
-        
+        foreach (GameObject item in imm)
+        {
+            item.SetActive(false);
+        }
+        pro.SetActive(false);
+
         holder.SetActive(false);
         eventSystem.SetActive(true);
         Destroy(fade);
@@ -349,50 +523,30 @@ public class StrategyTutorialImmunity : MonoBehaviour
     #endregion
 
     #region Text
-    IEnumerator StartText()
-    {
-        subtitles.gameObject.SetActive(true);
-        subtitles.text = text[0].text;
-        Color a = subtitles.color;
-        a.a = 0.0f;
-        subtitles.color = a;
-        float startTime = Time.time;
-        float t = 0.0f;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            a.a = t;
-            subtitles.color = a;
-            yield return 0;
-        }
-    }
-
     IEnumerator TurnTextOn(int index)
     {
-        Color a = subtitles.color;
-        float startTime = Time.time;
-        float t = 0.0f;
-        while (t < 1.0f)
-        {
-            t = (Time.time - startTime) * 2.0f;
-            a.a = 1.0f - t;
-            subtitles.color = a;
+        while (text)
             yield return 0;
-        }
-        yield return 0;
-        subtitles.text = text[index].text;
-        a = subtitles.color;
-        a.a = 0.0f;
-        subtitles.color = a;
-        startTime = Time.time;
-        t = 0;
-        while (t < 1.0f)
+
+        text = true;
+        subtitles.text = "_";
+
+        while (subtitles.text != texts[index].text && !finish)
         {
-            t = (Time.time - startTime) * 2.0f;
-            a.a = t;
-            subtitles.color = a;
-            yield return 0;
+            yield return new WaitForSeconds(GlobalVariables.textDelay);
+
+            if (subtitles.text.Length == texts[index].text.Length)
+            {
+                subtitles.text = texts[index].text;
+            }
+            else
+            {
+                subtitles.text = subtitles.text.Insert(subtitles.text.Length - 1, texts[index].text[subtitles.text.Length - 1].ToString());
+            }
         }
+        subtitles.text = texts[index].text;
+        finish = false;
+        text = false;
     }
 
     IEnumerator FadeInText(TMPro.TextMeshPro text)
@@ -425,21 +579,6 @@ public class StrategyTutorialImmunity : MonoBehaviour
             yield return 0;
         }
         text.gameObject.SetActive(false);
-    }
-
-    IEnumerator EndText()
-    {
-        Color a = subtitles.color;
-        float startTime = Time.time;
-        float t = 0.0f;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            a.a = 1.0f - t;
-            subtitles.color = a;
-            yield return 0;
-        }
-        subtitles.gameObject.SetActive(false);
     }
     #endregion
 }

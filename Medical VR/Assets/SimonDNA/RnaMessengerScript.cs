@@ -18,13 +18,13 @@ public class RnaMessengerScript : MonoBehaviour
     {
         tmpScore = simon.GetComponent<SimonSays>().score;
         tmpLives = simon.GetComponent<SimonSays>().lives;
-        if (SimonSays.arcadeMode == false)
+        if (GlobalVariables.arcadeMode == false)
         {
             subtitles.SetActive(false);
             subtitles.GetComponent<SubstitlesScript>().Stop();
             simon.GetComponent<SimonSays>().lives = 0;
             simon.GetComponent<SimonSays>().sign.SetActive(false);
-            if (SimonSays.arcadeMode == false && SimonSays.TutorialMode == false)
+            if (GlobalVariables.arcadeMode == false && GlobalVariables.tutorial == false)
             {
                 simon.GetComponent<SimonSays>().lives = 3;
                 simon.GetComponent<SimonSays>().sign.SetActive(true);
@@ -71,7 +71,7 @@ public class RnaMessengerScript : MonoBehaviour
     }
     void StoryModeStuff()
     {
-        if (SimonSays.arcadeMode == false && simon.GetComponent<SimonSays>().polys != simon.GetComponent<SimonSays>().polysDone)
+        if (GlobalVariables.arcadeMode == false && simon.GetComponent<SimonSays>().polys != simon.GetComponent<SimonSays>().polysDone)
         {
             timer += Time.deltaTime;
             if (timer > 1 && timer < 2)
@@ -90,7 +90,7 @@ public class RnaMessengerScript : MonoBehaviour
             {
                 //If you win story mode
                 VirusGameplayScript.loadCase = 2;
-                SceneManager.LoadScene("Virus Gameplay Scene");
+                SceneManager.LoadScene("VirusGameplay");
             }
             if (timer2 > 1.5f)
             {

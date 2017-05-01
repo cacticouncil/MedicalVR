@@ -74,11 +74,11 @@ public static class SoundManager {
         EventManager.OnUnpause += Resume;
 
         // Manually add the loop information beause configuration files are hard.
-        if (!Loops.ContainsKey("Boss1")) {
-            Loops.Add("Boss1", new LoopData(782664, 1940833));
-            Loops.Add("Boss2", new LoopData(317732, 2570388));
-            Loops.Add("Boss3-1", new LoopData(709131, 2515920));
-            Loops.Add("Boss3-2", new LoopData(0, 2094594));
+        if (!Loops.ContainsKey("AMBIANCE")) {
+            Loops.Add("AMBIANCE", new LoopData(782664, 1940833));
+            Loops.Add("DRUMS", new LoopData(317732, 2570388));
+            Loops.Add("SYNTHS", new LoopData(709131, 2515920));
+            Loops.Add("WEIRD N BASS", new LoopData(0, 2094594));
             Loops.Add("Boss3-3", new LoopData(194755, 2404985));
             Loops.Add("Title", new LoopData(351905, 1056500));
             Loops.Add("World1", new LoopData(990062, 2227651));
@@ -141,6 +141,17 @@ public static class SoundManager {
         }
     }
 
+    public static void DestroySFX()
+    {
+        for (int i = SFX.Count - 1; i >= 0; i--)
+        {
+           // if (!(SFX[i].isPlaying) && isPaused == false)
+            {
+                Object.Destroy(SFX[i]);
+                SFX.RemoveAt(i);
+            }
+        }
+    }
     public static void Play(string _title) {
         if (!Controller) {
             return;
@@ -150,6 +161,7 @@ public static class SoundManager {
         }
         BGM.Stop();
         Fade = FadeType.NONE;
+        if (Loops.ContainsKey(_title))
         LoopStats = Loops[_title];
         BGM.volume = MaxBGMVolume;
         BGM.clip = (AudioClip)Resources.Load("BGM/" + _title);
@@ -190,6 +202,7 @@ public static class SoundManager {
         CurrentTitle = _title;
         Fade = FadeType.FADEIN;
         AudioClip c = (AudioClip)Resources.Load("BGM/" + _title);
+        if (Loops.ContainsKey(_title))
         LoopStats = Loops[_title];
         BGM.volume = 0;
         BGM.clip = c;
@@ -383,6 +396,7 @@ public static class SoundManager {
         AudioClip c = (AudioClip)Resources.Load("BGM/" + _title);
         if (c != null) {
             CurrentTitle = _title;
+            if (Loops.ContainsKey(_title))
             LoopStats = Loops[_title];
             Fade = FadeType.FADEINOUT;
             Crossfade.Stop();

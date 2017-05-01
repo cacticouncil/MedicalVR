@@ -4,7 +4,7 @@ using System.Collections;
 public class PauseCapsules : MonoBehaviour {
     public GameObject pausemenu;
     public GameObject capsules;
-
+    public GameObject victoryeffect;
     // Use this for initialization
     void Start () {
 
@@ -17,7 +17,7 @@ public class PauseCapsules : MonoBehaviour {
         {
             capsules.SetActive(false);
         }
-        else
+        else if(pausemenu.GetComponent<Pause>().isPaused == false && victoryeffect.GetComponent<ParticleSystem>().isPlaying == false)
         {
             capsules.SetActive(true);
         }

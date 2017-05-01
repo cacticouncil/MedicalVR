@@ -8,13 +8,13 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
     public GameObject RedCell;
     public GameObject RedCellTutorialLocation;
     public GameObject WhiteCell;
-   public bool WhiteCellHitsPlayerFirstTime = false;
+    public bool WhiteCellHitsPlayerFirstTime = false;
     Vector3 SavedRedCellPosition;
     public List<GameObject> WhiteCellsToActivate;
 
     void Start()
     {
-        if (MovingCamera.TutorialMode == true)
+        if (GlobalVariables.tutorial)
         {
             //Set the player in the other tunnel
             Player.GetComponent<MovingCamera>().transform.position = transform.position;
@@ -26,10 +26,10 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //Trigger Events
-        if (MovingCamera.TutorialMode == true)
+        if (GlobalVariables.tutorial)
         {
             switch ((int)Subtitles.GetComponent<SubstitlesScript>().theTimer)
             {
@@ -47,7 +47,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                 //Bring the white cell in view
                 case 16:
                     Subtitles.GetComponent<SubstitlesScript>().Stop();
-                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, RedCellTutorialLocation.transform.position, 2.0f);
+                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, RedCellTutorialLocation.transform.position, 10.0f);
 
                     if (WhiteCell.transform.position == RedCellTutorialLocation.transform.position)
                     {
@@ -61,7 +61,8 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                     Subtitles.GetComponent<SubstitlesScript>().Stop();
                     Player.GetComponent<MovingCamera>().stopMoving = false;
                     Player.GetComponent<MovingCamera>().speed = 10.0f;
-                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.GetComponent<MovingCamera>().transform.position, 2.0f);
+                    if (WhiteCell)
+                        WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.transform.position, 10.0f);
                     break;
 
                 default:

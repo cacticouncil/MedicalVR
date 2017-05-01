@@ -12,7 +12,7 @@ public class RedCellScript : MonoBehaviour
     float timer = 0;
     void Start()
     {
-        if (MovingCamera.arcadeMode == true)
+        if (GlobalVariables.arcadeMode == true)
         {
             blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
             GetComponent<BoxCollider>().size = new Vector3(GetComponent<BoxCollider>().size.x, 0.5f, GetComponent<BoxCollider>().size.z);
@@ -32,12 +32,12 @@ public class RedCellScript : MonoBehaviour
             if (timer > 1)
             {
                 //For tutorial and story mode
-                if (MovingCamera.arcadeMode == false)
+                if (GlobalVariables.arcadeMode == false)
                 {
                     //When you beat tutorial mode, go to story mode
-                    if (MovingCamera.TutorialMode == true)
+                    if (GlobalVariables.tutorial == true)
                     {
-                        MovingCamera.TutorialMode = false;
+                        GlobalVariables.tutorial = false;
                         VirusGameplayScript.loadCase = 1;
                         SceneManager.LoadScene("DodgeAnitbodies");
                     }
@@ -45,10 +45,10 @@ public class RedCellScript : MonoBehaviour
                     //When you beat tutorial mode only once, go back to main menu
 
                     //When you beat story mode, go to next scene
-                    else if (MovingCamera.TutorialMode == false)
+                    else if (GlobalVariables.tutorial == false)
                     {
                         VirusGameplayScript.loadCase = 1;
-                        SceneManager.LoadScene("Virus Gameplay Scene");
+                        SceneManager.LoadScene("VirusGameplay");
                     }
                 }
             }
@@ -64,7 +64,7 @@ public class RedCellScript : MonoBehaviour
     {
         if (other.tag == "virus")
         {
-            if (MovingCamera.arcadeMode == true)
+            if (GlobalVariables.arcadeMode == true)
             {
                 virus.GetComponent<MovingCamera>().WinresetPos();
                 virus.GetComponent<MovingCamera>().speed++;

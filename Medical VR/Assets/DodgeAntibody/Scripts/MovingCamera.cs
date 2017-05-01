@@ -6,14 +6,11 @@ using UnityEngine.UI;
 
 public class MovingCamera : MonoBehaviour, TimedInputHandler
 {
-    public static bool TutorialMode = false;
-
     public GameObject subtitles;
     public float speed;
     public GameObject theScore, theLives, scoreBoard, UI, MenuButton, Username, ProfilePic;
     public float score = 0;
     public Color fogColor;
-    public static bool arcadeMode = true;
     public Vector3 originPos;
     public int lives = 3;
     float orgSpeed;
@@ -21,7 +18,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
     
    public void LoseresetPos()
     {
-        if(arcadeMode == true)
+        if(GlobalVariables.arcadeMode)
         {
             lives--;
             theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
@@ -64,13 +61,13 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         originPos = transform.position;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         orgSpeed = speed;
-        if(arcadeMode == false && TutorialMode == true)
+        if(GlobalVariables.arcadeMode == false && GlobalVariables.tutorial == true)
         {
             subtitles.SetActive(true);
             UI.SetActive(false);
             speed = 0;
         }
-        if(arcadeMode == false)
+        if(GlobalVariables.arcadeMode == false)
         {
             UI.SetActive(false);
         }
@@ -84,7 +81,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
 
     void FixedUpdate()
     {
-        if(arcadeMode == false)
+        if(GlobalVariables.arcadeMode == false)
         {
             if(startSpeed == true)
             {
@@ -105,7 +102,7 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
         else if(stopMoving == false)
         {
             transform.position += transform.forward * speed;
-            if(arcadeMode == true)
+            if(GlobalVariables.arcadeMode == true)
             {
                 score += Time.smoothDeltaTime;
                 int tmp = (int)score;

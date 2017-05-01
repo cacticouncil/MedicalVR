@@ -11,7 +11,11 @@ public class OptionsController : MonoBehaviour {
     Selectable[] Elements;
     [SerializeField]
     int ElementIndex;
-    
+
+    public Image reticleImage;
+    public Material reticleMaterial;
+    public GameObject reticle;
+
     float InitialSFXVolume, InitialBGMVolume;
     
 
@@ -65,9 +69,13 @@ public class OptionsController : MonoBehaviour {
         SoundManager.MaxBGMVolume = v;
     }
 
-    public void OnSettingsOK() {
+    public void OnSettingsOK()
+    {
+        SoundManager.PlaySFX("MenuEnter");
         PlayerPrefs.SetFloat("InitialSFXVolume", SoundManager.MaxSFXVolume);
         PlayerPrefs.SetFloat("InitialBGMVolume", SoundManager.MaxBGMVolume);
+        reticle.GetComponent<Renderer>().material.color = reticleImage.color;
+        reticleMaterial.color = reticleImage.color;
     }
 
     public void Exit()

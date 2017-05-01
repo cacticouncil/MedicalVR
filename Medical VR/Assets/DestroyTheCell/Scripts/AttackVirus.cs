@@ -5,8 +5,8 @@ public class AttackVirus : MonoBehaviour
 {
     public GameObject MainCamera;
     public GameObject WaveManager;
-    Vector3 SavedProteinLocation;
-    float Speed = .03f;
+    public GameObject target;
+    float Speed = .06f;
     float TempTimerForAttackVirusToLeaveCell = 0.0f;
     public bool CanLeaveCell = false;
 
@@ -15,39 +15,27 @@ public class AttackVirus : MonoBehaviour
         WaveManager = MainCamera.GetComponent<VirusPlayer>().WaveManager;
     }
 
-    void Update()
-    {
-        for (int i = 0; i < MainCamera.GetComponent<VirusPlayer>().WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count; i++)
-        {
-            if (MainCamera.GetComponent<VirusPlayer>().WaveManager.GetComponent<WaveManager>().CellReceptorsList[i].GetComponent<CellReceptors>().AttackMe == true)
-            {
-                SavedProteinLocation = MainCamera.GetComponent<VirusPlayer>().WaveManager.GetComponent<WaveManager>().CellReceptorsList[i].transform.position;
-            }
-        }
-    }
-
     void FixedUpdate()
     {
-        TempTimerForAttackVirusToLeaveCell += Time.deltaTime;
         if (TempTimerForAttackVirusToLeaveCell >= 7.5f)
-            Destroy(this.gameObject);
-        
-        if (CanLeaveCell == false)
-            transform.position = Vector3.MoveTowards(transform.position, SavedProteinLocation, Speed);
-
-        else if (CanLeaveCell == true)
-            transform.position += transform.forward * Speed;
-
-        if (transform.position == SavedProteinLocation)
         {
-            for (int i = 0; i < MainCamera.GetComponent<VirusPlayer>().WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count; i++)
+            Destroy(this.gameObject);
+        }
+        else if (CanLeaveCell == false)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Speed);
+            if (transform.position == target.transform.position)
             {
-                if (transform.position == MainCamera.GetComponent<VirusPlayer>().WaveManager.GetComponent<WaveManager>().CellReceptorsList[i].transform.position)
-                {
-                    Destroy(MainCamera.GetComponent<VirusPlayer>().WaveManager.GetComponent<WaveManager>().CellReceptorsList[i].gameObject);
-                }
+                target.GetComponent<CellReceptors>().health--;
+                if (target.GetComponent<CellReceptors>().health <= 0)
+                    Destroy(target);
+                CanLeaveCell = true;
             }
-            CanLeaveCell = true;
+        }
+        else if (CanLeaveCell == true)
+        {
+            transform.position += transform.forward * Speed;
+            TempTimerForAttackVirusToLeaveCell += Time.deltaTime;
         }
     }
 }

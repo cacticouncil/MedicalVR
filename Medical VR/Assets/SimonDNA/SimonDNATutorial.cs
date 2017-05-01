@@ -14,7 +14,7 @@ public class SimonDNATutorial : MonoBehaviour
     bool CheckAnimation = true;
     void Start()
     {
-        if (SimonSays.TutorialMode == true)
+        if (GlobalVariables.tutorial == true)
         {
             Subtitles.SetActive(true);
             Player.GetComponent<SimonSays>().GO.SetActive(false);
@@ -22,9 +22,9 @@ public class SimonDNATutorial : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (SimonSays.TutorialMode == true)
+        if (GlobalVariables.tutorial == true)
         {
             switch ((int)Subtitles.GetComponent<SubstitlesScript>().theTimer)
             {
@@ -122,8 +122,8 @@ public class SimonDNATutorial : MonoBehaviour
 
                     //Otherwise continue to story mode
                     VirusGameplayScript.loadCase = 2;
-                    SimonSays.TutorialMode = false;
-                    SimonSays.arcadeMode = false;
+                    GlobalVariables.tutorial = false;
+                    GlobalVariables.arcadeMode = false;
                     SceneManager.LoadScene("SimonDNA");
 
                     break;

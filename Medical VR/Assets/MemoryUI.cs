@@ -7,8 +7,8 @@ using System;
 using TMPro;
 
 
-public class MemoryUI : Tutorial{
-
+public class MemoryUI : MonoBehaviour
+{
     float TutorialTimer = 0.0f;
     int WhatToRead = 0;
     float BeatGameTimer = 0.0f;
@@ -26,8 +26,6 @@ public class MemoryUI : Tutorial{
     public float startTime = 60.0f;
     public bool finnished = false;
     public float timeRemaining = 60.0f;
-    public static bool arcadeMode = false;
-    public FBscript hi;
     public void LoseresetPos()
     {
             lives--;
@@ -65,12 +63,14 @@ public class MemoryUI : Tutorial{
     // Update is called once per frame
     void Update()
     {
-        if (tutorial == false)
+        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+
+        if (GlobalVariables.tutorial == false)
         {
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set up how turtorial will show players basic gameplay
-        else if (tutorial == true)
+        else if (GlobalVariables.tutorial == true)
         {
 
             switch (WhatToRead)
@@ -205,7 +205,7 @@ public class MemoryUI : Tutorial{
                 case 11:
                     TutorialTimer += Time.deltaTime;
 
-                    if (TutorialTimer <= 4.0f && arcadeMode == true)
+                    if (TutorialTimer <= 4.0f && GlobalVariables.arcadeMode == true)
                         CenterScreenObj.GetComponent<TextMeshPro>().text = " Make sure you do it before the timer ends";
                     else
                     {
@@ -246,15 +246,18 @@ public class MemoryUI : Tutorial{
                 //Story mode verion will play after completing
 
                 //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
-                tutorial = false;
-                arcadeMode = false;
-                SceneManager.LoadScene("MemoryGame");
-                //}
+                GlobalVariables.tutorial = false;
+                if (GlobalVariables.arcadeMode == true)
+                {
+                    GlobalVariables.arcadeMode = true;
+                    SceneManager.LoadScene("MemoryGame");
 
-                //    else if ()
-                //    {
-                //        //Just play tutorial once and go back to main menu
-                //    }
+                }
+                else
+                {
+                    GlobalVariables.arcadeMode = false;
+                    SceneManager.LoadScene("MemoryGame");
+                }
             }
         }
 
@@ -266,7 +269,7 @@ public class MemoryUI : Tutorial{
         if (finnished)
             return;
 
-        if (arcadeMode == true)
+        if (GlobalVariables.arcadeMode == true)
         {
             if(!(Randomsphere.correct == 3))
             timeRemaining -= Time.deltaTime;
@@ -285,7 +288,7 @@ public class MemoryUI : Tutorial{
         finnished = true;
     }
 
-    
+
     void FixedUpdate()
     {
 
@@ -295,7 +298,7 @@ public class MemoryUI : Tutorial{
         }
         else
         {
-            if (arcadeMode == true)
+            if (GlobalVariables.arcadeMode == true)
             {
                 int tmp = (int)score;
                 theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
@@ -306,8 +309,9 @@ public class MemoryUI : Tutorial{
             }
             theLevels.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + Level.ToString();
         }
+    }   
 
-    }
+    
 
     void AvoidBack()
     {

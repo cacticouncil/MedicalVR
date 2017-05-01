@@ -7,9 +7,6 @@ using System;
 
 public class Player : MonoBehaviour, TimedInputHandler
 {
-    public static bool ArcadeMode = true;
-    public static bool StoryMode = false;
-
     //Variables for tutorial
     float TutorialTimer = 0.0f;
     int WhatToRead = 0;
@@ -57,7 +54,7 @@ public class Player : MonoBehaviour, TimedInputHandler
         {
             if (isGameOver == false)
             {
-                if (StoryMode == false)
+                if (GlobalVariables.arcadeMode)
                     ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + Score.ToString();
 
                 VirusCount.GetComponent<TextMeshPro>().text = "VirusCount: " + VirusLeaveCount.ToString();
@@ -129,7 +126,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                 RuleTimer += Time.deltaTime;
             }
 
-            if (ArcadeMode == true)
+            if (GlobalVariables.arcadeMode)
             {
                 //If you lose arcade bring up scorebaord
                 if (VirusLeaveCount == 10)
@@ -150,14 +147,14 @@ public class Player : MonoBehaviour, TimedInputHandler
                 }
             }
 
-            else if (ArcadeMode == false)
+            else
             {
                 //If you lose story mode keep making them play until they beat it
                 if (VirusLeaveCount == 5)
                 {
                     isGameOver = true;
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You lose story mode";
-                    PlayStory();
+                    SceneManager.LoadScene("FightVirus");
                 }
 
                 //If you win story mode continue to next scene and don't forget to fade out
@@ -174,7 +171,7 @@ public class Player : MonoBehaviour, TimedInputHandler
                     if (BeatGameTimer >= 2.0f)
                     {
                         CellGameplayScript.loadCase = 4;
-                        SceneManager.LoadScene("Cell GamePlay");
+                        SceneManager.LoadScene("CellGameplay");
                     }
                 }
             }
@@ -332,11 +329,8 @@ public class Player : MonoBehaviour, TimedInputHandler
 
             if (BeatGameTimer >= 2.0f)
             {
-                if (StoryMode == true)
-                    PlayStory();
-
-                else
-                    PlayArcade();
+                GlobalVariables.tutorial = false;
+                SceneManager.LoadScene("FightVirus");
             }
         }
     }
@@ -350,26 +344,5 @@ public class Player : MonoBehaviour, TimedInputHandler
     {
         FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + Score.ToString(); /// + FacebookManager.Instance.GlobalScore /;
         FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
-    }
-
-    public void PlayArcade()
-    {
-        GlobalVariables.tutorial = false;
-        ArcadeMode = true;
-        SceneManager.LoadScene("FightVirus");
-    }
-
-    public void PlayStory()
-    {
-        GlobalVariables.tutorial = false;
-        ArcadeMode = false;
-        SceneManager.LoadScene("FightVirus");
-    }
-
-    public void PlayTutorial()
-    {
-        GlobalVariables.tutorial = true;
-        ArcadeMode = false;
-        SceneManager.LoadScene("FightVirus");
     }
 }

@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class SimonSays : MonoBehaviour
 {
-    public static bool TutorialMode = false;
-    public static bool arcadeMode = true;
-
     public GameObject yellow;
     public GameObject red;
     public GameObject blue;
@@ -20,7 +17,7 @@ public class SimonSays : MonoBehaviour
 
     int round = 1, inputed = 0, shownSign = 0, scoreCombo = 1;
 
-    float timer = 3, theTimer, goTimer =0;
+    float timer = 0, theTimer, goTimer =0;
 
     Vector3 orgPos;
     bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false, showGo = false;
@@ -40,6 +37,8 @@ public class SimonSays : MonoBehaviour
     List<theColors> inputedColors = new List<theColors>();
     void Start ()
     {
+        sign.GetComponent<MeshRenderer>().enabled = false;
+        sign.GetComponentInChildren<TMPro.TextMeshPro>().text = " ";
         orgPos = transform.position;
         cY = yellow.GetComponent<Renderer>().material.color;
         cR = red.GetComponent<Renderer>().material.color;
@@ -50,9 +49,9 @@ public class SimonSays : MonoBehaviour
         theLives.GetComponent<TMPro.TextMeshPro>().text = "Lives: " + lives.ToString();
        gameTimer.GetComponent<TMPro.TextMeshPro>().text = "TIMER " + theTimer.ToString();
         theTimer = 30;
-        polys = 36;
+        polys = 21;
         polysDone = 0;
-        if(arcadeMode == false)
+        if(GlobalVariables.arcadeMode == false)
         {
             polyLeft.SetActive(true);
             polyLeft.GetComponent<TMPro.TextMeshPro>().text = "Nucleids Done: " + polysDone.ToString();
@@ -86,7 +85,7 @@ public class SimonSays : MonoBehaviour
             theGO();
             if (waitAsec == false)
             {
-                if (showStuff == false && makeInput == false)
+                if (showStuff == false && makeInput == false && timer > 3)
                 {
                     ResetStuff();
                     GeneratePattern();
@@ -132,10 +131,7 @@ public class SimonSays : MonoBehaviour
             GO.SetActive(false);
         }
     }
-    void ArcadeMode()
-    {
-        
-    }
+   
     void WaitForTime()
     {
         if(waitAsec)
@@ -278,12 +274,7 @@ public class SimonSays : MonoBehaviour
     }
    public void ResetGame()
     {
-        ResetStuff();
-        UI.SetActive(true);
-        scoreBoard.SetActive(false);
-        transform.position = orgPos;
-        lives = 3;
-        score = 0;
+        SceneManager.LoadScene("SimonDNA");
     }
     void SignalIncorrect()
     {
@@ -296,7 +287,7 @@ public class SimonSays : MonoBehaviour
         theLives.GetComponent<TMPro.TextMeshPro>().text = "Lives: " + lives.ToString();
         if (lives < 1)
         {
-            if (arcadeMode == true)
+            if (GlobalVariables.arcadeMode == true)
             {
                 ShowScore();
             }
@@ -314,7 +305,7 @@ public class SimonSays : MonoBehaviour
         blue.GetComponent<Renderer>().material.color = Color.blue;
         green.GetComponent<Renderer>().material.color = Color.green;
         score += round * scoreCombo;
-        if (arcadeMode == true)
+        if (GlobalVariables.arcadeMode == true)
         {
             score += round * scoreCombo;
             scoreCombo++;
