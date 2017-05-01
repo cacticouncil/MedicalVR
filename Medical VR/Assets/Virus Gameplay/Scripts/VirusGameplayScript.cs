@@ -184,6 +184,7 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (132):
+                //DodgeAntibodies
                 if (subtitles.GetComponent<SubstitlesScript>().theTimer < 132.5f)
                     SceneManager.LoadScene("DodgeAnitbodies");
                 break;
@@ -305,6 +306,7 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (287):
+                //SimonDNA
                 if (subtitles.GetComponent<SubstitlesScript>().theTimer < 287.5)
                     SceneManager.LoadScene("SimonDNA");
                 break;
@@ -363,6 +365,7 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (352):
+                //Destroy Cell
                 VirusPlayer.ArcadeMode = false;
                 SceneManager.LoadScene("DestroyTheCell");
                 
