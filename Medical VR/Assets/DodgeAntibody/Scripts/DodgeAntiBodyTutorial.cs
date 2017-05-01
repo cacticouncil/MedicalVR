@@ -14,7 +14,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
 
     void Start()
     {
-        if (MovingCamera.TutorialMode == true)
+        if (GlobalVariables.tutorial)
         {
             //Set the player in the other tunnel
             Player.GetComponent<MovingCamera>().transform.position = transform.position;
@@ -29,7 +29,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
     void FixedUpdate()
     {
         //Trigger Events
-        if (MovingCamera.TutorialMode == true)
+        if (GlobalVariables.tutorial)
         {
             switch ((int)Subtitles.GetComponent<SubstitlesScript>().theTimer)
             {

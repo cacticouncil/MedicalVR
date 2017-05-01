@@ -178,13 +178,12 @@ public class VirusGameplayScript : MonoBehaviour
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-012");
                 break;
             case (131):
-                MovingCamera.arcadeMode = false;
-                MovingCamera.TutorialMode = true;
+                GlobalVariables.arcadeMode = false;
+                GlobalVariables.tutorial = true;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
             case (132):
-                //DodgeAntibodies
                 if (subtitles.GetComponent<SubstitlesScript>().theTimer < 132.5f)
                     SceneManager.LoadScene("DodgeAnitbodies");
                 break;
@@ -301,12 +300,11 @@ public class VirusGameplayScript : MonoBehaviour
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-032");
                 break;
             case (286):
-                SimonSays.arcadeMode = false;
+                GlobalVariables.arcadeMode = false;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
             case (287):
-                //SimonDNA
                 if (subtitles.GetComponent<SubstitlesScript>().theTimer < 287.5)
                     SceneManager.LoadScene("SimonDNA");
                 break;
@@ -365,8 +363,7 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (352):
-                //Destroy Cell
-                VirusPlayer.ArcadeMode = false;
+                GlobalVariables.arcadeMode = false;
                 SceneManager.LoadScene("DestroyTheCell");
                 
                 break;

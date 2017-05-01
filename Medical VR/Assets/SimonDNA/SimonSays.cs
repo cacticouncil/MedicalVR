@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class SimonSays : MonoBehaviour
 {
-    public static bool TutorialMode = false;
-    public static bool arcadeMode = true;
-
     public GameObject yellow;
     public GameObject red;
     public GameObject blue;
@@ -54,7 +51,7 @@ public class SimonSays : MonoBehaviour
         theTimer = 30;
         polys = 21;
         polysDone = 0;
-        if(arcadeMode == false)
+        if(GlobalVariables.arcadeMode == false)
         {
             polyLeft.SetActive(true);
             polyLeft.GetComponent<TMPro.TextMeshPro>().text = "Nucleids Done: " + polysDone.ToString();
@@ -290,7 +287,7 @@ public class SimonSays : MonoBehaviour
         theLives.GetComponent<TMPro.TextMeshPro>().text = "Lives: " + lives.ToString();
         if (lives < 1)
         {
-            if (arcadeMode == true)
+            if (GlobalVariables.arcadeMode == true)
             {
                 ShowScore();
             }
@@ -308,7 +305,7 @@ public class SimonSays : MonoBehaviour
         blue.GetComponent<Renderer>().material.color = Color.blue;
         green.GetComponent<Renderer>().material.color = Color.green;
         score += round * scoreCombo;
-        if (arcadeMode == true)
+        if (GlobalVariables.arcadeMode == true)
         {
             score += round * scoreCombo;
             scoreCombo++;

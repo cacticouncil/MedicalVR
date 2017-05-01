@@ -66,7 +66,7 @@ public class AnitbodySpawnerScript : MonoBehaviour {
             {
                 tmpNum.Add(Obstacles[i]);
                 tmpPlats.Add(Obstacles[i]);
-                if (MovingCamera.arcadeMode == true)
+                if (GlobalVariables.arcadeMode)
                 tmpPoints.Add(Obstacles[i]);
             }
             for (int j = 0; j < Obstacles.Count; j++)
@@ -86,7 +86,7 @@ public class AnitbodySpawnerScript : MonoBehaviour {
                 GameObject tmp = Instantiate(refAntiBody, tmpPos, refAntiBody.transform.rotation) as GameObject;
                 tmp.transform.localScale = new Vector3(tmp.transform.localScale.x + sizE, tmp.transform.localScale.y + sizE, tmp.transform.localScale.z + sizE);
                 randPositions.Add(tmp);
-                if(j%7 == 0 && MovingCamera.arcadeMode == true)
+                if(j%7 == 0 && GlobalVariables.arcadeMode)
                 {
                     obNum = Random.Range(0, Obstacles.Count - 1 - j);
                     tmpPos = new Vector3(tmpPoints[obNum].transform.position.x, tmpPoints[obNum].transform.position.y, z);
@@ -95,7 +95,7 @@ public class AnitbodySpawnerScript : MonoBehaviour {
                     platelets.Add(tmp);
                 }
                     
-                if(j%2 == 0 && MovingCamera.arcadeMode == true)
+                if(j%2 == 0 && GlobalVariables.arcadeMode)
                 {
                     obNum = Random.Range(0, Obstacles.Count - 1 - j);
                     tmpPos = new Vector3(tmpPoints[obNum].transform.position.x, tmpPoints[obNum].transform.position.y, z);

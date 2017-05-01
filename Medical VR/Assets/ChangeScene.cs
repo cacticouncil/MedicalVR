@@ -22,33 +22,28 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
     public void EnterEvent()
     {
         SoundManager.PlaySFX("MenuEnter");
+        GlobalVariables.arcadeMode = true;
         switch (index)
         {
             case 0:
                 LoadScene("Strategy");
                 break;
             case 1:
-                MemoryUI.arcadeMode = true;
                 LoadScene("MemoryGame");
                 break;
             case 2:
-                Player.ArcadeMode = false;
                 LoadScene("FightVirus");
                 break;
             case 3:
                 LoadScene("DodgeAnitbodies");
-                MovingCamera.arcadeMode = true;
                 break;
             case 4:
-                SimonSays.arcadeMode = true;
                 LoadScene("SimonDNA");
                 break;
             case 5:
-                Storebullets.arcadeMode = true;
                 LoadScene("CGampSnatcher");
                 break;
             case 6:
-                _TGameController.isArcadeMode = true;
                 LoadScene("ATPGTPShooter");
                 break;
             case 7:
@@ -71,15 +66,16 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("OptionsMenu");
                 break;
             case 13:
-                VirusPlayer.ArcadeMode = true;
                 LoadScene("DestroyTheCell");
                 break;
             case 14:
                 VirusGameplayScript.loadCase = 0;
+                GlobalVariables.arcadeMode = false;
                 LoadScene("VirusGameplay");
                 break;
             case 15:
                 CellGameplayScript.loadCase = 0;
+                GlobalVariables.arcadeMode = false;
                 LoadScene("CellGameplay");
                 break;
         }

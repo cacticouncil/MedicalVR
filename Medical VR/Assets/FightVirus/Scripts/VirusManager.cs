@@ -45,7 +45,7 @@ public class VirusManager : MonoBehaviour
                 switch (WaveNumber)
                 {
                     case 1:
-                        if (Player.ArcadeMode == true)
+                        if (GlobalVariables.arcadeMode == true)
                         {
                             EnemyCount = 12;
                             SmallVirusSpeed = 0.003f;
@@ -54,7 +54,7 @@ public class VirusManager : MonoBehaviour
                             BigVirusHealth = 40;
                         }
 
-                        else if (Player.ArcadeMode == false)
+                        else if (GlobalVariables.arcadeMode == false)
                         {
                             EnemyCount = 7;
                             SmallVirusSpeed = 0.003f;
@@ -65,7 +65,7 @@ public class VirusManager : MonoBehaviour
                         break;
 
                     case 2:
-                        if (Player.ArcadeMode == true)
+                        if (GlobalVariables.arcadeMode == true)
                         {
                             EnemyCount = 16;
                             SmallVirusSpeed = 0.004f;
@@ -74,7 +74,7 @@ public class VirusManager : MonoBehaviour
                             BigVirusHealth = 50;
                         }
 
-                        else if (Player.ArcadeMode == false)
+                        else if (GlobalVariables.arcadeMode == false)
                         {
                             EnemyCount = 12;
                             SmallVirusSpeed = 0.003f;
@@ -85,7 +85,7 @@ public class VirusManager : MonoBehaviour
                         break;
 
                     case 3:
-                        if (Player.ArcadeMode == true)
+                        if (GlobalVariables.arcadeMode == true)
                         {
                             EnemyCount = 20;
                             SmallVirusSpeed = 0.009f;
@@ -94,7 +94,7 @@ public class VirusManager : MonoBehaviour
                             BigVirusHealth = 60;
                         }
 
-                        else if (Player.ArcadeMode == false)
+                        else if (GlobalVariables.arcadeMode == false)
                         {
                             EnemyCount = 17;
                             SmallVirusSpeed = 0.004f;

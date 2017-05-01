@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
-using System;
 using TMPro;
 using UnityEngine.SceneManagement;
 
@@ -14,10 +12,6 @@ public class VirusPlayer : MonoBehaviour
     bool CanIRead = true;
     public bool TutorialModeCompleted = false;
 
-    //Variable for Arcade
-    public static bool ArcadeMode = true;
-    public static bool StoryMode = false;
-
     //Variables for Game
     public GameObject LivesGameobject;
     public GameObject Spawn;
@@ -28,7 +22,6 @@ public class VirusPlayer : MonoBehaviour
     public FacebookStuff FB;
 
     public GameObject VirusAttack;
-    Vector3 SpawnVirusAttack;
 
     public float currSpeed;
     [System.NonSerialized]
@@ -64,7 +57,7 @@ public class VirusPlayer : MonoBehaviour
         //For arcade and story mode
         if (GlobalVariables.tutorial == false)
         {
-            if (ArcadeMode == true)
+            if (GlobalVariables.arcadeMode)
             {
                 LivesGameobject.GetComponent<TextMeshPro>().text = "           Lives: " + Lives.ToString();
             }
@@ -118,7 +111,7 @@ public class VirusPlayer : MonoBehaviour
             }
 
             //Gameover
-            if (ArcadeMode == true)
+            if (GlobalVariables.arcadeMode)
             {
                 if (Lives == 0)
                     isGameover = true;
@@ -131,15 +124,14 @@ public class VirusPlayer : MonoBehaviour
                     BeatGameTimer += Time.deltaTime;
                     StartCoroutine(DisplayText("You Win", 2.0f));
 
-                    if (ArcadeMode == false)
+                    if (!GlobalVariables.arcadeMode)
                     {
                         float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
                         if (a < 0)
                             a = 0;
                         BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
                     }
-
-                    else if (ArcadeMode == true)
+                    else
                     {
                         ScoreBoard.SetActive(true);
                         ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
@@ -155,15 +147,15 @@ public class VirusPlayer : MonoBehaviour
                 if (BeatGameTimer >= 2.0f)
                 {
                     //For story mode once you beat it proceed to the next story mode
-                    if (ArcadeMode == false)
+                    if (!GlobalVariables.arcadeMode)
                     {
                         TutorialModeCompleted = false;
                         VirusGameplayScript.loadCase = 3;
-                        SceneManager.LoadScene("Virus Gameplay Scene");
+                        SceneManager.LoadScene("VirusGameplay");
                     }
 
                     //For arcade mode once you beat it will bring up scoreboard 
-                    else if (ArcadeMode == true)
+                    else
                     {
                         ScoreBoard.SetActive(true);
                         ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
@@ -257,11 +249,8 @@ public class VirusPlayer : MonoBehaviour
         //After you beat tutorial if story mode bool is active transtion to story mode for this game
         if (TutorialModeCompleted == true)
         {
-            if (StoryMode == true)
-                PlayStory();
-
-            else if (StoryMode == false)
-                PlayArcade();
+            GlobalVariables.tutorial = false;
+            SceneManager.LoadScene("DestroyTheCell");
         }
     }
 
@@ -333,27 +322,6 @@ public class VirusPlayer : MonoBehaviour
     {
         FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + Score.ToString(); /// + FacebookManager.Instance.GlobalScore /;
         FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
-    }
-
-    public void PlayArcade()
-    {
-        GlobalVariables.tutorial = false;
-        ArcadeMode = true;
-        SceneManager.LoadScene("DestroyTheCell");
-    }
-
-    public void PlayStory()
-    {
-        GlobalVariables.tutorial = false;
-        ArcadeMode = false;
-        SceneManager.LoadScene("DestroyTheCell");
-    }
-
-    public void PlayTutorial()
-    {
-        GlobalVariables.tutorial = true;
-        ArcadeMode = false;
-        SceneManager.LoadScene("DestroyTheCell");
     }
 }
 

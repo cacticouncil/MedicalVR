@@ -76,7 +76,7 @@ public class AntibodyScript : MonoBehaviour
             }
             Cam.GetComponent<MovingCamera>().LoseresetPos();
             //For tutorial mode 
-            if (MovingCamera.TutorialMode == true)
+            if (GlobalVariables.tutorial)
             {
                 if (TutorialMode.GetComponent<DodgeAntiBodyTutorial>().WhiteCellHitsPlayerFirstTime == false)
                 {
