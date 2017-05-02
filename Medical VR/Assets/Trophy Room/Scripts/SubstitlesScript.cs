@@ -82,7 +82,7 @@ public class SubstitlesScript : MonoBehaviour {
                             textIdx++;
                         }
 
-                        else if(theTimer >= theSubtitles[i].end - 0.1f)
+                        else if(theTimer >= theSubtitles[i].end)
                         {
                             stopTime = true;
                             

@@ -75,14 +75,15 @@ public class VirusGameplayScript : MonoBehaviour
         doAction();
         MoveTo();
     }
+
     void RiseCurtain()
     {
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a > 255)
             a = 255;
         blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * fadeSpeed));
-
     }
+
     void LowerCurtain()
     {
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
@@ -90,11 +91,13 @@ public class VirusGameplayScript : MonoBehaviour
             a = 0;
         blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * fadeSpeed));
     }
+
     void MoveTo()
     {
         if (I != places.Count)
             theCamera.transform.position = Vector3.MoveTowards(theCamera.transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
     }
+
     void CheckCaases()
     {
         float t = subtitles.GetComponent<SubstitlesScript>().theTimer;

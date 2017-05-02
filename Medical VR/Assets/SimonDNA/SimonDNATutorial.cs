@@ -114,13 +114,6 @@ public class SimonDNATutorial : MonoBehaviour
 
 
                 case 30:
-                    //Send back to main menu
-                    //if (true)
-                    //{
-
-                    //}
-
-                    //Otherwise continue to story mode
                     VirusGameplayScript.loadCase = 2;
                     GlobalVariables.tutorial = false;
                     GlobalVariables.arcadeMode = false;
