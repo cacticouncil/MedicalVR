@@ -24,7 +24,7 @@ public class FBscript : MonoBehaviour, TimedInputHandler{
   public  GameObject DialogLoggedOut;
   public GameObject DialogUsername;
   public GameObject DialogProfilePic;
-    public int GlobalScore;
+    public static int GlobalScore;
 
     public GameObject ScoreEntryPanel;
     public GameObject ScrollScoreList;
