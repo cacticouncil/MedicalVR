@@ -25,7 +25,6 @@ public class StrategyTutorialImmunity : MonoBehaviour
     private Vector3 prevPos;
     private GameObject fade;
     private bool last = false, text = false, finish = false, advance = false;
-    private List<Vector3> nextPos = new List<Vector3>();
     private List<Coroutine> stop = new List<Coroutine>();
 
     void OnEnable()
