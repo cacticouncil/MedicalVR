@@ -259,6 +259,7 @@ public static class SoundManager {
             }
             source.volume = MaxSFXVolume;
             source.Play();
+            SubstitlesScript.voice = source;
             SFX.Add(source);
         }
     }
@@ -313,6 +314,7 @@ public static class SoundManager {
             }
             source.volume = MaxSFXVolume;
             source.Play();
+            SubstitlesScript.voice = source;
             SFX.Add(source);
         }
     }
