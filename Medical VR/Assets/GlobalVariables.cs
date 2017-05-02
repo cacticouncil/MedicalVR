@@ -2,10 +2,32 @@
 
 public static class GlobalVariables
 {
-    public static float textDelay = .1f;
     public static bool tutorial = false;
     public static bool arcadeMode = true;
     public static int difficulty = 0;
+    public static int subtitles
+    {
+        get
+        {
+            return PlayerPrefs.GetInt("Subtitles");
+        }
+        set
+        {
+            PlayerPrefs.SetInt("Subtitles", value);
+        }
+    }
+
+    public static float textDelay
+    {
+        get
+        {
+            return PlayerPrefs.GetFloat("TextDelay");
+        }
+        set
+        {
+            PlayerPrefs.SetFloat("TextDelay", value);
+        }
+    }
 
     public static int VirusGameplayCompleted
     {

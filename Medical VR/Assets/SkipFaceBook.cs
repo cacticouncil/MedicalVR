@@ -4,15 +4,18 @@ using System.Collections;
 public class SkipFaceBook : MonoBehaviour
 {
     public static bool booked = false;
-    public Fade mainMenu;
+    public GameObject faceBookIn;
+    public GameObject faceBookOut;
+    public GameObject mainMenu;
 
     // Use this for initialization
     void Start()
     {
         if (booked)
         {
-            gameObject.SetActive(false);
-            mainMenu.FadeIn();
+            faceBookIn.SetActive(false);
+            faceBookOut.SetActive(false);
+            Fade.FadeIn(mainMenu);
         }
     }
 
