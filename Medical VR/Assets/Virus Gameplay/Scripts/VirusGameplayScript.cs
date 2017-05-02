@@ -8,7 +8,7 @@ public class VirusGameplayScript : MonoBehaviour
     public List<GameObject> places;
     public List<GameObject> Sceneries;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna;
-    public static int loadCase;
+    public static int loadCase =0;
     // Use this for initialization
     delegate void Func();
     Func doAction;
@@ -174,7 +174,7 @@ public class VirusGameplayScript : MonoBehaviour
 
                 doAction = NullFunction;
                 I = 1;
-                //moveSpeed = 30;
+                moveSpeed = 40;
                 break;
             case (116):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-012") == false)

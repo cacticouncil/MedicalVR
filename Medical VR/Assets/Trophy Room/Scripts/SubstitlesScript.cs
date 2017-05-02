@@ -44,9 +44,22 @@ public class SubstitlesScript : MonoBehaviour {
                     break;
             }
         }
-        else
+        else 
         {
-
+            switch (VirusGameplayScript.loadCase)
+            {
+                case 1:
+                    i = 26;
+                    break;
+                case 2:
+                    i = 54;
+                    break;
+                case 3:
+                    i = 63;
+                    break;              
+                default:
+                    break;
+            }
         }
         if (pressToContiue != null)
             pressToContiue.SetActive(false);
@@ -111,6 +124,10 @@ public class SubstitlesScript : MonoBehaviour {
             }
             else
                 GetComponent<TMPro.TextMeshPro>().text = "";
+        }
+        if(done == true)
+        {
+            theTimer += Time.deltaTime;
         }   
 	}
 
