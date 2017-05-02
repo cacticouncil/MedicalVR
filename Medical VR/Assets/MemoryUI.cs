@@ -20,7 +20,7 @@ public class MemoryUI : MonoBehaviour
 
     public int GlobalScore;
     // Use this for initialization
-    public float score = 0;
+    public static float score = 0;
     int lives = 5;
     public int Level = 1;
     public float startTime = 60.0f;
