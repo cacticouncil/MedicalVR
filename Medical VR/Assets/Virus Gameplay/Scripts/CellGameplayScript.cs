@@ -357,7 +357,7 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case 285:
-                PlayerPrefs.SetInt("CellComplete", 1);
+                GlobalVariables.CellGameplayCompleted = 1;
                 SceneManager.LoadScene("MainMenu");
                 break;
             default:

@@ -9,7 +9,7 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
 
     public void Start()
     {
-       
+
     }
     public void LoadScene(string scene)
     {
@@ -30,7 +30,9 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
         switch (index)
         {
             case 0:
-                LoadScene("Strategy");
+                if (GlobalVariables.CellGameplayCompleted == 1)
+                    LoadScene("Strategy");
+
                 break;
             case 1:
                 LoadScene("MemoryGame");
@@ -58,16 +60,8 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 Exit();
                 break;
             case 9:
-                if (GlobalVariables.VirusGameplayCompleted == 1 && GlobalVariables.CellGameplayCompleted == 1)
-                {
+                if (GlobalVariables.CellGameplayCompleted == 1)
                     LoadScene("MinigameMenu");
-                }
-
-                //Tell the user to complete both Story Modes
-                else
-                {
-
-                }
 
                 break;
             case 10:
@@ -94,13 +88,6 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                     GlobalVariables.arcadeMode = false;
                     LoadScene("CellGameplay");
                 }
-
-                //Tell the user to complete VirusGameplay Story Mode
-                else
-                {
-
-                }
-
                 break;
         }
     }

@@ -32,14 +32,7 @@ public class Fade : MonoBehaviour
 
     public void DeleteOut(Fade next)
     {
-        if (next.gameObject.name == "MiniGames")
-        {
-            if (GlobalVariables.CellGameplayCompleted == 1)
-                StartCoroutine(Erase(next));
-        }
-
-        else
-            StartCoroutine(Erase(next));
+        StartCoroutine(Erase(next));
     }
 
     IEnumerator Draw()
