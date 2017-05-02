@@ -26,6 +26,12 @@ public class MemoryUI : MonoBehaviour
     public float startTime = 60.0f;
     public bool finnished = false;
     public float timeRemaining = 60.0f;
+
+
+    //public void Start()
+    //{
+    //    GlobalVariables.arcadeMode = false;
+    //}
     public void LoseresetPos()
     {
             lives--;
@@ -53,7 +59,7 @@ public class MemoryUI : MonoBehaviour
         scoreBoard.SetActive(false);
         lives = 5;
         score = 0;
-        Level = 0;
+        Level = 1;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         Spheres.GetComponent<Randomsphere>().Reset();
         startTime = 60.0f;
@@ -304,12 +310,17 @@ public class MemoryUI : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (lives < 1 || timeRemaining < 0)
+        if ((lives < 1 || timeRemaining < 0) && GlobalVariables.arcadeMode != false)
         {
             ShowScore();
         }
         else
         {
+            if(lives < 1 || timeRemaining < 0)
+            {
+                GlobalVariables.arcadeMode = false;
+                SceneManager.LoadScene("MemoryGame");
+            }
             if (GlobalVariables.arcadeMode == true)
             {
                 int tmp = (int)score;
@@ -317,6 +328,7 @@ public class MemoryUI : MonoBehaviour
             }
             else
             {
+                Timer.GetComponent<TMPro.TextMeshPro>().text = "";
                 theScore.GetComponent<TMPro.TextMeshPro>().text = "";
             }
             theLevels.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + Level.ToString();

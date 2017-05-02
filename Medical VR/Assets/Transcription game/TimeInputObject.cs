@@ -39,7 +39,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
         {
            transform.position = Vector3.MoveTowards(transform.position, endMarker.position, step);
             //transform.position += endMarker.position * speed;
-            Debug.Log("position: " + transform.position);
+            //Debug.Log("position: " + transform.position);
             if(transform.position == endMarker.position)
             move = false;
         }
@@ -80,7 +80,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
         else
             IsCorrectj = false;
 
-        if ((Clonek == "C" && gameObject.tag == "G") || (Clonek == "T2" && gameObject.tag == "A2" ))
+        if ((Clonek == "C" && gameObject.tag == "G") || (Clonek == "T2" && gameObject.tag == "A2" ) /*|| (Clonek == "T2" && gameObject.tag == "A")*/)
         {
             if (sphere.GetComponent<Randomsphere>().ans.Contains("A2"))
             {
@@ -142,7 +142,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
 
         if (!(sphere.GetComponent<Randomsphere>().ans.Contains("A")) && !(sphere.GetComponent<Randomsphere>().ans.Contains("A2")))
         {
-            if ((Clonek == "C" && gameObject.tag == "G") || (Clonek == "T2" && (gameObject.tag == "A2" || gameObject.tag == "A")))
+            if ((Clonek == "C" && gameObject.tag == "G") || (Clonek == "T2" && gameObject.tag == "A2") || (Clonek == "T2" && gameObject.tag == "A"))
             {
                 endMarker.position = new Vector3(15, -20, 30);
                 move = true;
