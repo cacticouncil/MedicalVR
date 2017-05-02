@@ -19,12 +19,12 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
 
 
     public Transform endMarker;
-    public float speed = 0.00001F;
+    public float speed = 0.1F;
     // Use this for initialization
     void Start () {
         move = false;
         pos = transform.position;
-        endMarker = transform;
+        endMarker.position = transform.position;
         IsCorrect = false;
         IsCorrecti = false;
         IsCorrectj = false;
@@ -32,12 +32,15 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
 }
 
 
-     void Update()
+     void FixedUpdate()
     {
+        float step = speed * Time.fixedDeltaTime * 10;
         if (move == true)
         {
-           /* transform.position*/  Vector3.MoveTowards(transform.position, endMarker.position, speed);
+           transform.position = Vector3.MoveTowards(transform.position, endMarker.position, step);
             //transform.position += endMarker.position * speed;
+            Debug.Log("position: " + transform.position);
+            if(transform.position == endMarker.position)
             move = false;
         }
     }
