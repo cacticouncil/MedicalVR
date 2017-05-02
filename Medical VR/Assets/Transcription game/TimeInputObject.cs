@@ -62,7 +62,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
             }
 
 
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrecti = true;
         }
@@ -73,7 +73,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
         {
             endMarker.position = new Vector3(0, -20, 30);
             move = true;
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrectj = true;
         }
@@ -94,7 +94,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
                 sphere.GetComponent<Randomsphere>().ans.Add(gameObject.tag);
             }
 
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrectk = true;
         }
@@ -112,7 +112,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
                 endMarker.position = new Vector3(-15, -20, 30);
                 move = true;
                 sphere.GetComponent<Randomsphere>().ans.Add(gameObject.tag);
-                memoryui.GetComponent<MemoryUI>().score += 50;
+                MemoryUI.score += 50;
                 GetComponent<Renderer>().material.color = Color.green;
                 IsCorrecti = true;
             }
@@ -122,7 +122,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
         {
             endMarker.position = new Vector3(-15, -20, 30);
             move = true;
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrecti = true;
         }
@@ -133,7 +133,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
         {
             endMarker.position = new Vector3(0, -20, 30);
             move = true;
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrectj = true;
         }
@@ -148,7 +148,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
                 move = true;
 
                 sphere.GetComponent<Randomsphere>().ans.Add(gameObject.tag);
-                memoryui.GetComponent<MemoryUI>().score += 50;
+                MemoryUI.score += 50;
                 GetComponent<Renderer>().material.color = Color.green;
                 IsCorrectk = true;
             }
@@ -159,7 +159,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
             move = true;
 
 
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrectk = true;
         }
@@ -200,10 +200,10 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
             IsCorrect = false;
 
         if (IsCorrect)
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
         else
         {
-            memoryui.GetComponent<MemoryUI>().score -= 0;
+            MemoryUI.score -= 0;
             GetComponent<Renderer>().material.color = Color.red;
             memoryui.GetComponent<MemoryUI>().LoseresetPos();
             transform.position = pos;

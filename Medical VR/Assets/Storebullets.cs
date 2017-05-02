@@ -95,7 +95,7 @@ public class Storebullets : MonoBehaviour
                 case 1:
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Your objective is to grab cGAMP and shoot them towards the STING molecules on the Endoplasmic Recticulum.";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Your objective is to grab cGAMP and guide them towards the STING molecules on the Endoplasmic Recticulum.";
                     else
                     {
                         TutorialTimer = 0.0f;
