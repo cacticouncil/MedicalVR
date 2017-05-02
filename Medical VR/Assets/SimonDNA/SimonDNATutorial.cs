@@ -17,6 +17,8 @@ public class SimonDNATutorial : MonoBehaviour
     {
         if (GlobalVariables.tutorial == true)
         {
+            prevState = GlobalVariables.arcadeMode;
+            GlobalVariables.arcadeMode = false;
             Subtitles.SetActive(true);
             Player.GetComponent<SimonSays>().GO.SetActive(false);
             UI.SetActive(false);
@@ -27,9 +29,7 @@ public class SimonDNATutorial : MonoBehaviour
     {
         if (GlobalVariables.tutorial == true)
         {
-            prevState = GlobalVariables.arcadeMode;
-            GlobalVariables.arcadeMode = false;
-
+            Player.GetComponent<SimonSays>().lives = 0;
             switch ((int)Subtitles.GetComponent<SubstitlesScript>().theTimer)
             {
                 //Show them all 4 flashing nucleotides
