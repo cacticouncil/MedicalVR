@@ -89,7 +89,7 @@ public class SubstitlesScript : MonoBehaviour {
                     {
                         textTimer = 0;                                
                         
-                        if (textIdx < theSubtitles[i].text.Length - 1)
+                        if (textIdx < theSubtitles[i].text.Length)
                         {
                             theText = theText + theSubtitles[i].text[textIdx];
                             textIdx++;
