@@ -13,6 +13,7 @@ public class ObjectsCollector
     public GameObject mitocondriaCollector;
     public GameObject enzymeCollector;
     public GameObject fadeScreen;
+    public GameObject listOfLines;
 }
 
 [System.Serializable]
@@ -32,8 +33,12 @@ public class FacebookStuff
     private int score;
 }
 
+enum GameState { tutorial, play, end }
+
 public class _TGameController : MonoBehaviour
 {
+    private GameState gameState;
+    public GameObject[] uiElements;
     public ObjectsCollector shrinkStuff;
     public FacebookStuff fbManager;
 
@@ -45,7 +50,7 @@ public class _TGameController : MonoBehaviour
     [HideInInspector]
     public int score;
     public int maxNumEnzymes;
-    public GameObject enzyme;
+    public GameObject[] enzyme;
     public GameObject nucleus;
     public Boundary spawnValues;
     public int hazardCount;
@@ -59,17 +64,55 @@ public class _TGameController : MonoBehaviour
     private bool hasWon;
 
     public bool HasWon() { return hasWon; }
+    bool isInit = false;
 
     void Start()
     {
-        //isArcadeMode = true;
+        Initialize();
+    }
+    void Initialize()
+    {
+        if (isInit)
+            return;
+        isInit = true;
         hasWon = false;
         score = 0;
-        Invoke("StartScene", 0);
         SetFacebook();
+
+        //     if (GlobalVariables.tutorial)
+        //         gameState = GameState.tutorial;
+        //     else
+        //     {
+        //         gameState = GameState.play;
+        //         Invoke("StartScene", 1);
+        //     }
+        gameState = GameState.tutorial;
+
+        ////////////////////////////////////////////////////////////////////////////////
+        shrinkStuff.listOfLines.SetActive(false);
+        foreach(GameObject obj in uiElements)
+        {
+            _TSizeChange sc = obj.GetComponent<_TSizeChange>();
+            if (sc)
+            {
+                sc.startSmall = true;
+                obj.GetComponent<_TSizeChange>().Inititalize();
+            }
+        }
     }
 
     private void Update()
+    {
+        switch (gameState)
+        {            
+            case GameState.play:
+                RunMode();
+                break;
+        }
+    }
+
+    
+    void RunMode()
     {
         if (winScore <= score && !hasWon)
         {
@@ -153,15 +196,12 @@ public class _TGameController : MonoBehaviour
                         Random.Range(spawnValues.yMin, spawnValues.yMax),
                         Random.Range(spawnValues.zMin, spawnValues.zMax));
                     Quaternion spawnRotation = Quaternion.identity;
-                    GameObject haz = Instantiate(enzyme, spawnPosition, spawnRotation, shrinkStuff.enzymeCollector.transform) as GameObject;
+                    GameObject haz = Instantiate(enzyme[Random.Range(0, enzyme.Length)], spawnPosition, spawnRotation, shrinkStuff.enzymeCollector.transform) as GameObject;
                     haz.GetComponent<_TTravelToNucleus>().nucleus = nucleus;
                     if (haz.GetComponent<_TEnzymeController>())
                         haz.GetComponent<_TEnzymeController>().pointsValue = scorePerEnzyme;
                     else
                         Debug.Log("Unable to access Enzyme Controller");
-
-                    // Debug.Log("Velocity:" haz.transform.G)
-
                 }
                 yield return new WaitForSeconds(spawnWait);
             }
@@ -190,5 +230,17 @@ public class _TGameController : MonoBehaviour
         shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
         StartCoroutine("SpawnWaves");
         StartCoroutine("SpawnHazards");
+        foreach (Transform child in shrinkStuff.mitocondriaCollector.transform)
+            child.GetComponent<_TSizeChange>().StartGrow();
+        shrinkStuff.listOfLines.SetActive(true);
+    }    
+    public void runGameState()
+    {
+        gameState = GameState.play;
+        Invoke("StartScene", 1);
+    }
+    public void FadeScreen()
+    {
+        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
     }
 }

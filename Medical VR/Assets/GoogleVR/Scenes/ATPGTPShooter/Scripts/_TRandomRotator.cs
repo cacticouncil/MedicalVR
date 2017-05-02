@@ -11,5 +11,6 @@ public class _TRandomRotator : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.angularVelocity = Random.insideUnitSphere * tumble;
+        rb.maxAngularVelocity = 3;
     }
 }
