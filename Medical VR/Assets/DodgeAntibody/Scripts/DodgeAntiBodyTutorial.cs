@@ -6,23 +6,27 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
     public GameObject Subtitles;
     public GameObject Player;
     public GameObject RedCell;
-    public GameObject RedCellTutorialLocation;
     public GameObject WhiteCell;
+    public GameObject CellTutorialLocation;
     public bool WhiteCellHitsPlayerFirstTime = false;
     Vector3 SavedRedCellPosition;
     public List<GameObject> WhiteCellsToActivate;
+    public bool prevState;
 
     void Start()
     {
         if (GlobalVariables.tutorial)
         {
+            prevState = GlobalVariables.arcadeMode;
+            GlobalVariables.arcadeMode = false;
+
             //Set the player in the other tunnel
             Player.GetComponent<MovingCamera>().transform.position = transform.position;
             Player.GetComponent<MovingCamera>().stopMoving = true;
 
             //Save red cell orginal position
             SavedRedCellPosition = RedCell.transform.position;
-            RedCell.transform.position = RedCellTutorialLocation.transform.position;
+            RedCell.transform.position = CellTutorialLocation.transform.position;
         }
     }
 
@@ -47,9 +51,9 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                 //Bring the white cell in view
                 case 16:
                     Subtitles.GetComponent<SubstitlesScript>().Stop();
-                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, RedCellTutorialLocation.transform.position, 10.0f);
+                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, CellTutorialLocation.transform.position, 10.0f);
 
-                    if (WhiteCell.transform.position == RedCellTutorialLocation.transform.position)
+                    if (WhiteCell.transform.position == CellTutorialLocation.transform.position)
                     {
                         Subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
                         Subtitles.GetComponent<SubstitlesScript>().Continue();

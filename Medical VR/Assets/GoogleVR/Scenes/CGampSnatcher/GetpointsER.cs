@@ -3,14 +3,26 @@ using System.Collections;
 
 public class GetpointsER : MonoBehaviour {
 
+    bool ithit = false;
+
 	// Use this for initialization
 	void Start () {
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 	
+        if(ithit == true)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y + 20, transform.position.z), 0.1f);
+
+            if(transform.position == new Vector3(transform.position.x, transform.position.y + 20, transform.position.z))
+            {
+                
+                Destroy(gameObject);
+            }
+        }
 	}
 
     private void OnCollisionEnter(Collision collision)
@@ -19,9 +31,8 @@ public class GetpointsER : MonoBehaviour {
         {
             Storebullets.score += 25;
             Storebullets.numberofstingsdone += 1;
-            Destroy(collision.gameObject);
-
-            transform.position = new Vector3(transform.position.x, transform.position.y + 20, transform.position.z);
+            ithit = true; 
+                Destroy(collision.gameObject);
         }
     }
 }

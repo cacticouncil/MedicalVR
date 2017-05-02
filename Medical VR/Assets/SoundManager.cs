@@ -70,8 +70,6 @@ public static class SoundManager {
         BGM.loop = true;
         Crossfade.playOnAwake = false;
         Crossfade.loop = true;
-        EventManager.OnPause += Pause;
-        EventManager.OnUnpause += Resume;
 
         // Manually add the loop information beause configuration files are hard.
         if (!Loops.ContainsKey("AMBIANCE")) {
@@ -143,14 +141,19 @@ public static class SoundManager {
 
     public static void DestroySFX()
     {
-        for (int i = SFX.Count - 1; i >= 0; i--)
+        if(SFX != null)
         {
-           // if (!(SFX[i].isPlaying) && isPaused == false)
+            for (int i = SFX.Count - 1; i >= 0; i--)
             {
-                Object.Destroy(SFX[i]);
-                SFX.RemoveAt(i);
+                // if (!(SFX[i].isPlaying) && isPaused == false)
+                {
+                    if (SFX[i] != null)
+                        Object.Destroy(SFX[i]);
+                    SFX.RemoveAt(i);
+                }
             }
         }
+        
     }
     public static void Play(string _title) {
         if (!Controller) {
@@ -233,18 +236,27 @@ public static class SoundManager {
     }
     public static void PauseSFX()
     {
-        for (int i = 0; i < SFX.Count; i++)
+        if(SFX != null)
         {
-            SFX[i].Pause();
+            for (int i = 0; i < SFX.Count; i++)
+            {
+                if (SFX[i] != null)
+                    SFX[i].Pause();
+            }
         }
+       
         isPaused = true;
     }
     public static void UnPauseSFX()
     {
-        for (int i = 0; i < SFX.Count; i++)
+        if(SFX != null)
         {
-            SFX[i].UnPause();
-        }
+            for (int i = 0; i < SFX.Count; i++)
+            {
+                if (SFX[i] != null)
+                    SFX[i].UnPause();
+            }
+        }    
         isPaused = false;
     }
     public static void PlayVirusVoice(string _title)
@@ -259,6 +271,7 @@ public static class SoundManager {
             }
             source.volume = MaxSFXVolume;
             source.Play();
+            SubstitlesScript.voice = source;
             SFX.Add(source);
         }
     }
@@ -313,6 +326,7 @@ public static class SoundManager {
             }
             source.volume = MaxSFXVolume;
             source.Play();
+            SubstitlesScript.voice = source;
             SFX.Add(source);
         }
     }

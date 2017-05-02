@@ -19,12 +19,12 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
 
 
     public Transform endMarker;
-    public float speed = 0.00001F;
+    public float speed = 0.1F;
     // Use this for initialization
     void Start () {
         move = false;
         pos = transform.position;
-        endMarker = transform;
+        endMarker.position = transform.position;
         IsCorrect = false;
         IsCorrecti = false;
         IsCorrectj = false;
@@ -32,12 +32,15 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
 }
 
 
-     void Update()
+     void FixedUpdate()
     {
+        float step = speed * Time.fixedDeltaTime * 10;
         if (move == true)
         {
-           /* transform.position*/  Vector3.MoveTowards(transform.position, endMarker.position, speed);
+           transform.position = Vector3.MoveTowards(transform.position, endMarker.position, step);
             //transform.position += endMarker.position * speed;
+            //Debug.Log("position: " + transform.position);
+            if(transform.position == endMarker.position)
             move = false;
         }
     }
@@ -59,7 +62,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
             }
 
 
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrecti = true;
         }
@@ -70,14 +73,14 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
         {
             endMarker.position = new Vector3(0, -20, 30);
             move = true;
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrectj = true;
         }
         else
             IsCorrectj = false;
 
-        if ((Clonek == "C" && gameObject.tag == "G") || (Clonek == "T2" && gameObject.tag == "A2" ))
+        if ((Clonek == "C" && gameObject.tag == "G") || (Clonek == "T2" && gameObject.tag == "A2" ) /*|| (Clonek == "T2" && gameObject.tag == "A")*/)
         {
             if (sphere.GetComponent<Randomsphere>().ans.Contains("A2"))
             {
@@ -91,7 +94,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
                 sphere.GetComponent<Randomsphere>().ans.Add(gameObject.tag);
             }
 
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrectk = true;
         }
@@ -109,7 +112,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
                 endMarker.position = new Vector3(-15, -20, 30);
                 move = true;
                 sphere.GetComponent<Randomsphere>().ans.Add(gameObject.tag);
-                memoryui.GetComponent<MemoryUI>().score += 50;
+                MemoryUI.score += 50;
                 GetComponent<Renderer>().material.color = Color.green;
                 IsCorrecti = true;
             }
@@ -119,7 +122,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
         {
             endMarker.position = new Vector3(-15, -20, 30);
             move = true;
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrecti = true;
         }
@@ -130,7 +133,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
         {
             endMarker.position = new Vector3(0, -20, 30);
             move = true;
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrectj = true;
         }
@@ -139,13 +142,13 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
 
         if (!(sphere.GetComponent<Randomsphere>().ans.Contains("A")) && !(sphere.GetComponent<Randomsphere>().ans.Contains("A2")))
         {
-            if ((Clonek == "C" && gameObject.tag == "G") || (Clonek == "T2" && (gameObject.tag == "A2" || gameObject.tag == "A")))
+            if ((Clonek == "C" && gameObject.tag == "G") || (Clonek == "T2" && gameObject.tag == "A2") || (Clonek == "T2" && gameObject.tag == "A"))
             {
                 endMarker.position = new Vector3(15, -20, 30);
                 move = true;
 
                 sphere.GetComponent<Randomsphere>().ans.Add(gameObject.tag);
-                memoryui.GetComponent<MemoryUI>().score += 50;
+                MemoryUI.score += 50;
                 GetComponent<Renderer>().material.color = Color.green;
                 IsCorrectk = true;
             }
@@ -156,7 +159,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
             move = true;
 
 
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             IsCorrectk = true;
         }
@@ -197,10 +200,10 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
             IsCorrect = false;
 
         if (IsCorrect)
-            memoryui.GetComponent<MemoryUI>().score += 50;
+            MemoryUI.score += 50;
         else
         {
-            memoryui.GetComponent<MemoryUI>().score -= 0;
+            MemoryUI.score -= 0;
             GetComponent<Renderer>().material.color = Color.red;
             memoryui.GetComponent<MemoryUI>().LoseresetPos();
             transform.position = pos;

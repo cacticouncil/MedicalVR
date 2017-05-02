@@ -9,7 +9,7 @@ public class CellGameplayScript : MonoBehaviour
     public List<GameObject> places;
     public List<GameObject> Sceneries;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna;
-    public static int loadCase;
+    public static int loadCase=0;
     // Use this for initialization
     delegate void Func();
     Func doAction;
@@ -70,11 +70,12 @@ public class CellGameplayScript : MonoBehaviour
                 break;
         }
     }
+
     void NullFunction()
     {
 
     }
-    // Update is called once per frame
+
     void FixedUpdate()
     {
         CheckCaases();
@@ -357,6 +358,7 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case 285:
+                GlobalVariables.CellGameplayCompleted = 1;
                 SceneManager.LoadScene("MainMenu");
                 break;
             default:

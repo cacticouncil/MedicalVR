@@ -187,7 +187,8 @@ public class VirusPlayer : MonoBehaviour
                         break;
 
                     case 2:
-                        StartCoroutine(DisplayText("The objective is to kill the cell receptors", 3.5f));
+                        StartCoroutine(DisplayText("The objective is to kill these cell receptors", 3.5f));
+                        WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
                         break;
 
                     case 3:
@@ -198,7 +199,6 @@ public class VirusPlayer : MonoBehaviour
                         StartCoroutine(DisplayText("And using your reticle to destroy them", 3.5f));
                         CanIMove = true;
                         currSpeed = baseSpeed;
-                        WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
                         break;
 
                     case 5:

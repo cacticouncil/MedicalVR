@@ -84,7 +84,7 @@ public class Storebullets : MonoBehaviour
                     TutorialTimer += Time.deltaTime;
                     EventSystem.SetActive(false);
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Welcome to CGamp Snatcher";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Welcome to cGAMP Snatcher";
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -95,18 +95,17 @@ public class Storebullets : MonoBehaviour
                 case 1:
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Your objective is to " + "\n" + "Gramb Cgamp and shoot them towards the stings in the Endoplasmic Recticulum";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Your objective is to grab cGAMP and guide them towards the STING molecules on the Endoplasmic Recticulum.";
                     else
                     {
                         TutorialTimer = 0.0f;
                         WhatToRead += 1;
                     }
                     break;
-
                 case 2:
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  If you look around " + "\n" + "there are CGamps around.";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "This is how your cells communicate that a virus has been detected!";
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -117,7 +116,18 @@ public class Storebullets : MonoBehaviour
                 case 3:
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = " Look at them to grab them. Try to get 10";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "If you look around there are cGAMPs all around.";
+                    else
+                    {
+                        TutorialTimer = 0.0f;
+                        WhatToRead += 1;
+                    }
+                    break;
+
+                case 4:
+                    TutorialTimer += Time.deltaTime;
+                    if (TutorialTimer <= 4.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Look at them and to grab them. Try to get 10";
                     else
                     {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "";
@@ -132,11 +142,11 @@ public class Storebullets : MonoBehaviour
                     }
                     break;
 
-                case 4:
+                case 5:
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Perfect " + "\n" + " Now help them reach the stings by shooting them pressing the button ";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Perfect!" + "\n" + "Now help them reach the STING molecules by shooting them pressing the button.";
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -144,11 +154,11 @@ public class Storebullets : MonoBehaviour
                     }
                     break;
 
-                case 5:
+                case 6:
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = " Make sure they don't collide with other objects";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Make sure they don't collide with other objects.";
                     else
                     {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "";
@@ -161,12 +171,12 @@ public class Storebullets : MonoBehaviour
                     }
                     break;
 
-                case 6:
+                case 7:
                     TutorialTimer += Time.deltaTime;
                     //BulletSpawn.GetComponent<BulletManager>().CanIShoot = true;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = " Awesome ";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Awesome!";
 
                     else
                     {
@@ -176,11 +186,11 @@ public class Storebullets : MonoBehaviour
 
                     break;
 
-                case 7:
+                case 8:
                     TutorialTimer += Time.deltaTime;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Remember that CGamp can spawn behind you";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Remember that cGAMP can spawn behind you";
 
                     else
                     {
@@ -196,7 +206,7 @@ public class Storebullets : MonoBehaviour
         }
 
         //For tutorial only it will either transition to story mode or only play once
-        if (WhatToRead >= 8)
+        if (WhatToRead >= 9)
         {
             BeatGameTimer += Time.deltaTime;
             CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now your ready to play";
