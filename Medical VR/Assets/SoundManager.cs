@@ -70,8 +70,6 @@ public static class SoundManager {
         BGM.loop = true;
         Crossfade.playOnAwake = false;
         Crossfade.loop = true;
-        EventManager.OnPause += Pause;
-        EventManager.OnUnpause += Resume;
 
         // Manually add the loop information beause configuration files are hard.
         if (!Loops.ContainsKey("AMBIANCE")) {

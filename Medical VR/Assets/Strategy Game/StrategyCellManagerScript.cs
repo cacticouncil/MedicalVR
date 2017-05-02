@@ -46,6 +46,14 @@ public class StrategyCellManagerScript : MonoBehaviour
     public bool duplicate, viewingStats;
     [System.NonSerialized]
     public Vector2 selected = new Vector2(0.0f, 0.0f);
+    [System.NonSerialized]
+    public int eventTurns = 50;
+    [System.NonSerialized]
+    public int virusTurns = 15;
+    [System.NonSerialized]
+    public string lastEvent = "None";
+    
+    public StrategyEvents nextEvent;
 
     private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500), virusIndex = new Vector2(-500, 500);
     private GameObject virus1, virus2, virus3;
@@ -80,7 +88,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             }
         }
     }
-    private delegate void StrategyEvents();
+    public delegate void StrategyEvents();
     StrategyEvents sEvent
     {
         get
@@ -95,31 +103,31 @@ public class StrategyCellManagerScript : MonoBehaviour
                 easy++;
                 float e = Random.Range(0.0f, 1.0f);
                 if (e <= .25f)
-                    return MigratingWhiteCells;
+                    return Migrating_White_Cells;
                 else if (e <= .5f)
-                    return SpreadImmunityFaster;
+                    return Spread_Immunity_Faster;
                 else if (e <= .75f)
-                    return FreePowerups;
-                return DefendCells;
+                    return Free_Powerzups;
+                return Defend_Cells;
             }
             else if (r <= eFactor + mFactor)
             {
                 medium++;
                 float m = Random.Range(0.0f, 1.0f);
                 if (m <= .333f)
-                    return StrengthenViruses;
+                    return Strengthen_Viruses;
                 else if (m <= .666f)
-                    return SpeedUpViruses;
-                return MutateViruses;
+                    return Accelerate_Viruses;
+                return Mutate_Viruses;
             }
             else
             {
                 hard++;
                 float h = Random.Range(0.0f, 1.0f);
                 if (h <= .5f)
-                    return MigrateViruses;
+                    return Migrate_Viruses;
                 else
-                    return AsymptomaticCarriers;
+                    return Asymptomatic_Carriers;
             }
         }
     }
@@ -147,6 +155,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         t.GetComponent<Collider>().enabled = true;
         t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
 
+        nextEvent = sEvent;
         inventory = mysteryBox.items;
     }
     #endregion
@@ -225,14 +234,20 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
         yield return new WaitForEndOfFrame();
 
-        if (/*turnNumber >= 30 &&*/ turnNumber % 15 == 0)
+        if (turnNumber % virusTurns == 0)
         {
             SpawnVirus();
         }
 
-        if (turnNumber % 50 == 0)
+        if (turnNumber % eventTurns == 0)
         {
-            sEvent();
+            lastEvent = nextEvent.Method.ToString();
+            lastEvent = lastEvent.Remove(0, 5);
+            lastEvent = lastEvent.Remove(lastEvent.Length - 2, 2);
+            lastEvent = lastEvent.Replace('_', ' ');
+            lastEvent = lastEvent.Replace('z', '-');
+            nextEvent();
+            nextEvent = sEvent;
         }
 
         cellNum = cells.Count;
@@ -1401,7 +1416,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     #endregion
 
     #region Events
-    void MigratingWhiteCells()
+    void Migrating_White_Cells()
     {
         Vector3 ogDirection = Random.onUnitSphere;
         ogDirection.y = Mathf.Clamp(ogDirection.y, 0.65f, 1f);
@@ -1419,7 +1434,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
     }
 
-    void SpreadImmunityFaster()
+    void Spread_Immunity_Faster()
     {
         for (int i = 0; i < cells.Count; i++)
         {
@@ -1427,12 +1442,12 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
     }
 
-    void FreePowerups()
+    void Free_Powerzups()
     {
         mysteryBox.GiveAll();
     }
 
-    void DefendCells()
+    void Defend_Cells()
     {
         float highestDefense = float.MinValue;
         for (int i = 0; i < cells.Count; i++)
@@ -1449,7 +1464,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
     }
 
-    void StrengthenViruses()
+    void Strengthen_Viruses()
     {
         virus1.GetComponent<StrategyVirusScript>().health *= 1.5f;
         virus1.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
@@ -1459,20 +1474,20 @@ public class StrategyCellManagerScript : MonoBehaviour
         virus3.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
     }
 
-    void SpeedUpViruses()
+    void Accelerate_Viruses()
     {
         virus1.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
         virus2.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
         virus3.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
     }
 
-    void MutateViruses()
+    void Mutate_Viruses()
     {
         p2Modifier *= 1.5f;
         p3Modifier *= 1.5f;
     }
 
-    void MigrateViruses()
+    void Migrate_Viruses()
     {
         Vector3 ogDirection = Random.onUnitSphere;
         ogDirection.y = Mathf.Clamp(ogDirection.y, 0.65f, 1f);
@@ -1490,7 +1505,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
     }
 
-    void AsymptomaticCarriers()
+    void Asymptomatic_Carriers()
     {
         int asyTotal = (int)(cellNum * .05f + 1);
         int index = 0;
