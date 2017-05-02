@@ -70,11 +70,12 @@ public class CellGameplayScript : MonoBehaviour
                 break;
         }
     }
+
     void NullFunction()
     {
 
     }
-    // Update is called once per frame
+
     void FixedUpdate()
     {
         CheckCaases();

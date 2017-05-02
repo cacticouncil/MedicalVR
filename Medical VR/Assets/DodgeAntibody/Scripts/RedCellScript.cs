@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 public class RedCellScript : MonoBehaviour
 {
     public GameObject TutorialGameObject;
-    // Use this for initialization
     public float speed;
     public GameObject virus, spawner, banner, blackCurtain;
     bool fade = false;
     float timer = 0;
+
     void Start()
     {
         if (GlobalVariables.arcadeMode == true)
@@ -19,7 +19,6 @@ public class RedCellScript : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (fade)
@@ -37,12 +36,11 @@ public class RedCellScript : MonoBehaviour
                     //When you beat tutorial mode, go to story mode
                     if (GlobalVariables.tutorial == true)
                     {
-                        GlobalVariables.tutorial = false;
                         VirusGameplayScript.loadCase = 1;
+                        GlobalVariables.tutorial = false;
+                        GlobalVariables.arcadeMode = TutorialGameObject.GetComponent<DodgeAntiBodyTutorial>().prevState;
                         SceneManager.LoadScene("DodgeAnitbodies");
                     }
-
-                    //When you beat tutorial mode only once, go back to main menu
 
                     //When you beat story mode, go to next scene
                     else if (GlobalVariables.tutorial == false)
@@ -53,6 +51,7 @@ public class RedCellScript : MonoBehaviour
                 }
             }
         }
+
         else
         {
             float a = blackCurtain.GetComponent<Renderer>().material.color.a;

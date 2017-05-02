@@ -12,6 +12,7 @@ public class SimonDNATutorial : MonoBehaviour
     int AnimationCases = 1;
     float AnimationTimer = 0.0f;
     bool CheckAnimation = true;
+    public bool prevState;
     void Start()
     {
         if (GlobalVariables.tutorial == true)
@@ -26,6 +27,9 @@ public class SimonDNATutorial : MonoBehaviour
     {
         if (GlobalVariables.tutorial == true)
         {
+            prevState = GlobalVariables.arcadeMode;
+            GlobalVariables.arcadeMode = false;
+
             switch ((int)Subtitles.GetComponent<SubstitlesScript>().theTimer)
             {
                 //Show them all 4 flashing nucleotides
@@ -116,9 +120,8 @@ public class SimonDNATutorial : MonoBehaviour
                 case 30:
                     VirusGameplayScript.loadCase = 2;
                     GlobalVariables.tutorial = false;
-                    GlobalVariables.arcadeMode = false;
+                    GlobalVariables.arcadeMode = prevState;
                     SceneManager.LoadScene("SimonDNA");
-
                     break;
 
                 default:

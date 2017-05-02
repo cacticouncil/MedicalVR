@@ -9,12 +9,12 @@ public class VirusGameplayScript : MonoBehaviour
     public List<GameObject> Sceneries;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna;
     public static int loadCase;
-    // Use this for initialization
     delegate void Func();
     Func doAction;
     public float moveSpeed;
     float fadeSpeed;
     int I = 0;
+
     void Start()
     {
         GlobalVariables.tutorial = true;
@@ -68,7 +68,7 @@ public class VirusGameplayScript : MonoBehaviour
     {
 
     }
-    // Update is called once per frame
+
     void FixedUpdate()
     {
         CheckCaases();
