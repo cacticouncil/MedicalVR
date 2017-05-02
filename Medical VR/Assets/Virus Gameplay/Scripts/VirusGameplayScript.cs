@@ -382,6 +382,7 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (374):
+                GlobalVariables.VirusGameplayCompleted = 1;
                 SceneManager.LoadScene("MainMenu");
                 break;
             default:

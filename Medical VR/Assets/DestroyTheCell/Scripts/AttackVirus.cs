@@ -21,6 +21,7 @@ public class AttackVirus : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
         else if (CanLeaveCell == false)
         {
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Speed);
@@ -32,6 +33,7 @@ public class AttackVirus : MonoBehaviour
                 CanLeaveCell = true;
             }
         }
+
         else if (CanLeaveCell == true)
         {
             transform.position += transform.forward * Speed;
