@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class ChangeScene : MonoBehaviour, TimedInputHandler
@@ -94,7 +92,6 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
 
     public void HandleTimeInput()
     {
-        SetIndex(index);
         EnterEvent();
     }
 }
