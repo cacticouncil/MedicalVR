@@ -75,13 +75,13 @@ public class RedCellScript : MonoBehaviour
                 fade = true;
                 timer = 0;
             }
-
-            if (PlayerPrefs.GetInt("Red Cell") != 1)
-            {
-                banner.GetComponent<BannerScript>().ShowUp();
-                PlayerPrefs.SetInt("Red Cell", 1);
-                SoundManager.PlaySFX("MenuEnter");
-            }
+            BannerScript.UnlockTrophy("Red Cell");
+            //if (PlayerPrefs.GetInt("Red Cell") != 1)
+            //{
+            //    banner.GetComponent<BannerScript>().ShowUp();
+            //    PlayerPrefs.SetInt("Red Cell", 1);
+            //    SoundManager.PlaySFX("MenuEnter");
+            //}
         }
     }
 }
