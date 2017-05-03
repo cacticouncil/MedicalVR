@@ -95,18 +95,18 @@ public class SubstitlesScript : MonoBehaviour {
                             textIdx++;
                         }
 
-                        else if(theTimer >= theSubtitles[i].end)
+                        else if(theTimer >= theSubtitles[i].end - 0.1)
                         {
                             stopTime = true;
                             
                         }
                         if(stopTime == true)
                         {
-                            if(voiceTimer >= 0.1)
+                            if(voiceTimer >= 0.01)
                             {
                                 if(voice != null)
                                 {
-                                    if(voice.isPlaying == true)
+                                    if(voice.isPlaying == true && pressToContiue.activeSelf == false)
                                     Next();
                                 }
                                 else
@@ -143,6 +143,7 @@ public class SubstitlesScript : MonoBehaviour {
         theText = "";
         if (i >= theSubtitles.Count)
         {
+            theTimer = theSubtitles[i - 1].end;
             stop = true;
             done = true;
         }
