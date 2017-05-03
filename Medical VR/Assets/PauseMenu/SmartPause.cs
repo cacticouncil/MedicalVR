@@ -32,6 +32,7 @@ public class SmartPause : MonoBehaviour
                     isPaused = true;
                     Time.timeScale = 0;
                     SoundManager.Pause();
+                    SoundManager.PauseSFX();
                 }
             }
             else if (held != last)
@@ -61,5 +62,6 @@ public class SmartPause : MonoBehaviour
         isPaused = false;
         Time.timeScale = 1;
         SoundManager.Resume();
+        SoundManager.UnPauseSFX();
     }
 }
