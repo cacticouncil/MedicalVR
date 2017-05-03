@@ -1,4 +1,4 @@
-﻿Shader "Unlit/Overlay"
+﻿Shader "Unlit/Overlay-Transparent"
 {
 	Properties
 	{
@@ -8,8 +8,10 @@
 	}
 	SubShader
 	{
-		Tags{ "RenderType" = "Overlay" "Queue" = "Overlay" }
+		Tags{ "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
 		ZTest Always
+		Blend SrcAlpha OneMinusSrcAlpha
+
 		Pass
 		{
 			//Include functions
@@ -47,8 +49,7 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 				// sample the texture
-				fixed4 texColor = tex2D(_MainTex, i.uv);
-				return texColor * _Color;
+				return _Color * tex2D(_MainTex, i.uv);
 			}
 			ENDCG
 		}

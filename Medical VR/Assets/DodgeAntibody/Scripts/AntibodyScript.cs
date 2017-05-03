@@ -68,12 +68,8 @@ public class AntibodyScript : MonoBehaviour
             reswpawn = true;
             Effects.GetComponent<ParticleSystem>().Stop();
             Effects.GetComponent<ParticleSystem>().Play();
-            if (PlayerPrefs.GetInt("White Cell") != 1)
-            {
-                banner.GetComponent<BannerScript>().ShowUp();
-                PlayerPrefs.SetInt("White Cell", 1);
-                SoundManager.PlaySFX("MenuEnter");
-            }
+           
+            BannerScript.UnlockTrophy("White Cell");
             Cam.GetComponent<MovingCamera>().LoseresetPos();
             //For tutorial mode 
             if (GlobalVariables.tutorial)
