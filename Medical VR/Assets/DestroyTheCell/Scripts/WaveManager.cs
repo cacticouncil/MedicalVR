@@ -49,7 +49,7 @@ public class WaveManager : MonoBehaviour
                     switch (WaveNumber)
                     {
                         case 1:
-                            CellReceptorCount = 1;
+                            CellReceptorCount = 2;
                             AntiViralProteinCount = 1;
                             break;
 
@@ -74,7 +74,7 @@ public class WaveManager : MonoBehaviour
                         case 4:
                             if (GlobalVariables.arcadeMode)
                             {
-                                CellReceptorCount = 9;
+                                CellReceptorCount = 8;
                                 AntiViralProteinCount = 5;
                             }
                             else
@@ -119,7 +119,7 @@ public class WaveManager : MonoBehaviour
             switch (WaveNumber)
             {
                 case 1:
-                    CellReceptorCount = 1;
+                    CellReceptorCount = 2;
                     AntiViralProteinCount = 1;
                     break;
 
@@ -147,7 +147,7 @@ public class WaveManager : MonoBehaviour
     {
         for (int i = 0; i < CellReceptorCount; i++)
         {
-            CellReceptorLocation = Random.onUnitSphere * 10.5f;
+            CellReceptorLocation = Random.onUnitSphere * 11f;
             WhatColorCellReceptor = Random.Range(1, 3);
 
             if (GlobalVariables.tutorial == true && WaveNumber == 1)
@@ -175,7 +175,7 @@ public class WaveManager : MonoBehaviour
         for (int i = 0; i < AntiViralProteinCount; i++)
         {
             if (GlobalVariables.tutorial == false)
-                AntiViralProteinLocation = Random.onUnitSphere * 5.0f;
+                AntiViralProteinLocation = Random.onUnitSphere * 5.5f;
 
             else if (GlobalVariables.tutorial == true)
             {
