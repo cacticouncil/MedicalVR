@@ -19,7 +19,7 @@ public class SimonSays : MonoBehaviour
 
     float timer = 0, theTimer, goTimer =0;
 
-    Vector3 orgPos;
+    //Vector3 orgPos;
     bool makeInput = false, buttonPressed = false, showStuff = false, waitAsec = false, showGo = false;
     ///[System.Serializable]
     public enum theColors
@@ -39,7 +39,7 @@ public class SimonSays : MonoBehaviour
     {
         sign.GetComponent<MeshRenderer>().enabled = false;
         sign.GetComponentInChildren<TMPro.TextMeshPro>().text = " ";
-        orgPos = transform.position;
+        //orgPos = transform.position;
         cY = yellow.GetComponent<Renderer>().material.color;
         cR = red.GetComponent<Renderer>().material.color;
         cB = blue.GetComponent<Renderer>().material.color;
