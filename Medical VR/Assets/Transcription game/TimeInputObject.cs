@@ -80,7 +80,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler
         else
             IsCorrectj = false;
 
-        if ((Clonek == "C" && gameObject.tag == "G") || (Clonek == "T2" && gameObject.tag == "A2") || (Clonek == "T2" && gameObject.tag == "A"))
+        if ((Clonek == "C" && gameObject.tag == "G") || (Clonek == "T2" && gameObject.tag == "A2") /*|| (Clonek == "T2" && gameObject.tag == "A")*/)
         {
             if (sphere.GetComponent<Randomsphere>().ans.Contains("A2"))
             {
