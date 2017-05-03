@@ -6,7 +6,7 @@ public class BannerScript : MonoBehaviour {
     public GameObject target, hidden;
     public float speed;
 
-    bool show = false;
+   static bool show = false;
     bool hide = false;
     float theTimer = 0;
     //Vector3 orgPos;
@@ -43,8 +43,21 @@ public class BannerScript : MonoBehaviour {
             }
         }
 	}
-    public void ShowUp()
+    public static void ShowUp()
     {
         show = true;
+    }
+    public static void UnlockTrophy(string name)
+    {
+        if (PlayerPrefs.GetInt(name) != 1)
+        {
+            ShowUp();
+            PlayerPrefs.SetInt(name, 1);
+            SoundManager.PlaySFX("MenuEnter");
+        }
+    }
+    public static void LockTrophy(string name)
+    {
+        PlayerPrefs.SetInt(name, -1);
     }
 }

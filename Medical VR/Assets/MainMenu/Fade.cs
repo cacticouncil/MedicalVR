@@ -3,44 +3,127 @@ using System.Collections;
 
 public class Fade : MonoBehaviour
 {
-    public void FadeIn()
+    private static Fade localInstance;
+    public static Fade fade { get { return localInstance; } }
+
+    private void Awake()
     {
-        StartCoroutine(TurnOn());
+        if (localInstance != null && localInstance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            localInstance = this;
+        }
     }
 
-    public void FadeOut(Fade next)
+
+    public static void FadeIn(GameObject @in)
     {
+        if (fade == null)
+        {
+            GameObject o = new GameObject("Fade");
+            localInstance = o.AddComponent<Fade>();
+        }
+
+        foreach (Transform item in @in.GetComponentsInChildren<Transform>(true))
+        {
+            item.gameObject.SetActive(true);
+        }
+        foreach (Renderer item in @in.GetComponentsInChildren<Renderer>(true))
+        {
+            fade.StartCoroutine(fade.FadeInObject(item));
+        }
+        foreach (TMPro.TextMeshPro item in @in.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+        {
+            fade.StartCoroutine(fade.FadeInText(item));
+        }
+    }
+
+    public static void FadeOut(GameObject @out, GameObject @in)
+    {
+        if (fade == null)
+        {
+            GameObject o = new GameObject("Fade");
+            localInstance = o.AddComponent<Fade>();
+        }
+
         SoundManager.PlaySFX("MenuEnter");
 
-        foreach (Renderer item in GetComponentsInChildren<Renderer>(true))
+        foreach (Renderer item in @out.GetComponentsInChildren<Renderer>(true))
         {
-            StartCoroutine(FadeOutObject(item));
+            fade.StartCoroutine(fade.FadeOutObject(item));
+        }
+        foreach (TMPro.TextMeshPro item in @out.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+        {
+            fade.StartCoroutine(fade.FadeOutText(item));
         }
 
-        foreach (TMPro.TextMeshPro item in GetComponentsInChildren<TMPro.TextMeshPro>(true))
+        fade.StartCoroutine(fade.TurnOff(@out, @in));
+    }
+
+    public void FadeOut(OutIn outin)
+    {
+        if (fade == null)
         {
-            StartCoroutine(FadeOutText(item));
+            GameObject o = new GameObject("Fade");
+            localInstance = o.AddComponent<Fade>();
         }
 
-        StartCoroutine(TurnOff(next));
-    }
+        SoundManager.PlaySFX("MenuEnter");
 
-    public void TypeIn()
-    {
-        StartCoroutine(Draw());
-    }
-
-    public void DeleteOut(Fade next)
-    {
-        StartCoroutine(Erase(next));
-    }
-
-    IEnumerator Draw()
-    {
-        foreach (Transform item in GetComponentsInChildren<Transform>(true))
+        foreach (Renderer item in outin.@out.GetComponentsInChildren<Renderer>(true))
         {
-            if (item != transform)
-                item.gameObject.SetActive(true);
+            fade.StartCoroutine(fade.FadeOutObject(item));
+        }
+        foreach (TMPro.TextMeshPro item in outin.@out.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+        {
+            fade.StartCoroutine(fade.FadeOutText(item));
+        }
+
+        fade.StartCoroutine(fade.TurnOff(outin.@out, outin.@in));
+    }
+
+    public static void TypeIn(GameObject @in)
+    {
+        if (fade == null)
+        {
+            GameObject o = new GameObject("Fade");
+            localInstance = o.AddComponent<Fade>();
+        }
+
+        fade.StartCoroutine(fade.Draw(@in));
+    }
+
+    public static void DeleteOut(GameObject @out, GameObject @in)
+    {
+        if (fade == null)
+        {
+            GameObject o = new GameObject("Fade");
+            localInstance = o.AddComponent<Fade>();
+        }
+
+        fade.StartCoroutine(fade.Erase(@out, @in));
+    }
+
+    public void DeleteOut(OutIn outin)
+    {
+        if (fade == null)
+        {
+            GameObject o = new GameObject("Fade");
+            localInstance = o.AddComponent<Fade>();
+        }
+
+        fade.StartCoroutine(fade.Erase(outin.@out, outin.@in));
+    }
+
+    #region Enumerators
+    IEnumerator Draw(GameObject @in)
+    {
+        foreach (Transform item in @in.GetComponentsInChildren<Transform>(true))
+        {
+            item.gameObject.SetActive(true);
         }
 
         TMPro.TextMeshPro[] texts = GetComponentsInChildren<TMPro.TextMeshPro>(true);
@@ -87,9 +170,9 @@ public class Fade : MonoBehaviour
         }
     }
 
-    IEnumerator Erase(Fade next)
+    IEnumerator Erase(GameObject @out, GameObject @in)
     {
-        TMPro.TextMeshPro[] texts = GetComponentsInChildren<TMPro.TextMeshPro>(true);
+        TMPro.TextMeshPro[] texts = @out.GetComponentsInChildren<TMPro.TextMeshPro>(true);
         string[] strs = new string[texts.Length];
         string[] org = new string[texts.Length];
         for (int i = 0; i < texts.Length; i++)
@@ -128,10 +211,9 @@ public class Fade : MonoBehaviour
             }
         }
 
-        foreach (Transform item in GetComponentsInChildren<Transform>(true))
+        foreach (Transform item in @out.GetComponentsInChildren<Transform>(true))
         {
-            if (item != transform)
-                item.gameObject.SetActive(false);
+            item.gameObject.SetActive(false);
         }
 
         for (int i = 0; i < texts.Length; i++)
@@ -139,45 +221,26 @@ public class Fade : MonoBehaviour
             texts[i].text = org[i];
         }
 
-        next.TypeIn();
+        StartCoroutine(Draw(@in));
     }
 
-    IEnumerator TurnOn()
-    {
-        foreach (Renderer item in GetComponentsInChildren<Renderer>(true))
-        {
-            StartCoroutine(FadeInObject(item));
-        }
-        foreach (TMPro.TextMeshPro item in GetComponentsInChildren<TMPro.TextMeshPro>(true))
-        {
-            StartCoroutine(FadeInText(item));
-        }
-
-        yield return new WaitForSeconds(.5f);
-        foreach (Transform item in GetComponentsInChildren<Transform>(true))
-        {
-            if (item != transform)
-                item.gameObject.SetActive(true);
-        }
-    }
-
-    IEnumerator TurnOff(Fade next)
+    IEnumerator TurnOff(GameObject o, GameObject @in)
     {
         yield return new WaitForSeconds(.5f);
-        foreach (Transform item in GetComponentsInChildren<Transform>(true))
+        foreach (Transform item in o.GetComponentsInChildren<Transform>(true))
         {
-            if (item != transform)
-                item.gameObject.SetActive(false);
+            item.gameObject.SetActive(false);
         }
 
-        next.FadeIn();
+        FadeIn(@in);
     }
+
 
     IEnumerator FadeInObject(Renderer g)
     {
+        g.gameObject.SetActive(true);
         if (g.material.HasProperty("_Color"))
         {
-            g.gameObject.SetActive(true);
             Color c = g.material.color;
             c.a = 0.0f;
             float startTime = Time.time;
@@ -207,8 +270,10 @@ public class Fade : MonoBehaviour
                 g.material.color = c;
                 yield return 0;
             }
-            g.gameObject.SetActive(false);
+            c.a = 1.0f;
+            g.material.color = c;
         }
+        g.gameObject.SetActive(false);
     }
 
 
@@ -241,6 +306,9 @@ public class Fade : MonoBehaviour
             text.color = c;
             yield return 0;
         }
+        c.a = 1.0f;
+        text.color = c;
         text.gameObject.SetActive(false);
     }
+    #endregion
 }

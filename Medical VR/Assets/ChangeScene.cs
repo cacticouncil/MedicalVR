@@ -1,16 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class ChangeScene : MonoBehaviour, TimedInputHandler
 {
     public int index = 0;
 
-    public void Start()
-    {
-
-    }
     public void LoadScene(string scene)
     {
         SoundManager.PlaySFX("MenuEnter");
@@ -23,6 +17,12 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
         Application.Quit();
     }
 
+    public void SetAndEnter(int i)
+    {
+        index = i;
+        EnterEvent();
+    }
+
     public void EnterEvent()
     {
         SoundManager.PlaySFX("MenuEnter");
@@ -30,9 +30,7 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
         switch (index)
         {
             case 0:
-                if (GlobalVariables.CellGameplayCompleted == 1)
-                    LoadScene("Strategy");
-
+                LoadScene("Strategy");
                 break;
             case 1:
                 LoadScene("MemoryGame");
@@ -60,9 +58,7 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 Exit();
                 break;
             case 9:
-                if (GlobalVariables.CellGameplayCompleted == 1)
-                    LoadScene("MinigameMenu");
-
+                LoadScene("MinigameMenu");
                 break;
             case 10:
                 LoadScene("TrophyRoom");
@@ -82,24 +78,20 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("VirusGameplay");
                 break;
             case 15:
-                if (GlobalVariables.VirusGameplayCompleted == 1)
-                {
-                    CellGameplayScript.loadCase = 0;
-                    GlobalVariables.arcadeMode = false;
-                    LoadScene("CellGameplay");
-                }
+                CellGameplayScript.loadCase = 0;
+                GlobalVariables.arcadeMode = false;
+                LoadScene("CellGameplay");
                 break;
         }
     }
 
-    public void Highlight(int anything)
+    public void SetIndex(int anything)
     {
         index = anything;
     }
 
     public void HandleTimeInput()
     {
-        Highlight(index);
         EnterEvent();
     }
 }

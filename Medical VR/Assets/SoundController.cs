@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class SoundController : MonoBehaviour {
-
-    public string MainMenu, Options, Memory, Minigame, Dodge, Simon, ATP, Throphy,DestroyCell, DestroyVirus,Cgamp, Strategy, Jordan;
-    [SerializeField]
+public class SoundController : MonoBehaviour
+{
+    public string MainMenu, Options, Memory, Minigame, Dodge, Simon, ATP, Throphy, DestroyCell, DestroyVirus, Cgamp, Strategy, Jordan;
     public int Samples;
 
     void Start()
     {
-        if(SoundManager.Initialized) {
+        if (SoundManager.Initialized)
+        {
             DestroyImmediate(gameObject);
             return;
         }
@@ -17,34 +18,51 @@ public class SoundController : MonoBehaviour {
         SoundManager.MaxSFXVolume = PlayerPrefs.GetFloat("InitialSFXVolume", 1);
         DontDestroyOnLoad(gameObject);
         SoundManager.Init(gameObject);
-        OnLevelWasLoaded(0);
+        OnSceneLoaded(SceneManager.GetSceneAt(0), LoadSceneMode.Single);
     }
 
-    void OnLevelWasLoaded(int level) {
-        string name = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        switch(name) {
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        string name = SceneManager.GetActiveScene().name;
+        switch (name)
+        {
             case "MainMenu":
-                if(MainMenu != null) {
+                if (MainMenu != null)
+                {
                     SoundManager.FadeInBGM(MainMenu);
                 }
                 break;
             case "OptionsMenu":
-                if (Options != null) {
+                if (Options != null)
+                {
                     SoundManager.FadeInBGM(Options);
                 }
                 break;
             case "DestroyTheCell":
-                if (DestroyCell != null) {
+                if (DestroyCell != null)
+                {
                     SoundManager.FadeInBGM(DestroyCell);
                 }
                 break;
             case "DodgeAnitbodies":
-                if (Dodge != null) {
+                if (Dodge != null)
+                {
                     SoundManager.FadeInBGM(Dodge);
                 }
                 break;
             case "FightVirus":
-                if (DestroyVirus != null) {
+                if (DestroyVirus != null)
+                {
                     SoundManager.FadeInBGM(DestroyVirus);
                 }
                 break;
@@ -102,7 +120,8 @@ public class SoundController : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
         SoundManager.Update();
         Samples = SoundManager.BGM.timeSamples;
     }
