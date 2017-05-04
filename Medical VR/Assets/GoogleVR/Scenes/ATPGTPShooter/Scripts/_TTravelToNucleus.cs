@@ -51,6 +51,8 @@ public class _TTravelToNucleus : MonoBehaviour
     }
     public void StartTravel()
     {
+        if (!nucleus)
+            return;
         Vector3 farPoint = nucleus.transform.GetChild((int)nucleusChild.MovementPath).GetChild((int)nucleusPathChild.FarPoint).transform.position;
         Vector3 nearPoint = nucleus.transform.GetChild((int)nucleusChild.MovementPath).GetChild((int)nucleusPathChild.EnterOne).transform.position;
         float farDist = Vector3.Distance(transform.position, farPoint);
@@ -90,5 +92,6 @@ public class _TTravelToNucleus : MonoBehaviour
     void TurnOffColliders()
     {
         transform.FindChild("Colliders").gameObject.SetActive(false);
+        transform.FindChild("Viral DNA").GetChild(0).GetComponent<CapsuleCollider>().enabled = false;
     }
 }

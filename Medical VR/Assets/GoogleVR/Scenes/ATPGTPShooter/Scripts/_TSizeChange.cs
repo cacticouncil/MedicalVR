@@ -12,9 +12,18 @@ public class _TSizeChange : MonoBehaviour
     private float curShrink;
 
     bool smallSizeChange;
+    bool isInit = false;
 
     void Start()
     {
+        Inititalize();
+    }
+
+    public void Inititalize()
+    {
+        if (isInit)
+            return;
+        isInit = true;
         initialScale = transform.localScale;
         if (startSmall)
             ResetToSmall();
@@ -23,10 +32,7 @@ public class _TSizeChange : MonoBehaviour
         smallSizeChange = false;
         isShrinking = false;
         isGrowing = false;
-    //    Invoke("StartShrink", 3);
     }
-
-    // Update is called once per frame
 
     void Update()
     {

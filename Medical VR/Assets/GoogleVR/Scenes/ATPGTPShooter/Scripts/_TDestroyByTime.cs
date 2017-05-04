@@ -4,6 +4,7 @@ using System.Collections;
 public class _TDestroyByTime : MonoBehaviour
 {
     public float deathTime;
+    bool isInit = false;
 
     //    void Start()
     //    {
@@ -13,11 +14,20 @@ public class _TDestroyByTime : MonoBehaviour
 
     void Start()
     {
+        Init();
+    }
+    void Init()
+    {
+        if (isInit)
+            return;
+        isInit = true;
         Invoke("DestroyMe", deathTime);
     }
 
     public void CancelDestroy()
     {
+        if (!isInit)
+            Init();
         CancelInvoke("DestroyMe");
     }
 
