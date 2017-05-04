@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 enum Letters
-{C, G, U, A, T, A2
+{
+    C, G, U, A, T, A2
 };
 
 public enum GNE
@@ -12,7 +13,8 @@ public enum GNE
     GAC, ACT, GAC2, TCT, CGT, TAC, TCT2, GAC3, CAT
 }
 
-public class Randomsphere : MonoBehaviour {
+public class Randomsphere : MonoBehaviour
+{
     public GameObject EventSystem;
     public GameObject memoryui;
     public GameObject victoryeffect, NextLevel;
@@ -49,7 +51,8 @@ public class Randomsphere : MonoBehaviour {
     public GNE Genes;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         NextLevel.SetActive(false);
         playfx = false;
         testSpheres = new List<GameObject>();
@@ -147,11 +150,11 @@ public class Randomsphere : MonoBehaviour {
                 break;
         }
 
-        clonei =  Instantiate(Spheres[i], new Vector3(-15,26,30), Spheres[0].transform.rotation)  as GameObject;
-                                                                                                  
-         clonej = Instantiate(Spheres[j], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                                                                                                  
-         clonek = Instantiate(Spheres[k], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+        clonei = Instantiate(Spheres[i], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+
+        clonej = Instantiate(Spheres[j], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+
+        clonek = Instantiate(Spheres[k], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
 
         for (int x = 0; x < Spheres2.Length; x++)
         {
@@ -171,7 +174,7 @@ public class Randomsphere : MonoBehaviour {
                 testSpheres.Remove(testSpheres[i]);
                 correct += 1;
             }
-               
+
         }
 
         if (correct == 3)
@@ -213,7 +216,7 @@ public class Randomsphere : MonoBehaviour {
 
         ans.Clear();
 
-        
+
 
         GNE temp = Genes;
 
@@ -332,7 +335,7 @@ public class Randomsphere : MonoBehaviour {
         correct = 0;
 
         memoryui.GetComponent<MemoryUI>().finnished = false;
-        if(!(memoryui.GetComponent<MemoryUI>().startTime < 15))
+        if (!(memoryui.GetComponent<MemoryUI>().startTime < 15))
             memoryui.GetComponent<MemoryUI>().startTime -= 5;
         memoryui.GetComponent<MemoryUI>().timeRemaining = memoryui.GetComponent<MemoryUI>().startTime;
     }
