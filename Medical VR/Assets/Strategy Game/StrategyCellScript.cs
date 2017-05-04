@@ -360,7 +360,7 @@ public class StrategyCellScript : MonoBehaviour
             }
         }
 
-        if (hosted)
+        if (hosted || targeted)
         {
             if (render)
             {
@@ -375,20 +375,12 @@ public class StrategyCellScript : MonoBehaviour
                 Debug.Log("Cell " + gameObject.name + " does not have a renderer.");
             }
         }
-        else if (targeted)
-        {
-            if (render.material.color != Color.green)
-            {
-                StopCoroutine("ChangeColorOverTime");
-                StartCoroutine(ChangeColorOverTime(Color.grey));
-            }
-        }
         else
         {
             if (render.material.color != Color.grey)
             {
                 StopCoroutine("ChangeColorOverTime");
-                StartCoroutine(ChangeColorOverTime(Color.white));
+                StartCoroutine(ChangeColorOverTime(Color.grey));
             }
         }
 

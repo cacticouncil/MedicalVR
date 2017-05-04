@@ -202,7 +202,7 @@ public class VirusGameplayScript : MonoBehaviour
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-015") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-015");
                 I = 3;
-                moveSpeed = 100;
+                moveSpeed = 10;
                 break;
             case (158):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-016") == false)
@@ -257,7 +257,7 @@ public class VirusGameplayScript : MonoBehaviour
             case (227):
                 doAction = NullFunction;
                 I = 5;
-                moveSpeed = 250;
+                moveSpeed = 25;
                 break;
             case (236):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-026") == false)
@@ -284,7 +284,7 @@ public class VirusGameplayScript : MonoBehaviour
             case (252):
                 doAction = NullFunction;
                 I = 7;
-                moveSpeed = 50;
+                moveSpeed = 5;
                 break;
             case (257):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-029") == false)
@@ -333,7 +333,7 @@ public class VirusGameplayScript : MonoBehaviour
                 break;
             case (297):
                 I = 9;
-                moveSpeed = 175;
+                moveSpeed = 17.5f;
                 break;
             case (303):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-035") == false)

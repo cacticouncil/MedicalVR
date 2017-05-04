@@ -23,7 +23,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     [Header("Instances")]
     public StrategyBox mysteryBox;
     public SimulateSun sun;
-    public GameObject victory;
+    public GameObject victoryObject;
     public StrategyTutorialReproduction str;
     public StrategyTutorialDefense std;
     public StrategyTutorialImmunity sti;
@@ -49,17 +49,18 @@ public class StrategyCellManagerScript : MonoBehaviour
     [System.NonSerialized]
     public int eventTurns = 50;
     [System.NonSerialized]
-    public int virusTurns = 15;
-    [System.NonSerialized]
     public string lastEvent = "None";
-    
+
     public StrategyEvents nextEvent;
 
     private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500), virusIndex = new Vector2(-500, 500);
     private GameObject virus1, virus2, virus3;
     private int easy = 0, medium = 1, hard = 2;
+    private int victoryNum = 50;
     private float randomRange = .5f;
     private float p2Modifier = 1, p3Modifier = .5f;
+    private bool victory = false, defeat = false;
+    private int virusTurns = 15, virusDelay = 30;
 
     private float xOffset = 2.0f;
     private float yOffset = 2.0f;
@@ -140,20 +141,85 @@ public class StrategyCellManagerScript : MonoBehaviour
         virus1 = Instantiate(virusPrefab1, new Vector3(-10000, -10000, -10000), Quaternion.identity) as GameObject;
         virus2 = Instantiate(virusPrefab2, new Vector3(-10000, -10000, -10000), Quaternion.identity) as GameObject;
         virus3 = Instantiate(virusPrefab3, new Vector3(-10000, -10000, -10000), Quaternion.identity) as GameObject;
-        p2Modifier = 1;
-        p3Modifier = .5f;
 
-        GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
-        t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
-        AddToDictionary(t.GetComponent<StrategyCellScript>());
-        t.name = "Cell0_0";
-        t.GetComponent<StrategyCellScript>().parent = this;
-        t.GetComponent<StrategyCellScript>().reproduction = 1;
-        t.GetComponent<StrategyCellScript>().defense = 1;
-        t.GetComponent<StrategyCellScript>().immunity = 1;
-        t.GetComponent<StrategyCellScript>().enabled = true;
-        t.GetComponent<Collider>().enabled = true;
-        t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
+        switch (GlobalVariables.difficulty)
+        {
+            default:
+                {
+                    p2Modifier = .5f;
+                    p3Modifier = .25f;
+
+                    easy = 0;
+                    medium = 2;
+                    hard = 4;
+
+                    virusDelay = 40;
+                    virusTurns = 20;
+
+                    GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
+                    t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
+                    AddToDictionary(t.GetComponent<StrategyCellScript>());
+                    t.name = "Cell0_0";
+                    t.GetComponent<StrategyCellScript>().parent = this;
+                    t.GetComponent<StrategyCellScript>().reproduction = 5;
+                    t.GetComponent<StrategyCellScript>().defense = 5;
+                    t.GetComponent<StrategyCellScript>().immunity = 5;
+                    t.GetComponent<StrategyCellScript>().enabled = true;
+                    t.GetComponent<Collider>().enabled = true;
+                    t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
+                }
+                break;
+
+            case 1:
+                {
+                    p2Modifier = 1;
+                    p3Modifier = .5f;
+
+                    easy = 0;
+                    medium = 1;
+                    hard = 2;
+
+                    virusDelay = 30;
+                    virusTurns = 15;
+
+                    GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
+                    t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
+                    AddToDictionary(t.GetComponent<StrategyCellScript>());
+                    t.name = "Cell0_0";
+                    t.GetComponent<StrategyCellScript>().parent = this;
+                    t.GetComponent<StrategyCellScript>().reproduction = 1;
+                    t.GetComponent<StrategyCellScript>().defense = 1;
+                    t.GetComponent<StrategyCellScript>().immunity = 1;
+                    t.GetComponent<StrategyCellScript>().enabled = true;
+                    t.GetComponent<Collider>().enabled = true;
+                    t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
+                }
+                break;
+
+            case 2:
+                {
+                    p2Modifier = 2;
+                    p3Modifier = 1;
+
+                    easy = medium = hard = 0;
+
+                    virusDelay = 1;
+                    virusTurns = 15;
+
+                    GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
+                    t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
+                    AddToDictionary(t.GetComponent<StrategyCellScript>());
+                    t.name = "Cell0_0";
+                    t.GetComponent<StrategyCellScript>().parent = this;
+                    t.GetComponent<StrategyCellScript>().reproduction = 0;
+                    t.GetComponent<StrategyCellScript>().defense = 0;
+                    t.GetComponent<StrategyCellScript>().immunity = 0;
+                    t.GetComponent<StrategyCellScript>().enabled = true;
+                    t.GetComponent<Collider>().enabled = true;
+                    t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
+                }
+                break;
+        }
 
         nextEvent = sEvent;
         inventory = mysteryBox.items;
@@ -181,9 +247,12 @@ public class StrategyCellManagerScript : MonoBehaviour
                 }
             }
         }
-        else if (selected == victoryIndex && victory)
+        else if (selected == victoryIndex && victoryObject)
         {
-            victory.GetComponent<Destroy>().Kill();
+            if (victory)
+                victoryObject.GetComponent<Destroy>().Kill();
+            else
+                victoryObject.SetActive(false);
         }
         selected = k;
     }
@@ -234,7 +303,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
         yield return new WaitForEndOfFrame();
 
-        if (turnNumber % virusTurns == 0)
+        if (turnNumber >= virusDelay && turnNumber % virusTurns == 0)
         {
             SpawnVirus();
         }
@@ -253,35 +322,35 @@ public class StrategyCellManagerScript : MonoBehaviour
         cellNum = cells.Count;
         virNum = viruses.Count;
 
-        if (cellNum >= 50 && victory)
+        if (cellNum >= victoryNum && victoryObject)
         {
-                victory.SetActive(true);
-                foreach (StrategyCellScript child in cells.ToList())
-                    immunitySpread += child.immunitySpread;
-                victory.GetComponent<TMPro.TextMeshPro>().text = "Congratulations! You've won!" +
-                    "\nYou reached a colony size of " + cellNum + " cells." +
-                    "\nIt took you " + turnNumber + " turns." +
-                    "\nYou spawned " + cellsSpawned + " cells." +
-                    "\nYou spread " + (int)immunitySpread + " immunity." +
-                    "\nYou killed " + virusKills + " viruses." +
-                    "\nAt this point you can continue in sandbox mode, retry, or return to the main menu.";
-                Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(victory.transform.position.x, victory.transform.position.y, victory.transform.position.z - 1.5f));
-                SetSelected(new Vector2(-500, -500));
+            victory = true;
+            victoryObject.SetActive(true);
+            foreach (StrategyCellScript child in cells.ToList())
+                immunitySpread += child.immunitySpread;
+            victoryObject.GetComponent<TMPro.TextMeshPro>().text = "Congratulations! You've won!" +
+                "\nIt took you " + turnNumber + " turns." +
+                "\nYou spawned " + cellsSpawned + " cells." +
+                "\nYou spread " + (int)immunitySpread + " immunity." +
+                "\nYou killed " + virusKills + " viruses." +
+                "\nAt this point you can continue in sandbox mode, retry, or return to the main menu.";
+            Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
+            SetSelected(victoryIndex);
         }
-        else if (virNum > cellNum && victory)
+        else if (virNum > cellNum && !defeat && victoryObject)
         {
-                victory.SetActive(true);
-                foreach (StrategyCellScript child in cells.ToList())
-                    immunitySpread += child.immunitySpread;
-                victory.GetComponent<TMPro.TextMeshPro>().text = "At this point there are currently more viruses than cells." +
-                    "\nYou can continue if you want, but it is very unlikely that you will win." +
-                    "\nYou reached a colony size of " + cellNum + " cells." +
-                    "\nIt took you " + turnNumber + " turns." +
-                    "\nYou spawned " + cellsSpawned + " cells." +
-                    "\nYou spread " + (int)immunitySpread + " immunity." +
-                    "\nYou killed " + virusKills + " viruses.";
-                Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(victory.transform.position.x, victory.transform.position.y, victory.transform.position.z - 1.5f));
-                SetSelected(new Vector2(-500, -500));
+            defeat = true;
+            victoryObject.SetActive(true);
+            foreach (StrategyCellScript child in cells.ToList())
+                immunitySpread += child.immunitySpread;
+            victoryObject.GetComponent<TMPro.TextMeshPro>().text = "At this point there are currently more viruses than cells." +
+                "\nYou can continue if you want, but it is very unlikely that you will win." +
+                "\nIt took you " + turnNumber + " turns." +
+                "\nYou spawned " + cellsSpawned + " cells." +
+                "\nYou spread " + (int)immunitySpread + " immunity." +
+                "\nYou killed " + virusKills + " viruses.";
+            Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
+            SetSelected(victoryIndex);
         }
     }
     #endregion
@@ -866,7 +935,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
 
@@ -884,7 +953,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
 
@@ -903,7 +972,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
 
@@ -921,7 +990,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
 
@@ -939,7 +1008,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
 
@@ -957,7 +1026,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
         }
@@ -976,7 +1045,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
 
@@ -994,7 +1063,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
 
@@ -1012,7 +1081,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
 
@@ -1031,7 +1100,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
 
@@ -1049,7 +1118,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
 
@@ -1068,7 +1137,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 v.GetComponent<StrategyVirusScript>().parent = this;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
                 return;
             }
         }
@@ -1102,14 +1171,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
 
             //Right (+1, 0)
@@ -1125,14 +1194,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
 
             //Bottom Right (+1, -1)
@@ -1149,14 +1218,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
 
             //Bottom Left (0, -1)
@@ -1172,14 +1241,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
 
             //Left (-1, 0)
@@ -1195,14 +1264,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
 
             //Top Left (0, +1)
@@ -1218,14 +1287,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
         }
         else
@@ -1242,14 +1311,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
 
             //Right (+1, 0)
@@ -1265,14 +1334,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
 
             //Bottom Right (0, -1)
@@ -1288,14 +1357,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
 
             //Bottom Left (-1, -1)
@@ -1312,14 +1381,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
 
             //Left (-1, 0)
@@ -1335,14 +1404,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
 
             //Top Left (-1, +1)
@@ -1359,14 +1428,14 @@ public class StrategyCellManagerScript : MonoBehaviour
                 v.GetComponent<StrategyVirusScript>().target = tiles[check];
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
             else
             {
                 v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
                 v.GetComponent<StrategyVirusScript>().percentTraveled = .75f;
                 t.GetComponent<StrategyTransporter>().enabled = true;
-                
+
             }
         }
     }
@@ -1501,7 +1570,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             v.GetComponent<StrategyVirusScript>().target = FindVirusNewTarget(v);
             v.GetComponent<StrategyVirusScript>().parent = this;
             v.GetComponent<Collider>().enabled = true;
-            
+
         }
     }
 
@@ -1526,7 +1595,7 @@ public class StrategyCellManagerScript : MonoBehaviour
             v.GetComponent<StrategyVirusScript>().target = cells[index];
             v.GetComponent<StrategyVirusScript>().percentTraveled = 100.0f;
             v.GetComponent<StrategyVirusScript>().parent = this;
-            
+
             index++;
         }
     }

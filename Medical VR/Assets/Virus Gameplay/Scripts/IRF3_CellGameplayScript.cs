@@ -26,7 +26,7 @@ public class IRF3_CellGameplayScript : MonoBehaviour {
                 break;
             case 194:
                 I = 2;
-                moveSpeed = 200;
+                moveSpeed = 20;
                 break;
             default:
                 break;

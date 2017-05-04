@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class TimeInputObject : MonoBehaviour, TimedInputHandler {
+public class TimeInputObject : MonoBehaviour/*, TimedInputHandler*/ {
 
     public GameObject memoryui;
     public GameObject sphere;
@@ -167,7 +167,33 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
             IsCorrectk = false;
     }
 
-    public void HandleTimeInput()
+    //public void HandleTimeInput()
+    //{
+    //    Clonei = sphere.GetComponent<Randomsphere>().Getclonei().tag;
+    //    Clonej = sphere.GetComponent<Randomsphere>().Getclonej().tag;
+    //    Clonek = sphere.GetComponent<Randomsphere>().Getclonek().tag;
+
+    //    switch (sphere.GetComponent<Randomsphere>().Genes)
+    //    {
+    //        case GNE.TCT:
+    //            {
+    //                TCTCASE();
+    //            }
+    //            break;
+    //        case GNE.TCT2:
+    //            {
+    //                TCTCASE();
+    //            }
+    //            break;
+    //        default:
+    //            {
+    //                OTHERCASES();
+    //            }
+    //            break;
+    //    }
+    //}
+
+        public void ClickedInput()
     {
         Clonei = sphere.GetComponent<Randomsphere>().Getclonei().tag;
         Clonej = sphere.GetComponent<Randomsphere>().Getclonej().tag;
@@ -192,7 +218,7 @@ public class TimeInputObject : MonoBehaviour, TimedInputHandler {
                 break;
         }
 
-        
+
 
         if (IsCorrecti == true || IsCorrectj == true || IsCorrectk == true)
             IsCorrect = true;

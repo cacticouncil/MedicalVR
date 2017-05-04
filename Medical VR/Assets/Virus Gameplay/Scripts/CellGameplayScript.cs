@@ -9,7 +9,7 @@ public class CellGameplayScript : MonoBehaviour
     public List<GameObject> places;
     public List<GameObject> Sceneries;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna;
-    public static int loadCase;
+    public static int loadCase =0;
     // Use this for initialization
     delegate void Func();
     Func doAction;
@@ -138,7 +138,7 @@ public class CellGameplayScript : MonoBehaviour
             case (25):
                // doAction = NullFunction;
                 I = 2;
-                moveSpeed = 100;
+                moveSpeed = 10;
                 break;
             case (30):
                 doAction = LowerCurtain;
@@ -197,7 +197,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (106):
                 I = 4;
-                moveSpeed = 400;
+                moveSpeed = 40;
                 break;
             case 113:
                 if(t >= 113.5)
@@ -233,7 +233,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (159):
                 I = 5;
-                moveSpeed = 200;
+                moveSpeed = 20;
                 break;
             case 167:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line17") == false)
@@ -246,7 +246,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (182):
                 I = 6;
-                moveSpeed = 200;
+                moveSpeed = 20;
                 break;
             case 186:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line19") == false)
@@ -289,7 +289,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 213:
                 I = 10;
-                moveSpeed = 300;
+                moveSpeed = 30;
                 if(t >= 213.5f)
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line21") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line21");

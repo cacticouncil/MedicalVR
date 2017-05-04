@@ -17,9 +17,17 @@ public class _TRaycastTarget : MonoBehaviour
     float movementOffset;
 
     int DebugStuff;
+    private bool isInit = false;
 
     void Start()
     {
+        Initialize();
+    }
+    void Initialize()
+    {
+        if (isInit)
+            return;
+        isInit = true;
         hasWon = false;
         if (!gun)
             Debug.Log("failed to load Gun");
@@ -71,14 +79,18 @@ public class _TRaycastTarget : MonoBehaviour
         PlotTrajectory(gun.transform.position, gun.transform.forward * 10, .2f, 1.0f);
 
         RaycastHit hit;
+        if (gun)
+        {
+            Physics.Raycast(gun.transform.position, gun.transform.TransformDirection(Vector3.forward), out hit);
 
-        Physics.Raycast(gun.transform.position, gun.transform.TransformDirection(Vector3.forward), out hit);
-
-        if (hit.transform.CompareTag("Finish") || hasWon)
-            rayOn = false;
+            if (hit.transform.CompareTag("Finish") || hasWon)
+                rayOn = false;
+            else
+                rayOn = true;
+        }
         else
-            rayOn = true;
-        if(GVRReticle)
+            rayOn = false;
+        if (GVRReticle)
             GVRReticle.SetActive(!rayOn);
     }
 }
