@@ -20,20 +20,20 @@ public class _TFadeScreen : MonoBehaviour
             camPos = cameraPosition.position;
         else
             camPos = new Vector3(0, 1, 0);
-        
+
         startPosition = transform.position;
         transform.position = camPos;
-        
+
         startColor = GetComponent<Renderer>().material.color;
         if (startDarkScreen)
             ResetToBlack();
         else
             ResetToScene();
     }
-    
+
     void Update()
     {
-        if(turnToBlack)
+        if (turnToBlack)
             TurnToBlack();
         else if (turnToScene)
             TurnToScene();
@@ -41,10 +41,18 @@ public class _TFadeScreen : MonoBehaviour
 
     public void StartBlackScreen()
     {
+        Invoke("InvokeBlack", .1f);
+    }
+    public void StartScene()
+    {
+        Invoke("InvokeStart", .1f);
+    }
+    void InvokeBlack()
+    {
         turnToBlack = true;
         turnToScene = false;
     }
-    public void StartScene()
+    void InvokeStart()
     {
         turnToScene = true;
         turnToBlack = false;
@@ -73,7 +81,7 @@ public class _TFadeScreen : MonoBehaviour
     {
         float curValue = curfade / fadeTime;
         curfade += Time.deltaTime;
-        if(curfade >= fadeTime)
+        if (curfade >= fadeTime)
         {
             ResetToBlack();
             return;

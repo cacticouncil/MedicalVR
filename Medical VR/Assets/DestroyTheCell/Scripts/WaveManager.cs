@@ -147,7 +147,7 @@ public class WaveManager : MonoBehaviour
     {
         for (int i = 0; i < CellReceptorCount; i++)
         {
-            CellReceptorLocation = Random.onUnitSphere * 11f;
+            CellReceptorLocation = Random.onUnitSphere * 12.0f;
             WhatColorCellReceptor = Random.Range(1, 3);
 
             if (GlobalVariables.tutorial == true && WaveNumber == 1)

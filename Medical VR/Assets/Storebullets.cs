@@ -23,6 +23,7 @@ public class Storebullets : MonoBehaviour
 
     public GameObject shotSpawn;
 
+    public float tumble = 5;
     public float fireRate;
     public GameObject bullet;
 
@@ -295,7 +296,8 @@ public class Storebullets : MonoBehaviour
             if (bulletamount > 0)
             {
                 nextFire = Time.time + fireRate;
-                Instantiate(bullet, shotSpawn.transform.position, shotSpawn.transform.rotation);
+                GameObject obj = Instantiate(bullet, shotSpawn.transform.position, shotSpawn.transform.rotation) as GameObject;
+                obj.GetComponent<Rigidbody>().angularVelocity = UnityEngine.Random.insideUnitSphere * tumble;
                 bulletamount -= 1;
                 BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
             }
