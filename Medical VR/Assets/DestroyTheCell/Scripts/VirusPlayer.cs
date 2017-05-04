@@ -23,9 +23,10 @@ public class VirusPlayer : MonoBehaviour
 
     public GameObject VirusAttack;
 
-    public float currSpeed;
     [System.NonSerialized]
-    public float baseSpeed = .04f;
+    public float baseSpeed = .03f;
+    public float currSpeed;
+
     public int Lives;
     public bool isGameover = false;
 
@@ -105,7 +106,9 @@ public class VirusPlayer : MonoBehaviour
                     if (enemy.GetComponent<AntiViralProtein>())
                     {
                         if (enemy.GetComponent<AntiViralProtein>().CheckFOV() == true)
-                            FlashScreen();
+                        {
+                            //Alert the player
+                        }
                     }
                 }
             }
@@ -150,8 +153,7 @@ public class VirusPlayer : MonoBehaviour
                     if (!GlobalVariables.arcadeMode)
                     {
                         TutorialModeCompleted = false;
-                        VirusGameplayScript.loadCase = 3;
-                        SceneManager.LoadScene("VirusGameplay");
+                        ContinuePlayThrough();
                     }
 
                     //For arcade mode once you beat it will bring up scoreboard 
@@ -187,22 +189,22 @@ public class VirusPlayer : MonoBehaviour
                         break;
 
                     case 2:
-                        StartCoroutine(DisplayText("The objective is to kill these cell receptors", 3.5f));
+                        StartCoroutine(DisplayText("Your objective is to find the cell receptors", 3.5f));
                         WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
                         break;
 
                     case 3:
-                        StartCoroutine(DisplayText("Do this by finding them near the cell membrane", 3.5f));
+                        StartCoroutine(DisplayText("You can search for the cell receptors near the cell membrane", 3.5f));
                         break;
 
                     case 4:
-                        StartCoroutine(DisplayText("And using your reticle to destroy them", 3.5f));
+                        StartCoroutine(DisplayText("Use your cursor to automatically fire viruses at them", 3.5f));
                         CanIMove = true;
                         currSpeed = baseSpeed;
                         break;
 
                     case 5:
-                        StartCoroutine(DisplayText("You will shoot attack viruses", 3.5f));
+                        StartCoroutine(DisplayText(" ", 3.5f));
                         WaveManager.GetComponent<WaveManager>().CanDestroyProteins = true;
                         break;
 
@@ -217,7 +219,7 @@ public class VirusPlayer : MonoBehaviour
                         break;
 
                     case 8:
-                        StartCoroutine(DisplayText("Or they will set you back to the spawn area", 3.5f));
+                        StartCoroutine(DisplayText("or they will set you back to the spawn area", 3.5f));
                         WaveManager.GetComponent<WaveManager>().CanISpawnAntiViralProtein = true;
                         break;
 
@@ -231,7 +233,7 @@ public class VirusPlayer : MonoBehaviour
                         break;
 
                     case 10:
-                        StartCoroutine(DisplayText("Great now you're ready to play", 3.5f));
+                        StartCoroutine(DisplayText("Great! now you're ready to play", 3.5f));
                         TutorialModeCompleted = true;
                         break;
 
@@ -246,12 +248,9 @@ public class VirusPlayer : MonoBehaviour
             }
         }
 
-        //After you beat tutorial if story mode bool is active transtion to story mode for this game
+        //After you beat tutorial play the story mode
         if (TutorialModeCompleted == true)
-        {
-            GlobalVariables.tutorial = false;
-            SceneManager.LoadScene("DestroyTheCell");
-        }
+            PlayStory();
     }
 
     void FixedUpdate()
@@ -283,11 +282,6 @@ public class VirusPlayer : MonoBehaviour
                 GetComponent<Rigidbody>().velocity *= currSpeed;
             }
         }
-    }
-
-    void FlashScreen()
-    {
-
     }
 
     IEnumerator DisplayText(string message, float duration)
@@ -322,6 +316,18 @@ public class VirusPlayer : MonoBehaviour
     {
         FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + Score.ToString(); /// + FacebookManager.Instance.GlobalScore /;
         FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
+    }
+
+    void PlayStory()
+    {
+        GlobalVariables.tutorial = false;
+        SceneManager.LoadScene("DestroyTheCell");
+    }
+
+    void ContinuePlayThrough()
+    {
+        VirusGameplayScript.loadCase = 3;
+        SceneManager.LoadScene("VirusGameplay");
     }
 }
 

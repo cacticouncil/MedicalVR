@@ -11,12 +11,17 @@ public class CellReceptors : MonoBehaviour, TimedInputHandler
     float SpawnTimer;
     int Count = 5;
     public int health = 5;
+    GameObject OriginalTutorialGameObject;
     void Start()
     {
         SpawnTimer = 0.0f;
         WaveManager = gameObject.transform.parent.gameObject;
         Player = WaveManager.GetComponent<WaveManager>().Player;
-        GetComponent<Rigidbody>().AddForce(new Vector3(100, 100, 100));
+
+        if (!GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber != 1)
+            GetComponent<Rigidbody>().AddForce(new Vector3(100, 100, 100));
+
+        OriginalTutorialGameObject = WaveManager.GetComponent<WaveManager>().TutorialLocationEnd;
     }
 
     void Update()
@@ -37,6 +42,16 @@ public class CellReceptors : MonoBehaviour, TimedInputHandler
 
         if (Player.GetComponent<VirusPlayer>().isGameover)
             Destroy(this.gameObject);
+
+        //Check Rigidbody
+        //if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
+        //{
+        //    if (transform.position != OriginalTutorialGameObject.transform.position)
+        //        Vector3.MoveTowards(transform.position, OriginalTutorialGameObject.transform.position, 10);
+        //}
+
+        //Vector3.MoveTowards(transform.position, OriginalTutorialGameObject.transform.position, 10);
+        //GetComponent<Rigidbody>().MovePosition(OriginalTutorialGameObject.transform.position);
     }
 
     public void SpawnAttackVirus()
