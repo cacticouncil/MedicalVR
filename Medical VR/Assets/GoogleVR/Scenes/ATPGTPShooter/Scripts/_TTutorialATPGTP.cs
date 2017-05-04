@@ -18,16 +18,16 @@ public class _TTutorialATPGTP : MonoBehaviour
 
     void Start()
     {
-        Initialize();
+        //Initialize();
     }
 
-    void Initialize()
+    public void Initialize()
     {
         if (isInit)
             return;
         isInit = true;
         //run = GlobalVariables.tutorial;
-        run = true;
+        run = GetComponent<_TGameController>().IsTutorial();
         tState = TutorialState.dispEnzyme;
         GetComponent<_TGameController>().FadeScreen();
     }
