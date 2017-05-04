@@ -32,11 +32,11 @@ public class Sting_CellGameplayScript : MonoBehaviour {
                 break;
             case 159:
                 I = 1;
-                moveSpeed = 200;
+                moveSpeed = 20;
                 break;
             case 182:
                 I = 2;
-                moveSpeed = 200;
+                moveSpeed = 20;
                 break;
             default:
                 break;

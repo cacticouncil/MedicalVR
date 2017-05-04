@@ -52,7 +52,7 @@ public class Rna_VirusGameplayScript : MonoBehaviour {
                 break;
             case (297):
                 I = 2;
-                moveSpeed = 175;
+                moveSpeed = 17.5f;
                 break;
             default:
                 break;
