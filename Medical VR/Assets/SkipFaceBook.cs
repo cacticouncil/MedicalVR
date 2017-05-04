@@ -15,7 +15,13 @@ public class SkipFaceBook : MonoBehaviour
         {
             faceBookIn.SetActive(false);
             faceBookOut.SetActive(false);
-            Fade.FadeIn(mainMenu);
+
+            if (GlobalVariables.VirusGameplayCompleted == 0)
+            {
+                mainMenu.GetComponent<MainMenuLocked>().CellGameplayGameObject.GetComponent<Renderer>().material.color = new Color32(31, 46, 77, 255);
+                mainMenu.GetComponent<MainMenuLocked>().TrophyRoomGameObject.GetComponent<Renderer>().material.color = new Color32(31, 46, 77, 255);
+            }
+                Fade.FadeIn(mainMenu);
         }
     }
 
