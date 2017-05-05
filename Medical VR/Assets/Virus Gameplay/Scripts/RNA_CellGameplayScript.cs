@@ -50,7 +50,7 @@ public class RNA_CellGameplayScript : MonoBehaviour {
                 break;
             case (213):
                 I = 2;
-                moveSpeed = 300;
+                moveSpeed = 30;
                 break;
             default:
                 break;

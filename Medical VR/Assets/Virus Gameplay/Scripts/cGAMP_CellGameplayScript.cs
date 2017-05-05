@@ -4,7 +4,7 @@ using System.Collections;
 public class cGAMP_CellGameplayScript : MonoBehaviour {
 
     public GameObject target, subtitles, body;
-    float moveSpeed = 400;
+    float moveSpeed = 40;
 	// Use this for initialization
 	void Start ()
     {

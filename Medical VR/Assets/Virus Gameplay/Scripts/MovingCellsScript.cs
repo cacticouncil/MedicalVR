@@ -4,7 +4,7 @@ using System.Collections;
 public class MovingCellsScript : MonoBehaviour {
 
     public GameObject Cam;
-    public float speed;
+    float speed =5;
 	// Use this for initialization
 	void Start () {
 	
@@ -13,7 +13,7 @@ public class MovingCellsScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (Vector3.Distance(transform.position, Cam.transform.position) < 4000)
+        if (Vector3.Distance(transform.position, Cam.transform.position) < 800)
         {
             if (GetComponent<Renderer>() != null)
             GetComponent<Renderer>().enabled = true;
