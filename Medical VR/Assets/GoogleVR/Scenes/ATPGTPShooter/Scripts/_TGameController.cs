@@ -83,7 +83,7 @@ public class _TGameController : MonoBehaviour
         SetFacebook();
         isTutorial = GlobalVariables.tutorial;
         // For Testing //
-        isTutorial = false;
+        isTutorial = true;
         /////////////////
 
         if (isTutorial)
@@ -149,6 +149,9 @@ public class _TGameController : MonoBehaviour
     void ShrinkObjects()
     {
         foreach (Transform child in shrinkStuff.enzymeCollector.transform)
+            ShrinkChild(child);
+
+        foreach (Transform child in shrinkStuff.ViralEnzymeCollector.transform)
             ShrinkChild(child);
 
         foreach (Transform child in shrinkStuff.hazardCollector.transform)
