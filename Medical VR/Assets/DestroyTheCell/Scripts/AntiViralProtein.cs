@@ -4,16 +4,18 @@ using System.Collections;
 enum Movements { XAxis = 0, YAxis = 1, XYAxis = 2, NXAxis = 3, NYAxis = 4, NXNYAxis = 5, XNYAxis = 6, NXYAxis = 7 }
 public class AntiViralProtein : MonoBehaviour
 {
+    Movements M;
     GameObject WaveManager;
     GameObject Player;
-    Movements M;
     bool AlwaysChasePlayer;
     bool FlashScreen;
     bool isRotating;
     float RotateTimer;
     float MoveTimer;
+
     [System.NonSerialized]
     public float patrolSpeed = .4f;
+
     [System.NonSerialized]
     public float chaceSpeed = .6f;
 

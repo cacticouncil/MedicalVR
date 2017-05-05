@@ -195,6 +195,7 @@ public class VirusPlayer : MonoBehaviour
 
                     case 3:
                         StartCoroutine(DisplayText("You can search for the cell receptors near the cell membrane", 3.5f));
+
                         break;
 
                     case 4:
