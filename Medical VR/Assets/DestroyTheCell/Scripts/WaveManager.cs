@@ -26,9 +26,11 @@ public class WaveManager : MonoBehaviour
     public bool CanDestroyProteins = false;
 
     //Tutorial Variables
-    public GameObject TutorialLocation;
-    public bool CanISpawnAntiViralProtein = false;
+    public GameObject TutorialLocationStart;
+    public GameObject TutorialLocationEnd;
+
     public bool CanISpawnCellReceptor = false;
+    public bool CanISpawnAntiViralProtein = false;
 
     void Update()
     {
@@ -119,7 +121,7 @@ public class WaveManager : MonoBehaviour
             switch (WaveNumber)
             {
                 case 1:
-                    CellReceptorCount = 2;
+                    CellReceptorCount = 1;
                     AntiViralProteinCount = 1;
                     break;
 
@@ -151,7 +153,7 @@ public class WaveManager : MonoBehaviour
             WhatColorCellReceptor = Random.Range(1, 3);
 
             if (GlobalVariables.tutorial == true && WaveNumber == 1)
-                CellReceptorLocation = TutorialLocation.transform.position;
+                CellReceptorLocation = TutorialLocationStart.transform.position;
 
             
             switch (WhatColorCellReceptor)
@@ -180,7 +182,7 @@ public class WaveManager : MonoBehaviour
             else if (GlobalVariables.tutorial == true)
             {
                 if (WaveNumber == 1)
-                    AntiViralProteinLocation = TutorialLocation.transform.position;
+                    AntiViralProteinLocation = TutorialLocationStart.transform.position;
 
                 else if (WaveNumber == 2)
                     AntiViralProteinLocation = Random.onUnitSphere * 6.0f;

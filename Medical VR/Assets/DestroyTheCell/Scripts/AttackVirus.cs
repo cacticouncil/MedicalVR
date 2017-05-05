@@ -18,9 +18,7 @@ public class AttackVirus : MonoBehaviour
     void FixedUpdate()
     {
         if (TempTimerForAttackVirusToLeaveCell >= 7.5f)
-        {
             Destroy(this.gameObject);
-        }
 
         else if (CanLeaveCell == false)
         {

@@ -11,15 +11,24 @@ public class CellReceptors : MonoBehaviour, TimedInputHandler
     float SpawnTimer;
     int Count = 5;
     public int health = 5;
+
+
+    private float Speed = 1.3f;
+
+    Vector3 SavedLocation;
     void Start()
     {
         SpawnTimer = 0.0f;
         WaveManager = gameObject.transform.parent.gameObject;
         Player = WaveManager.GetComponent<WaveManager>().Player;
-        GetComponent<Rigidbody>().AddForce(new Vector3(100, 100, 100));
+
+        if (!GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber != 1)
+            GetComponent<Rigidbody>().AddForce(new Vector3(100, 100, 100));
+
+        SavedLocation = WaveManager.GetComponent<WaveManager>().TutorialLocationEnd.transform.position;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (SpawnFiveAttackVirus == true && Count > 0)
         {
@@ -37,6 +46,12 @@ public class CellReceptors : MonoBehaviour, TimedInputHandler
 
         if (Player.GetComponent<VirusPlayer>().isGameover)
             Destroy(this.gameObject);
+
+        if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
+        {
+            if (transform.position != SavedLocation)
+                transform.position = Vector3.MoveTowards(transform.position, SavedLocation, Speed * Time.fixedDeltaTime);
+        }
     }
 
     public void SpawnAttackVirus()
