@@ -59,6 +59,7 @@ public class Storebullets : MonoBehaviour
     void Start()
     {
         bulletamount = 0;
+        score = 0;
         BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         TheLevel.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + level;
