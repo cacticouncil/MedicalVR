@@ -83,7 +83,7 @@ public class _TGameController : MonoBehaviour
         SetFacebook();
         isTutorial = GlobalVariables.tutorial;
         // For Testing //
-        isTutorial = true;
+        isTutorial = false;
         /////////////////
 
         if (isTutorial)
