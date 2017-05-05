@@ -3,7 +3,7 @@ using System.Collections;
 using TMPro;
 public class MainMenuLocked : MonoBehaviour
 {
-    //bool DisableAllScenes = false;
+    bool DisableAllScenes = false;
     public GameObject CellGameplayGameObject;
     public GameObject TrophyRoomGameObject;
 
@@ -13,12 +13,12 @@ public class MainMenuLocked : MonoBehaviour
 
 	void Awake ()
     {
-        ////Debug to start the scenes locked or unlocked
-        //if (DisableAllScenes == true)
-        //    Lock();
+        //Debug to start the scenes locked or unlocked
+        if (DisableAllScenes == true)
+            Lock();
 
-        //else if (DisableAllScenes == false)
-        //    Unlock();
+        else if (DisableAllScenes == false)
+            Unlock();
 
         //Show that cell gameplay is locked 
         if (GlobalVariables.VirusGameplayCompleted == 0)

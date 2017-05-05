@@ -18,16 +18,10 @@ public class SpawnCGamp : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	 if (Input.GetKey(KeyCode.Q))
-            {
-            SpawnEnzime();
-        }
     }
     public void SpawnEnzime()
     {
-        
-
-        InvokeRepeating("SpawnC", 1, 1);
+        InvokeRepeating("SpawnC", 1, 0.5f);
     }
 
     public void SpawnC()
