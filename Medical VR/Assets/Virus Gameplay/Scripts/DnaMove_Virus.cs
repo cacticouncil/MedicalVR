@@ -28,7 +28,7 @@ public class DnaMove_Virus : MonoBehaviour {
         }
         if(move == true)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * 50);
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * 5);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, target.transform.rotation, Time.deltaTime * 100);
         }
     }

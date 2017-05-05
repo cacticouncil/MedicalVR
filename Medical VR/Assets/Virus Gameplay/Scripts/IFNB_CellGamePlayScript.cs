@@ -30,7 +30,7 @@ public class IFNB_CellGamePlayScript : MonoBehaviour {
         }
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 244)
         {
-            moveSpeed = 200;
+            moveSpeed = 20;
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * moveSpeed);
         }
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 250)

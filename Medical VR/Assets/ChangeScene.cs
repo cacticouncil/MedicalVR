@@ -39,7 +39,7 @@ public class ChangeScene : MonoBehaviour, TimedInputHandler
                 LoadScene("FightVirus");
                 break;
             case 3:
-                LoadScene("DodgeAnitbodies");
+                LoadScene("DodgeAntibodies");
                 break;
             case 4:
                 LoadScene("SimonDNA");

@@ -84,8 +84,12 @@ public class MemoryUI : MonoBehaviour
                 case 0:
                     TutorialTimer += Time.deltaTime;
                     EventSystem.SetActive(false);
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 2.0f)
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-001") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-001");
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "Welcome to the DNA Memory Game";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -97,7 +101,11 @@ public class MemoryUI : MonoBehaviour
                     TutorialTimer += Time.deltaTime;
                     EventSystem.SetActive(false);
                     if (TutorialTimer <= 4.0f)
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-002") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-002");
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "Nucleic acids to comprise DNA pair in very specific ways";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -107,8 +115,10 @@ public class MemoryUI : MonoBehaviour
 
                 case 2:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 6.0f)
+                    if (TutorialTimer <= 7.0f)
+                    {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "Your objective is to select three capsules that are the correct pairing to the DNA code given above";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -117,8 +127,12 @@ public class MemoryUI : MonoBehaviour
                     break;
                 case 3:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 2.0f)
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-003") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-003");
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "The pairing is as follows:";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -128,8 +142,10 @@ public class MemoryUI : MonoBehaviour
 
                 case 4:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 2.0f)
+                    {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "A binds to U,";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -139,8 +155,10 @@ public class MemoryUI : MonoBehaviour
 
                 case 5:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 2.0f)
+                    {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "G binds to C,";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -150,8 +168,10 @@ public class MemoryUI : MonoBehaviour
 
                 case 6:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 2.0f)
+                    {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "C binds to G,";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -161,8 +181,10 @@ public class MemoryUI : MonoBehaviour
 
                 case 7:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 2.0f)
+                    {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "and T binds to A.";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -172,8 +194,12 @@ public class MemoryUI : MonoBehaviour
 
                 case 8:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 3.0f)
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-004") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-004");
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "Pair the correct ones and they will turn green,";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -183,8 +209,10 @@ public class MemoryUI : MonoBehaviour
 
                 case 9:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 2.0f)
+                    {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "pair a wrong one and it will turn red.";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -194,8 +222,10 @@ public class MemoryUI : MonoBehaviour
 
                 case 10:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 3.0f)
+                    {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "Make sure you don't get 5 wrong or you will have to restart";
+                    }
                     else
                     {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "";
@@ -211,8 +241,12 @@ public class MemoryUI : MonoBehaviour
                 case 11:
                     TutorialTimer += Time.deltaTime;
 
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 2.0f)
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-005") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-005");
                         CenterScreenObj.GetComponent<TextMeshPro>().text = " Perfect " + "\n" + " Now get the others!";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -223,26 +257,17 @@ public class MemoryUI : MonoBehaviour
                 case 12:
                     TutorialTimer += Time.deltaTime;
 
-                    if (TutorialTimer <= 4.0f && GlobalVariables.arcadeMode == true)
+                    if (TutorialTimer <= 2.0f && GlobalVariables.arcadeMode == true)
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-006") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-006");
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "Make sure you do it before the timer ends";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
                         WhatToRead += 1;
                     }
-                    break;
-
-                case 13:
-                    TutorialTimer += Time.deltaTime;
-
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Awesome";
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-
                     break;
 
                 default:
@@ -252,12 +277,14 @@ public class MemoryUI : MonoBehaviour
         }
 
         //For tutorial only it will either transition to story mode or only play once
-        if (WhatToRead >= 14 && (Randomsphere.correct == 3))
+        if (WhatToRead >= 13 && (Randomsphere.correct == 3))
         {
             BeatGameTimer += Time.deltaTime;
-            CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now your ready to play";
+            if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-007") == false)
+                SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-007");
+            CenterScreenObj.GetComponent<TextMeshPro>().text = "Awesome! Now your ready to play.";
 
-            if (BeatGameTimer >= 3.5)
+            if (BeatGameTimer >= 2.5)
             {
                 //if ()
                 //{

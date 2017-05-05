@@ -67,15 +67,15 @@ public class Virus_CellGameplayScript : MonoBehaviour {
             case (24):
                 I = 1;
                 transform.position = places[I].transform.position;
-                moveSpeed = 50;
+                moveSpeed = 5;
                 break;
             case (25):
                 I = 2;
-                moveSpeed = 50;
+                moveSpeed = 5;
                 break;
             case (26):
                 I = 3;
-                moveSpeed = 50;
+                moveSpeed = 5;
                 break;
             case (31):
                 I = 4;
@@ -89,7 +89,7 @@ public class Virus_CellGameplayScript : MonoBehaviour {
                 capsid.SetActive(false);
                 doAction = NullFunction;
                 I = 5;
-                moveSpeed = 250;
+                moveSpeed = 25;
                 break;
             //case 200:
             //    I = 6;

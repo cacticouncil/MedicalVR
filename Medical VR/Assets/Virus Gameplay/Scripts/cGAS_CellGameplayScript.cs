@@ -53,7 +53,7 @@ public class cGAS_CellGameplayScript : MonoBehaviour {
             case (46):
                 if(doAct == true)
                 I = 1;
-                moveSpeed = 50;
+                moveSpeed = 5;
                 break;
             default:
                 break;

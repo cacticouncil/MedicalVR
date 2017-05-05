@@ -28,7 +28,10 @@ public class _TEnzymeController : MonoBehaviour
             if (particles)
                 Instantiate(particles, transform.position, transform.rotation, transform);
 
-            GetComponent<_TTravelToNucleus>().StartTravel();
+            if(GetComponent<_TTravelToNucleus>())
+                GetComponent<_TTravelToNucleus>().StartTravel();
+            if (!transform.parent)
+                return;
             if (transform.parent.parent.GetComponent<_TGameController>())
             {
                 transform.parent.parent.GetComponent<_TGameController>().AddToScore(pointsValue);

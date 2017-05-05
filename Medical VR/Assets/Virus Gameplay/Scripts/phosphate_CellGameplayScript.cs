@@ -19,7 +19,7 @@ public class phosphate_CellGameplayScript : MonoBehaviour {
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 184)
         {
             transform.parent = IRF3.transform;
-            moveSpeed = 200;
+            moveSpeed = 20;
             if (goLeft == true)
             {
                 transform.position = Vector3.MoveTowards(transform.position, IRF3.GetComponent<IRF3_CellGameplayScript>().leftP.transform.position, Time.deltaTime * moveSpeed);
@@ -31,7 +31,7 @@ public class phosphate_CellGameplayScript : MonoBehaviour {
         }
         else if(subtitles.GetComponent<SubstitlesScript>().theTimer > 180)
         {
-            moveSpeed = 200;
+            moveSpeed = 20;
             if(goLeft == true)
             {
                 transform.position = Vector3.MoveTowards(transform.position, sting.GetComponent<Sting_CellGameplayScript>().leftP.transform.position, Time.deltaTime * moveSpeed);
