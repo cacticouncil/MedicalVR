@@ -27,8 +27,10 @@ public class SpawnCGamp : MonoBehaviour {
     public void SpawnC()
     {
         Vector3 pos = /*Center.transform.position + */Random.insideUnitSphere * size;
-        //GameObject CGamp = Instantiate(Cgampprefab, pos, Quaternion.identity) as GameObject;
-        Instantiate(Cgampprefab, pos, Quaternion.identity);
+        pos.y += 10;
+        GameObject ent = Instantiate(Cgampprefab, pos, Quaternion.identity);
+        ent.GetComponent<_TSizeChange>().Inititalize();
+        ent.GetComponent<_TSizeChange>().StartGrow();
     }
 
     private void OnDrawGizmosSelected()
