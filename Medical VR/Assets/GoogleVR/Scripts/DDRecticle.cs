@@ -77,7 +77,7 @@ public class DDRecticle : MonoBehaviour, IGvrGazePointer
 
     void OnDisable()
     {
-        if (GazeInputModule.gazePointer == this)
+        if (ReferenceEquals(GazeInputModule.gazePointer, this))
         {
             GazeInputModule.gazePointer = null;
         }
@@ -228,7 +228,7 @@ public class DDRecticle : MonoBehaviour, IGvrGazePointer
         mesh.vertices = vertices;
         mesh.triangles = indices;
         mesh.RecalculateBounds();
-        mesh.Optimize();
+        ;
     }
 
     private void UpdateDiameters()

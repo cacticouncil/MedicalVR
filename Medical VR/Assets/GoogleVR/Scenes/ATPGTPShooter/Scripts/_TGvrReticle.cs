@@ -61,7 +61,7 @@ public class _TGvrReticle : MonoBehaviour, IGvrGazePointer
 
     void OnDisable()
     {
-        if (GazeInputModule.gazePointer == this)
+        if (ReferenceEquals(GazeInputModule.gazePointer, this))
         {
             GazeInputModule.gazePointer = null;
         }
@@ -213,7 +213,7 @@ public class _TGvrReticle : MonoBehaviour, IGvrGazePointer
         mesh.vertices = vertices;
         mesh.triangles = indices;
         mesh.RecalculateBounds();
-        mesh.Optimize();
+        ;
     }
 
     private void UpdateDiameters()

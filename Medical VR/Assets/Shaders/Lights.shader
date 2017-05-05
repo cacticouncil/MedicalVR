@@ -1,4 +1,6 @@
-﻿Shader "Test/Lights" 
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Test/Lights" 
 {
 	Properties
 	{
@@ -86,7 +88,7 @@
 				output.diffuseColor = ambientLighting + diffuseReflection;
 				output.specularColor = specularReflection;
 				output.tex = input.texcoord;
-				output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
+				output.pos = UnityObjectToClipPos(input.vertex);
 				return output;
 			}
 
@@ -179,7 +181,7 @@
 				output.diffuseColor = diffuseReflection; 
 				output.specularColor = specularReflection;
 				output.tex = input.texcoord;
-				output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
+				output.pos = UnityObjectToClipPos(input.vertex);
 				return output;
 			}
 			

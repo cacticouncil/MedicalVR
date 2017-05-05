@@ -1,4 +1,7 @@
-﻿Shader "Custom/ColorInverted"
+﻿// Upgrade NOTE: replaced 'UNITY_INSTANCE_ID' with 'UNITY_VERTEX_INPUT_INSTANCE_ID'
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/ColorInverted"
 {
 	Properties
 	{
@@ -21,13 +24,13 @@
 		struct appdata
 	{
 		float4 pos : POSITION;
-		UNITY_INSTANCE_ID
+		UNITY_VERTEX_INPUT_INSTANCE_ID
 	};
 
 	struct v2f
 	{
 		float4 pos : SV_POSITION;
-		UNITY_INSTANCE_ID
+		UNITY_VERTEX_INPUT_INSTANCE_ID
 	};
 
 	//Import properties
@@ -43,7 +46,7 @@
 		UNITY_SETUP_INSTANCE_ID(v);
 		UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-		o.pos = mul(UNITY_MATRIX_MVP, v.pos);
+		o.pos = UnityObjectToClipPos(v.pos);
 		return o;
 	}
 

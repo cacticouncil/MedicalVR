@@ -19,10 +19,11 @@ public class ImmunityParticles : MonoBehaviour
     {
         p = GetComponent<ParticleSystem>();
         ParticleSystem.EmissionModule e = p.emission;
-        e.rate = Mathf.CeilToInt(immunity);
-        lifetime = p.startLifetime;
-        p.startLifetime = 100.0f;
-        p.startSpeed = startSpeed;
+        e.rateOverTimeMultiplier = Mathf.CeilToInt(immunity);
+        lifetime = p.main.startLifetimeMultiplier;
+        var par = p.main;
+        par.startLifetimeMultiplier = 100.0f;
+        par.startSpeedMultiplier = startSpeed;
 
         StartCoroutine(Emit());
         StartCoroutine(Curve());
@@ -30,7 +31,8 @@ public class ImmunityParticles : MonoBehaviour
 
     void OnDisable()
     {
-        p.startLifetime = lifetime;
+        var par = p.main;
+        par.startLifetimeMultiplier = lifetime;
     }
 
     private IEnumerator Emit()
@@ -61,7 +63,7 @@ public class ImmunityParticles : MonoBehaviour
             {
                 for (int i = 0; i < numParticlesAlive; i++)
                 {
-                    particles[i].lifetime = 0;
+                    particles[i].remainingLifetime = 0;
                 }
 
                 // Apply the particle changes to the particle system
@@ -75,7 +77,7 @@ public class ImmunityParticles : MonoBehaviour
                 {
                     for (int j = 0; j < numParticlesAlive; j++)
                     {
-                        particles[j].lifetime = 0;
+                        particles[j].remainingLifetime = 0;
                     }
 
                     // Apply the particle changes to the particle system
@@ -86,18 +88,18 @@ public class ImmunityParticles : MonoBehaviour
                 }
                 else if (V3Equal(particles[i].position, target.position))
                 {
-                    particles[i].lifetime = 0.0f;
+                    particles[i].remainingLifetime = 0.0f;
                 }
                 else
                 {
-                    float f = 1.0f - Mathf.Clamp01((particles[i].lifetime - (p.startLifetime - lifetime)) / lifetime);
+                    float f = 1.0f - Mathf.Clamp01((particles[i].remainingLifetime - (p.main.startLifetimeMultiplier - lifetime)) / lifetime);
                     if (f > threshHold)
                     {
                         Color32 c = particles[i].startColor;
                         if (c.a < fadeRate)
                         {
                             c.a = 0;
-                            particles[i].lifetime = 0.0f;
+                            particles[i].remainingLifetime = 0.0f;
                         }
                         else
                         {
@@ -124,8 +126,8 @@ public class ImmunityParticles : MonoBehaviour
         if (p == null)
             p = GetComponent<ParticleSystem>();
 
-        if (particles == null || particles.Length < p.maxParticles)
-            particles = new ParticleSystem.Particle[p.maxParticles];
+        if (particles == null || particles.Length < p.main.maxParticles)
+            particles = new ParticleSystem.Particle[p.main.maxParticles];
     }
 
     private bool V3Equal(Vector3 a, Vector3 b)

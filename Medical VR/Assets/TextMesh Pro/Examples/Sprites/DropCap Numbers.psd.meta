@@ -56,14 +56,11 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
-  spriteTessellationDetail: -1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    serializedVersion: 2
     sprites:
-    - serializedVersion: 2
-      name: 0
+    - name: 0
       rect:
         serializedVersion: 2
         x: 0
@@ -73,10 +70,15 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: 1
+      outline:
+      - - {x: -64, y: -61}
+        - {x: -63, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 61}
+        - {x: 63, y: 64}
+        - {x: -53, y: 64}
+        - {x: -64, y: 57}
+    - name: 1
       rect:
         serializedVersion: 2
         x: 128
@@ -86,10 +88,15 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: 2
+      outline:
+      - - {x: -64, y: -61}
+        - {x: -63, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 61}
+        - {x: 63, y: 64}
+        - {x: -53, y: 64}
+        - {x: -64, y: 57}
+    - name: 2
       rect:
         serializedVersion: 2
         x: 256
@@ -99,10 +106,15 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: 3
+      outline:
+      - - {x: -64, y: -61}
+        - {x: -63, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 61}
+        - {x: 63, y: 64}
+        - {x: -53, y: 64}
+        - {x: -64, y: 57}
+    - name: 3
       rect:
         serializedVersion: 2
         x: 384
@@ -112,10 +124,15 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: 4
+      outline:
+      - - {x: -64, y: -61}
+        - {x: -63, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 61}
+        - {x: 63, y: 64}
+        - {x: -53, y: 64}
+        - {x: -64, y: 57}
+    - name: 4
       rect:
         serializedVersion: 2
         x: 0
@@ -125,10 +142,15 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: 5
+      outline:
+      - - {x: -64, y: -61}
+        - {x: -63, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 61}
+        - {x: 63, y: 64}
+        - {x: -53, y: 64}
+        - {x: -64, y: 57}
+    - name: 5
       rect:
         serializedVersion: 2
         x: 128
@@ -138,10 +160,15 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: 6
+      outline:
+      - - {x: -64, y: -61}
+        - {x: -63, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 61}
+        - {x: 63, y: 64}
+        - {x: -53, y: 64}
+        - {x: -64, y: 57}
+    - name: 6
       rect:
         serializedVersion: 2
         x: 256
@@ -151,10 +178,15 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: 7
+      outline:
+      - - {x: -64, y: -61}
+        - {x: -63, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 61}
+        - {x: 63, y: 64}
+        - {x: -53, y: 64}
+        - {x: -64, y: 57}
+    - name: 7
       rect:
         serializedVersion: 2
         x: 384
@@ -164,10 +196,15 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: 8
+      outline:
+      - - {x: -64, y: -61}
+        - {x: -63, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 61}
+        - {x: 63, y: 64}
+        - {x: -53, y: 64}
+        - {x: -64, y: 57}
+    - name: 8
       rect:
         serializedVersion: 2
         x: 0
@@ -177,10 +214,15 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: 9
+      outline:
+      - - {x: -64, y: -61}
+        - {x: -63, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 61}
+        - {x: 63, y: 64}
+        - {x: -53, y: 64}
+        - {x: -64, y: 57}
+    - name: 9
       rect:
         serializedVersion: 2
         x: 128
@@ -190,8 +232,14 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
+      outline:
+      - - {x: -64, y: -61}
+        - {x: -63, y: -64}
+        - {x: 64, y: -64}
+        - {x: 64, y: 61}
+        - {x: 63, y: 64}
+        - {x: -53, y: 64}
+        - {x: -64, y: 57}
     outline: []
   spritePackingTag: 
   userData: 

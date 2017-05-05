@@ -36,6 +36,11 @@ public class GvrMenu {
     Application.OpenURL("https://developers.google.com/vr/unity/release-notes#known_issues");
   }
 
+  [MenuItem("GoogleVR/Editor Settings", false, 100)]
+  private static void OpenEditorSettings() {
+    EditorWindow.GetWindow(typeof(GvrEditorSettings));
+  }
+
   [MenuItem("GoogleVR/Report Bug", false, 100)]
   private static void OpenReportBug() {
     Application.OpenURL("https://github.com/googlesamples/cardboard-unity/issues");
@@ -44,9 +49,9 @@ public class GvrMenu {
   [MenuItem("GoogleVR/About Google VR", false, 200)]
   private static void OpenAbout() {
     EditorUtility.DisplayDialog("Google VR SDK for Unity",
-        "Version: " + GvrViewer.GVR_SDK_VERSION + "\n\n"
-        + "License: Apache 2.0\n"
-        + "Copyright: ©2015 Google Inc. All rights reserved.\n"
+        "Version: " + GvrUnitySdkVersion.GVR_SDK_VERSION + "\n\n"
+        + "Licenses: Apache 2.0, MIT\n"
+        + "Copyright: ©2017 Google Inc. All rights reserved.\n"
         + "See LICENSE for additional license information.",
         "OK");
   }

@@ -1,4 +1,7 @@
-﻿Shader "Test/Offset"
+﻿// Upgrade NOTE: replaced 'UNITY_INSTANCE_ID' with 'UNITY_VERTEX_INPUT_INSTANCE_ID'
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Test/Offset"
 {
 	Properties
 	{
@@ -45,7 +48,7 @@
 				float4 pos : POSITION;
 				float2 uv1 : TEXCOORD0;
 				float2 uv2 : TEXCOORD1;
-                UNITY_INSTANCE_ID
+                UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
 			struct v2f
@@ -62,7 +65,7 @@
 
 				float3 ambientLighting = UNITY_LIGHTMODEL_AMBIENT.rgb * UNITY_ACCESS_INSTANCED_PROP (_Color).rgb;
 
-				o.pos = mul(UNITY_MATRIX_MVP, v.pos);
+				o.pos = UnityObjectToClipPos(v.pos);
 				o.uv1 = TRANSFORM_TEX(v.uv1, _Tex1);
 				o.uv2 = TRANSFORM_TEX(v.uv2, _Tex2);
 				return o;

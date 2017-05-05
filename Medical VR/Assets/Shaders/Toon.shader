@@ -1,4 +1,6 @@
-﻿Shader "Test/Toon"
+﻿// Upgrade NOTE: replaced 'UNITY_INSTANCE_ID' with 'UNITY_VERTEX_INPUT_INSTANCE_ID'
+
+Shader "Test/Toon"
 {
 	Properties
 	{
@@ -29,7 +31,7 @@
         {
             float2 uv_MainTex;
             INTERNAL_DATA
-            UNITY_INSTANCE_ID
+            UNITY_VERTEX_INPUT_INSTANCE_ID
         };
 
 		//Make functions
