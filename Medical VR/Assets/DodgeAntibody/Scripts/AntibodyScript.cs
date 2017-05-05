@@ -69,7 +69,7 @@ public class AntibodyScript : MonoBehaviour
             Effects.GetComponent<ParticleSystem>().Stop();
             Effects.GetComponent<ParticleSystem>().Play();
            
-            BannerScript.UnlockTrophy("White Cell");
+            
             Cam.GetComponent<MovingCamera>().LoseresetPos();
             //For tutorial mode 
             if (GlobalVariables.tutorial)
