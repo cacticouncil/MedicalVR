@@ -36,9 +36,7 @@ public class SpawnSting : MonoBehaviour {
     public void SpawnC()
     {
         int Randomindex = Random.Range(0, SpawnPoints.Length);
-        //Vector3 pos = /*Center.transform.position + */Random.insideUnitSphere * size;
-        //GameObject CGamp = Instantiate(Stings, /*pos*/ SpawnPoints[Randomindex].position, /*Quaternion.identity*/SpawnPoints[Randomindex].rotation) as GameObject;
-        Instantiate(Stings, /*pos*/ SpawnPoints[Randomindex].position, /*Quaternion.identity*/SpawnPoints[Randomindex].rotation);
+        Instantiate(Stings, SpawnPoints[Randomindex].position, SpawnPoints[Randomindex].rotation);
     }
 
     private void OnDrawGizmosSelected()

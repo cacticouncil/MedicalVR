@@ -9,7 +9,7 @@ public class TrophyLoader : MonoBehaviour {
     int numUnlocked = 0;
 	void Start ()
     {
-       // LockAllTrophies();
+       //LockAllTrophies();
         for (int i = 0; i < Trophies.Count; i++)
         {
             if (PlayerPrefs.GetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text) != 1)

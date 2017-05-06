@@ -81,7 +81,10 @@ public class MovingCamera : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(GlobalVariables.arcadeMode == false)
+        if(score >= 500)
+        BannerScript.UnlockTrophy("Platelet");
+
+        if (GlobalVariables.arcadeMode == false)
         {
             if(startSpeed == true)
             {
