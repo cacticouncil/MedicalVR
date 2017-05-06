@@ -18,8 +18,8 @@ enum MiniGames
     StrategyGame
 }
 
-public class FBscript : MonoBehaviour, TimedInputHandler{
-
+public class FBscript : MonoBehaviour
+{
   public  GameObject DialogLoggedIn;
   public  GameObject DialogLoggedOut;
   public GameObject DialogUsername;
