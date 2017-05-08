@@ -33,14 +33,12 @@ public class Randomsphere : MonoBehaviour
     private Color[] colors = new Color[6];
     private Vector3[] positions = new Vector3[6];
 
-    private bool playfx;
     public GNE Genes;
 
     // Use this for initialization
     void Start()
     {
         NextLevel.SetActive(false);
-        playfx = false;
 
         correct = 0;
 
@@ -197,7 +195,6 @@ public class Randomsphere : MonoBehaviour
             NextLevel.GetComponent<TMPro.TextMeshPro>().text = "Next Level";
             victoryeffect.GetComponent<ParticleSystem>().Play();
             EventSystem.SetActive(false);
-            playfx = true;
 
             Invoke("Reset", 3.0f);
         }
@@ -207,7 +204,6 @@ public class Randomsphere : MonoBehaviour
     {
         NextLevel.SetActive(false);
         EventSystem.SetActive(true);
-        playfx = false;
         memoryui.GetComponent<MemoryUI>().Level += 1;
 
         memoryui.GetComponent<MemoryUI>().Finish();
@@ -222,8 +218,7 @@ public class Randomsphere : MonoBehaviour
         if (GlobalVariables.arcadeMode == true)
         {
             Genes = (GNE)Random.Range(0, 9);
-
-            if (temp == Genes)
+            while (temp == Genes)
                 Genes = (GNE)Random.Range(0, 9);
         }
         else
