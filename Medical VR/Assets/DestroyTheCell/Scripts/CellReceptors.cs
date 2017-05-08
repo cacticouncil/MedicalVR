@@ -12,7 +12,7 @@ public class CellReceptors : MonoBehaviour
     private bool NeverTargetAgain = false;
 
     public int Health = 4;
-    private float SpeedForTutorial = 1.3f;
+    private float SpeedForTutorial = .008f;
     public float TutorialCellReceptorTimer = 0.0f;
     Vector3 SavedLocation;
     void Start()
@@ -43,17 +43,29 @@ public class CellReceptors : MonoBehaviour
 
             TutorialCellReceptorTimer += Time.deltaTime;
 
-            //if (TutorialCellReceptorTimer <= 3.0f)
-            //    Player.GetComponent<VirusPlayer>().isCellReceptorDone = true;
-            
-            if (transform.position != SavedLocation)
-                transform.position = Vector3.MoveTowards(transform.position, SavedLocation, SpeedForTutorial * Time.fixedDeltaTime);
-
-            if (transform.position == SavedLocation)
+            if (Player.GetComponent<VirusPlayer>().IsCellDoneIdling == false)
             {
-                AmITargeted = true;
-                Player.GetComponent<VirusPlayer>().ProceedTutorial = true;
-            }     
+                if (TutorialCellReceptorTimer >= 3.5f)
+                {
+                    Player.GetComponent<VirusPlayer>().IsCellDoneIdling = true;
+                    TutorialCellReceptorTimer = 0;
+                }
+            }
+
+            else if (Player.GetComponent<VirusPlayer>().IsCellDoneIdling == true && Player.GetComponent<VirusPlayer>().WhatToRead == 4)
+            {
+                if (TutorialCellReceptorTimer <= 6.0f)
+                {
+                    transform.LookAt(Player.GetComponent<VirusPlayer>().transform.position);
+                    transform.position -= transform.forward * SpeedForTutorial;
+                }
+
+                if (TutorialCellReceptorTimer >= 6.0f)
+                {
+                    AmITargeted = true;
+                    Player.GetComponent<VirusPlayer>().IsCellDoneMoving = true;
+                }
+            }
         }
     }
 

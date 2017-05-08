@@ -8,8 +8,8 @@ using UnityEngine.SceneManagement;
 public class VirusPlayer : MonoBehaviour
 {
     //Variables for Tutorial
-    int WhatToRead = 1;
-    bool CanIRead = true;
+    public int WhatToRead = 1;
+    public bool CanIRead = true;
     public bool TutorialModeCompleted = false;
 
     //Variables for Game
@@ -35,8 +35,8 @@ public class VirusPlayer : MonoBehaviour
 
     public bool CanIMove = false;
     public bool WaveStarted = false;
-    public bool isCellReceptorDone = false;
-    public bool ProceedTutorial = false;
+    public bool IsCellDoneIdling = false;
+    public bool IsCellDoneMoving = false;
     bool DelaySpawn = false;
     float DelayTimer = 0.0f;
     float BeatGameTimer = 0.0f;
@@ -173,10 +173,10 @@ public class VirusPlayer : MonoBehaviour
             float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
 
-            if (WhatToRead == 3 && isCellReceptorDone == true)
+            if (WhatToRead == 3 && IsCellDoneIdling == true)
                 CanIRead = true;
 
-            if (WhatToRead == 4 && ProceedTutorial == true)
+            if (WhatToRead == 4 && IsCellDoneMoving == true)
                 CanIRead = true;
             
             if (WhatToRead == 6 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0)
@@ -303,10 +303,10 @@ public class VirusPlayer : MonoBehaviour
 
         //Events for tutorial
         CanIRead = true;
-        if (WhatToRead == 4 && isCellReceptorDone == false)
+        if (WhatToRead == 3 && IsCellDoneIdling == false)
             CanIRead = false;
 
-        if (WhatToRead == 4 && ProceedTutorial == false)
+        if (WhatToRead == 4 && IsCellDoneMoving == false)
             CanIRead = false;
         
         if (WhatToRead == 6 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count != 0)
