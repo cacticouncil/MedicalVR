@@ -477,7 +477,7 @@ public class StrategyCellScript : MonoBehaviour
 
     public IEnumerator Die()
     {
-        GetComponent<Collider>().enabled = false;
+        transform.GetChild(1).GetComponent<Collider>().enabled = false;
         float startTime = Time.time;
         Color c = render.material.color;
         Color o = render.material.GetColor("_OutlineColor");
