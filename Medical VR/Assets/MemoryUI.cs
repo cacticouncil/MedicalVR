@@ -17,10 +17,10 @@ public class MemoryUI : MonoBehaviour
 
     public GameObject theScore, theLives, theLevels, scoreBoard, UI, Spheres, Timer, Capsules;
     public GameObject Username, ProfilePic;
-
-    public int GlobalScore;
+    
     // Use this for initialization
-    public static float score = 0;
+    public float score = 0;
+    public static float finalScore = 0;
     int lives = 5;
     public int Level = 1;
     public float startTime = 60.0f;
@@ -40,6 +40,8 @@ public class MemoryUI : MonoBehaviour
 
     void ShowScore()
     {
+        if (score > finalScore)
+            finalScore = score;
         lives = 5;
         UI.SetActive(false);
         Capsules.SetActive(false);
@@ -306,9 +308,6 @@ public class MemoryUI : MonoBehaviour
             }
         }
 
-
-
-
         AvoidBack();
 
         if (finnished)
@@ -328,15 +327,14 @@ public class MemoryUI : MonoBehaviour
             Timer.GetComponent<TMPro.TextMeshPro>().text = "";
         }
     }
+
     public void Finish()
     {
         finnished = true;
     }
 
-
     void FixedUpdate()
     {
-
         if ((lives < 1 || timeRemaining < 0) && GlobalVariables.arcadeMode != false)
         {
             ShowScore();
@@ -361,17 +359,13 @@ public class MemoryUI : MonoBehaviour
             theLevels.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + Level.ToString();
         }
     }   
-
     
-
     void AvoidBack()
     {
-
         if (transform.rotation.eulerAngles.y > 90)
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, 90, transform.rotation.eulerAngles.z);
 
         if (transform.rotation.eulerAngles.y < -90)
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, -90, transform.rotation.eulerAngles.z);
-
     }
 }

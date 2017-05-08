@@ -451,19 +451,22 @@ public class GvrPointerInputModule : BaseInputModule
         ?? ExecuteEvents.GetEventHandler<IPointerClickHandler>(go);
 
         // Save the pending click state.
-        pointerData.rawPointerPress = go;
-        pointerData.eligibleForClick = true;
-        pointerData.delta = Vector2.zero;
-        pointerData.dragging = false;
-        pointerData.useDragThreshold = true;
-        pointerData.clickCount = 1;
-        pointerData.clickTime = Time.unscaledTime;
-
-        // Save the drag handler as well
-        pointerData.pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(go);
-        if (pointerData.pointerDrag != null)
+        if (pointerData != null)
         {
-            ExecuteEvents.Execute(pointerData.pointerDrag, pointerData, ExecuteEvents.initializePotentialDrag);
+            pointerData.rawPointerPress = go;
+            pointerData.eligibleForClick = true;
+            pointerData.delta = Vector2.zero;
+            pointerData.dragging = false;
+            pointerData.useDragThreshold = true;
+            pointerData.clickCount = 1;
+            pointerData.clickTime = Time.unscaledTime;
+
+            // Save the drag handler as well
+            pointerData.pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(go);
+            if (pointerData.pointerDrag != null)
+            {
+                ExecuteEvents.Execute(pointerData.pointerDrag, pointerData, ExecuteEvents.initializePotentialDrag);
+            }
         }
 
         if (pointer != null)
