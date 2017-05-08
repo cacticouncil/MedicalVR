@@ -11,6 +11,9 @@ public class Storebullets : MonoBehaviour
     float BeatGameTimer = 0.0f;
 
     public GameObject EventSystem;
+    public GameObject CGAMPspawnSystem;
+    public GameObject StingspawnSystem;
+
     public static int bulletamount;
     public static int numberofstingsdone;
     public static int neededstings = 5;
@@ -43,7 +46,9 @@ public class Storebullets : MonoBehaviour
     {
         UI.SetActive(false);
         scoreBoard.SetActive(true);
-        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
+        CGAMPspawnSystem.GetComponent<SpawnCGamp>().enabled = false;
+        StingspawnSystem.GetComponent<SpawnSting>().enabled = false;
+        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 4);
         lives = 3;
     }
     public void RestartGame()

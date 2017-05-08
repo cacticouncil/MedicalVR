@@ -21,7 +21,7 @@ public class SpawnCGamp : MonoBehaviour {
     }
     public void SpawnEnzime()
     {
-        InvokeRepeating("SpawnC", 1, 0.5f);
+        InvokeRepeating("SpawnC", 1,1 /*0.5f*/);
     }
 
     public void SpawnC()
@@ -37,5 +37,10 @@ public class SpawnCGamp : MonoBehaviour {
     {
         Gizmos.color = new Color(1, 0, 0, 0.5f);
         Gizmos.DrawSphere(/*transform.localPosition + */Center.transform.position, size);
+    }
+
+    private void OnDisable()
+    {
+        CancelInvoke("SpawnC");
     }
 }

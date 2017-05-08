@@ -7,7 +7,7 @@ public class SmartPause : MonoBehaviour
     public GameObject buttons;
     public GameObject mainMenu;
     public GameObject resume;
-    private bool isPaused = false;
+   public bool isPaused = false;
     private float buttonHeldTimer = 0.0f;
     private float angle = 30;
 

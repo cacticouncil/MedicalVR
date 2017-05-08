@@ -13,11 +13,11 @@ public class PauseCapsules : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (pausemenu.GetComponent<Pause>().isPaused == true)
+        if (pausemenu.GetComponent<SmartPause>().isPaused == true)
         {
             capsules.SetActive(false);
         }
-        else if(pausemenu.GetComponent<Pause>().isPaused == false && victoryeffect.GetComponent<ParticleSystem>().isPlaying == false)
+        else if(pausemenu.GetComponent<SmartPause>().isPaused == false && victoryeffect.GetComponent<ParticleSystem>().isPlaying == false)
         {
             capsules.SetActive(true);
         }
