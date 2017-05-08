@@ -61,7 +61,7 @@ public class RedCellScript : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "virus")
+        if (other.tag == "MainCamera")
         {
             if (GlobalVariables.arcadeMode == true)
             {
@@ -75,7 +75,7 @@ public class RedCellScript : MonoBehaviour
                 fade = true;
                 timer = 0;
             }
-            BannerScript.UnlockTrophy("Red Cell");
+            
             //if (PlayerPrefs.GetInt("Red Cell") != 1)
             //{
             //    banner.GetComponent<BannerScript>().ShowUp();

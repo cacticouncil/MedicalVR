@@ -9,11 +9,6 @@ public class AntibodyScript : MonoBehaviour
     float saveSpeed;
     
     public GameObject TutorialMode;
-    // Use this for initialization
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -60,7 +55,7 @@ public class AntibodyScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "virus")
+        if (other.tag == "MainCamera")
         {
             other.transform.position -= other.transform.forward * 50;
             saveSpeed = other.GetComponent<MovingCamera>().speed;
@@ -69,7 +64,7 @@ public class AntibodyScript : MonoBehaviour
             Effects.GetComponent<ParticleSystem>().Stop();
             Effects.GetComponent<ParticleSystem>().Play();
            
-            BannerScript.UnlockTrophy("White Cell");
+            
             Cam.GetComponent<MovingCamera>().LoseresetPos();
             //For tutorial mode 
             if (GlobalVariables.tutorial)

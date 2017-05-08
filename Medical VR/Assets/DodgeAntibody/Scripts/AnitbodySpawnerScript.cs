@@ -110,8 +110,11 @@ public class AnitbodySpawnerScript : MonoBehaviour {
             }
         }
     }
-	void Update ()
+	void FixedUpdate ()
     {
-	
+	    if(levelNum >= 20)
+        {
+            BannerScript.UnlockTrophy("White Cell");
+        }
 	}
 }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class Player : MonoBehaviour, TimedInputHandler
+public class Player : MonoBehaviour
 {
     //Variables for tutorial
     float TutorialTimer = 0.0f;
