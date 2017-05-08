@@ -1,23 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BloodVesselScript : MonoBehaviour {
-
+public class BloodVesselScript : MonoBehaviour
+{
     public GameObject enter;
     public GameObject exit;
     public GameObject Effects;
     public GameObject Cam;
     bool respawn = false;
     float saveSpeed = 0;
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate ()
+
+    // Update is called once per frame
+    void FixedUpdate()
     {
-        if(respawn == true)
+        if (respawn == true)
         {
             Cam.GetComponent<MovingCamera>().stopMoving = true;
             Cam.GetComponent<MovingCamera>().speed = -100;
@@ -30,11 +26,11 @@ public class BloodVesselScript : MonoBehaviour {
                 Cam.GetComponent<SphereCollider>().enabled = true;
             }
         }
-        
+
     }
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "virus")
+        if (other.tag == "MainCamera")
         {
             if (enter.GetComponent<VesselOpening>().shouldCollide == true && exit.GetComponent<VesselOpening>().shouldCollide == true)
             {

@@ -4,7 +4,7 @@ using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MovingCamera : MonoBehaviour, TimedInputHandler
+public class MovingCamera : MonoBehaviour
 {
     public GameObject subtitles;
     public float speed;
@@ -81,7 +81,10 @@ public class MovingCamera : MonoBehaviour, TimedInputHandler
 
     void FixedUpdate()
     {
-        if(GlobalVariables.arcadeMode == false)
+        if(score >= 500)
+        BannerScript.UnlockTrophy("Platelet");
+
+        if (GlobalVariables.arcadeMode == false)
         {
             if(startSpeed == true)
             {

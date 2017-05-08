@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class CellReceptors : MonoBehaviour, TimedInputHandler
+public class CellReceptors : MonoBehaviour
 {
     public GameObject VirusAttack;
     GameObject WaveManager;
