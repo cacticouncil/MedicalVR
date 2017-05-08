@@ -68,7 +68,7 @@ public class SimonDNATutorial : MonoBehaviour
                     break;
 
                 //Animation
-                case 24:
+                case 28:
                     Subtitles.GetComponent<SubstitlesScript>().Stop();
                     AnimationTimer += Time.deltaTime;
 
@@ -117,7 +117,7 @@ public class SimonDNATutorial : MonoBehaviour
                     break;
 
 
-                case 30:
+                case 32:
                     VirusGameplayScript.loadCase = 2;
                     GlobalVariables.tutorial = false;
                     GlobalVariables.arcadeMode = prevState;

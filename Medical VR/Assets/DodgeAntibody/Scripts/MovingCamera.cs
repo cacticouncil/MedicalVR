@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class MovingCamera : MonoBehaviour
 {
-    public GameObject subtitles;
+    public GameObject subtitles, cam;
     public float speed;
     public GameObject theScore, theLives, scoreBoard, UI, MenuButton, Username, ProfilePic;
     public float score = 0;
@@ -104,7 +104,7 @@ public class MovingCamera : MonoBehaviour
 
         else if(stopMoving == false)
         {
-            transform.position += transform.forward * speed;
+            transform.position +=cam.transform.forward * speed;
             if(GlobalVariables.arcadeMode == true)
             {
                 score += Time.smoothDeltaTime;
