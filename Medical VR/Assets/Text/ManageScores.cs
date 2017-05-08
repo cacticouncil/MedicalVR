@@ -26,14 +26,14 @@ public class ManageScores : MonoBehaviour {
 
         MemoryScoreText.GetComponent<TextMeshPro>().text = "Memory Game: " + MemoryUI.score.ToString();
         SimonDNAScoreText.GetComponent<TextMeshPro>().text = "";
-        cGAMPScoreText.GetComponent<TextMeshPro>().text = "cGAMP Snatcher: " + Storebullets.score.ToString();
+        cGAMPScoreText.GetComponent<TextMeshPro>().text = "cGAMP Snatcher: "/* + Storebullets.score.ToString()*/;
         DodgeScoreText.GetComponent<TextMeshPro>().text = "";
         VirusScoreText.GetComponent<TextMeshPro>().text = "";
         CellScoreText.GetComponent<TextMeshPro>().text = "";
         StrategyScoreText.GetComponent<TextMeshPro>().text = "";
         ATPScoreText.GetComponent<TextMeshPro>().text = "";
 
-        FBscript.GlobalScore = ((int)MemoryUI.score + (int)Storebullets.score) % 1000;
+        FBscript.GlobalScore = ((int)MemoryUI.score + (int)Storebullets.finalScore) % 1000;
 
     }
 }
