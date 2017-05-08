@@ -24,7 +24,7 @@ public class ScoreBoardScript : MonoBehaviour {
                 score = (int)objectWithScore.GetComponent<MovingCamera>().score;
                 break;
             case "Transcription":
-                score = (int)MemoryUI.score;
+                score = (int)objectWithScore.GetComponent<MemoryUI>().score;
                 break;
             case "Simon":
                 score = (int)objectWithScore.GetComponent<SimonSays>().score;
