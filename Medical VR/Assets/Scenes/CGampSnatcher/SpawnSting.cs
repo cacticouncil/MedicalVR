@@ -3,9 +3,10 @@ using System.Collections;
 
 public class SpawnSting : MonoBehaviour {
 
+    public GameObject mainCamera;
     public Transform[] SpawnPoints;
     public float spawntime = 1.5f;
-
+    private int previousRandomIndex = 0;
     public GameObject Stings;
 
     public GameObject Center;
@@ -36,7 +37,14 @@ public class SpawnSting : MonoBehaviour {
     public void SpawnC()
     {
         int Randomindex = Random.Range(0, SpawnPoints.Length);
-        Instantiate(Stings, SpawnPoints[Randomindex].position, SpawnPoints[Randomindex].rotation);
+        if(Randomindex != previousRandomIndex)
+        {
+        GameObject obj =  Instantiate(Stings, SpawnPoints[Randomindex].position, SpawnPoints[Randomindex].rotation);
+        obj.GetComponent<GetpointsER>().storebullets = mainCamera;
+
+        }
+
+        previousRandomIndex = Randomindex;
     }
 
     private void OnDrawGizmosSelected()

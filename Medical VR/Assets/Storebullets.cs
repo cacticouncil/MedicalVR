@@ -20,7 +20,10 @@ public class Storebullets : MonoBehaviour
     public GameObject theScore, scoreBoard, UI, BulletAmount, TheLevel;
     public GameObject theLives;
     public GameObject CenterScreenObj;
-    public static float score = 0;
+    public static float finalScore = 0;
+    public float score = 0;
+    public float ReturnScore() { return score; }
+    public void AddToScore(float _score) { score += _score; }
     public static int lives = 3;
     int level = 1;
 
@@ -44,6 +47,9 @@ public class Storebullets : MonoBehaviour
     }
     void ShowScore()
     {
+        if (score > finalScore)
+            finalScore = score;
+        
         UI.SetActive(false);
         scoreBoard.SetActive(true);
         CGAMPspawnSystem.GetComponent<SpawnCGamp>().enabled = false;
@@ -63,8 +69,8 @@ public class Storebullets : MonoBehaviour
     }
     void Start()
     {
-        bulletamount = 0;
         score = 0;
+        bulletamount = 0;
         BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         TheLevel.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + level;
