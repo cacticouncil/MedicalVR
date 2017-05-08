@@ -54,13 +54,13 @@ public class CellReceptors : MonoBehaviour
 
             else if (Player.GetComponent<VirusPlayer>().IsCellDoneIdling == true && Player.GetComponent<VirusPlayer>().WhatToRead == 4)
             {
-                if (TutorialCellReceptorTimer <= 6.0f)
+                if (TutorialCellReceptorTimer <= 6.5f)
                 {
                     transform.LookAt(Player.GetComponent<VirusPlayer>().transform.position);
                     transform.position -= transform.forward * SpeedForTutorial;
                 }
 
-                if (TutorialCellReceptorTimer >= 6.0f)
+                if (TutorialCellReceptorTimer >= 6.5f)
                 {
                     AmITargeted = true;
                     Player.GetComponent<VirusPlayer>().IsCellDoneMoving = true;

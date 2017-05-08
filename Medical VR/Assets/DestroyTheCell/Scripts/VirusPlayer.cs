@@ -337,6 +337,13 @@ public class VirusPlayer : MonoBehaviour
         SceneManager.LoadScene("DestroyTheCell");
     }
 
+    public void PlayArcade()
+    {
+        GlobalVariables.tutorial = false;
+        GlobalVariables.arcadeMode = true;
+        SceneManager.LoadScene("DestroyTheCell");
+    }
+
     void ContinuePlayThrough()
     {
         VirusGameplayScript.loadCase = 3;
