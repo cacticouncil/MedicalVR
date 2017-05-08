@@ -1,29 +1,23 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ChangeScene : MonoBehaviour
+public static class ChangeScene
 {
-    public int index = 0;
+    public static int index = 0;
 
-    public void LoadScene(string scene)
+    public static void LoadScene(string scene)
     {
         SoundManager.PlaySFX("MenuEnter");
         SceneManager.LoadScene(scene);
     }
 
-    public void Exit()
+    public static void Exit()
     {
         SoundManager.PlaySFX("MenuEnter");
         Application.Quit();
     }
 
-    public void SetAndEnter(int i)
-    {
-        index = i;
-        EnterEvent();
-    }
-
-    public void EnterEvent()
+    public static void EnterEvent()
     {
         SoundManager.PlaySFX("MenuEnter");
         GlobalVariables.arcadeMode = true;
@@ -85,7 +79,7 @@ public class ChangeScene : MonoBehaviour
         }
     }
 
-    public void SetIndex(int anything)
+    public static void SetIndex(int anything)
     {
         index = anything;
     }

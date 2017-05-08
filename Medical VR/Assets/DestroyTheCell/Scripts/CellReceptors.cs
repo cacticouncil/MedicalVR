@@ -4,21 +4,19 @@ using System;
 
 public class CellReceptors : MonoBehaviour
 {
-    public GameObject VirusAttack;
-    GameObject WaveManager;
     GameObject Player;
-    bool SpawnFiveAttackVirus = false;
-    float SpawnTimer;
-    int Count = 5;
-    public int health = 5;
+    GameObject WaveManager;
+    public GameObject VirusAttack;
 
+    private bool AmITargeted = false;
+    private bool NeverTargetAgain = false;
 
-    private float Speed = 1.3f;
-
+    public int Health = 4;
+    private float SpeedForTutorial = 1.3f;
+    public float TutorialCellReceptorTimer = 0.0f;
     Vector3 SavedLocation;
     void Start()
     {
-        SpawnTimer = 0.0f;
         WaveManager = gameObject.transform.parent.gameObject;
         Player = WaveManager.GetComponent<WaveManager>().Player;
 
@@ -30,18 +28,10 @@ public class CellReceptors : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (SpawnFiveAttackVirus == true && Count > 0)
+        if (GvrViewer.Instance.Triggered && AmITargeted == true && NeverTargetAgain == false)
         {
-            SpawnTimer += Time.deltaTime;
-
-            if (SpawnTimer >= .3f)
-            {
-                SpawnTimer = 0.0f;
-                SpawnAttackVirus();
-                Count -= 1;
-                if (Count == 0)
-                    Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
-            }
+            NeverTargetAgain = true;
+            StartCoroutine(FireAttackVirus(4, .3f));
         }
 
         if (Player.GetComponent<VirusPlayer>().isGameover)
@@ -49,9 +39,35 @@ public class CellReceptors : MonoBehaviour
 
         if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
         {
+            AmITargeted = false;
+
+            TutorialCellReceptorTimer += Time.deltaTime;
+
+            //if (TutorialCellReceptorTimer <= 3.0f)
+            //    Player.GetComponent<VirusPlayer>().isCellReceptorDone = true;
+            
             if (transform.position != SavedLocation)
-                transform.position = Vector3.MoveTowards(transform.position, SavedLocation, Speed * Time.fixedDeltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, SavedLocation, SpeedForTutorial * Time.fixedDeltaTime);
+
+            if (transform.position == SavedLocation)
+            {
+                AmITargeted = true;
+                Player.GetComponent<VirusPlayer>().ProceedTutorial = true;
+            }     
         }
+    }
+
+
+    public void OnGazeEnter()
+    {
+        Player.GetComponent<VirusPlayer>().currSpeed = 0;
+        AmITargeted = true;
+    }
+
+    public void OnGazeExit()
+    {
+        Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
+        AmITargeted = false;
     }
 
     public void SpawnAttackVirus()
@@ -62,24 +78,15 @@ public class CellReceptors : MonoBehaviour
         V.GetComponent<AttackVirus>().enabled = true;
     }
 
-    public void OnGazeEnter()
+    IEnumerator FireAttackVirus(int num, float duration)
     {
-        if (Count > 0)
-            Player.GetComponent<VirusPlayer>().currSpeed = 0;
-    }
-
-    public void OnGazeExit()
-    {
-        Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
-        SpawnFiveAttackVirus = false;
-    }
-
-    public void HandleTimeInput()
-    {
-        if (WaveManager.GetComponent<WaveManager>().CanDestroyProteins == true)
+        for (int i = 0; i < num; i++)
         {
-            SpawnFiveAttackVirus = true;
+            SpawnAttackVirus();
+            yield return new WaitForSeconds(duration);
         }
+
+        Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
     }
 
     void OnDestroy()
@@ -88,3 +95,4 @@ public class CellReceptors : MonoBehaviour
         WaveManager.GetComponent<WaveManager>().CellReceptorsList.Remove(transform.gameObject);
     }
 }
+
