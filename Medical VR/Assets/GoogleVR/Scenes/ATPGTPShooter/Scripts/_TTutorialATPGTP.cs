@@ -4,6 +4,7 @@ using System.Collections;
 public class _TTutorialATPGTP : MonoBehaviour
 {
     enum TutorialState { dispEnzyme, dispATP, moveATP, dispGTP, moveGTP, startGame, wait }
+    public GameObject nucleus;
     public GameObject enzyme;
     public GameObject ATP;
     public GameObject GTP;
@@ -80,7 +81,6 @@ public class _TTutorialATPGTP : MonoBehaviour
                 if(MoveToEnzyme(gtp))
                 {
                     ChangeTutorialState(TutorialState.wait);
-
                 }
                 break;
             case TutorialState.startGame:
@@ -141,6 +141,9 @@ public class _TTutorialATPGTP : MonoBehaviour
 
         enz.GetComponent<_TSizeChange>().Inititalize();
         enz.GetComponent<_TSizeChange>().StartGrow();
+        enz.GetComponent<_TTravelToNucleus>().nucleus = nucleus;
+        enz.GetComponent<_TTravelToNucleus>().waitTime = 3;
+
         ChangeTutorialState(TutorialState.dispATP);
     }
 }
