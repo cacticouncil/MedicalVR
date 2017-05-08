@@ -50,442 +50,530 @@ using UnityEngine.VR;
 ///   - Set the parent of GvrReticlePointer to the main camera.
 ///
 [AddComponentMenu("GoogleVR/GvrPointerInputModule")]
-public class GvrPointerInputModule : BaseInputModule {
-  /// Determines whether pointer input is active in VR Mode only (`true`), or all of the
-  /// time (`false`).  Set to false if you plan to use direct screen taps or other
-  /// input when not in VR Mode.
-  [Tooltip("Whether pointer input is active in VR Mode only (true), or all the time (false).")]
-  public bool vrModeOnly = false;
+public class GvrPointerInputModule : BaseInputModule
+{
+    /// Determines whether pointer input is active in VR Mode only (`true`), or all of the
+    /// time (`false`).  Set to false if you plan to use direct screen taps or other
+    /// input when not in VR Mode.
+    [Tooltip("Whether pointer input is active in VR Mode only (true), or all the time (false).")]
+    public bool vrModeOnly = false;
 
-  [SerializeField]
-  private GvrPointerScrollInput scrollInput = new GvrPointerScrollInput();
+    [SerializeField]
+    private GvrPointerScrollInput scrollInput = new GvrPointerScrollInput();
 
-  private PointerEventData pointerData;
-  private Vector2 lastPose;
-  private bool isPointerHovering = false;
+    private PointerEventData pointerData;
+    private Vector2 lastPose;
+    private bool isPointerHovering = false;
 
-  // Active state
-  private bool isActive = false;
+    // Active state
+    private bool isActive = false;
 
-  /// The GvrPointerScrollInput used to route Scroll Events through _EventSystem_
-  public GvrPointerScrollInput ScrollInput {
-    get {
-      return scrollInput;
+    /// The GvrPointerScrollInput used to route Scroll Events through _EventSystem_
+    public GvrPointerScrollInput ScrollInput
+    {
+        get
+        {
+            return scrollInput;
+        }
     }
-  }
 
-  /// The GvrBasePointer which will be responding to pointer events.
-  private GvrBasePointer pointer {
-    get {
-      return GvrPointerManager.Pointer;
+    /// The GvrBasePointer which will be responding to pointer events.
+    private GvrBasePointer pointer
+    {
+        get
+        {
+            return GvrPointerManager.Pointer;
+        }
     }
-  }
 
-  /// @cond
-  public override bool ShouldActivateModule() {
-    bool isVrModeEnabled = !vrModeOnly;
+    /// @cond
+    public override bool ShouldActivateModule()
+    {
+        bool isVrModeEnabled = !vrModeOnly;
 #if UNITY_HAS_GOOGLEVR && (UNITY_ANDROID || UNITY_EDITOR)
-    isVrModeEnabled |= VRSettings.enabled;
+        isVrModeEnabled |= VRSettings.enabled;
 #else
     isVrModeEnabled |= GvrViewer.Instance.VRModeEnabled;
 #endif  // UNITY_HAS_GOOGLEVR && (UNITY_ANDROID || UNITY_EDITOR)
 
-    bool activeState = base.ShouldActivateModule() && isVrModeEnabled;
+        bool activeState = base.ShouldActivateModule() && isVrModeEnabled;
 
-    if (activeState != isActive) {
-      isActive = activeState;
+        if (activeState != isActive)
+        {
+            isActive = activeState;
 
-      // Activate pointer
-      if (pointer != null) {
-        if (isActive) {
-          pointer.OnInputModuleEnabled();
+            // Activate pointer
+            if (pointer != null)
+            {
+                if (isActive)
+                {
+                    pointer.OnInputModuleEnabled();
+                }
+            }
         }
-      }
+
+        return activeState;
+    }
+    /// @endcond
+
+    /// @cond
+    public override void DeactivateModule()
+    {
+        DisablePointer();
+        base.DeactivateModule();
+        if (pointerData != null)
+        {
+            HandlePendingClick();
+            HandlePointerExitAndEnter(pointerData, null);
+            pointerData = null;
+        }
+        eventSystem.SetSelectedGameObject(null, GetBaseEventData());
+    }
+    /// @endcond
+
+    /// @cond
+    public override bool IsPointerOverGameObject(int pointerId)
+    {
+        return pointerData != null && pointerData.pointerEnter != null;
+    }
+    /// @endcond
+
+    /// @cond
+    public override void Process()
+    {
+        if (pointer == null)
+        {
+            return;
+        }
+
+        // Save the previous Game Object
+        GameObject previousObject = GetCurrentGameObject();
+
+        CastRay();
+        UpdateCurrentObject(previousObject);
+        UpdateReticle(previousObject);
+
+        // True during the frame that the trigger has been pressed.
+        bool triggerDown = Input.GetMouseButtonDown(0);
+        // True if the trigger is held down.
+        bool triggering = Input.GetMouseButton(0);
+
+#if UNITY_HAS_GOOGLEVR && (UNITY_ANDROID || UNITY_EDITOR)
+        triggerDown |= GvrController.ClickButtonDown;
+        triggering |= GvrController.ClickButton;
+#endif  // UNITY_HAS_GOOGLEVR && (UNITY_ANDROID || UNITY_EDITOR)
+
+        if (!IsPointerActiveAndAvailable())
+        {
+            triggerDown = false;
+            triggering = false;
+        }
+
+        bool handlePendingClickRequired = !triggering;
+
+        // Handle input
+        if (!triggerDown && triggering)
+        {
+            HandleDrag();
+        }
+        else if (triggerDown && !pointerData.eligibleForClick)
+        {
+            // New trigger action.
+            HandleTriggerDown();
+        }
+        else if (handlePendingClickRequired)
+        {
+            // Check if there is a pending click to handle.
+            HandlePendingClick();
+        }
+
+        scrollInput.HandleScroll(GetCurrentGameObject(), pointerData, IsPointerActiveAndAvailable());
+    }
+    /// @endcond
+
+    private void CastRay()
+    {
+        if (pointer == null || pointer.PointerTransform == null)
+        {
+            return;
+        }
+        Vector2 currentPose = NormalizedCartesianToSpherical(pointer.PointerTransform.forward);
+
+        if (pointerData == null)
+        {
+            pointerData = new PointerEventData(eventSystem);
+            lastPose = currentPose;
+        }
+
+        // Store the previous raycast result.
+        RaycastResult previousRaycastResult = pointerData.pointerCurrentRaycast;
+
+        // The initial cast must use the enter radius.
+        if (pointer != null)
+        {
+            pointer.ShouldUseExitRadiusForRaycast = false;
+        }
+
+        // Cast a ray into the scene
+        pointerData.Reset();
+        // Set the position to the center of the camera.
+        // This is only necessary if using the built-in Unity raycasters.
+        RaycastResult raycastResult;
+        pointerData.position = GetViewportCenter();
+        bool isPointerActiveAndAvailable = IsPointerActiveAndAvailable();
+        if (isPointerActiveAndAvailable)
+        {
+            eventSystem.RaycastAll(pointerData, m_RaycastResultCache);
+            raycastResult = FindFirstRaycast(m_RaycastResultCache);
+        }
+        else
+        {
+            raycastResult = new RaycastResult();
+            raycastResult.Clear();
+        }
+
+        // If we were already pointing at an object we must check that object against the exit radius
+        // to make sure we are no longer pointing at it to prevent flicker.
+        if (previousRaycastResult.gameObject != null
+            && raycastResult.gameObject != previousRaycastResult.gameObject
+            && isPointerActiveAndAvailable)
+        {
+            if (pointer != null)
+            {
+                pointer.ShouldUseExitRadiusForRaycast = true;
+            }
+            m_RaycastResultCache.Clear();
+            eventSystem.RaycastAll(pointerData, m_RaycastResultCache);
+            RaycastResult firstResult = FindFirstRaycast(m_RaycastResultCache);
+            if (firstResult.gameObject == previousRaycastResult.gameObject)
+            {
+                raycastResult = firstResult;
+            }
+        }
+
+        if (raycastResult.gameObject != null && raycastResult.worldPosition == Vector3.zero)
+        {
+            raycastResult.worldPosition = GetIntersectionPosition(pointerData.enterEventCamera, raycastResult);
+        }
+
+        pointerData.pointerCurrentRaycast = raycastResult;
+
+        // Find the real screen position associated with the raycast
+        // Based on the results of the hit and the state of the pointerData.
+        if (raycastResult.gameObject != null)
+        {
+            pointerData.position = raycastResult.screenPosition;
+        }
+        else
+        {
+            Transform pointerTransform = pointer.PointerTransform;
+            float maxPointerDistance = pointer.MaxPointerDistance;
+            Vector3 pointerPos = pointerTransform.position + (pointerTransform.forward * maxPointerDistance);
+            if (pointerData.pressEventCamera != null)
+            {
+                pointerData.position = pointerData.pressEventCamera.WorldToScreenPoint(pointerPos);
+            }
+            else if (Camera.main != null)
+            {
+                pointerData.position = Camera.main.WorldToScreenPoint(pointerPos);
+            }
+        }
+
+        m_RaycastResultCache.Clear();
+        pointerData.delta = currentPose - lastPose;
+        lastPose = currentPose;
+
+        // Check to make sure the Raycaster being used is a GvrRaycaster.
+        if (raycastResult.module != null
+          && !(raycastResult.module is GvrPointerGraphicRaycaster)
+          && !(raycastResult.module is GvrPointerPhysicsRaycaster))
+        {
+            Debug.LogWarning("Using Raycaster (Raycaster: " + raycastResult.module.GetType() +
+              ", Object: " + raycastResult.module.name + "). It is recommended to use " +
+              "GvrPointerPhysicsRaycaster or GvrPointerGrahpicRaycaster with GvrPointerInputModule.");
+        }
     }
 
-    return activeState;
-  }
-  /// @endcond
+    private void UpdateCurrentObject(GameObject previousObject)
+    {
+        if (pointer == null || pointerData == null)
+        {
+            return;
+        }
+        // Send enter events and update the highlight.
+        GameObject currentObject = GetCurrentGameObject(); // Get the pointer target
+        HandlePointerExitAndEnter(pointerData, previousObject);
 
-  /// @cond
-  public override void DeactivateModule() {
-    DisablePointer();
-    base.DeactivateModule();
-    if (pointerData != null) {
-      HandlePendingClick();
-      HandlePointerExitAndEnter(pointerData, null);
-      pointerData = null;
-    }
-    eventSystem.SetSelectedGameObject(null, GetBaseEventData());
-  }
-  /// @endcond
+        // Update the current selection, or clear if it is no longer the current object.
+        var selected = ExecuteEvents.GetEventHandler<ISelectHandler>(currentObject);
+        if (selected == eventSystem.currentSelectedGameObject)
+        {
+            ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, GetBaseEventData(),
+              ExecuteEvents.updateSelectedHandler);
+        }
+        else
+        {
+            eventSystem.SetSelectedGameObject(null, pointerData);
+        }
 
-  /// @cond
-  public override bool IsPointerOverGameObject(int pointerId) {
-    return pointerData != null && pointerData.pointerEnter != null;
-  }
-  /// @endcond
-
-  /// @cond
-  public override void Process() {
-    if (pointer == null) {
-      return;
-    }
-
-    // Save the previous Game Object
-    GameObject previousObject = GetCurrentGameObject();
-
-    CastRay();
-    UpdateCurrentObject(previousObject);
-    UpdateReticle(previousObject);
-
-    // True during the frame that the trigger has been pressed.
-    bool triggerDown = Input.GetMouseButtonDown(0);
-    // True if the trigger is held down.
-    bool triggering = Input.GetMouseButton(0);
-
-    #if UNITY_HAS_GOOGLEVR && (UNITY_ANDROID || UNITY_EDITOR)
-    triggerDown |= GvrController.ClickButtonDown;
-    triggering |= GvrController.ClickButton;
-    #endif  // UNITY_HAS_GOOGLEVR && (UNITY_ANDROID || UNITY_EDITOR)
-
-    if (!IsPointerActiveAndAvailable()) {
-      triggerDown = false;
-      triggering = false;
+        // Execute hover event.
+        if (currentObject == previousObject)
+        {
+            ExecuteEvents.ExecuteHierarchy(currentObject, pointerData, GvrExecuteEventsExtension.pointerHoverHandler);
+        }
     }
 
-    bool handlePendingClickRequired = !triggering;
+    private void UpdateReticle(GameObject previousObject)
+    {
+        if (pointer == null || pointerData == null)
+        {
+            return;
+        }
 
-    // Handle input
-    if (!triggerDown && triggering) {
-      HandleDrag();
-    } else if (triggerDown && !pointerData.eligibleForClick) {
-      // New trigger action.
-      HandleTriggerDown();
-    } else if (handlePendingClickRequired) {
-      // Check if there is a pending click to handle.
-      HandlePendingClick();
+        GameObject currentObject = GetCurrentGameObject(); // Get the pointer target
+        Vector3 intersectionPosition = pointerData.pointerCurrentRaycast.worldPosition;
+        bool isInteractive = pointerData.pointerPress != null ||
+                             ExecuteEvents.GetEventHandler<IPointerClickHandler>(currentObject) != null ||
+                             ExecuteEvents.GetEventHandler<IDragHandler>(currentObject) != null;
+
+        if (isPointerHovering && currentObject != null && currentObject == previousObject)
+        {
+            pointer.OnPointerHover(currentObject, intersectionPosition, GetLastRay(), isInteractive);
+        }
+        else
+        {
+            // If the object's don't match or the hovering object has been destroyed
+            // then the pointer has exited.
+            if (previousObject != null || (currentObject == null && isPointerHovering))
+            {
+                pointer.OnPointerExit(previousObject);
+                isPointerHovering = false;
+            }
+
+            if (currentObject != null)
+            {
+                pointer.OnPointerEnter(currentObject, intersectionPosition, GetLastRay(), isInteractive);
+                isPointerHovering = true;
+            }
+        }
     }
 
-    scrollInput.HandleScroll(GetCurrentGameObject(), pointerData, IsPointerActiveAndAvailable());
-  }
-  /// @endcond
+    private static bool ShouldStartDrag(Vector2 pressPos, Vector2 currentPos, float threshold, bool useDragThreshold)
+    {
+        if (!useDragThreshold)
+            return true;
 
-  private void CastRay() {
-    if (pointer == null || pointer.PointerTransform == null) {
-      return;
-    }
-    Vector2 currentPose = NormalizedCartesianToSpherical(pointer.PointerTransform.forward);
-
-    if (pointerData == null) {
-      pointerData = new PointerEventData(eventSystem);
-      lastPose = currentPose;
+        return (pressPos - currentPos).sqrMagnitude >= threshold * threshold;
     }
 
-    // Store the previous raycast result.
-    RaycastResult previousRaycastResult = pointerData.pointerCurrentRaycast;
+    private void HandleDrag()
+    {
+        bool moving = pointerData.IsPointerMoving();
+        bool shouldStartDrag = ShouldStartDrag(pointerData.pressPosition,
+          pointerData.position,
+          eventSystem.pixelDragThreshold,
+          pointerData.useDragThreshold);
 
-    // The initial cast must use the enter radius.
-    if (pointer != null) {
-      pointer.ShouldUseExitRadiusForRaycast = false;
+        if (moving && shouldStartDrag && pointerData.pointerDrag != null && !pointerData.dragging)
+        {
+            ExecuteEvents.Execute(pointerData.pointerDrag, pointerData,
+              ExecuteEvents.beginDragHandler);
+            pointerData.dragging = true;
+        }
+
+        // Drag notification
+        if (pointerData.dragging && moving && pointerData.pointerDrag != null)
+        {
+            // Before doing drag we should cancel any pointer down state
+            // And clear selection!
+            if (pointerData.pointerPress != pointerData.pointerDrag)
+            {
+                ExecuteEvents.Execute(pointerData.pointerPress, pointerData, ExecuteEvents.pointerUpHandler);
+
+                pointerData.eligibleForClick = false;
+                pointerData.pointerPress = null;
+                pointerData.rawPointerPress = null;
+            }
+
+            ExecuteEvents.Execute(pointerData.pointerDrag, pointerData, ExecuteEvents.dragHandler);
+        }
     }
 
-    // Cast a ray into the scene
-    pointerData.Reset();
-    // Set the position to the center of the camera.
-    // This is only necessary if using the built-in Unity raycasters.
-    RaycastResult raycastResult;
-    pointerData.position = GetViewportCenter();
-    bool isPointerActiveAndAvailable = IsPointerActiveAndAvailable();
-    if (isPointerActiveAndAvailable) {
-      eventSystem.RaycastAll(pointerData, m_RaycastResultCache);
-      raycastResult = FindFirstRaycast(m_RaycastResultCache);
-    } else {
-      raycastResult = new RaycastResult();
-      raycastResult.Clear();
-    }
+    private void HandlePendingClick()
+    {
+        if (pointerData == null || (!pointerData.eligibleForClick && !pointerData.dragging))
+        {
+            return;
+        }
 
-    // If we were already pointing at an object we must check that object against the exit radius
-    // to make sure we are no longer pointing at it to prevent flicker.
-    if (previousRaycastResult.gameObject != null
-        && raycastResult.gameObject != previousRaycastResult.gameObject
-        && isPointerActiveAndAvailable) {
-      if (pointer != null) {
-        pointer.ShouldUseExitRadiusForRaycast = true;
-      }
-      m_RaycastResultCache.Clear();
-      eventSystem.RaycastAll(pointerData, m_RaycastResultCache);
-      RaycastResult firstResult = FindFirstRaycast(m_RaycastResultCache);
-      if (firstResult.gameObject == previousRaycastResult.gameObject) {
-        raycastResult = firstResult;
-      }
-    }
+        if (pointer != null)
+        {
+            pointer.OnPointerClickUp();
+        }
 
-    if (raycastResult.gameObject != null && raycastResult.worldPosition == Vector3.zero) {
-      raycastResult.worldPosition = GetIntersectionPosition(pointerData.enterEventCamera, raycastResult);
-    }
+        var go = pointerData.pointerCurrentRaycast.gameObject;
 
-    pointerData.pointerCurrentRaycast = raycastResult;
-
-    // Find the real screen position associated with the raycast
-    // Based on the results of the hit and the state of the pointerData.
-    if (raycastResult.gameObject != null) {
-      pointerData.position = raycastResult.screenPosition;
-    } else {
-      Transform pointerTransform = pointer.PointerTransform;
-      float maxPointerDistance = pointer.MaxPointerDistance;
-      Vector3 pointerPos = pointerTransform.position + (pointerTransform.forward * maxPointerDistance);
-      if (pointerData.pressEventCamera != null) {
-        pointerData.position = pointerData.pressEventCamera.WorldToScreenPoint(pointerPos);
-      } else if (Camera.main != null) {
-        pointerData.position = Camera.main.WorldToScreenPoint(pointerPos);
-      }
-    }
-
-    m_RaycastResultCache.Clear();
-    pointerData.delta = currentPose - lastPose;
-    lastPose = currentPose;
-
-    // Check to make sure the Raycaster being used is a GvrRaycaster.
-    if (raycastResult.module != null
-      && !(raycastResult.module is GvrPointerGraphicRaycaster)
-      && !(raycastResult.module is GvrPointerPhysicsRaycaster)) {
-      Debug.LogWarning("Using Raycaster (Raycaster: " + raycastResult.module.GetType() +
-        ", Object: " + raycastResult.module.name + "). It is recommended to use " +
-        "GvrPointerPhysicsRaycaster or GvrPointerGrahpicRaycaster with GvrPointerInputModule.");
-    }
-  }
-
-  private void UpdateCurrentObject(GameObject previousObject) {
-    if (pointer == null || pointerData == null) {
-      return;
-    }
-    // Send enter events and update the highlight.
-    GameObject currentObject = GetCurrentGameObject(); // Get the pointer target
-    HandlePointerExitAndEnter(pointerData, previousObject);
-
-    // Update the current selection, or clear if it is no longer the current object.
-    var selected = ExecuteEvents.GetEventHandler<ISelectHandler>(currentObject);
-    if (selected == eventSystem.currentSelectedGameObject) {
-      ExecuteEvents.Execute(eventSystem.currentSelectedGameObject, GetBaseEventData(),
-        ExecuteEvents.updateSelectedHandler);
-    } else {
-      eventSystem.SetSelectedGameObject(null, pointerData);
-    }
-
-    // Execute hover event.
-    if (currentObject == previousObject) {
-      ExecuteEvents.ExecuteHierarchy(currentObject, pointerData, GvrExecuteEventsExtension.pointerHoverHandler);
-    }
-  }
-
-  private void UpdateReticle(GameObject previousObject) {
-    if (pointer == null || pointerData == null) {
-      return;
-    }
-
-    GameObject currentObject = GetCurrentGameObject(); // Get the pointer target
-    Vector3 intersectionPosition = pointerData.pointerCurrentRaycast.worldPosition;
-    bool isInteractive = pointerData.pointerPress != null ||
-                         ExecuteEvents.GetEventHandler<IPointerClickHandler>(currentObject) != null ||
-                         ExecuteEvents.GetEventHandler<IDragHandler>(currentObject) != null;
-
-    if (isPointerHovering && currentObject != null && currentObject == previousObject) {
-        pointer.OnPointerHover(currentObject, intersectionPosition, GetLastRay(), isInteractive);
-    } else {
-      // If the object's don't match or the hovering object has been destroyed
-      // then the pointer has exited.
-      if (previousObject != null || (currentObject == null && isPointerHovering)) {
-        pointer.OnPointerExit(previousObject);
-        isPointerHovering = false;
-      }
-
-      if (currentObject != null) {
-        pointer.OnPointerEnter(currentObject, intersectionPosition, GetLastRay(), isInteractive);
-        isPointerHovering = true;
-      }
-    }
-  }
-
-  private static bool ShouldStartDrag(Vector2 pressPos, Vector2 currentPos, float threshold, bool useDragThreshold)
-  {
-    if (!useDragThreshold)
-      return true;
-
-    return (pressPos - currentPos).sqrMagnitude >= threshold * threshold;
-  }
-
-  private void HandleDrag() {
-    bool moving = pointerData.IsPointerMoving();
-    bool shouldStartDrag = ShouldStartDrag(pointerData.pressPosition,
-      pointerData.position,
-      eventSystem.pixelDragThreshold,
-      pointerData.useDragThreshold);
-
-    if (moving && shouldStartDrag && pointerData.pointerDrag != null && !pointerData.dragging) {
-      ExecuteEvents.Execute(pointerData.pointerDrag, pointerData,
-        ExecuteEvents.beginDragHandler);
-      pointerData.dragging = true;
-    }
-
-    // Drag notification
-    if (pointerData.dragging && moving && pointerData.pointerDrag != null) {
-      // Before doing drag we should cancel any pointer down state
-      // And clear selection!
-      if (pointerData.pointerPress != pointerData.pointerDrag) {
+        // Send pointer up and click events.
         ExecuteEvents.Execute(pointerData.pointerPress, pointerData, ExecuteEvents.pointerUpHandler);
+        GameObject pointerClickHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(go);
+        if (pointerData.pointerPress == pointerClickHandler && pointerData.eligibleForClick)
+        {
+            ExecuteEvents.Execute(pointerData.pointerPress, pointerData, ExecuteEvents.pointerClickHandler);
+        }
+        else if (pointerData.dragging)
+        {
+            ExecuteEvents.ExecuteHierarchy(go, pointerData, ExecuteEvents.dropHandler);
+            ExecuteEvents.Execute(pointerData.pointerDrag, pointerData, ExecuteEvents.endDragHandler);
+        }
 
-        pointerData.eligibleForClick = false;
-        pointerData.pointerPress = null;
-        pointerData.rawPointerPress = null;
-      }
-
-      ExecuteEvents.Execute(pointerData.pointerDrag, pointerData, ExecuteEvents.dragHandler);
-    }
-  }
-
-  private void HandlePendingClick() {
-    if (pointerData == null || (!pointerData.eligibleForClick && !pointerData.dragging)) {
-      return;
-    }
-
-    if (pointer != null) {
-      pointer.OnPointerClickUp();
-    }
-
-    var go = pointerData.pointerCurrentRaycast.gameObject;
-
-    // Send pointer up and click events.
-    ExecuteEvents.Execute(pointerData.pointerPress, pointerData, ExecuteEvents.pointerUpHandler);
-    GameObject pointerClickHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(go);
-    if (pointerData.pointerPress == pointerClickHandler && pointerData.eligibleForClick) {
-      ExecuteEvents.Execute(pointerData.pointerPress, pointerData, ExecuteEvents.pointerClickHandler);
-    } else if (pointerData.dragging) {
-      ExecuteEvents.ExecuteHierarchy(go, pointerData, ExecuteEvents.dropHandler);
-      ExecuteEvents.Execute(pointerData.pointerDrag, pointerData, ExecuteEvents.endDragHandler);
+        // Clear the click state.
+        if (pointerData != null)
+        {
+            pointerData.pointerPress = null;
+            pointerData.rawPointerPress = null;
+            pointerData.eligibleForClick = false;
+            pointerData.clickCount = 0;
+            pointerData.clickTime = 0;
+            pointerData.pointerDrag = null;
+            pointerData.dragging = false;
+        }
     }
 
-    // Clear the click state.
-    pointerData.pointerPress = null;
-    pointerData.rawPointerPress = null;
-    pointerData.eligibleForClick = false;
-    pointerData.clickCount = 0;
-    pointerData.clickTime = 0;
-    pointerData.pointerDrag = null;
-    pointerData.dragging = false;
-  }
+    private void HandleTriggerDown()
+    {
+        var go = pointerData.pointerCurrentRaycast.gameObject;
 
-  private void HandleTriggerDown() {
-    var go = pointerData.pointerCurrentRaycast.gameObject;
+        // Send pointer down event.
+        pointerData.pressPosition = pointerData.position;
+        pointerData.pointerPressRaycast = pointerData.pointerCurrentRaycast;
+        pointerData.pointerPress =
+          ExecuteEvents.ExecuteHierarchy(go, pointerData, ExecuteEvents.pointerDownHandler)
+        ?? ExecuteEvents.GetEventHandler<IPointerClickHandler>(go);
 
-    // Send pointer down event.
-    pointerData.pressPosition = pointerData.position;
-    pointerData.pointerPressRaycast = pointerData.pointerCurrentRaycast;
-    pointerData.pointerPress =
-      ExecuteEvents.ExecuteHierarchy(go, pointerData, ExecuteEvents.pointerDownHandler)
-    ?? ExecuteEvents.GetEventHandler<IPointerClickHandler>(go);
+        // Save the pending click state.
+        if (pointerData != null)
+        {
+            pointerData.rawPointerPress = go;
+            pointerData.eligibleForClick = true;
+            pointerData.delta = Vector2.zero;
+            pointerData.dragging = false;
+            pointerData.useDragThreshold = true;
+            pointerData.clickCount = 1;
+            pointerData.clickTime = Time.unscaledTime;
 
-    // Save the pending click state.
-    pointerData.rawPointerPress = go;
-    pointerData.eligibleForClick = true;
-    pointerData.delta = Vector2.zero;
-    pointerData.dragging = false;
-    pointerData.useDragThreshold = true;
-    pointerData.clickCount = 1;
-    pointerData.clickTime = Time.unscaledTime;
+            // Save the drag handler as well
+            pointerData.pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(go);
+            if (pointerData.pointerDrag != null)
+            {
+                ExecuteEvents.Execute(pointerData.pointerDrag, pointerData, ExecuteEvents.initializePotentialDrag);
+            }
+        }
 
-    // Save the drag handler as well
-    pointerData.pointerDrag = ExecuteEvents.GetEventHandler<IDragHandler>(go);
-    if (pointerData.pointerDrag != null) {
-      ExecuteEvents.Execute(pointerData.pointerDrag, pointerData, ExecuteEvents.initializePotentialDrag);
+        if (pointer != null)
+        {
+            pointer.OnPointerClickDown();
+        }
     }
 
-    if (pointer != null) {
-      pointer.OnPointerClickDown();
-    }
-  }
-
-  private Vector2 NormalizedCartesianToSpherical(Vector3 cartCoords) {
-    cartCoords.Normalize();
-    if (cartCoords.x == 0)
-      cartCoords.x = Mathf.Epsilon;
-    float outPolar = Mathf.Atan(cartCoords.z / cartCoords.x);
-    if (cartCoords.x < 0)
-      outPolar += Mathf.PI;
-    float outElevation = Mathf.Asin(cartCoords.y);
-    return new Vector2(outPolar, outElevation);
-  }
-
-  private GameObject GetCurrentGameObject() {
-    if (pointerData != null) {
-      return pointerData.pointerCurrentRaycast.gameObject;
+    private Vector2 NormalizedCartesianToSpherical(Vector3 cartCoords)
+    {
+        cartCoords.Normalize();
+        if (cartCoords.x == 0)
+            cartCoords.x = Mathf.Epsilon;
+        float outPolar = Mathf.Atan(cartCoords.z / cartCoords.x);
+        if (cartCoords.x < 0)
+            outPolar += Mathf.PI;
+        float outElevation = Mathf.Asin(cartCoords.y);
+        return new Vector2(outPolar, outElevation);
     }
 
-    return null;
-  }
+    private GameObject GetCurrentGameObject()
+    {
+        if (pointerData != null)
+        {
+            return pointerData.pointerCurrentRaycast.gameObject;
+        }
 
-  private Ray GetLastRay() {
-    if (pointerData != null) {
-      GvrBasePointerRaycaster raycaster = pointerData.pointerCurrentRaycast.module as GvrBasePointerRaycaster;
-      if (raycaster != null) {
-        return raycaster.GetLastRay();
-      } else if (pointerData.enterEventCamera != null) {
-        Camera cam = pointerData.enterEventCamera;
-        return new Ray(cam.transform.position, cam.transform.forward);
-      }
+        return null;
     }
 
-    return new Ray();
-  }
+    private Ray GetLastRay()
+    {
+        if (pointerData != null)
+        {
+            GvrBasePointerRaycaster raycaster = pointerData.pointerCurrentRaycast.module as GvrBasePointerRaycaster;
+            if (raycaster != null)
+            {
+                return raycaster.GetLastRay();
+            }
+            else if (pointerData.enterEventCamera != null)
+            {
+                Camera cam = pointerData.enterEventCamera;
+                return new Ray(cam.transform.position, cam.transform.forward);
+            }
+        }
 
-  private Vector3 GetIntersectionPosition(Camera cam, RaycastResult raycastResult) {
-    // Check for camera
-    if (cam == null) {
-      return Vector3.zero;
+        return new Ray();
     }
 
-    float intersectionDistance = raycastResult.distance + cam.nearClipPlane;
-    Vector3 intersectionPosition = cam.transform.position + cam.transform.forward * intersectionDistance;
-    return intersectionPosition;
-  }
+    private Vector3 GetIntersectionPosition(Camera cam, RaycastResult raycastResult)
+    {
+        // Check for camera
+        if (cam == null)
+        {
+            return Vector3.zero;
+        }
 
-  private void DisablePointer() {
-    if (pointer == null) {
-      return;
+        float intersectionDistance = raycastResult.distance + cam.nearClipPlane;
+        Vector3 intersectionPosition = cam.transform.position + cam.transform.forward * intersectionDistance;
+        return intersectionPosition;
     }
 
-    GameObject currentGameObject = GetCurrentGameObject();
-    if (currentGameObject) {
-      pointer.OnPointerExit(currentGameObject);
+    private void DisablePointer()
+    {
+        if (pointer == null)
+        {
+            return;
+        }
+
+        GameObject currentGameObject = GetCurrentGameObject();
+        if (currentGameObject)
+        {
+            pointer.OnPointerExit(currentGameObject);
+        }
+
+        pointer.OnInputModuleDisabled();
     }
 
-    pointer.OnInputModuleDisabled();
-  }
+    private Vector2 GetViewportCenter()
+    {
+        int viewportWidth = Screen.width;
+        int viewportHeight = Screen.height;
+#if UNITY_HAS_GOOGLEVR && (UNITY_ANDROID || UNITY_EDITOR) && UNITY_ANDROID
+        // GVR native integration is supported.
+        if (VRSettings.enabled)
+        {
+            viewportWidth = VRSettings.eyeTextureWidth;
+            viewportHeight = VRSettings.eyeTextureHeight;
+        }
+#endif  // UNITY_HAS_GOOGLEVR && (UNITY_ANDROID || UNITY_EDITOR) && UNITY_ANDROID
 
-  private Vector2 GetViewportCenter() {
-    int viewportWidth = Screen.width;
-    int viewportHeight = Screen.height;
-    #if UNITY_HAS_GOOGLEVR && (UNITY_ANDROID || UNITY_EDITOR) && UNITY_ANDROID
-    // GVR native integration is supported.
-    if (VRSettings.enabled) {
-      viewportWidth = VRSettings.eyeTextureWidth;
-      viewportHeight = VRSettings.eyeTextureHeight;
-    }
-    #endif  // UNITY_HAS_GOOGLEVR && (UNITY_ANDROID || UNITY_EDITOR) && UNITY_ANDROID
-
-    return new Vector2(0.5f * viewportWidth, 0.5f * viewportHeight);
-  }
-
-  private bool IsPointerActiveAndAvailable() {
-    if (pointer == null) {
-      return false;
+        return new Vector2(0.5f * viewportWidth, 0.5f * viewportHeight);
     }
 
-    Transform pointerTransform = pointer.PointerTransform;
-    if (pointerTransform == null) {
-      return false;
-    }
+    private bool IsPointerActiveAndAvailable()
+    {
+        if (pointer == null)
+        {
+            return false;
+        }
 
-    return pointerTransform.gameObject.activeInHierarchy;
-  }
+        Transform pointerTransform = pointer.PointerTransform;
+        if (pointerTransform == null)
+        {
+            return false;
+        }
+
+        return pointerTransform.gameObject.activeInHierarchy;
+    }
 }

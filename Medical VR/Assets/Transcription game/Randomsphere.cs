@@ -20,11 +20,9 @@ public class Randomsphere : MonoBehaviour
     public GameObject victoryeffect, NextLevel;
     public GameObject[] Spheres;
     public GameObject[] Spheres2;
-    private List<GameObject> testSpheres;
-    public List<string> ans;
-    private int i;
-    private int j;
-    private int k;
+
+    public bool aPlayed = false;
+    public string que;
 
     public static int correct;
 
@@ -32,21 +30,8 @@ public class Randomsphere : MonoBehaviour
     private GameObject clonej;
     private GameObject clonek;
 
-    private Color C1color;
-    private Color G1color;
-    private Color U1color;
-    private Color A1color;
-    private Color T1color;
-    private Color A2color;
-
-    private bool playfx;
-
-    private Vector3 C1position;
-    private Vector3 G1position;
-    private Vector3 U1position;
-    private Vector3 A1position;
-    private Vector3 T1position;
-    private Vector3 A2position;
+    private Color[] colors = new Color[6];
+    private Vector3[] positions = new Vector3[6];
 
     public GNE Genes;
 
@@ -54,25 +39,22 @@ public class Randomsphere : MonoBehaviour
     void Start()
     {
         NextLevel.SetActive(false);
-        playfx = false;
-        testSpheres = new List<GameObject>();
-        ans = new List<string>();
 
         correct = 0;
 
-        C1color = Spheres2[(int)Letters.C].GetComponent<Renderer>().sharedMaterial.color;
-        G1color = Spheres2[(int)Letters.G].GetComponent<Renderer>().sharedMaterial.color;
-        U1color = Spheres2[(int)Letters.U].GetComponent<Renderer>().sharedMaterial.color;
-        A1color = Spheres2[(int)Letters.A].GetComponent<Renderer>().sharedMaterial.color;
-        T1color = Spheres2[(int)Letters.T].GetComponent<Renderer>().sharedMaterial.color;
-        A2color = Spheres2[(int)Letters.A2].GetComponent<Renderer>().sharedMaterial.color;
+        colors[(int)Letters.C] = Spheres2[(int)Letters.C].GetComponent<Renderer>().sharedMaterial.color;
+        colors[(int)Letters.G] = Spheres2[(int)Letters.G].GetComponent<Renderer>().sharedMaterial.color;
+        colors[(int)Letters.U] = Spheres2[(int)Letters.U].GetComponent<Renderer>().sharedMaterial.color;
+        colors[(int)Letters.A] = Spheres2[(int)Letters.A].GetComponent<Renderer>().sharedMaterial.color;
+        colors[(int)Letters.T] = Spheres2[(int)Letters.T].GetComponent<Renderer>().sharedMaterial.color;
+        colors[(int)Letters.A2] = Spheres2[(int)Letters.A2].GetComponent<Renderer>().sharedMaterial.color;
 
-        C1position = Spheres2[(int)Letters.C].transform.position;
-        G1position = Spheres2[(int)Letters.G].transform.position;
-        U1position = Spheres2[(int)Letters.U].transform.position;
-        A1position = Spheres2[(int)Letters.A].transform.position;
-        T1position = Spheres2[(int)Letters.T].transform.position;
-        A2position = Spheres2[(int)Letters.A2].transform.position;
+        positions[(int)Letters.C] = Spheres2[(int)Letters.C].transform.position;
+        positions[(int)Letters.G] = Spheres2[(int)Letters.G].transform.position;
+        positions[(int)Letters.U] = Spheres2[(int)Letters.U].transform.position;
+        positions[(int)Letters.A] = Spheres2[(int)Letters.A].transform.position;
+        positions[(int)Letters.T] = Spheres2[(int)Letters.T].transform.position;
+        positions[(int)Letters.A2] = Spheres2[(int)Letters.A2].transform.position;
 
         if (GlobalVariables.arcadeMode == true)
             Genes = (GNE)Random.Range(0, 9);
@@ -81,150 +63,162 @@ public class Randomsphere : MonoBehaviour
 
         switch (Genes)
         {
+            //i = 1;
+            //j = 2;
+            //k = 0;
             case GNE.GAC:
                 {
-                    i = 1;
-                    j = 2;
-                    k = 0;
+                    que = "GAC";
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 2;
+            //j = 0;
+            //k = 5;
             case GNE.ACT:
                 {
-                    i = 2;
-                    j = 0;
-                    k = 3;
+                    que = "ACT";
+                    clonei = Instantiate(Spheres[2], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 1;
+            //j = 2;
+            //k = 0;
             case GNE.GAC2:
                 {
-                    i = 1;
-                    j = 2;
-                    k = 0;
+                    que = "GAC";
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 3;
+            //j = 0;
+            //k = 5;
             case GNE.TCT:
                 {
-                    i = 3;
-                    j = 0;
-                    k = 3;
+                    que = "TCT";
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 0;
+            //j = 1;
+            //k = 5;
             case GNE.CGT:
                 {
-                    i = 0;
-                    j = 1;
-                    k = 3;
+                    que = "CGT";
+                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[1], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 3;
+            //j = 2;
+            //k = 0;
             case GNE.TAC:
                 {
-                    i = 3;
-                    j = 2;
-                    k = 0;
+                    que = "TAC";
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 3;
+            //j = 0;
+            //k = 5;
             case GNE.TCT2:
                 {
-                    i = 3;
-                    j = 0;
-                    k = 5;
+                    que = "TCT";
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 1;
+            //j = 2;
+            //k = 0;
             case GNE.GAC3:
                 {
-                    i = 1;
-                    j = 2;
-                    k = 0;
+                    que = "GAC";
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 0;
+            //j = 2;
+            //k = 5;
             case GNE.CAT:
                 {
-                    i = 0;
-                    j = 2;
-                    k = 5;
+                    que = "CAT";
+                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
             default:
                 CellGameplayScript.loadCase = 3;
                 SceneManager.LoadScene("CellGameplay");
                 break;
         }
-
-        clonei = Instantiate(Spheres[i], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-
-        clonej = Instantiate(Spheres[j], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-
-        clonek = Instantiate(Spheres[k], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-
-        for (int x = 0; x < Spheres2.Length; x++)
-        {
-            testSpheres.Add(Spheres2[x]);
-        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Update()
     {
-
-        for (int i = 0; i < testSpheres.Count; i++)
-        {
-            if (testSpheres[i].GetComponent<TimeInputObject>().IsCorrect == true)
-            {
-                testSpheres[i].GetComponent<TimeInputObject>().IsCorrect = false;
-                testSpheres.Remove(testSpheres[i]);
-                correct += 1;
-            }
-
-        }
-
-        if (correct == 3)
-        {
-
-            //victoryeffect.GetComponent<ParticleSystem>().Stop();
-            if (playfx == false)
-            {
-                NextLevel.SetActive(true);
-                NextLevel.GetComponent<TMPro.TextMeshPro>().text = "Next Level";
-                victoryeffect.GetComponent<ParticleSystem>().Play();
-                EventSystem.SetActive(false);
-                playfx = true;
-            }
-
-            if (victoryeffect.GetComponent<ParticleSystem>().isPlaying == false)
-            {
-                NextLevel.SetActive(false);
-                EventSystem.SetActive(true);
-                playfx = false;
-                Reset();
-                memoryui.GetComponent<MemoryUI>().Level += 1;
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Reset();
         }
     }
 
+    public void Correct()
+    {
+        correct++;
+        if (correct == 3)
+        {
+            NextLevel.SetActive(true);
+            NextLevel.GetComponent<TMPro.TextMeshPro>().text = "Next Level";
+            victoryeffect.GetComponent<ParticleSystem>().Play();
+            EventSystem.SetActive(false);
+
+            Invoke("Reset", 3.0f);
+        }
+    }
+
     public void Reset()
     {
+        NextLevel.SetActive(false);
+        EventSystem.SetActive(true);
+        memoryui.GetComponent<MemoryUI>().Level += 1;
+
         memoryui.GetComponent<MemoryUI>().Finish();
+        aPlayed = false;
 
         Destroy(clonei);
         Destroy(clonej);
         Destroy(clonek);
-
-        ans.Clear();
-
-
 
         GNE temp = Genes;
 
         if (GlobalVariables.arcadeMode == true)
         {
             Genes = (GNE)Random.Range(0, 9);
-
-            if (temp == Genes)
+            while (temp == Genes)
                 Genes = (GNE)Random.Range(0, 9);
         }
         else
@@ -232,71 +226,113 @@ public class Randomsphere : MonoBehaviour
             Genes += 1;
         }
 
-
-
         switch (Genes)
         {
+            //i = 1;
+            //j = 2;
+            //k = 0;
             case GNE.GAC:
                 {
-                    i = 1;
-                    j = 2;
-                    k = 0;
+                    que = "GAC";
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 2;
+            //j = 0;
+            //k = 5;
             case GNE.ACT:
                 {
-                    i = 2;
-                    j = 0;
-                    k = 5;
+                    que = "ACT";
+                    clonei = Instantiate(Spheres[2], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 1;
+            //j = 2;
+            //k = 0;
             case GNE.GAC2:
                 {
-                    i = 1;
-                    j = 2;
-                    k = 0;
+                    que = "GAC";
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 3;
+            //j = 0;
+            //k = 5;
             case GNE.TCT:
                 {
-                    i = 3;
-                    j = 0;
-                    k = 5;
+                    que = "TCT";
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 0;
+            //j = 1;
+            //k = 5;
             case GNE.CGT:
                 {
-                    i = 0;
-                    j = 1;
-                    k = 5;
+                    que = "CGT";
+                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[1], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 3;
+            //j = 2;
+            //k = 0;
             case GNE.TAC:
                 {
-                    i = 3;
-                    j = 2;
-                    k = 0;
+                    que = "TAC";
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 3;
+            //j = 0;
+            //k = 5;
             case GNE.TCT2:
                 {
-                    i = 3;
-                    j = 0;
-                    k = 5;
+                    que = "TCT";
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 1;
+            //j = 2;
+            //k = 0;
             case GNE.GAC3:
                 {
-                    i = 1;
-                    j = 2;
-                    k = 0;
+                    que = "GAC";
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
+
+            //i = 0;
+            //j = 2;
+            //k = 5;
             case GNE.CAT:
                 {
-                    i = 0;
-                    j = 2;
-                    k = 5;
+                    que = "CAT";
+                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
             default:
@@ -305,32 +341,23 @@ public class Randomsphere : MonoBehaviour
                 break;
         }
 
-        clonei = (GameObject)Instantiate(Spheres[i], new Vector3(-15, 26, 30), Spheres[0].transform.rotation);
+        Spheres2[(int)Letters.C].transform.position = positions[(int)Letters.C];
+        Spheres2[(int)Letters.G].transform.position = positions[(int)Letters.G];
+        Spheres2[(int)Letters.U].transform.position = positions[(int)Letters.U];
+        Spheres2[(int)Letters.A].transform.position = positions[(int)Letters.A];
+        Spheres2[(int)Letters.T].transform.position = positions[(int)Letters.T];
+        Spheres2[(int)Letters.A2].transform.position = positions[(int)Letters.A2];
 
-        clonej = (GameObject)Instantiate(Spheres[j], new Vector3(0, 26, 30), Spheres[0].transform.rotation);
+        Spheres2[(int)Letters.C].GetComponent<Renderer>().sharedMaterial.color = colors[(int)Letters.C];
+        Spheres2[(int)Letters.G].GetComponent<Renderer>().sharedMaterial.color = colors[(int)Letters.G];
+        Spheres2[(int)Letters.U].GetComponent<Renderer>().sharedMaterial.color = colors[(int)Letters.U];
+        Spheres2[(int)Letters.A].GetComponent<Renderer>().sharedMaterial.color = colors[(int)Letters.A];
+        Spheres2[(int)Letters.T].GetComponent<Renderer>().sharedMaterial.color = colors[(int)Letters.T];
+        Spheres2[(int)Letters.A2].GetComponent<Renderer>().sharedMaterial.color = colors[(int)Letters.A2];
 
-        clonek = (GameObject)Instantiate(Spheres[k], new Vector3(15, 26, 30), Spheres[0].transform.rotation);
-
-        Spheres2[(int)Letters.C].transform.position = C1position;
-        Spheres2[(int)Letters.G].transform.position = G1position;
-        Spheres2[(int)Letters.U].transform.position = U1position;
-        Spheres2[(int)Letters.A].transform.position = A1position;
-        Spheres2[(int)Letters.T].transform.position = T1position;
-        Spheres2[(int)Letters.A2].transform.position = A2position;
-
-        Spheres2[(int)Letters.C].GetComponent<Renderer>().sharedMaterial.color = C1color;
-        Spheres2[(int)Letters.G].GetComponent<Renderer>().sharedMaterial.color = G1color;
-        Spheres2[(int)Letters.U].GetComponent<Renderer>().sharedMaterial.color = U1color;
-        Spheres2[(int)Letters.A].GetComponent<Renderer>().sharedMaterial.color = A1color;
-        Spheres2[(int)Letters.T].GetComponent<Renderer>().sharedMaterial.color = T1color;
-        Spheres2[(int)Letters.A2].GetComponent<Renderer>().sharedMaterial.color = A2color;
-
-
-
-        testSpheres.Clear();
-        for (int x = 0; x < Spheres2.Length; x++)
+        foreach (GameObject item in Spheres2)
         {
-            testSpheres.Add(Spheres2[x]);
+            item.GetComponent<Collider>().enabled = true;
         }
         correct = 0;
 

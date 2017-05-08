@@ -28,7 +28,7 @@ public class MoveCamera : MonoBehaviour
         }
         else
         {
-            GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            GetComponent<Rigidbody>().MovePosition(endPosition);
         }
     }
 

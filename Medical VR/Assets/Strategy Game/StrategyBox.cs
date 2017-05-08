@@ -19,17 +19,7 @@ public class StrategyBox : MonoBehaviour
     public GameObject anim;
     public TMPro.TextMeshPro animationText;
 
-    public MoveCamera mainCamera;
-
     private Vector2 key = new Vector2(500, 500);
-    void Start()
-    {
-        if (mainCamera == null)
-        {
-            mainCamera = Camera.main.GetComponent<MoveCamera>();
-        }
-    }
-
     public void AClick()
     {
         actionsLeft--;
@@ -72,7 +62,7 @@ public class StrategyBox : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
             GetComponent<Collider>().enabled = false;
             //This is the new target position
-            mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f));
+            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f));
             cellmanager.SetSelected(key);
         }
     }

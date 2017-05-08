@@ -48,8 +48,6 @@ public class StrategyCellScript : MonoBehaviour
     public TMPro.TextMeshPro[] texts;
 
     private float tImmunity;
-
-    private MoveCamera mainCamera;
     private float camOffset = 1.5f;
     private float scaledDistance = 1.3f;
 
@@ -70,10 +68,6 @@ public class StrategyCellScript : MonoBehaviour
 
     void Start()
     {
-        if (mainCamera == null)
-        {
-            mainCamera = Camera.main.GetComponent<MoveCamera>();
-        }
         turnSpawned = parent.turnNumber;
         parent.cells.Add(this);
         parent.cellsSpawned++;
@@ -447,7 +441,7 @@ public class StrategyCellScript : MonoBehaviour
     {
         if ((parent.viewingStats && parent.selected != transform.GetComponent<StrategyCellScript>().key) || (!parent.viewingStats && parent.selected == transform.GetComponent<StrategyCellScript>().key))
         {
-            Vector3 direction = mainCamera.transform.forward;
+            Vector3 direction = Camera.main.transform.forward;
             direction.y = 0;
             direction.Normalize();
             direction *= scaledDistance;
@@ -461,14 +455,14 @@ public class StrategyCellScript : MonoBehaviour
             transform.GetChild(0).transform.LookAt(finalPos);
 
             //This is the new target position
-            mainCamera.SetDestination(finalPos);
+            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(finalPos);
             parent.SetSelected(transform.GetComponent<StrategyCellScript>().key);
             gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
             parent.viewingStats = true;
         }
         else if (!parent.viewingStats)
         {
-            mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
+            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
             parent.SetSelected(transform.GetComponent<StrategyCellScript>().key);
             parent.viewingStats = false;
         }
@@ -476,7 +470,7 @@ public class StrategyCellScript : MonoBehaviour
 
     public void Back()
     {
-        mainCamera.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
+        Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
         parent.SetSelected(transform.GetComponent<StrategyCellScript>().key);
         parent.viewingStats = false;
     }
