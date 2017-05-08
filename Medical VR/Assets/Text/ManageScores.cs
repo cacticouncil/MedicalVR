@@ -26,7 +26,7 @@ public class ManageScores : MonoBehaviour {
 
         MemoryScoreText.GetComponent<TextMeshPro>().text = "Memory Game: "; //MemoryUI.score.ToString();
         SimonDNAScoreText.GetComponent<TextMeshPro>().text = "";
-        cGAMPScoreText.GetComponent<TextMeshPro>().text = "cGAMP Snatcher: " + Storebullets.score.ToString();
+        cGAMPScoreText.GetComponent<TextMeshPro>().text = "cGAMP Snatcher: " /*+ Storebullets.score.ToString()*/;
         DodgeScoreText.GetComponent<TextMeshPro>().text = "";
         VirusScoreText.GetComponent<TextMeshPro>().text = "";
         CellScoreText.GetComponent<TextMeshPro>().text = "";
