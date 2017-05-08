@@ -25,8 +25,8 @@ public class AttackVirus : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Speed);
             if (transform.position == target.transform.position)
             {
-                target.GetComponent<CellReceptors>().health--;
-                if (target.GetComponent<CellReceptors>().health <= 0)
+                target.GetComponent<CellReceptors>().Health--;
+                if (target.GetComponent<CellReceptors>().Health <= 0)
                     Destroy(target);
                 CanLeaveCell = true;
             }

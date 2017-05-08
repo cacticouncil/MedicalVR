@@ -23,7 +23,6 @@ public class WaveManager : MonoBehaviour
     Vector3 CellReceptorLocation;
 
     public int WaveNumber = 1;
-    public bool CanDestroyProteins = false;
 
     //Tutorial Variables
     public GameObject TutorialLocationStart;
@@ -94,7 +93,6 @@ public class WaveManager : MonoBehaviour
                     Player.GetComponent<VirusPlayer>().Respawn();
                     Player.GetComponent<VirusPlayer>().currSpeed = 0.0f;
                     Player.GetComponent<VirusPlayer>().WaveStarted = true;
-                    CanDestroyProteins = false;
                     Invoke("CreateAntiViralProteinWave", 5);
                 }
             }
@@ -216,7 +214,6 @@ public class WaveManager : MonoBehaviour
         if (GlobalVariables.tutorial == false)
         {
             Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
-            CanDestroyProteins = true;
         }
     }
 

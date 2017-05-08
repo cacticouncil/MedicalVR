@@ -35,6 +35,8 @@ public class VirusPlayer : MonoBehaviour
 
     public bool CanIMove = false;
     public bool WaveStarted = false;
+    public bool isCellReceptorDone = false;
+    public bool ProceedTutorial = false;
     bool DelaySpawn = false;
     float DelayTimer = 0.0f;
     float BeatGameTimer = 0.0f;
@@ -171,6 +173,12 @@ public class VirusPlayer : MonoBehaviour
             float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
 
+            if (WhatToRead == 3 && isCellReceptorDone == true)
+                CanIRead = true;
+
+            if (WhatToRead == 4 && ProceedTutorial == true)
+                CanIRead = true;
+            
             if (WhatToRead == 6 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0)
                 CanIRead = true;
 
@@ -195,18 +203,16 @@ public class VirusPlayer : MonoBehaviour
 
                     case 3:
                         StartCoroutine(DisplayText("You can search for the cell receptors near the cell membrane", 3.5f));
-
                         break;
 
                     case 4:
-                        StartCoroutine(DisplayText("Use your cursor to automatically fire viruses at them", 3.5f));
+                        StartCoroutine(DisplayText("Use the button to automatically fire viruses at them", 3.5f));
                         CanIMove = true;
                         currSpeed = baseSpeed;
                         break;
 
                     case 5:
                         StartCoroutine(DisplayText(" ", 3.5f));
-                        WaveManager.GetComponent<WaveManager>().CanDestroyProteins = true;
                         break;
 
                     case 6:
@@ -297,6 +303,12 @@ public class VirusPlayer : MonoBehaviour
 
         //Events for tutorial
         CanIRead = true;
+        if (WhatToRead == 4 && isCellReceptorDone == false)
+            CanIRead = false;
+
+        if (WhatToRead == 4 && ProceedTutorial == false)
+            CanIRead = false;
+        
         if (WhatToRead == 6 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count != 0)
             CanIRead = false;
 
