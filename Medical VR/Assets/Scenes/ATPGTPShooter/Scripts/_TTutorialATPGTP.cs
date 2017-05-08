@@ -4,9 +4,11 @@ using System.Collections;
 public class _TTutorialATPGTP : MonoBehaviour
 {
     enum TutorialState { dispEnzyme, dispATP, moveATP, dispGTP, moveGTP, startGame, wait }
+    public GameObject nucleus;
     public GameObject enzyme;
     public GameObject ATP;
     public GameObject GTP;
+    public GameObject tutorialStuff;
     GameObject enz;
     GameObject atp;
     GameObject gtp;
@@ -80,11 +82,11 @@ public class _TTutorialATPGTP : MonoBehaviour
                 if(MoveToEnzyme(gtp))
                 {
                     ChangeTutorialState(TutorialState.wait);
-
+                    ChangeTutorialState(TutorialState.startGame);
                 }
                 break;
             case TutorialState.startGame:
-                GetComponent<_TGameController>().runGameState();
+                GetComponent<_TGameController>().runGameState(10);
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.wait:
@@ -141,6 +143,9 @@ public class _TTutorialATPGTP : MonoBehaviour
 
         enz.GetComponent<_TSizeChange>().Inititalize();
         enz.GetComponent<_TSizeChange>().StartGrow();
+        enz.GetComponent<_TTravelToNucleus>().nucleus = nucleus;
+        enz.GetComponent<_TTravelToNucleus>().waitTime = 3;
+
         ChangeTutorialState(TutorialState.dispATP);
     }
 }
