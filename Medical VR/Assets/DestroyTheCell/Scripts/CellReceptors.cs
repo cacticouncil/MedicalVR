@@ -8,7 +8,7 @@ public class CellReceptors : MonoBehaviour
     GameObject WaveManager;
     public GameObject VirusAttack;
 
-    private bool AmITargeted = false;
+    public bool AmITargeted = false;
     private bool NeverTargetAgain = false;
 
     public int Health = 4;
@@ -72,8 +72,11 @@ public class CellReceptors : MonoBehaviour
 
     public void OnGazeEnter()
     {
-        Player.GetComponent<VirusPlayer>().currSpeed = 0;
-        AmITargeted = true;
+        if (AmITargeted == false)
+        {
+            Player.GetComponent<VirusPlayer>().currSpeed = 0;
+            AmITargeted = true;
+        }
     }
 
     public void OnGazeExit()
