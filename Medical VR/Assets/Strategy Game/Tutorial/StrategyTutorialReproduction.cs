@@ -313,13 +313,13 @@ public class StrategyTutorialReproduction : MonoBehaviour
         nextPos.Clear();
         viruses[3].transform.localScale = Vector3.one;
 
-        subtitles.text = "";
         foreach (GameObject item in bas)
         {
             StartCoroutine(FadeOutObject(item));
             StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
         }
 
+        subtitles.text = "";
 
         //Fade to black
         StartCoroutine(FadeInObject(fade));
