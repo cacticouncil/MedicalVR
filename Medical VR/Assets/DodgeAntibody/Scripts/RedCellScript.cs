@@ -61,7 +61,7 @@ public class RedCellScript : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "virus")
+        if (other.tag == "MainCamera")
         {
             if (GlobalVariables.arcadeMode == true)
             {

@@ -4,7 +4,7 @@ using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MovingCamera : MonoBehaviour, TimedInputHandler
+public class MovingCamera : MonoBehaviour
 {
     public GameObject subtitles;
     public float speed;
