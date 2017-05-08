@@ -29,7 +29,7 @@ public class AntibodyScript : MonoBehaviour
                 Cam.GetComponent<MovingCamera>().speed = -100;
                 Cam.GetComponent<SphereCollider>().enabled = false;
                
-                if (TutorialMode == false)
+                if (GlobalVariables.tutorial == false)
                 {
                     if (Cam.transform.position == Cam.GetComponent<MovingCamera>().originPos)
                     {
@@ -57,7 +57,7 @@ public class AntibodyScript : MonoBehaviour
     {
         if (other.tag == "MainCamera")
         {
-            other.transform.position -= other.transform.forward * 50;
+           // other.transform.position -= other.transform.forward * 50;
             saveSpeed = other.GetComponent<MovingCamera>().speed;
             other.GetComponent<MovingCamera>().speed = 0;
             reswpawn = true;

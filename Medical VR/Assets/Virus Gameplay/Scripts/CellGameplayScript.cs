@@ -61,7 +61,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[1].SetActive(false);
                 Sceneries[2].SetActive(true);
                 I = 10;
-                subtitles.GetComponent<SubstitlesScript>().theTimer = 261f;
+                subtitles.GetComponent<SubstitlesScript>().theTimer = 262f;
                 theCamera.transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
@@ -317,47 +317,47 @@ public class CellGameplayScript : MonoBehaviour
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line24") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line24");
                 break;
-            case 249:
-                if(t >= 249.5)
-                if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line25") == false)
-                    SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line25");
+            case 250:
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case 250:
+            case 251:
+                if(t >= 251.5)
+                if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line25") == false)
+                    SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line25");
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case 256:
+            case 258:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line26") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line26");
 
                 break;
-            case 259:
+            case 260:
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case 260:
+            case 261:
                 //FightVirus
                 GlobalVariables.arcadeMode = false;
                 SceneManager.LoadScene("FightVirus");
                 break;
-            case 261:
+            case 262:
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line27") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line27");
                 break;
-            case 273:
+            case 274:
                 
                     if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line28") == false)
                         SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line28");
                 break;
-            case 284:
+            case 285:
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
-            case 285:
+            case 286:
                 GlobalVariables.CellGameplayCompleted = 1;
                 SceneManager.LoadScene("MainMenu");
                 break;
