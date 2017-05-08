@@ -44,4 +44,9 @@ public class SpawnSting : MonoBehaviour {
         Gizmos.color = new Color(1, 0, 0, 0.5f);
         Gizmos.DrawSphere(/*transform.localPosition + */Center.transform.position, size);
     }
+
+    private void OnDisable()
+    {
+        CancelInvoke("SpawnC");
+    }
 }
