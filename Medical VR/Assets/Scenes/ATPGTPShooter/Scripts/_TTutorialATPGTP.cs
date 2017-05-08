@@ -8,6 +8,7 @@ public class _TTutorialATPGTP : MonoBehaviour
     public GameObject enzyme;
     public GameObject ATP;
     public GameObject GTP;
+    public GameObject tutorialStuff;
     GameObject enz;
     GameObject atp;
     GameObject gtp;
@@ -81,10 +82,11 @@ public class _TTutorialATPGTP : MonoBehaviour
                 if(MoveToEnzyme(gtp))
                 {
                     ChangeTutorialState(TutorialState.wait);
+                    ChangeTutorialState(TutorialState.startGame);
                 }
                 break;
             case TutorialState.startGame:
-                GetComponent<_TGameController>().runGameState();
+                GetComponent<_TGameController>().runGameState(10);
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.wait:

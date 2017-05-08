@@ -9,6 +9,7 @@ public class ObjectsCollector
 {
     public GameObject Player;
     public GameObject shotsUI;
+    public GameObject scoreUI;
     public GameObject hazardCollector;
     public GameObject mitocondriaCollector;
     public GameObject enzymeCollector;
@@ -38,6 +39,10 @@ enum GameState { tutorial, play, end }
 
 public class _TGameController : MonoBehaviour
 {
+    public bool testTutorial;
+
+    [HideInInspector]
+    public static float finalATPScore;
     private GameState gameState;
     public GameObject[] uiElements;
     public ObjectsCollector shrinkStuff;
@@ -83,7 +88,8 @@ public class _TGameController : MonoBehaviour
         SetFacebook();
         isTutorial = GlobalVariables.tutorial;
         // For Testing //
-        isTutorial = false;
+        if(testTutorial)
+            isTutorial = testTutorial;
         /////////////////
 
         if (isTutorial)
@@ -98,6 +104,7 @@ public class _TGameController : MonoBehaviour
                 {
                     sc.startSmall = true;
                     obj.GetComponent<_TSizeChange>().Inititalize();
+                    obj.GetComponent<_TSizeChange>().ResetToSmall();
                 }
             }
         }
@@ -137,6 +144,8 @@ public class _TGameController : MonoBehaviour
             else
                 Invoke("MoveToNewScene", 5);
             Invoke("ShrinkObjects", 2);
+            if (finalATPScore < score)
+                finalATPScore = score;
         }
     }
 
@@ -161,6 +170,7 @@ public class _TGameController : MonoBehaviour
             child.GetComponent<_TSizeChange>().StartShrink();
 
         shrinkStuff.shotsUI.GetComponent<_TSizeChange>().StartShrink();
+        // shrinkStuff.scoreUI.GetComponent<_TSizeChange>().StartShrink();
     }
     void ShrinkChild(Transform child)
     {
@@ -249,14 +259,19 @@ public class _TGameController : MonoBehaviour
         shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
         StartCoroutine("SpawnWaves");
         StartCoroutine("SpawnHazards");
+        shrinkStuff.mitocondriaCollector.SetActive(true);
         foreach (Transform child in shrinkStuff.mitocondriaCollector.transform)
+        {
+            child.GetComponent<_TSizeChange>().Inititalize();
+            child.GetComponent<_TSizeChange>().ResetToSmall();
             child.GetComponent<_TSizeChange>().StartGrow();
+        }
         shrinkStuff.listOfLines.SetActive(true);
     }
-    public void runGameState()
+    public void runGameState(float time)
     {
         gameState = GameState.play;
-        Invoke("StartScene", 1);
+        Invoke("StartScene", time);
     }
     public void FadeScreen()
     {
