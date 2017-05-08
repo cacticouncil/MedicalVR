@@ -7,10 +7,9 @@ public class SmartPause : MonoBehaviour
     public GameObject buttons;
     public GameObject mainMenu;
     public GameObject resume;
-    public ChangeScene sceneController;
-    public bool isPaused = false;
-    public float buttonHeldTimer = 0.0f;
-    public float angle = 30;
+    private bool isPaused = false;
+    private float buttonHeldTimer = 0.0f;
+    private float angle = 30;
 
     private bool last = false;
 
@@ -44,8 +43,8 @@ public class SmartPause : MonoBehaviour
                 else if (Vector3.Angle(player.transform.forward, mainMenu.transform.position - player.transform.position) < angle)
                 {
                     Resume();
-                    sceneController.index = 7;
-                    sceneController.EnterEvent();
+                    ChangeScene.index = 7;
+                    ChangeScene.EnterEvent();
                 }
             }
         }
