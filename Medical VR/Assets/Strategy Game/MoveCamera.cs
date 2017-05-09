@@ -17,18 +17,22 @@ public class MoveCamera : MonoBehaviour
         startTime = Time.time;
         GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
     }
-    
-    void FixedUpdate()
+
+    IEnumerator Move()
     {
-        float disCovered = (Time.time - startTime) * speed;
-        float fracJourney = disCovered / distance;
-        if (fracJourney <= 1.0f)
+        while (transform.position != endPosition)
         {
-            GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(startPosition, endPosition, fracJourney));
-        }
-        else
-        {
-            GetComponent<Rigidbody>().MovePosition(endPosition);
+            float disCovered = (Time.time - startTime) * speed;
+            float fracJourney = disCovered / distance;
+            if (fracJourney <= 1.0f)
+            {
+                GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(startPosition, endPosition, fracJourney));
+            }
+            else
+            {
+                GetComponent<Rigidbody>().MovePosition(endPosition);
+            }
+            yield return new WaitForFixedUpdate();
         }
     }
 
@@ -38,5 +42,7 @@ public class MoveCamera : MonoBehaviour
         startPosition = transform.position;
         distance = Mathf.Max(Vector3.Distance(startPosition, endPosition), .001f);
         startTime = Time.time;
+        StopCoroutine(Move());
+        StartCoroutine(Move());
     }
 }
