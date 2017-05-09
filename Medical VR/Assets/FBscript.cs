@@ -30,7 +30,6 @@ public class FBscript : MonoBehaviour
     public GameObject ScrollScoreList;
     void Awake()
     {
-        GlobalScore = 0;
         FacebookManager.Instance.InitFB();
         DealWithFBMenus(FB.IsLoggedIn);
     }
@@ -103,6 +102,7 @@ public class FBscript : MonoBehaviour
             {
                 StartCoroutine("WaitForProfilePic");
             }
+            SetScore();
         }
         else
         {
@@ -208,16 +208,21 @@ public class FBscript : MonoBehaviour
         }
     }
 
- //   public void SetScore(int Scoreint)
- //   {
- //       var ScoreData = new Dictionary<string, string>();
- //   //    GlobalScore += Scoreint;
- //       GlobalScore = 50;
- //       ScoreData["score"] = GlobalScore.ToString();
- //
- //       FB.API("/me/scores", HttpMethod.POST, delegate(IGraphResult result) {Debug.Log("Score Submitted successfully" + result.RawResult);}, ScoreData);
- //       Debug.Log("Sending a score of " + GlobalScore);
- //   }
+    public void SetScore()
+    {
+        if (GlobalScore > PlayerPrefs.GetInt("GlobalScore"))
+        {
+            PlayerPrefs.SetInt("GlobalScore", GlobalScore);
+        }
+        else
+            GlobalScore = PlayerPrefs.GetInt("GlobalScore");
+
+        var ScoreData = new Dictionary<string, string>();
+        ScoreData["score"] = GlobalScore.ToString();
+
+        FB.API("/me/scores", HttpMethod.POST, delegate (IGraphResult result) { Debug.Log("Score Submitted successfully" + result.RawResult); }, ScoreData);
+        Debug.Log("Sending a score of " + GlobalScore);
+    }
 
     public void newSetScore()
     {
