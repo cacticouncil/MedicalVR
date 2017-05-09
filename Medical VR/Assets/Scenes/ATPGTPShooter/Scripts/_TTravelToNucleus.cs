@@ -14,6 +14,8 @@ public class _TTravelToNucleus : MonoBehaviour
     public GameObject nucleus;
     [HideInInspector]
     public bool hasATP, hasGTP;
+    [HideInInspector]
+    public float waitTime = 0;
 
     private nucleusPathChild targetPath;
    // private GameObject nearestPath;
@@ -51,6 +53,11 @@ public class _TTravelToNucleus : MonoBehaviour
     }
     public void StartTravel()
     {
+        Invoke("RunTravel", waitTime);
+    }
+
+    void RunTravel()
+    {
         if (!nucleus)
             return;
         Vector3 farPoint = nucleus.transform.GetChild((int)nucleusChild.MovementPath).GetChild((int)nucleusPathChild.FarPoint).transform.position;
@@ -72,6 +79,7 @@ public class _TTravelToNucleus : MonoBehaviour
             phase = TravelPhase.travelToER;
         }
     }
+
     nucleusPathChild GetPath(nucleusPathChild curNearPath, nucleusPathChild compPath)
     {
         Vector3 curP = nucleus.transform.GetChild((int)nucleusChild.MovementPath).GetChild((int)curNearPath).transform.position;

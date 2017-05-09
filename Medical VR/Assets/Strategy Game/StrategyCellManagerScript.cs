@@ -165,7 +165,8 @@ public class StrategyCellManagerScript : MonoBehaviour
                     t.GetComponent<StrategyCellScript>().defense = 5;
                     t.GetComponent<StrategyCellScript>().immunity = 5;
                     t.GetComponent<StrategyCellScript>().enabled = true;
-                    t.GetComponent<Collider>().enabled = true;
+                    if (t.GetComponent<Collider>())
+                        t.GetComponent<Collider>().enabled = true;
                     t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
                 }
                 break;
@@ -334,7 +335,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 "\nYou spread " + (int)immunitySpread + " immunity." +
                 "\nYou killed " + virusKills + " viruses." +
                 "\nAt this point you can continue in sandbox mode, retry, or return to the main menu.";
-            Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
+            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
             SetSelected(victoryIndex);
         }
         else if (virNum > cellNum && !defeat && victoryObject)
@@ -349,7 +350,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 "\nYou spawned " + cellsSpawned + " cells." +
                 "\nYou spread " + (int)immunitySpread + " immunity." +
                 "\nYou killed " + virusKills + " viruses.";
-            Camera.main.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
+            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
             SetSelected(victoryIndex);
         }
     }

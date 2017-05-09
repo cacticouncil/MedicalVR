@@ -303,6 +303,7 @@ public class VirusGameplayScript : MonoBehaviour
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-032");
                 break;
             case (286):
+                GlobalVariables.tutorial = true;
                 GlobalVariables.arcadeMode = false;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;

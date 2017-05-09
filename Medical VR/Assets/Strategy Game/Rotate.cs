@@ -8,7 +8,11 @@ public class Rotate : MonoBehaviour
 
     void Update()
     {
-        if (x && y && z)
+        if (GetComponent<Rigidbody>())
+        {
+            GetComponent<Rigidbody>().angularVelocity = rotation;
+        }
+        else if (x && y && z)
         {
             transform.Rotate(new Vector3(Time.deltaTime * rotation.x, Time.deltaTime * rotation.y, Time.deltaTime * rotation.z));
         }
