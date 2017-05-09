@@ -284,7 +284,7 @@ public class StrategyTutorial : MonoBehaviour
 
             //Clean Up 
             case 27:
-                subtitles.gameObject.SetActive(false);
+                subtitles.text = "";
                 StopAllCoroutines();
                 cellManager.SetActive(true);
                 strategyBox.SetActive(true);
@@ -403,15 +403,6 @@ public class StrategyTutorial : MonoBehaviour
     #region Text
     IEnumerator TurnTextOn(int index)
     {
-        //subtitles.text += "_";
-
-        //while (subtitles.text.Length > 1)
-        //{
-        //    subtitles.text = subtitles.text.Remove(subtitles.text.Length - 2, 1);
-        //    yield return new WaitForSeconds(GlobalVariables.textDelay * .5f);
-        //}
-        //yield return new WaitForSeconds(GlobalVariables.textDelay);
-
         while (text)
             yield return 0;
 

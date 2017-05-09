@@ -24,16 +24,16 @@ public class ManageScores : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        MemoryScoreText.GetComponent<TextMeshPro>().text = "Memory Game: "; //MemoryUI.score.ToString();
-        SimonDNAScoreText.GetComponent<TextMeshPro>().text = "";
-        cGAMPScoreText.GetComponent<TextMeshPro>().text = "cGAMP Snatcher: " /*+ Storebullets.score.ToString()*/;
-        DodgeScoreText.GetComponent<TextMeshPro>().text = "";
+        MemoryScoreText.GetComponent<TextMeshPro>().text = "Memory Game: " + MemoryUI.finalScore.ToString();
+        SimonDNAScoreText.GetComponent<TextMeshPro>().text = "Simon DNA: ";
+        cGAMPScoreText.GetComponent<TextMeshPro>().text = "cGAMP Snatcher: " + Storebullets.finalScore.ToString();
+        DodgeScoreText.GetComponent<TextMeshPro>().text = "ATP/GTP Shooter: " + _TGameController.finalATPScore.ToString();
         VirusScoreText.GetComponent<TextMeshPro>().text = "";
         CellScoreText.GetComponent<TextMeshPro>().text = "";
         StrategyScoreText.GetComponent<TextMeshPro>().text = "";
         ATPScoreText.GetComponent<TextMeshPro>().text = "";
 
-        //FBscript.GlobalScore = ((int)MemoryUI.score + (int)Storebullets.score) % 1000;
+        FBscript.GlobalScore = ((int)MemoryUI.finalScore + (int)Storebullets.finalScore + (int)_TGameController.finalATPScore) % 1000;
 
     }
 }

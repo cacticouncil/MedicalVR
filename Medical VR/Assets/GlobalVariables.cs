@@ -29,6 +29,18 @@ public static class GlobalVariables
         }
     }
 
+    public static float textSize
+    {
+        get
+        {
+            return PlayerPrefs.GetFloat("TextSize");
+        }
+        set
+        {
+            PlayerPrefs.SetFloat("TextSize", value);
+        }
+    }
+
     public static int VirusGameplayCompleted
     {
         get
