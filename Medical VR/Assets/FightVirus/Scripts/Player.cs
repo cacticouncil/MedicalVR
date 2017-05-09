@@ -7,6 +7,16 @@ using System;
 
 public class Player : MonoBehaviour
 {
+    public GameObject ScoreObj;
+    public GameObject VirusCount;
+    public GameObject CenterScreenObj;
+    public GameObject EnemyManger;
+    public GameObject BulletSpawn;
+    public GameObject BlackCurtain;
+
+    public GameObject ScoreBoard;
+    public FacebookStuff FB;
+
     //Variables for tutorial
     float TutorialTimer = 0.0f;
     int WhatToRead = 0;
@@ -14,7 +24,9 @@ public class Player : MonoBehaviour
     bool SpawnWaveTwice = false;
 
     //Variables for game
+    public static float FinalScore;
     public float Score = 0.0f;
+    float ScoreMultiplier = 0.0f;
     public int VirusLeaveCount = 0;
 
     float RuleTimer = 0.0f;
@@ -27,19 +39,10 @@ public class Player : MonoBehaviour
     bool DisplayRules;
     public bool isGameOver;
     public bool DisplayWaveNumber = false;
-
-    public GameObject ScoreObj;
-    public GameObject VirusCount;
-    public GameObject CenterScreenObj;
-    public GameObject EnemyManger;
-    public GameObject BulletSpawn;
-    public GameObject BlackCurtain;
-
-    public GameObject ScoreBoard;
-    public FacebookStuff FB;
-
+    public bool BeatBoss = false;
     void Start()
     {
+        BannerScript.LockTrophy("Virus Trophy");
         DisplayRules = true;
         isGameOver = false;
         SetFacebook();
@@ -54,11 +57,7 @@ public class Player : MonoBehaviour
         {
             if (isGameOver == false)
             {
-                if (GlobalVariables.arcadeMode)
-                    ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + Score.ToString();
-
                 VirusCount.GetComponent<TextMeshPro>().text = "VirusCount: " + VirusLeaveCount.ToString();
-
 
                 if (RuleTimer >= 4.0f && RuleTimer <= 5.0f)
                 {
@@ -128,6 +127,8 @@ public class Player : MonoBehaviour
 
             if (GlobalVariables.arcadeMode)
             {
+                ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + Score.ToString();
+
                 //If you lose arcade bring up scorebaord
                 if (VirusLeaveCount == 10)
                 {
@@ -144,6 +145,10 @@ public class Player : MonoBehaviour
                     ScoreBoard.SetActive(true);
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You win arcade mode";
                     ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
+                    if (VirusLeaveCount == 0 && BeatBoss == true)
+                    {
+                        BannerScript.UnlockTrophy("Virus Trophy");
+                    }
                 }
             }
 
@@ -328,10 +333,7 @@ public class Player : MonoBehaviour
             CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now you're ready to play";
 
             if (BeatGameTimer >= 2.0f)
-            {
-                GlobalVariables.tutorial = false;
-                SceneManager.LoadScene("FightVirus");
-            }
+                StoryMode();         
         }
     }
 
@@ -344,5 +346,11 @@ public class Player : MonoBehaviour
     {
         FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + Score.ToString(); /// + FacebookManager.Instance.GlobalScore /;
         FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
+    }
+
+    void StoryMode()
+    {
+        GlobalVariables.tutorial = false;
+        SceneManager.LoadScene("FightVirus");
     }
 }

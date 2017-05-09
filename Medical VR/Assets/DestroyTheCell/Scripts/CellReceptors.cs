@@ -8,12 +8,13 @@ public class CellReceptors : MonoBehaviour
     GameObject WaveManager;
     public GameObject VirusAttack;
 
-    private bool AmITargeted = false;
+    public bool AmITargeted = false;
     private bool NeverTargetAgain = false;
 
     public int Health = 4;
     private float SpeedForTutorial = .008f;
     public float TutorialCellReceptorTimer = 0.0f;
+    bool DontCheckAgain = false;
     Vector3 SavedLocation;
     void Start()
     {
@@ -37,7 +38,7 @@ public class CellReceptors : MonoBehaviour
         if (Player.GetComponent<VirusPlayer>().isGameover)
             Destroy(this.gameObject);
 
-        if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
+        if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1 && DontCheckAgain == false)
         {
             AmITargeted = false;
 
@@ -54,16 +55,16 @@ public class CellReceptors : MonoBehaviour
 
             else if (Player.GetComponent<VirusPlayer>().IsCellDoneIdling == true && Player.GetComponent<VirusPlayer>().WhatToRead == 4)
             {
-                if (TutorialCellReceptorTimer <= 6.0f)
+                if (TutorialCellReceptorTimer <= 6.5f)
                 {
                     transform.LookAt(Player.GetComponent<VirusPlayer>().transform.position);
                     transform.position -= transform.forward * SpeedForTutorial;
                 }
 
-                if (TutorialCellReceptorTimer >= 6.0f)
+                if (TutorialCellReceptorTimer >= 6.5f)
                 {
-                    AmITargeted = true;
                     Player.GetComponent<VirusPlayer>().IsCellDoneMoving = true;
+                    DontCheckAgain = true;
                 }
             }
         }
@@ -72,8 +73,11 @@ public class CellReceptors : MonoBehaviour
 
     public void OnGazeEnter()
     {
-        Player.GetComponent<VirusPlayer>().currSpeed = 0;
-        AmITargeted = true;
+        if (AmITargeted == false)
+        {
+            Player.GetComponent<VirusPlayer>().currSpeed = 0;
+            AmITargeted = true;
+        }
     }
 
     public void OnGazeExit()
