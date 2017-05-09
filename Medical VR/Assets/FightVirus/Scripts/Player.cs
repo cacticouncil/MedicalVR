@@ -39,9 +39,10 @@ public class Player : MonoBehaviour
     bool DisplayRules;
     public bool isGameOver;
     public bool DisplayWaveNumber = false;
-
+    public bool BeatBoss = false;
     void Start()
     {
+        BannerScript.LockTrophy("Virus Trophy");
         DisplayRules = true;
         isGameOver = false;
         SetFacebook();
@@ -144,6 +145,10 @@ public class Player : MonoBehaviour
                     ScoreBoard.SetActive(true);
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You win arcade mode";
                     ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
+                    if (VirusLeaveCount == 0 && BeatBoss == true)
+                    {
+                        BannerScript.UnlockTrophy("Virus Trophy");
+                    }
                 }
             }
 
