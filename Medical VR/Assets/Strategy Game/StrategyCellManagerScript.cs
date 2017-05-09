@@ -192,7 +192,8 @@ public class StrategyCellManagerScript : MonoBehaviour
                     t.GetComponent<StrategyCellScript>().defense = 1;
                     t.GetComponent<StrategyCellScript>().immunity = 1;
                     t.GetComponent<StrategyCellScript>().enabled = true;
-                    t.GetComponent<Collider>().enabled = true;
+                    if (t.GetComponent<Collider>())
+                        t.GetComponent<Collider>().enabled = true;
                     t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
                 }
                 break;
@@ -216,7 +217,8 @@ public class StrategyCellManagerScript : MonoBehaviour
                     t.GetComponent<StrategyCellScript>().defense = 0;
                     t.GetComponent<StrategyCellScript>().immunity = 0;
                     t.GetComponent<StrategyCellScript>().enabled = true;
-                    t.GetComponent<Collider>().enabled = true;
+                    if (t.GetComponent<Collider>())
+                        t.GetComponent<Collider>().enabled = true;
                     t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
                 }
                 break;
