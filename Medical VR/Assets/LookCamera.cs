@@ -12,7 +12,7 @@ public class LookCamera : MonoBehaviour
         StartCoroutine(Rotate());
     }
 
-    IEnumerator Rotate()
+    public IEnumerator Rotate()
     {
         yield return 0;
         Vector3 angles = transform.GetChild(0).localEulerAngles;
