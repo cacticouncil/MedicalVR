@@ -14,6 +14,7 @@ public class CellReceptors : MonoBehaviour
     public int Health = 4;
     private float SpeedForTutorial = .008f;
     public float TutorialCellReceptorTimer = 0.0f;
+    bool DontCheckAgain = false;
     Vector3 SavedLocation;
     void Start()
     {
@@ -37,7 +38,7 @@ public class CellReceptors : MonoBehaviour
         if (Player.GetComponent<VirusPlayer>().isGameover)
             Destroy(this.gameObject);
 
-        if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1)
+        if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1 && DontCheckAgain == false)
         {
             AmITargeted = false;
 
@@ -62,8 +63,8 @@ public class CellReceptors : MonoBehaviour
 
                 if (TutorialCellReceptorTimer >= 6.5f)
                 {
-                    AmITargeted = true;
                     Player.GetComponent<VirusPlayer>().IsCellDoneMoving = true;
+                    DontCheckAgain = true;
                 }
             }
         }
