@@ -9,8 +9,6 @@ public class LookCamera : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
-
         StartCoroutine(Rotate());
     }
 
@@ -18,8 +16,10 @@ public class LookCamera : MonoBehaviour
     {
         yield return 0;
         Vector3 angles = transform.GetChild(0).localEulerAngles;
-        Quaternion m_parentToChild = Quaternion.Euler(0.0f, -angles.y, 0.0f);
+        Quaternion m_parentToChild = Quaternion.Euler(-angles.x, -angles.y, -angles.z);
         Quaternion lookRotation = Quaternion.LookRotation(target.transform.position - transform.position);
-        transform.rotation = lookRotation * m_parentToChild;
+        Vector3 euler = (lookRotation * m_parentToChild).eulerAngles;
+        euler.x = euler.z = 0.0f;
+        transform.rotation = Quaternion.Euler(euler);
     }
 }
