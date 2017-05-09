@@ -204,6 +204,7 @@ public class Virus : MonoBehaviour
                         Destroy(gameObject);
                         FightVirusPlayer.GetComponent<Player>().Score += 100;
                         FightVirusPlayer.GetComponent<Player>().isGameOver = true;
+                        FightVirusPlayer.GetComponent<Player>().BeatBoss = true;
                     }
                 }
             }

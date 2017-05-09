@@ -178,7 +178,7 @@ public class VirusPlayer : MonoBehaviour
 
             if (WhatToRead == 4 && IsCellDoneMoving == true)
                 CanIRead = true;
-            
+
             if (WhatToRead == 6 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0)
                 CanIRead = true;
 
@@ -241,7 +241,6 @@ public class VirusPlayer : MonoBehaviour
 
                     case 10:
                         StartCoroutine(DisplayText("Great! now you're ready to play", 3.5f));
-                        TutorialModeCompleted = true;
                         break;
 
                     default:
@@ -308,7 +307,7 @@ public class VirusPlayer : MonoBehaviour
 
         if (WhatToRead == 4 && IsCellDoneMoving == false)
             CanIRead = false;
-        
+
         if (WhatToRead == 6 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count != 0)
             CanIRead = false;
 
@@ -317,6 +316,9 @@ public class VirusPlayer : MonoBehaviour
 
         if (WhatToRead == 10 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count != 0)
             CanIRead = false;
+
+        if (WhatToRead == 11)
+            TutorialModeCompleted = true;
     }
 
     public void Respawn()
@@ -334,6 +336,13 @@ public class VirusPlayer : MonoBehaviour
     void PlayStory()
     {
         GlobalVariables.tutorial = false;
+        SceneManager.LoadScene("DestroyTheCell");
+    }
+
+    public void PlayArcade()
+    {
+        GlobalVariables.tutorial = false;
+        GlobalVariables.arcadeMode = true;
         SceneManager.LoadScene("DestroyTheCell");
     }
 
