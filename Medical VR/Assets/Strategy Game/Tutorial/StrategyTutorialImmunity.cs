@@ -386,6 +386,8 @@ public class StrategyTutorialImmunity : MonoBehaviour
         stop.Clear();
         protein.SetActive(false);
 
+        subtitles.text = "";
+
         //Fade to black
         StartCoroutine(FadeInObject(fade));
         yield return new WaitForSeconds(1.0f);

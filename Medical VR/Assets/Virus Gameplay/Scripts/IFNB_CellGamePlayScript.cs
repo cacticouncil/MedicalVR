@@ -14,6 +14,7 @@ public class IFNB_CellGamePlayScript : MonoBehaviour {
         {
             case 4:
                 proteins.SetActive(true);
+                gameObject.SetActive(false);
                 break;
             default:
                 break;
@@ -33,7 +34,7 @@ public class IFNB_CellGamePlayScript : MonoBehaviour {
             moveSpeed = 20;
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * moveSpeed);
         }
-        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 250)
+        if (subtitles.GetComponent<SubstitlesScript>().theTimer > 251)
         {
             proteins.SetActive(true);
         }

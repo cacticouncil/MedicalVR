@@ -25,18 +25,12 @@ public class StrategyVirusScript : MonoBehaviour
     private float startTime = 0.0f;
     private bool trav = false;
     private Vector2 key = new Vector2(-500, 500);
-
-    private MoveCamera mainCamera;
+    
     private float scaledDistance = 1.3f;
 
     // Use this for initialization
     void Start()
     {
-        if (mainCamera == null)
-        {
-            mainCamera = Camera.main.GetComponent<MoveCamera>();
-        }
-
         startingPosition = prevPosition = nextPosition = transform.position;
         if (target)
         {
@@ -183,7 +177,7 @@ public class StrategyVirusScript : MonoBehaviour
         if (!selected)
         {
             //Get the direction of the player from the cell
-            Vector3 heading = mainCamera.transform.position - transform.position;
+            Vector3 heading = Camera.main.transform.position - transform.position;
             //Don't change y value
             heading.y = 0;
             //Find normalized direction
@@ -201,7 +195,7 @@ public class StrategyVirusScript : MonoBehaviour
             transform.GetChild(0).transform.LookAt(finalPos);
 
             //This is the new target position
-            mainCamera.SetDestination(finalPos);
+            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(finalPos);
             parent.SetSelected(key);
             ToggleUI(true);
             parent.viewingStats = true;
