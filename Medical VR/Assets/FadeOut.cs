@@ -5,13 +5,14 @@ using UnityEngine;
 public class FadeOut : MonoBehaviour
 {
     // Use this for initialization
-    void Start()
+    void OnEnable()
     {
         StartCoroutine(FadeOutObject(gameObject.GetComponent<Renderer>()));
     }
 
     IEnumerator FadeOutObject(Renderer g)
     {
+        g.enabled = true;
         if (g.material.HasProperty("_Color"))
         {
             Color c = g.material.color;
@@ -25,9 +26,10 @@ public class FadeOut : MonoBehaviour
                 g.material.color = c;
                 yield return 0;
             }
-            c.a = 1.0f;
+            c.a = 0.0f;
             g.material.color = c;
         }
-        Destroy(gameObject);
+        g.enabled = false;
+        enabled = false;
     }
 }

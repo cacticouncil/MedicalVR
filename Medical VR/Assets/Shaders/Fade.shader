@@ -4,7 +4,7 @@
 	}
 
 		SubShader{
-		Tags{ "Queue" = "Overlay" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
+		Tags{ "Queue" = "Overlay-1" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
 		Cull Front
 		ZTest Always
 		ZWrite Off

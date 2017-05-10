@@ -275,8 +275,8 @@ public class VirusPlayer : MonoBehaviour
 
             else if (DelaySpawn == false)
             {
-                transform.position += transform.forward * currSpeed;
-                GetComponent<Rigidbody>().velocity *= currSpeed;
+                transform.parent.position += transform.forward * currSpeed;
+                transform.parent.GetComponent<Rigidbody>().velocity *= currSpeed;
             }
         }
 
@@ -284,7 +284,7 @@ public class VirusPlayer : MonoBehaviour
         {
             if (CanIMove == true)
             {
-                transform.position += transform.forward * currSpeed;
+                transform.parent.position += transform.forward * currSpeed;
                 GetComponent<Rigidbody>().velocity *= currSpeed;
             }
         }
@@ -323,7 +323,7 @@ public class VirusPlayer : MonoBehaviour
 
     public void Respawn()
     {
-        transform.position = Spawn.transform.position;
+        transform.parent.position = Spawn.transform.position;
         DelaySpawn = true;
     }
 
