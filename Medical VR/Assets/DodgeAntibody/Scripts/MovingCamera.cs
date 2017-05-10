@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class MovingCamera : MonoBehaviour
 {
+    public static float finalScore;
+
     public GameObject subtitles, cam;
     public float speed;
     public GameObject theScore, theLives, scoreBoard, UI, Username, ProfilePic;
@@ -32,6 +34,10 @@ public class MovingCamera : MonoBehaviour
     }
     void ShowScore()
     {
+        if(score > finalScore)
+        {
+            finalScore = score;
+        }
         UI.SetActive(false);
         transform.position = originPos;
         speed = 0;
