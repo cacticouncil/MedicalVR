@@ -29,9 +29,10 @@ public class CellReceptors : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GvrViewer.Instance.Triggered && AmITargeted == true && NeverTargetAgain == false)
+        if (Input.GetButton("Fire1") && AmITargeted == true && NeverTargetAgain == false)
         {
             NeverTargetAgain = true;
+            Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
             StartCoroutine(FireAttackVirus(4, .3f));
         }
 
@@ -73,7 +74,7 @@ public class CellReceptors : MonoBehaviour
 
     public void OnGazeEnter()
     {
-        if (AmITargeted == false)
+        if (AmITargeted == false && NeverTargetAgain == false)
         {
             Player.GetComponent<VirusPlayer>().currSpeed = 0;
             AmITargeted = true;
@@ -101,8 +102,6 @@ public class CellReceptors : MonoBehaviour
             SpawnAttackVirus();
             yield return new WaitForSeconds(duration);
         }
-
-        Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
     }
 
     void OnDestroy()

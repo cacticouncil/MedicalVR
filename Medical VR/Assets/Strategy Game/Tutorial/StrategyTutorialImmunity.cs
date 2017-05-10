@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class StrategyTutorialImmunity : MonoBehaviour
 {
-    public GameObject cam;
+    public Transform cam;
     public GameObject eventSystem;
-    public GameObject fadePrefab;
+    public GameObject fade;
     public GameObject immunityParticles;
     public GameObject holder;
     public GameObject objects;
@@ -23,7 +23,6 @@ public class StrategyTutorialImmunity : MonoBehaviour
     public List<TMPro.TextMeshPro> texts = new List<TMPro.TextMeshPro>();
 
     private Vector3 prevPos;
-    private GameObject fade;
     private bool last = false, text = false, finish = false, advance = false;
     private List<Coroutine> stop = new List<Coroutine>();
 
@@ -31,9 +30,9 @@ public class StrategyTutorialImmunity : MonoBehaviour
     {
         eventSystem.SetActive(false);
         if (cam == null)
-            cam = Camera.main.gameObject;
+            cam = Camera.main.transform.parent;
 
-        prevPos = cam.transform.position;
+        prevPos = cam.position;
         StartCoroutine(Advance());
     }
 
@@ -56,23 +55,21 @@ public class StrategyTutorialImmunity : MonoBehaviour
 
     IEnumerator Advance()
     {
-        //Fade to black
-        fade = Instantiate(fadePrefab, cam.transform.position, cam.transform.rotation, cam.transform) as GameObject;
-        yield return 0;
-        StartCoroutine(FadeInObject(fade));
+        //Fade In
+        fade.GetComponent<FadeIn>().enabled = true;
         yield return new WaitForSeconds(1.0f);
 
-        //Fade In
-        cam.transform.position = transform.position;
-        Vector3 forward = cam.transform.forward;
+        //Fade Out
+        cam.position = transform.position;
+        Vector3 forward = cam.forward;
         forward.y = 0.0f;
         holder.transform.position = forward + transform.position;
         yield return 0;
-        holder.transform.LookAt(cam.transform);
+        holder.transform.LookAt(cam);
         holder.SetActive(true);
         immDes.text = "Immunity: 0";
 
-        StartCoroutine(FadeOutObject(fade));
+        fade.GetComponent<FadeOut>().enabled = true;
         yield return new WaitForSeconds(1.0f);
 
         //Immunity spreads from cell to cell and helps you fight back against viruses in multiple ways. 
@@ -388,14 +385,14 @@ public class StrategyTutorialImmunity : MonoBehaviour
 
         subtitles.text = "";
 
-        //Fade to black
-        StartCoroutine(FadeInObject(fade));
+        //Fade In
+        fade.GetComponent<FadeIn>().enabled = true;
         yield return new WaitForSeconds(1.0f);
 
-        //Fade In
-        cam.transform.position = prevPos;
-        StartCoroutine(FadeOutObject(fade));
-        yield return new WaitForSeconds(1.5f);
+        //Fade Out
+        cam.position = prevPos;
+        fade.GetComponent<FadeOut>().enabled = true;
+        yield return new WaitForSeconds(1.0f);
 
         foreach (GameObject cell in cells)
         {
@@ -410,7 +407,6 @@ public class StrategyTutorialImmunity : MonoBehaviour
 
         holder.SetActive(false);
         eventSystem.SetActive(true);
-        Destroy(fade);
         enabled = false;
     }
 

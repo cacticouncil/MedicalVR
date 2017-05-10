@@ -7,7 +7,10 @@ public class SmartPause : MonoBehaviour
     public GameObject buttons;
     public GameObject mainMenu;
     public GameObject resume;
-   public bool isPaused = false;
+    public GameObject fade;
+    [System.NonSerialized]
+    public bool isPaused = false;
+
     private float buttonHeldTimer = 0.0f;
     private float angle = 30;
 
@@ -44,7 +47,13 @@ public class SmartPause : MonoBehaviour
                 {
                     Resume();
                     ChangeScene.index = 7;
-                    ChangeScene.EnterEvent();
+                    if (fade)
+                    {
+                        fade.GetComponent<FadeIn>().enabled = true;
+                        StartCoroutine(Delay());
+                    }
+                    else
+                        ChangeScene.EnterEvent();
                 }
             }
         }
@@ -62,5 +71,12 @@ public class SmartPause : MonoBehaviour
         Time.timeScale = 1;
         SoundManager.Resume();
         SoundManager.UnPauseSFX();
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(1.0f);
+        Resume();
+        ChangeScene.EnterEvent();
     }
 }

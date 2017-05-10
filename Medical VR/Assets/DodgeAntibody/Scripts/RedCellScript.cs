@@ -39,7 +39,7 @@ public class RedCellScript : MonoBehaviour
                         VirusGameplayScript.loadCase = 1;
                         GlobalVariables.tutorial = false;
                         GlobalVariables.arcadeMode = TutorialGameObject.GetComponent<DodgeAntiBodyTutorial>().prevState;
-                        SceneManager.LoadScene("DodgeAnitbodies");
+                        SceneManager.LoadScene("DodgeAntibodies");
                     }
 
                     //When you beat story mode, go to next scene

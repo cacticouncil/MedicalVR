@@ -146,7 +146,7 @@ public class AntiViralProtein : MonoBehaviour
 
     void OnCollisionEnter(Collision c)
     {
-        if (c.gameObject.tag == "MainCamera" && AlwaysChasePlayer == true)
+        if (c.gameObject.tag == "Player" && AlwaysChasePlayer == true)
         {
             Destroy(gameObject);
             Player.GetComponent<VirusPlayer>().Lives -= 1;
