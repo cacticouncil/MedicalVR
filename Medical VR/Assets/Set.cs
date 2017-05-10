@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Set : MonoBehaviour
 {
+    public GameObject fade;
+
     public void SetDifficulty(int i)
     {
         GlobalVariables.difficulty = i;
@@ -21,12 +23,32 @@ public class Set : MonoBehaviour
 
     public void EnterScene()
     {
-        ChangeScene.EnterEvent();
+        SoundManager.PlaySFX("MenuEnter");
+        if (fade)
+        {
+            fade.GetComponent<FadeIn>().enabled = true;
+            StartCoroutine(EnterDelay());
+        }
+        else
+            ChangeScene.EnterEvent();
     }
 
     public void SetAndEnter(int i)
     {
+        SoundManager.PlaySFX("MenuEnter");
         ChangeScene.index = i;
+        if (fade)
+        {
+            fade.GetComponent<FadeIn>().enabled = true;
+            StartCoroutine(EnterDelay());
+        }
+        else
+            ChangeScene.EnterEvent();
+    }
+
+    IEnumerator EnterDelay()
+    {
+        yield return new WaitForSeconds(1.0f);
         ChangeScene.EnterEvent();
     }
 }

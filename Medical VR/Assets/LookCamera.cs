@@ -7,12 +7,12 @@ public class LookCamera : MonoBehaviour
     public Transform target;
 
     // Use this for initialization
-    void Start()
+    void OnEnable()
     {
         StartCoroutine(Rotate());
     }
 
-    IEnumerator Rotate()
+    public IEnumerator Rotate()
     {
         yield return 0;
         Vector3 angles = transform.GetChild(0).localEulerAngles;
@@ -21,5 +21,6 @@ public class LookCamera : MonoBehaviour
         Vector3 euler = (lookRotation * m_parentToChild).eulerAngles;
         euler.x = euler.z = 0.0f;
         transform.rotation = Quaternion.Euler(euler);
+        enabled = false;
     }
 }

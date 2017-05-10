@@ -19,7 +19,6 @@ public static class ChangeScene
 
     public static void EnterEvent()
     {
-        SoundManager.PlaySFX("MenuEnter");
         GlobalVariables.arcadeMode = true;
         switch (index)
         {

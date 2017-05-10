@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class MovingCamera : MonoBehaviour
 {
+    public static float finalScore;
+
     public GameObject subtitles, cam;
     public float speed;
-    public GameObject theScore, theLives, scoreBoard, UI, MenuButton, Username, ProfilePic;
+    public GameObject theScore, theLives, scoreBoard, UI, Username, ProfilePic;
     public float score = 0;
     public Color fogColor;
     public Vector3 originPos;
@@ -24,19 +26,20 @@ public class MovingCamera : MonoBehaviour
             theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         }
         //transform.position = originPos;
-        //MenuButton.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 100);
 
     }
     public void WinresetPos()
     {
         transform.position = originPos;
-        //MenuButton.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 100);
     }
     void ShowScore()
     {
+        if(score > finalScore)
+        {
+            finalScore = score;
+        }
         UI.SetActive(false);
         transform.position = originPos;
-        //MenuButton.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 100);
         speed = 0;
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);

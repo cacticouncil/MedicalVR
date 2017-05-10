@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class SimonSays : MonoBehaviour
 {
+    public static float finalScore;
+ 
     public GameObject yellow;
     public GameObject red;
     public GameObject blue;
@@ -47,7 +49,7 @@ public class SimonSays : MonoBehaviour
         selectedColor = (theColors)5;
         theScore.GetComponent<TMPro.TextMeshPro>().text = "Score: " + score.ToString();
         theLives.GetComponent<TMPro.TextMeshPro>().text = "Lives: " + lives.ToString();
-       gameTimer.GetComponent<TMPro.TextMeshPro>().text = "TIMER " + theTimer.ToString();
+        gameTimer.GetComponent<TMPro.TextMeshPro>().text = "TIMER " + theTimer.ToString();
         theTimer = 30;
         polys = 21;
         polysDone = 0;
@@ -253,6 +255,10 @@ public class SimonSays : MonoBehaviour
     }
     void ShowScore()
     {
+        if(score > finalScore)
+        {
+            finalScore = score;
+        }
         UI.SetActive(false);
        
         scoreBoard.SetActive(true);
