@@ -7,7 +7,8 @@ public class VirusGameplayScript : MonoBehaviour
 {
     public List<GameObject> places;
     public List<GameObject> Sceneries;
-    public GameObject subtitles, blackCurtain, theCamera, virus, rna;
+    public List<Transform> rotationTargets;
+    public GameObject subtitles, blackCurtain, theCamera, virus, rna, parent;
     public static int loadCase =0;
     // Use this for initialization
     delegate void Func();
@@ -191,10 +192,13 @@ public class VirusGameplayScript : MonoBehaviour
                     SceneManager.LoadScene("DodgeAntibodies");
                 break;
             case (133):
+                parent.GetComponent<LookCamera>().target = rotationTargets[0];
+                parent.GetComponent<LookCamera>().enabled = true;
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-013") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-013");
                 break;
             case (146):
+                parent.GetComponent<LookCamera>().enabled = false;
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-014") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-014");
                 break;
@@ -225,6 +229,8 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (182):
+                parent.GetComponent<LookCamera>().target = rotationTargets[1];
+                parent.GetComponent<LookCamera>().enabled = true;
                 Sceneries[1].SetActive(false);
                 Sceneries[2].SetActive(true);
                 I = 4;
@@ -234,6 +240,7 @@ public class VirusGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (183):
+                parent.GetComponent<LookCamera>().enabled = false;
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-020") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-020");
                 break;
@@ -273,6 +280,8 @@ public class VirusGameplayScript : MonoBehaviour
                 break;
             case (249):
                 I = 6;
+                parent.GetComponent<LookCamera>().target = rotationTargets[2];
+                parent.GetComponent<LookCamera>().enabled = true;
                 Sceneries[3].SetActive(true);
                 RenderSettings.fogDensity = 0;
                 theCamera.transform.position = places[I].transform.position;
@@ -282,6 +291,7 @@ public class VirusGameplayScript : MonoBehaviour
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-028");
                 break;
             case (252):
+                parent.GetComponent<LookCamera>().enabled = false;
                 doAction = NullFunction;
                 I = 7;
                 moveSpeed = 5;
@@ -313,15 +323,20 @@ public class VirusGameplayScript : MonoBehaviour
                     SceneManager.LoadScene("SimonDNA");
                 break;
             case (288):
+                parent.GetComponent<LookCamera>().target = rotationTargets[3];
+                parent.GetComponent<LookCamera>().enabled = true;
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-033") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-033");
                 rna.SetActive(true);
                 break;
             case (295):
+                parent.GetComponent<LookCamera>().enabled = false;
                 doAction = LowerCurtain;
                 fadeSpeed = 1.5f;
                 break;
             case (296):
+                parent.GetComponent<LookCamera>().target = rotationTargets[4];
+                parent.GetComponent<LookCamera>().enabled = true;
                 Sceneries[3].SetActive(false);
                 Sceneries[2].SetActive(true);
                 I = 8;
@@ -333,6 +348,7 @@ public class VirusGameplayScript : MonoBehaviour
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-034");
                 break;
             case (297):
+                parent.GetComponent<LookCamera>().enabled = false;
                 I = 9;
                 moveSpeed = 17.5f;
                 break;
@@ -372,6 +388,8 @@ public class VirusGameplayScript : MonoBehaviour
                 
                 break;
             case (353):
+                parent.GetComponent<LookCamera>().target = rotationTargets[5];
+                parent.GetComponent<LookCamera>().enabled = true;
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-040") == false)
