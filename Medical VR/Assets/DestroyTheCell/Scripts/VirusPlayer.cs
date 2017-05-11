@@ -24,7 +24,7 @@ public class VirusPlayer : MonoBehaviour
     public GameObject VirusAttack;
 
     [System.NonSerialized]
-    public float baseSpeed = .03f;
+    public float baseSpeed = 1;
     public float currSpeed;
 
     public int Lives;
@@ -280,6 +280,7 @@ public class VirusPlayer : MonoBehaviour
         {
             if (DelaySpawn == true)
             {
+                transform.parent.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 DelayTimer += Time.deltaTime;
                 if (DelayTimer >= 2.5f)
                 {
@@ -290,8 +291,7 @@ public class VirusPlayer : MonoBehaviour
 
             else if (DelaySpawn == false)
             {
-                transform.parent.position += transform.forward * currSpeed;
-                transform.parent.GetComponent<Rigidbody>().velocity *= currSpeed;
+                transform.parent.GetComponent<Rigidbody>().velocity = transform.forward * currSpeed;
             }
         }
 
@@ -299,8 +299,11 @@ public class VirusPlayer : MonoBehaviour
         {
             if (CanIMove == true)
             {
-                transform.parent.position += transform.forward * currSpeed;
-                GetComponent<Rigidbody>().velocity *= currSpeed;
+                transform.parent.GetComponent<Rigidbody>().velocity = transform.forward * currSpeed;
+            }
+            else
+            {
+                transform.parent.GetComponent<Rigidbody>().velocity = Vector3.zero;
             }
         }
     }
