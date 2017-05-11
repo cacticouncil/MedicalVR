@@ -286,7 +286,7 @@ public class VirusGameplayScript : MonoBehaviour
                 moveSpeed = 25;
                 break;
             case (236):
-                parent.GetComponent<CameraMovement_VirusGameplay>().speed = 1f;
+                parent.GetComponent<CameraMovement_VirusGameplay>().speed = 5f;
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-026") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-026");
                 break;
