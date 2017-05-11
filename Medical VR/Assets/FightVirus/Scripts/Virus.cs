@@ -186,7 +186,7 @@ public class Virus : MonoBehaviour
 
                 if (Health == 0)
                 {
-                    FightVirusPlayer.GetComponent<Player>().Score += 100;
+                    FightVirusPlayer.GetComponent<Player>().CurrentScore += 100;
                     VirusManager.GetComponent<VirusManager>().VirusList.Remove(gameObject);
                     Destroy(gameObject);
                 }
@@ -202,7 +202,7 @@ public class Virus : MonoBehaviour
                     {
                         VirusManager.GetComponent<VirusManager>().VirusList.Remove(gameObject);
                         Destroy(gameObject);
-                        FightVirusPlayer.GetComponent<Player>().Score += 100;
+                        FightVirusPlayer.GetComponent<Player>().CurrentScore += 100;
                         FightVirusPlayer.GetComponent<Player>().isGameOver = true;
                         FightVirusPlayer.GetComponent<Player>().BeatBoss = true;
                     }

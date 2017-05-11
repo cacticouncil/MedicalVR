@@ -7,10 +7,11 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
     public GameObject Player;
     public GameObject RedCell;
     public GameObject WhiteCell;
-    public GameObject CellTutorialLocation;
+    public Transform PlayerTutorialLocation;
+    public Transform CellTutorialLocation;
     public bool WhiteCellHitsPlayerFirstTime = false;
     Vector3 SavedRedCellPosition;
-    public List<GameObject> WhiteCellsToActivate;
+    public AntibodySpawnerScript spawner;
     public bool prevState;
 
     void Start()
@@ -21,13 +22,15 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
             GlobalVariables.arcadeMode = false;
 
             //Set the player in the other tunnel
-            Player.GetComponent<MovingCamera>().transform.position = transform.position;
+            Player.transform.position = PlayerTutorialLocation.position;
             Player.GetComponent<MovingCamera>().stopMoving = true;
 
             //Save red cell orginal position
             SavedRedCellPosition = RedCell.transform.position;
-            RedCell.transform.position = CellTutorialLocation.transform.position;
+            RedCell.transform.position = CellTutorialLocation.position;
         }
+        else
+            enabled = false;
     }
 
     void FixedUpdate()
@@ -40,7 +43,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                 //Show them the red cell and then fade it back to where the orignal postion is
                 case 10:
                     Subtitles.GetComponent<SubstitlesScript>().Stop();
-                    RedCell.transform.position = Vector3.MoveTowards(RedCell.transform.position, SavedRedCellPosition, 8.0f);
+                    RedCell.transform.position = Vector3.MoveTowards(RedCell.transform.position, SavedRedCellPosition, 10.0f * Time.fixedDeltaTime);
                     if (RedCell.transform.position == SavedRedCellPosition)
                     {
                         Subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
@@ -51,9 +54,9 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                 //Bring the white cell in view
                 case 16:
                     Subtitles.GetComponent<SubstitlesScript>().Stop();
-                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, CellTutorialLocation.transform.position, 10.0f);
+                    WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, CellTutorialLocation.position, 10.0f * Time.fixedDeltaTime);
 
-                    if (WhiteCell.transform.position == CellTutorialLocation.transform.position)
+                    if (WhiteCell.transform.position == CellTutorialLocation.position)
                     {
                         Subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
                         Subtitles.GetComponent<SubstitlesScript>().Continue();
@@ -66,7 +69,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                     Player.GetComponent<MovingCamera>().stopMoving = false;
                     Player.GetComponent<MovingCamera>().speed = 10.0f;
                     if (WhiteCell)
-                        WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.transform.position, 10.0f);
+                        WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.transform.position, 1.0f * Time.fixedDeltaTime);
                     break;
 
                 default:
@@ -82,18 +85,10 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
         Player.GetComponent<MovingCamera>().speed = 0.0f;
         Subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
         Subtitles.GetComponent<SubstitlesScript>().Continue();
-        DisplayWhiteCells();
+        spawner.enabled = true;
     }
 
-    void DisplayWhiteCells()
-    {
-        for (int i = 0; i < WhiteCellsToActivate.Count; i++)
-        {
-            WhiteCellsToActivate[i].gameObject.SetActive(true);
-        }
-    }
-
-    public void RepawnPlayer()
+    public void RespawnPlayer()
     {
         //Player.GetComponent<MovingCamera>().stopMoving = false;
         Player.GetComponent<MovingCamera>().speed = 10.0f;

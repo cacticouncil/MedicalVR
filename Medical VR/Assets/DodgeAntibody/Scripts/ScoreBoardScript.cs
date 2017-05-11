@@ -30,7 +30,7 @@ public class ScoreBoardScript : MonoBehaviour {
                 score = (int)objectWithScore.GetComponent<SimonSays>().score;
                 break;
             case "FightVirus":
-                score = (int)objectWithScore.GetComponent<Player>().Score;
+                score = (int)objectWithScore.GetComponent<Player>().CurrentScore;
                     break;
             default:
                 break;
