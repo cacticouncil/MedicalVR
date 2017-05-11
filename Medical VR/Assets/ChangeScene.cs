@@ -7,13 +7,13 @@ public static class ChangeScene
 
     public static void LoadScene(string scene)
     {
-        SoundManager.PlaySFX("MenuEnter");
+        //SoundManager.PlaySFX("MenuEnter");
         SceneManager.LoadScene(scene);
     }
 
     public static void Exit()
     {
-        SoundManager.PlaySFX("MenuEnter");
+        //SoundManager.PlaySFX("MenuEnter");
         Application.Quit();
     }
 
