@@ -6,7 +6,8 @@ public class RedCellScript : MonoBehaviour
 {
     public GameObject TutorialGameObject;
     public float speed;
-    public GameObject virus, spawner, banner, blackCurtain;
+    public GameObject virus, banner, blackCurtain;
+    public AntibodySpawnerScript spawner;
     bool fade = false;
     float timer = 0;
 
@@ -57,18 +58,16 @@ public class RedCellScript : MonoBehaviour
             float a = blackCurtain.GetComponent<Renderer>().material.color.a;
             blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
         }
-
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "MainCamera")
+        if (other.tag == "Player")
         {
             if (GlobalVariables.arcadeMode == true)
             {
-                virus.GetComponent<MovingCamera>().WinresetPos();
-                virus.GetComponent<MovingCamera>().speed++;
-                spawner.GetComponent<AnitbodySpawnerScript>().GenerateObstacles();
-
+                virus.GetComponent<MovingCamera>().WinResetPos();
+                virus.GetComponent<MovingCamera>().speed *= 1.5f;
+                spawner.GenerateObstacles();
             }
             else
             {

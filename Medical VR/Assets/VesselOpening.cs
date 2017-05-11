@@ -1,29 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class VesselOpening : MonoBehaviour {
-
+public class VesselOpening : MonoBehaviour
+{
     public GameObject otherSide;
     public bool shouldCollide;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         shouldCollide = true;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    }
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "virus")
+        if (other.tag == "Player")
         {
             shouldCollide = !shouldCollide;
         }
-        else if(otherSide != null)
+        else if (otherSide != null)
         {
-            if(other.transform.position.x < transform.position.x)
-            other.transform.position = new Vector3(otherSide.transform.position.x, other.transform.position.y, other.transform.position.z);
+            if (other.transform.position.x < transform.position.x)
+                other.transform.position = new Vector3(otherSide.transform.position.x, other.transform.position.y, other.transform.position.z);
         }
     }
 }

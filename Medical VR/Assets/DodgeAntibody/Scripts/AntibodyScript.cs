@@ -3,17 +3,15 @@ using System.Collections;
 
 public class AntibodyScript : MonoBehaviour
 {
-
-    public GameObject Cam, Effects, banner;
+    public GameObject cam, Effects;
     bool reswpawn = false;
-    float saveSpeed;
-    
+
     public GameObject TutorialMode;
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Vector3.Distance(transform.position, Cam.transform.position) < 3000)
+        if (Vector3.Distance(transform.position, cam.transform.position) < 3000)
         {
             GetComponent<Renderer>().enabled = true;
         }
@@ -25,47 +23,39 @@ public class AntibodyScript : MonoBehaviour
         {
             if (Effects.GetComponent<ParticleSystem>().isPlaying == false)
             {
-                Cam.GetComponent<MovingCamera>().stopMoving = true;
-                Cam.GetComponent<MovingCamera>().speed = -100;
-                Cam.GetComponent<SphereCollider>().enabled = false;
-               
                 if (GlobalVariables.tutorial == false)
                 {
-                    if (Cam.transform.position == Cam.GetComponent<MovingCamera>().originPos)
+                    if (cam.transform.position == cam.GetComponent<MovingCamera>().orgPos)
                     {
                         reswpawn = false;
-                        Cam.GetComponent<MovingCamera>().stopMoving = false;
-                        Cam.GetComponent<MovingCamera>().speed = saveSpeed;
-                        Cam.GetComponent<SphereCollider>().enabled = true;
+                        cam.GetComponent<MovingCamera>().stopMoving = false;
+                        cam.GetComponent<SphereCollider>().enabled = true;
                     }
-                    // Cam.GetComponent<MovingCamera>().LoseresetPos();
+                    //Cam.GetComponent<MovingCamera>().LoseresetPos();
                     //Cam.GetComponent<MovingCamera>().speed = saveSpeed;
                 }
                 else if (TutorialMode.GetComponent<DodgeAntiBodyTutorial>().WhiteCellHitsPlayerFirstTime == true)
                 {
-                    Cam.GetComponent<MovingCamera>().stopMoving = false;
-                    Cam.GetComponent<MovingCamera>().speed =10;
-                    Cam.GetComponent<SphereCollider>().enabled = true;
+                    cam.GetComponent<MovingCamera>().stopMoving = false;
+                    cam.GetComponent<MovingCamera>().speed = 10;
+                    cam.GetComponent<SphereCollider>().enabled = true;
                     reswpawn = false;
-                    TutorialMode.GetComponent<DodgeAntiBodyTutorial>().RepawnPlayer();
+                    TutorialMode.GetComponent<DodgeAntiBodyTutorial>().RespawnPlayer();
                 }
             }
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
-        if (other.tag == "MainCamera")
+        if (other.gameObject.tag == "Player")
         {
-           // other.transform.position -= other.transform.forward * 50;
-            saveSpeed = other.GetComponent<MovingCamera>().speed;
-            other.GetComponent<MovingCamera>().speed = 0;
+            // other.transform.position -= other.transform.forward * 50;
             reswpawn = true;
             Effects.GetComponent<ParticleSystem>().Stop();
             Effects.GetComponent<ParticleSystem>().Play();
-           
-            
-            Cam.GetComponent<MovingCamera>().LoseresetPos();
+
+            other.gameObject.GetComponent<MovingCamera>().LoseResetPos();
             //For tutorial mode 
             if (GlobalVariables.tutorial)
             {
