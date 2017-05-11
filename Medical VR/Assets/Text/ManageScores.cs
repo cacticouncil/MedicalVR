@@ -28,7 +28,7 @@ public class ManageScores : MonoBehaviour {
         SimonDNAScoreText.GetComponent<TextMeshPro>().text = "Simon DNA: " + SimonSays.finalScore.ToString();
         cGAMPScoreText.GetComponent<TextMeshPro>().text = "cGAMP Snatcher: " + Storebullets.finalScore.ToString();
         DodgeScoreText.GetComponent<TextMeshPro>().text = "Dodge Antibodies: " + MovingCamera.finalScore.ToString();  _TGameController.finalATPScore.ToString();
-        VirusScoreText.GetComponent<TextMeshPro>().text = "Fight Virus: " + Player.FinalScore.ToString();
+        VirusScoreText.GetComponent<TextMeshPro>().text = "Fight Virus: " + Player.BestScoreForFightVirus.ToString();
         CellScoreText.GetComponent<TextMeshPro>().text = "";
         StrategyScoreText.GetComponent<TextMeshPro>().text = "";
         ATPScoreText.GetComponent<TextMeshPro>().text = "ATP/GTP Shooter: " + _TGameController.finalATPScore.ToString();
