@@ -41,7 +41,8 @@ public class VirusPlayer : MonoBehaviour
     float DelayTimer = 0.0f;
     float BeatGameTimer = 0.0f;
 
-    float Score = 0.0f;
+    float CurrentScore = 0.0f;
+    public static float BestScoreForDestroyCell;
     void Start()
     {
         currSpeed = baseSpeed;
@@ -162,6 +163,10 @@ public class VirusPlayer : MonoBehaviour
                     else
                     {
                         ScoreBoard.SetActive(true);
+
+                        if (CurrentScore > BestScoreForDestroyCell)
+                            BestScoreForDestroyCell = CurrentScore;
+                        
                         ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
                     }
                 }
@@ -329,7 +334,7 @@ public class VirusPlayer : MonoBehaviour
 
     void SetFacebook()
     {
-        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + Score.ToString(); /// + FacebookManager.Instance.GlobalScore /;
+        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + CurrentScore.ToString(); /// + FacebookManager.Instance.GlobalScore /;
         FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
 

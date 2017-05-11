@@ -7,49 +7,81 @@ using UnityEngine.UI;
 public class MovingCamera : MonoBehaviour
 {
     public static float finalScore;
-
     public GameObject subtitles, cam;
     public float speed;
     public GameObject theScore, theLives, scoreBoard, UI, Username, ProfilePic;
     public float score = 0;
     public Color fogColor;
-    public Vector3 originPos;
+    public Vector3 orgPos;
     public int lives = 3;
-    float orgSpeed;
-    public bool stopMoving = false, startSpeed = true;
-    
-   public void LoseresetPos()
+    public float orgSpeed;
+    public bool stopMoving = false, startSpeed = true, resetting = false;
+
+    private float vComparer = .01f;
+
+    void Start()
     {
-        if(GlobalVariables.arcadeMode)
+        orgPos = transform.position;
+        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+        orgSpeed = speed;
+        if (GlobalVariables.arcadeMode == false && GlobalVariables.tutorial == true)
+        {
+            subtitles.SetActive(true);
+            UI.SetActive(false);
+            speed = 0;
+        }
+        if (GlobalVariables.arcadeMode == false)
+        {
+            UI.SetActive(false);
+        }
+    }
+
+    public void LoseResetPos()
+    {
+        if (GlobalVariables.arcadeMode)
         {
             lives--;
             theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+            GetComponent<SphereCollider>().enabled = false;
+            StartCoroutine(LoseReset());
         }
         //transform.position = originPos;
+    }
 
-    }
-    public void WinresetPos()
+    IEnumerator LoseReset()
     {
-        transform.position = originPos;
+        while (!V3Equal(transform.position, orgPos))
+        {
+            speed = -10;
+            yield return 0;
+        }
+        speed = orgSpeed;
+        GetComponent<SphereCollider>().enabled = true;
     }
+
+    public void WinResetPos()
+    {
+        transform.position = orgPos;
+    }
+
     void ShowScore()
     {
-        if(score > finalScore)
+        if (score > finalScore)
         {
             finalScore = score;
         }
         UI.SetActive(false);
-        transform.position = originPos;
+        transform.position = orgPos;
         speed = 0;
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
         int tmp = (int)score;
         Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + tmp.ToString();
         ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
-        
+
     }
 
-   public void RestartGame()
+    public void RestartGame()
     {
         UI.SetActive(true);
         scoreBoard.SetActive(false);
@@ -59,39 +91,19 @@ public class MovingCamera : MonoBehaviour
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         //theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
     }
-    void Start ()
-    {
-        originPos = transform.position;
-        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
-        orgSpeed = speed;
-        if(GlobalVariables.arcadeMode == false && GlobalVariables.tutorial == true)
-        {
-            subtitles.SetActive(true);
-            UI.SetActive(false);
-            speed = 0;
-        }
-        if(GlobalVariables.arcadeMode == false)
-        {
-            UI.SetActive(false);
-        }
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-      
-    }
 
     void FixedUpdate()
     {
-        if(score >= 500)
-        BannerScript.UnlockTrophy("Platelet");
+        if (score >= 500)
+        {
+            BannerScript.UnlockTrophy("Platelet");
+        }
 
         if (GlobalVariables.arcadeMode == false)
         {
-            if(startSpeed == true)
+            if (startSpeed == true)
             {
-                if(subtitles.GetComponent<SubstitlesScript>().IsDone() == true)
+                if (subtitles.GetComponent<SubstitlesScript>().IsDone() == true)
                 {
                     speed = orgSpeed;
                     startSpeed = false;
@@ -100,41 +112,40 @@ public class MovingCamera : MonoBehaviour
         }
 
         AvoidBack();
-        if(lives < 1)
+
+        if (lives < 1)
         {
             ShowScore();
         }
-
-        else if(stopMoving == false)
+        else if (speed < 0)
         {
-            transform.position +=cam.transform.forward * speed;
-            if(GlobalVariables.arcadeMode == true)
+            transform.position = Vector3.MoveTowards(transform.position, orgPos, Time.fixedDeltaTime * -speed);
+        }
+        else if (!stopMoving)
+        {
+            transform.position += cam.transform.forward * speed * Time.fixedDeltaTime;
+            if (GlobalVariables.arcadeMode == true)
             {
                 score += Time.smoothDeltaTime;
-                int tmp = (int)score;
-                theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
+                theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + ((int)score).ToString();
             }
-        }
-        else if(speed < 0)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, originPos, Time.deltaTime * 5000);
         }
     }
 
     void AvoidBack()
     {
-        if (transform.rotation.eulerAngles.y > 90 && transform.rotation.eulerAngles.y < 270)
+        if (cam.transform.rotation.eulerAngles.y > 90 && cam.transform.rotation.eulerAngles.y < 270)
         {
             stopMoving = true;
-            //MenuButton.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z -100);
         }
-
-        else if( speed >=0)
-            stopMoving = false; 
+        else if (speed >= 0)
+        {
+            stopMoving = false;
+        }
     }
 
-    public void HandleTimeInput()
+    private bool V3Equal(Vector3 a, Vector3 b)
     {
-        RestartGame();
+        return Vector3.SqrMagnitude(a - b) < vComparer;
     }
 }

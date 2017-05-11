@@ -3,37 +3,32 @@ using System.Collections;
 
 public class PlateletScript : MonoBehaviour
 {
-    public GameObject virus;
-    public bool startTimer = false;
-    float timer = 0;
-    float orgSpeed = 0;
-
-    // Update is called once per frame
-    void Update()
+    void OnCollisionEnter(Collision other)
     {
-        if (startTimer == true)
+        if (other.gameObject.tag == "Player")
         {
-            timer += Time.deltaTime;
-            virus.GetComponent<MovingCamera>().speed += Time.deltaTime;
-            virus.GetComponent<MovingCamera>().score -= Time.smoothDeltaTime;
-            if (timer >= 3)
-            {
-                virus.GetComponent<MovingCamera>().speed = orgSpeed;
-                startTimer = false;
-                timer = 0;
-            }
+            StartCoroutine(Reverse(other.gameObject.GetComponent<MovingCamera>()));
         }
     }
-    void OnTriggerEnter(Collider other)
+
+    IEnumerator Reverse(MovingCamera player)
     {
-        if (other.tag == "MainCamera")
+        player.score -= 10;
+        if (player.score < 0)
+            player.score = 0;
+
+        float timer = 0;
+        player.speed *= -.5f;
+
+        while (timer < 3)
         {
-            virus.GetComponent<MovingCamera>().score -= 10;
-            if (virus.GetComponent<MovingCamera>().score <= 0)
-                virus.GetComponent<MovingCamera>().score = 0;
-            orgSpeed = virus.GetComponent<MovingCamera>().speed;
-            virus.GetComponent<MovingCamera>().speed = -3;
-            startTimer = true;
+            timer += Time.deltaTime;
+            player.score -= Time.smoothDeltaTime;
+            if (player.score < 0)
+                player.score = 0;
+            yield return 0;
         }
+        player.speed = player.orgSpeed;
+        timer = 0;
     }
 }

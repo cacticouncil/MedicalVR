@@ -36,3 +36,5 @@ Thumbs.db
 /Medical VR/Assets/GoogleVR/DemoScenes
 /Medical VR/Assets/GoogleVR/DemoScenes.meta
 /DemoScenes
+/Medical VR/Assets/*.meta
+/Medical VR/Assets/*.meta~HEAD

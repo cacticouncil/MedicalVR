@@ -6,6 +6,7 @@ using TMPro;
 public class _TTutorialATPGTP : MonoBehaviour
 {
     enum TutorialState { dispEnzyme, dispATP, moveATP, dispGTP, moveGTP, pointsDesc, startGame, wait }
+    enum TextChild { Top, Right, Left, Bottom }
 
     public GameObject nucleus;
     public GameObject enzyme;
@@ -80,24 +81,25 @@ public class _TTutorialATPGTP : MonoBehaviour
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.dispATP:
-                Invoke("DispATP", 6);
+                Invoke("DispATP", 6 + 6);
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.moveATP:
                 if(MoveToEnzyme(atp))
                 {
                     ChangeTutorialState(TutorialState.wait);
-                    Invoke("DispGTP", 4);
+                    Invoke("DispGTP", 3);
                 }
                 break;
             case TutorialState.moveGTP:
                 if(MoveToEnzyme(gtp))
                 {
                     ChangeTutorialState(TutorialState.wait);
-                    ChangeTutorialState(TutorialState.startGame);
+                    ChangeTutorialState(TutorialState.pointsDesc);
                 }
                 break;
             case TutorialState.pointsDesc:
+                Invoke("ScoreDescription", 1);
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.startGame:
@@ -129,19 +131,15 @@ public class _TTutorialATPGTP : MonoBehaviour
         atp.GetComponent<_TMover>().enabled = false;
         atp.GetComponent<_TDestroyByTime>().CancelDestroy();
         ChangeTutorialState(TutorialState.moveATP, 9);
-
+        
         float initTime = 1.0f;
 
-        StartCoroutine(TurnOnText(1, initTime));
+        string text = "This is ATP.";
+        StartCoroutine(DisplayText(text, TextChild.Right, initTime, 4));
         initTime += 5;
-        SetText(1, "This is ATP.");
-        StartCoroutine(TurnOffText(1, initTime));
 
-        initTime += 1;
-        StartCoroutine(TurnOnText(0, initTime));
-        SetText(0, "Attach the ATP to the Enzyme.");
-        initTime += 5;
-        StartCoroutine(TurnOffText(0, initTime));
+        text = "Attach the ATP to the Enzyme.";
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
     }
     void DispGTP()
     {
@@ -159,20 +157,16 @@ public class _TTutorialATPGTP : MonoBehaviour
 
         float initTime = 1.0f;
 
-        StartCoroutine(TurnOnText(2, initTime));
+        string text = "This is GTP.";
+        StartCoroutine(DisplayText(text, TextChild.Left, initTime, 4));
         initTime += 5;
-        SetText(2, "This is GTP.");
-        StartCoroutine(TurnOffText(2, initTime));
 
-        initTime += 1;
-        StartCoroutine(TurnOnText(0, initTime));
-        SetText(0, "Attach the GTP to the Enzyme.");
-        initTime += 5;
-        StartCoroutine(TurnOffText(0, initTime));
-
+        text = "Attach the GTP to the Enzyme.";
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
     }
     void DispEnzyme()
     {
+        float moveEnzymeTime = 10;
         enz = Instantiate(enzyme, new Vector3(0, 1, 4), Quaternion.identity) as GameObject;
         enz.GetComponent<_TRandomRotator>().enabled = false;
         Rigidbody rb = enz.GetComponent<Rigidbody>();
@@ -185,46 +179,65 @@ public class _TTutorialATPGTP : MonoBehaviour
         enz.GetComponent<_TSizeChange>().Inititalize();
         enz.GetComponent<_TSizeChange>().StartGrow();
         enz.GetComponent<_TTravelToNucleus>().nucleus = nucleus;
-        enz.GetComponent<_TTravelToNucleus>().waitTime = 5;
+        enz.GetComponent<_TTravelToNucleus>().waitTime = moveEnzymeTime;
+
+        float initTime = 1.0f;
 
         ChangeTutorialState(TutorialState.dispATP);
-        StartCoroutine(TurnOnText(0, 1.0f));
-        SetText(0, "This is Viral DNA.");
-        StartCoroutine(TurnOffText(0, 5));
+        string text = "This is cGas.";
+
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
+
+        initTime += 5;
+        text = "This cGas is infected with Viral DNA.";
+
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
+    }
+    void ScoreDescription()
+    {
+        float initTime = 1.0f;
+
+        string text = "When the cGas is Completed you get 10 points.";
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
+        initTime += 5;
+
+        text = "10 seconds will also be added to your time.";
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
+        initTime += 5;
+
+        text = "cGas will then return to the Endoplasmic Reticulum";
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
+        initTime += 5;
+
+        text = "Complete as many cGas as you can before time runs out.";
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 4));
+        initTime += 5;
+
+        text = "Ready!";
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 2));
+        initTime += 2;
+
+        text = "Begin!";
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 2));
     }
 
-    bool SetText(int childNum, string text)
+    IEnumerator DisplayText(string text, TextChild childNum, float startText, float displayDuration)
     {
-        GameObject obj = tutorialStuff.transform.GetChild(0).transform.GetChild(childNum).gameObject;
-        if (!obj)
-            return false;
-        obj.GetComponent<TextMeshPro>().text = text;
-        return true;
-    }
-    IEnumerator PointsDesc(float time)
-    {
-        TextMeshPro text = tutorialStuff.transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<TextMeshPro>();
-        yield return new WaitForSeconds(time);
-
-    }
-
-    IEnumerator TurnOffText(int childNum, float time)
-    {
-        yield return new WaitForSeconds(time);
-        tutorialStuff.transform.GetChild(0).transform.GetChild(childNum).gameObject.GetComponent<_TSizeChange>().StartShrink();
-
-        //yield return new WaitForSeconds(time + 2.0f);
-        //tutorialStuff.transform.GetChild(0).transform.GetChild(childNum).gameObject.SetActive(false);
-        //tutorialStuff.transform.GetChild(childNum).GetComponent<_TSizeChange>().StartShrink();
-    }
-    IEnumerator TurnOnText(int childNum, float time)
-    {
-        yield return new  WaitForSeconds(time);
-        GameObject obj = tutorialStuff.transform.GetChild(0).transform.GetChild(childNum).gameObject;
-        obj.SetActive(true);
-        obj.GetComponent<_TSizeChange>().startSmall = false;
+        GameObject obj = tutorialStuff.transform.GetChild(0).transform.GetChild((int)childNum).gameObject;
+        obj.GetComponent<_TSizeChange>().startSmall = true;
         obj.GetComponent<_TSizeChange>().Inititalize();
+
+        yield return new WaitForSeconds(startText);
+
         obj.GetComponent<_TSizeChange>().ResetToSmall();
+        obj.SetActive(true);
+        obj.GetComponent<TextMeshPro>().text = text;
         obj.GetComponent<_TSizeChange>().StartGrow();
+
+        yield return new WaitForSeconds(displayDuration);
+
+        obj.GetComponent<_TSizeChange>().StartShrink();
+
+        yield return new WaitForSeconds(3);
     }
 }
