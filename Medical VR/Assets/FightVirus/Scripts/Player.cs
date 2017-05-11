@@ -24,8 +24,8 @@ public class Player : MonoBehaviour
     bool SpawnWaveTwice = false;
 
     //Variables for game
-    public static float FinalScore;
-    public float Score = 0.0f;
+    public static float BestScoreForFightVirus;
+    public float CurrentScore = 0.0f;
     float ScoreMultiplier = 0.0f;
     public int VirusLeaveCount = 0;
 
@@ -127,7 +127,7 @@ public class Player : MonoBehaviour
 
             if (GlobalVariables.arcadeMode)
             {
-                ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + Score.ToString();
+                ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + CurrentScore.ToString();
 
                 //If you lose arcade bring up scorebaord
                 if (VirusLeaveCount == 10)
@@ -135,6 +135,10 @@ public class Player : MonoBehaviour
                     isGameOver = true;
                     ScoreBoard.SetActive(true);
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You lose arcade mode";
+
+                    if (CurrentScore > BestScoreForFightVirus)
+                        BestScoreForFightVirus = CurrentScore;
+
                     ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
                 }
 
@@ -144,11 +148,14 @@ public class Player : MonoBehaviour
                     isGameOver = true;
                     ScoreBoard.SetActive(true);
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You win arcade mode";
+
+                    if (CurrentScore > BestScoreForFightVirus)
+                        BestScoreForFightVirus = CurrentScore;
+
                     ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
+
                     if (VirusLeaveCount == 0 && BeatBoss == true)
-                    {
                         BannerScript.UnlockTrophy("Virus Trophy");
-                    }
                 }
             }
 
@@ -344,7 +351,7 @@ public class Player : MonoBehaviour
 
     void SetFacebook()
     {
-        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + Score.ToString(); /// + FacebookManager.Instance.GlobalScore /;
+        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + CurrentScore.ToString(); /// + FacebookManager.Instance.GlobalScore /;
         FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
 
