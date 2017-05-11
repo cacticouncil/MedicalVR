@@ -103,6 +103,7 @@ public class FBscript : MonoBehaviour
                 StartCoroutine("WaitForProfilePic");
             }
             SetScore();
+            QueryScore();
         }
         else
         {
