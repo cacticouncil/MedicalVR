@@ -42,6 +42,7 @@ public class VirusPlayer : MonoBehaviour
     float BeatGameTimer = 0.0f;
 
     float CurrentScore = 0.0f;
+    public static float FinalScore;
     public static float BestScoreForDestroyCell;
     void Start()
     {
@@ -139,6 +140,15 @@ public class VirusPlayer : MonoBehaviour
                     }
                     else
                     {
+                        if (CurrentScore > FinalScore)
+                            FinalScore = CurrentScore;
+
+                        if( FinalScore > PlayerPrefs.GetFloat("DestroyCellScore"))
+                        PlayerPrefs.SetFloat("DestroyCellScore", FinalScore);
+                        else
+                            FinalScore = PlayerPrefs.GetFloat("DestroyCellScore");
+                        
+
                         ScoreBoard.SetActive(true);
                         ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
                     }
@@ -335,7 +345,8 @@ public class VirusPlayer : MonoBehaviour
     void SetFacebook()
     {
         FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + CurrentScore.ToString(); /// + FacebookManager.Instance.GlobalScore /;
-        FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
+        if (FacebookManager.Instance.ProfilePic != null)
+            FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
 
     void PlayStory()
