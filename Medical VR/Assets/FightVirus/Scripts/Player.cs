@@ -152,6 +152,11 @@ public class Player : MonoBehaviour
                     if (CurrentScore > BestScoreForFightVirus)
                         BestScoreForFightVirus = CurrentScore;
 
+                    if (BestScoreForFightVirus > PlayerPrefs.GetFloat("FightVirusScore"))
+                        PlayerPrefs.SetFloat("FightVirusScore", BestScoreForFightVirus);
+                    else
+                        BestScoreForFightVirus = PlayerPrefs.GetFloat("FightVirusScore");
+
                     ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
 
                     if (VirusLeaveCount == 0 && BeatBoss == true)

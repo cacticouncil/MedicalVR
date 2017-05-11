@@ -42,6 +42,11 @@ public class MemoryUI : MonoBehaviour
     {
         if (score > finalScore)
             finalScore = score;
+        if (finalScore > PlayerPrefs.GetFloat("MemoryScore"))
+            PlayerPrefs.SetFloat("MemoryScore", finalScore);
+        else
+            finalScore = PlayerPrefs.GetFloat("MemoryScore");
+
         lives = 5;
         UI.SetActive(false);
         Capsules.SetActive(false);
