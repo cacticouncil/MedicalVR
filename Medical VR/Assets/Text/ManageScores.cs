@@ -25,13 +25,13 @@ public class ManageScores : MonoBehaviour {
 	void Update () {
 
         MemoryScoreText.GetComponent<TextMeshPro>().text = "Memory Game: " + MemoryUI.finalScore.ToString();
-        SimonDNAScoreText.GetComponent<TextMeshPro>().text = "Simon DNA: ";
+        SimonDNAScoreText.GetComponent<TextMeshPro>().text = "Simon DNA: " + SimonSays.finalScore.ToString();
         cGAMPScoreText.GetComponent<TextMeshPro>().text = "cGAMP Snatcher: " + Storebullets.finalScore.ToString();
-        DodgeScoreText.GetComponent<TextMeshPro>().text = "ATP/GTP Shooter: " + _TGameController.finalATPScore.ToString();
-        VirusScoreText.GetComponent<TextMeshPro>().text = "";
+        DodgeScoreText.GetComponent<TextMeshPro>().text = "Dodge Antibodies: " + MovingCamera.finalScore.ToString();  _TGameController.finalATPScore.ToString();
+        VirusScoreText.GetComponent<TextMeshPro>().text = "Fight Virus: " + Player.FinalScore.ToString();
         CellScoreText.GetComponent<TextMeshPro>().text = "";
         StrategyScoreText.GetComponent<TextMeshPro>().text = "";
-        ATPScoreText.GetComponent<TextMeshPro>().text = "";
+        ATPScoreText.GetComponent<TextMeshPro>().text = "ATP/GTP Shooter: " + _TGameController.finalATPScore.ToString();
 
         FBscript.GlobalScore = ((int)MemoryUI.finalScore + (int)Storebullets.finalScore + (int)_TGameController.finalATPScore) % 1000;
 

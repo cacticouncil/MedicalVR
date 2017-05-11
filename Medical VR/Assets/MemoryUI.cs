@@ -51,7 +51,8 @@ public class MemoryUI : MonoBehaviour
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
         //scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
-        Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + FacebookManager.Instance.GlobalScore;
+        Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
+        if(FacebookManager.Instance.ProfilePic != null)
         ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
     public void RestartGame()
