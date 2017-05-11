@@ -33,7 +33,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 3;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 96f;
-                theCamera.transform.position = places[I].transform.position;
+                parent.transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
                 break;
@@ -43,7 +43,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 4;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 145f;
-                theCamera.transform.position = places[I].transform.position;
+                parent.transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
                 break;
@@ -53,7 +53,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 10;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 231f;
-                theCamera.transform.position = places[I].transform.position;
+                parent.transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
                 break;
@@ -63,7 +63,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 10;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 262f;
-                theCamera.transform.position = places[I].transform.position;
+                parent.transform.position = places[I].transform.position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
                 break;
@@ -101,7 +101,7 @@ public class CellGameplayScript : MonoBehaviour
     void MoveTo()
     {
         if (I != places.Count)
-            theCamera.transform.position = Vector3.MoveTowards(theCamera.transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
+            parent.transform.position = Vector3.MoveTowards(parent.transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
     }
     void CheckCaases()
     {
@@ -132,7 +132,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[0].SetActive(false);
                 Sceneries[1].SetActive(true);
                 I = 1;
-                theCamera.transform.position = places[I].transform.position;
+                parent.transform.position = places[I].transform.position;
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line03") == false)
@@ -155,7 +155,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 3;
                 RenderSettings.fogDensity = 0;
-                theCamera.transform.position = places[I].transform.position;
+                parent.transform.position = places[I].transform.position;
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 break;
@@ -277,7 +277,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(false);
                 Sceneries[3].SetActive(true);
                 I = 7;
-                theCamera.transform.position = places[I].transform.position;
+                parent.transform.position = places[I].transform.position;
                 break;
             case 194:
                 parent.GetComponent<LookCamera>().enabled = false;
@@ -302,7 +302,7 @@ public class CellGameplayScript : MonoBehaviour
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 I = 9;
-                theCamera.transform.position = places[I].transform.position;
+                parent.transform.position = places[I].transform.position;
                 RenderSettings.fogDensity = 0;
                 break;
             case 213:

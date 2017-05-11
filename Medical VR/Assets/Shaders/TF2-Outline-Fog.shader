@@ -1,6 +1,4 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "Custom/TF2-Outline-Fog"
+﻿Shader "Custom/TF2-Outline-Fog"
 {
 	Properties
 	{

@@ -18,12 +18,12 @@ public class CollectiblePoints : MonoBehaviour
             GetComponent<Renderer>().enabled = false;
         }
     }
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
-        if (other.tag == "MainCamera")
+        if (other.gameObject.tag == "Player")
         {
             pointEffect.GetComponent<ParticleSystem>().Stop();
-            other.GetComponent<MovingCamera>().score += score;
+            other.gameObject.GetComponent<MovingCamera>().score += score;
             pointEffect.GetComponent<ParticleSystem>().Play();
             Destroy(gameObject);
         }
