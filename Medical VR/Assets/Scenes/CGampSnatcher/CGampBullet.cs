@@ -5,7 +5,9 @@ using System;
 public class CGampBullet : MonoBehaviour
 {
     public GameObject Trial;
-    public GameObject camera;
+    
+   
+    public GameObject cameras;
     bool isgrabbed = false;
 
     void Start()
@@ -18,9 +20,9 @@ public class CGampBullet : MonoBehaviour
     {
         if(isgrabbed == true)
         {
-            transform.position = Vector3.MoveTowards(transform.position, camera.transform.position + new Vector3(0,0,1), 0.3f);
+            transform.position = Vector3.MoveTowards(transform.position, cameras.transform.position + new Vector3(0,0,1), 0.3f);
 
-            if (transform.position == camera.transform.position + new Vector3(0, 0, 1))
+            if (transform.position == cameras.transform.position + new Vector3(0, 0, 1))
             {
                 Destroy(gameObject);
                 Storebullets.bulletamount += 1;
