@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
-public class SpawnSting : MonoBehaviour {
-
+public class SpawnSting : MonoBehaviour
+{
     public GameObject mainCamera;
+    public Transform stingHolder;
     public Transform[] SpawnPoints;
+    [System.NonSerialized]
+    public List<Transform> takenPoints = new List<Transform>();
     public float spawntime = 1.5f;
-    private int previousRandomIndex = 0;
     public GameObject Stings;
-
-    public GameObject Center;
     public float size;
 
     //public Quaternion min;
@@ -19,6 +19,7 @@ public class SpawnSting : MonoBehaviour {
     void Start()
     {
         SpawnEnzime();
+        SpawnC();
     }
 
     // Update is called once per frame
@@ -29,6 +30,7 @@ public class SpawnSting : MonoBehaviour {
             SpawnEnzime();
         }
     }
+
     public void SpawnEnzime()
     {
         InvokeRepeating("SpawnC", spawntime, spawntime);
@@ -36,21 +38,20 @@ public class SpawnSting : MonoBehaviour {
 
     public void SpawnC()
     {
-        int Randomindex = Random.Range(0, SpawnPoints.Length);
-        if(Randomindex != previousRandomIndex)
+        while (takenPoints.Count != SpawnPoints.Length)
         {
-        GameObject obj =  Instantiate(Stings, SpawnPoints[Randomindex].position, SpawnPoints[Randomindex].rotation);
-        obj.GetComponent<GetpointsER>().storebullets = mainCamera;
-
+            int index = Random.Range(0, SpawnPoints.Length);
+            if (!takenPoints.Contains(SpawnPoints[index]))
+            {
+                takenPoints.Add(SpawnPoints[index]);
+                GameObject obj = Instantiate(Stings, SpawnPoints[index].position, Quaternion.identity, stingHolder);
+                Debug.Log(SpawnPoints[index].position.ToString());
+                obj.GetComponent<GetpointsER>().storebullets = mainCamera;
+                obj.GetComponent<GetpointsER>().parent = this;
+                obj.GetComponent<GetpointsER>().position = SpawnPoints[index];
+                return;
+            }
         }
-
-        previousRandomIndex = Randomindex;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(1, 0, 0, 0.5f);
-        Gizmos.DrawSphere(/*transform.localPosition + */Center.transform.position, size);
     }
 
     private void OnDisable()

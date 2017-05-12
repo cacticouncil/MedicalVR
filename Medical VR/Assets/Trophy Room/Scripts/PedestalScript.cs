@@ -1,16 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PedestalScript : MonoBehaviour {
-
-    public GameObject theCamera, station, camPos, selectedTrophy, descButton;
+public class PedestalScript : MonoBehaviour
+{
+    public TrophyRoomScript theCamera;
+    public GameObject station, camPos, selectedTrophy, descButton;
     public int speed;
     public bool inUse, isSoundPlaying;
     bool inMove = false;
+    public bool ActivateFirstClick = false;
     //Vector3 target;
     Color orgButtonColor;
-	// Use this for initialization
-	void Start ()
+
+    bool FirstClickOnly = false;
+    bool SecondClickOnly = false;
+
+    void Start()
     {
         if (descButton != null)
         {
@@ -19,37 +24,36 @@ public class PedestalScript : MonoBehaviour {
         }
         isSoundPlaying = false;
         inUse = false;
-       
-	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    }
+
+    void Update()
     {
-        if(inMove)
+        if (inMove)
         {
-             theCamera.transform.position = Vector3.MoveTowards(theCamera.transform.position, camPos.transform.position, speed*Time.deltaTime);
-             if(theCamera.transform.position == camPos.transform.position)
-             {
+            theCamera.transform.position = Vector3.MoveTowards(theCamera.transform.position, camPos.transform.position, speed * Time.deltaTime);
+            if (theCamera.transform.position == camPos.transform.position)
+            {
                 inMove = false;
                 inUse = true;
-             }
+            }
         }
         if (theCamera.transform.position != camPos.transform.position)
         {
             isSoundPlaying = false;
-            if(descButton != null)
-            descButton.GetComponent<Renderer>().material.color = orgButtonColor;
-            if(selectedTrophy != null)
+            if (descButton != null)
+                descButton.GetComponent<Renderer>().material.color = orgButtonColor;
+            if (selectedTrophy != null)
             {
                 selectedTrophy.GetComponent<AudioSource>().Stop();
                 selectedTrophy.GetComponent<TrophyScript>().BringToPedestal();
             }
             inUse = false;
-          
+
         }
-        if(isSoundPlaying && inUse)
+        if (isSoundPlaying && inUse)
         {
-            if(selectedTrophy.GetComponent<AudioSource>().isPlaying == false)
+            if (selectedTrophy.GetComponent<AudioSource>().isPlaying == false)
             {
                 isSoundPlaying = false;
                 descButton.GetComponent<Renderer>().material.color = orgButtonColor;
@@ -72,16 +76,37 @@ public class PedestalScript : MonoBehaviour {
         //        break;
         //}
     }
+
+    public void FirstClick()
+    {
+        if (theCamera.MoveText == 4 && FirstClickOnly == false)
+        {
+            theCamera.MoveText += 1;
+            theCamera.CanIRead = true;
+            FirstClickOnly = true;
+        }
+    }
+
+    public void SecondClick()
+    {
+        if (theCamera.MoveText == 7 && SecondClickOnly == false)
+        {
+            theCamera.MoveText += 1;
+            theCamera.CanIRead = true;
+            SecondClickOnly = true;
+        }
+    }
+
     public void DoButtonAction()
     {
-        if(isSoundPlaying == false)
+        if (isSoundPlaying == false)
         {
             selectedTrophy.GetComponent<TrophyScript>().PlayDescription();
             descButton.GetComponent<Renderer>().material.color = Color.green;
             isSoundPlaying = true;
         }
-
     }
+
     public void RevertButtonAction()
     {
         isSoundPlaying = false;

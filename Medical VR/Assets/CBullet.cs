@@ -31,7 +31,7 @@ public class CBullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("target"))
+        if (collision.gameObject.CompareTag("Target"))
         {
             GetComponent<MeshCollider>().enabled = false;
         }
