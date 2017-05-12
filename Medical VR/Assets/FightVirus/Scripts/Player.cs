@@ -152,6 +152,11 @@ public class Player : MonoBehaviour
                     if (CurrentScore > BestScoreForFightVirus)
                         BestScoreForFightVirus = CurrentScore;
 
+                    if (BestScoreForFightVirus > PlayerPrefs.GetFloat("FightVirusScore"))
+                        PlayerPrefs.SetFloat("FightVirusScore", BestScoreForFightVirus);
+                    else
+                        BestScoreForFightVirus = PlayerPrefs.GetFloat("FightVirusScore");
+
                     ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
 
                     if (VirusLeaveCount == 0 && BeatBoss == true)
@@ -352,7 +357,8 @@ public class Player : MonoBehaviour
     void SetFacebook()
     {
         FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + CurrentScore.ToString(); /// + FacebookManager.Instance.GlobalScore /;
-        FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
+        if (FacebookManager.Instance.ProfilePic != null)
+            FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
 
     void StoryMode()

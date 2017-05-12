@@ -3,14 +3,14 @@ using System.Collections;
 
 public class VesselOpening : MonoBehaviour
 {
-    public GameObject otherSide;
+    public Transform otherSide = null;
     public bool shouldCollide;
     // Use this for initialization
     void Start()
     {
         shouldCollide = true;
     }
-    void OnTriggerEnter(Collider other)
+    void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")
         {
@@ -18,8 +18,9 @@ public class VesselOpening : MonoBehaviour
         }
         else if (otherSide != null)
         {
-            if (other.transform.position.x < transform.position.x)
-                other.transform.position = new Vector3(otherSide.transform.position.x, other.transform.position.y, other.transform.position.z);
+            Vector3 diff = transform.position - otherSide.position;
+            diff *= 1.05f;
+            other.transform.position = other.transform.position - diff;
         }
     }
 }
