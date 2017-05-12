@@ -12,7 +12,7 @@ public class SmartPause : MonoBehaviour
     public bool isPaused = false;
 
     private float buttonHeldTimer = 0.0f;
-    private float angle = 30;
+    private float angle = 10;
 
     private bool last = false;
 
@@ -28,7 +28,7 @@ public class SmartPause : MonoBehaviour
                 {
                     buttonHeldTimer = 0.0f;
                     buttons.SetActive(true);
-                    transform.position = player.transform.position + player.transform.forward * .45f;
+                    transform.position = player.transform.position + player.transform.forward * .90f;
                     transform.LookAt(player.transform.position);
                     transform.Rotate(new Vector3(0, 180, 0));
                     isPaused = true;
