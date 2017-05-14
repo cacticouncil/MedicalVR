@@ -10,7 +10,7 @@ public class CellGameplayScript : MonoBehaviour
     public List<GameObject> Sceneries;
     public List<Transform> rotationTargets;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna, parent;
-    public static int loadCase = 1;
+    public static int loadCase;
     // Use this for initialization
     delegate void Func();
     Func doAction;
@@ -18,6 +18,7 @@ public class CellGameplayScript : MonoBehaviour
     float fadeSpeed;
     int I = 0;
     private bool firstLook = true;
+
     void Start()
     {
         GlobalVariables.tutorial = true;
@@ -84,26 +85,30 @@ public class CellGameplayScript : MonoBehaviour
         doAction();
         MoveTo();
     }
+
     void RiseCurtain()
     {
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a > 255)
             a = 255;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * fadeSpeed));
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.fixedDeltaTime * fadeSpeed));
 
     }
+
     void LowerCurtain()
     {
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a < 0)
             a = 0;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * fadeSpeed));
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.fixedDeltaTime * fadeSpeed));
     }
+
     void MoveTo()
     {
         if (I != places.Count)
-            parent.transform.position = Vector3.MoveTowards(parent.transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
+            parent.transform.position = Vector3.MoveTowards(parent.transform.position, places[I].transform.position, moveSpeed * Time.fixedDeltaTime);
     }
+
     void CheckCaases()
     {
         float t = subtitles.GetComponent<SubstitlesScript>().theTimer;
@@ -285,7 +290,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (182):
                 I = 6;
-                moveSpeed = .2f;
+                moveSpeed = .05f;
                 break;
             case 186:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line19") == false)
@@ -311,6 +316,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 194:
                 firstLook = true;
+                moveSpeed = .3f;
                 I = 8;
                 break;
             case 204:
@@ -342,7 +348,7 @@ public class CellGameplayScript : MonoBehaviour
                     parent.GetComponent<LookCamera>().enabled = false;
                 }
                 I = 10;
-                moveSpeed = 30;
+                moveSpeed = .3f;
                 if (t >= 213.5f)
                     if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line21") == false)
                         SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line21");

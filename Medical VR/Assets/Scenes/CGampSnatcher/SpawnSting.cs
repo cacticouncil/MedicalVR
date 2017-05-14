@@ -45,7 +45,6 @@ public class SpawnSting : MonoBehaviour
             {
                 takenPoints.Add(SpawnPoints[index]);
                 GameObject obj = Instantiate(Stings, SpawnPoints[index].position, Quaternion.identity, stingHolder);
-                Debug.Log(SpawnPoints[index].position.ToString());
                 obj.GetComponent<GetpointsER>().storebullets = mainCamera;
                 obj.GetComponent<GetpointsER>().parent = this;
                 obj.GetComponent<GetpointsER>().position = SpawnPoints[index];

@@ -28,7 +28,7 @@ public class cGAMP_CellGameplayScript : MonoBehaviour
         }
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 106)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * moveSpeed);
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.fixedDeltaTime * moveSpeed);
         }
     }
 }

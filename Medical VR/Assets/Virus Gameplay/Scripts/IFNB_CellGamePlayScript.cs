@@ -31,11 +31,12 @@ public class IFNB_CellGamePlayScript : MonoBehaviour {
         }
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 244)
         {
-            moveSpeed = 20;
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * moveSpeed);
+            moveSpeed = .2f;
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.fixedDeltaTime * moveSpeed);
         }
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 251)
         {
+            gameObject.SetActive(false);
             proteins.SetActive(true);
         }
 
