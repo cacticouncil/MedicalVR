@@ -3,22 +3,28 @@ using System.Collections;
 
 public class GetpointsER : MonoBehaviour
 {
-
-    bool ithit = false;
     public GameObject storebullets;
+    public SpawnSting parent;
+    public Transform position;
 
+    private bool hit = false;
 
-    // Use this for initialization
-    void Start()
+    private void OnCollisionEnter(Collision collision)
     {
-
+        if (collision.transform.tag == "CBullet" && !hit)
+        {
+            hit = true;
+            storebullets.GetComponent<Storebullets>().AddToScore(25);
+            Storebullets.numberofstingsdone += 1;
+            parent.takenPoints.Remove(position);
+            StartCoroutine(MoveTo());
+            Destroy(collision.gameObject);
+        }
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    IEnumerator MoveTo()
     {
-
-        if (ithit == true)
+        while (true)
         {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y + 20, transform.position.z), 0.1f);
 
@@ -27,19 +33,8 @@ public class GetpointsER : MonoBehaviour
 
                 Destroy(gameObject);
             }
-        }
-    }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.tag == "CBullet")
-        {
-            if (ithit == true)
-                return;
-            storebullets.GetComponent<Storebullets>().AddToScore(25);
-            Storebullets.numberofstingsdone += 1;
-            ithit = true;
-            Destroy(collision.gameObject);
+            yield return new WaitForFixedUpdate();
         }
     }
 }

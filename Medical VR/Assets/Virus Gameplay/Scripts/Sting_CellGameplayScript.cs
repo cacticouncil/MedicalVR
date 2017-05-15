@@ -32,11 +32,11 @@ public class Sting_CellGameplayScript : MonoBehaviour {
                 break;
             case 159:
                 I = 1;
-                moveSpeed = 20;
+                moveSpeed = .2f;
                 break;
             case 182:
                 I = 2;
-                moveSpeed = 20;
+                moveSpeed = .2f;
                 break;
             default:
                 break;
@@ -46,7 +46,7 @@ public class Sting_CellGameplayScript : MonoBehaviour {
     void MoveTo()
     {
         if (I != places.Count)
-            transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, moveSpeed * Time.fixedDeltaTime);
     }
     public void DoAction()
     {

@@ -5,18 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class CellGameplayScript : MonoBehaviour
 {
-
+    public GameObject cGAS_pic;
     public List<GameObject> places;
     public List<GameObject> Sceneries;
     public List<Transform> rotationTargets;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna, parent;
-    public static int loadCase =0;
+    public static int loadCase;
     // Use this for initialization
     delegate void Func();
     Func doAction;
     public float moveSpeed;
     float fadeSpeed;
     int I = 0;
+    private bool firstLook = true;
+
     void Start()
     {
         GlobalVariables.tutorial = true;
@@ -83,26 +85,30 @@ public class CellGameplayScript : MonoBehaviour
         doAction();
         MoveTo();
     }
+
     void RiseCurtain()
     {
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a > 255)
             a = 255;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * fadeSpeed));
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.fixedDeltaTime * fadeSpeed));
 
     }
+
     void LowerCurtain()
     {
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a < 0)
             a = 0;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * fadeSpeed));
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.fixedDeltaTime * fadeSpeed));
     }
+
     void MoveTo()
     {
         if (I != places.Count)
-            parent.transform.position = Vector3.MoveTowards(parent.transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
+            parent.transform.position = Vector3.MoveTowards(parent.transform.position, places[I].transform.position, moveSpeed * Time.fixedDeltaTime);
     }
+
     void CheckCaases()
     {
         float t = subtitles.GetComponent<SubstitlesScript>().theTimer;
@@ -117,9 +123,9 @@ public class CellGameplayScript : MonoBehaviour
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line01");
                 break;
             case (7):
-                if(t >= 7.5)
-                if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line02") == false)
-                    SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line02");
+                if (t >= 7.5)
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line02") == false)
+                        SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line02");
                 break;
             case (23):
                 doAction = LowerCurtain;
@@ -127,8 +133,12 @@ public class CellGameplayScript : MonoBehaviour
                 virus.SetActive(true);
                 break;
             case (24):
-                parent.GetComponent<LookCamera>().target = rotationTargets[0];
-                parent.GetComponent<LookCamera>().enabled = true;
+                if (firstLook)
+                {
+                    firstLook = false;
+                    parent.GetComponent<LookCamera>().target = rotationTargets[0];
+                    parent.GetComponent<LookCamera>().enabled = true;
+                }
                 Sceneries[0].SetActive(false);
                 Sceneries[1].SetActive(true);
                 I = 1;
@@ -139,7 +149,7 @@ public class CellGameplayScript : MonoBehaviour
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line03");
                 break;
             case (25):
-                parent.GetComponent<LookCamera>().enabled = false;
+                firstLook = true;
                 // doAction = NullFunction;
                 I = 2;
                 moveSpeed = 10;
@@ -149,8 +159,12 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (31):
-                parent.GetComponent<LookCamera>().target = rotationTargets[1];
-                parent.GetComponent<LookCamera>().enabled = true;
+                if (firstLook)
+                {
+                    firstLook = false;
+                    parent.GetComponent<LookCamera>().target = rotationTargets[1];
+                    parent.GetComponent<LookCamera>().enabled = true;
+                }
                 Sceneries[1].SetActive(false);
                 Sceneries[2].SetActive(true);
                 I = 3;
@@ -160,11 +174,20 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case 37:
-                parent.GetComponent<LookCamera>().enabled = false;
+                firstLook = true;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line04") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line04");
                 break;
+
+            case (43):
+                cGAS_pic.SetActive(true);
+                break;
+            case (44):
+                if (t >= 44.5)
+                    subtitles.GetComponent<SubstitlesScript>().Stop();
+                break;
             case 46:
+                cGAS_pic.SetActive(false);
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line05") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line05");
                 break;
@@ -193,26 +216,30 @@ public class CellGameplayScript : MonoBehaviour
                 SceneManager.LoadScene("ATPGTPShooter");
                 break;
             case (96):
-                parent.GetComponent<LookCamera>().target = rotationTargets[1];
-                parent.GetComponent<LookCamera>().enabled = true;
+                if (firstLook)
+                {
+                    firstLook = false;
+                    parent.GetComponent<LookCamera>().target = rotationTargets[1];
+                    parent.GetComponent<LookCamera>().enabled = true;
+                }
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line10") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line10");
                 break;
             case 105:
-                parent.GetComponent<LookCamera>().enabled = false;
+                firstLook = true;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line11") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line11");
                 break;
             case (106):
                 I = 4;
-                moveSpeed = 40;
+                moveSpeed = .4f;
                 break;
             case 113:
-                if(t >= 113.5)
-                if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line12") == false)
-                    SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line12");
+                if (t >= 113.5)
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line12") == false)
+                        SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line12");
                 break;
             case 120:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line13") == false)
@@ -232,34 +259,38 @@ public class CellGameplayScript : MonoBehaviour
                 SceneManager.LoadScene("CGampSnatcher");
                 break;
             case (145):
-                parent.GetComponent<LookCamera>().target = rotationTargets[2];
-                parent.GetComponent<LookCamera>().enabled = true;
+                if (firstLook)
+                {
+                    firstLook = false;
+                    parent.GetComponent<LookCamera>().target = rotationTargets[2];
+                    parent.GetComponent<LookCamera>().enabled = true;
+                }
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line15") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line15");
                 break;
             case 158:
-                parent.GetComponent<LookCamera>().enabled = false;
+                firstLook = true;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line16") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line16");
                 break;
             case (159):
                 I = 5;
-                moveSpeed = 20;
+                moveSpeed = .2f;
                 break;
             case 167:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line17") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line17");
                 break;
             case 177:
-                if(t >= 177.5f)
-                if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line18") == false)
-                    SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line18");
+                if (t >= 177.5f)
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line18") == false)
+                        SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line18");
                 break;
             case (182):
                 I = 6;
-                moveSpeed = 20;
+                moveSpeed = .05f;
                 break;
             case 186:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line19") == false)
@@ -270,8 +301,12 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case (191):
-                parent.GetComponent<LookCamera>().target = rotationTargets[3];
-                parent.GetComponent<LookCamera>().enabled = true;
+                if (firstLook)
+                {
+                    firstLook = false;
+                    parent.GetComponent<LookCamera>().target = rotationTargets[3];
+                    parent.GetComponent<LookCamera>().enabled = true;
+                }
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 Sceneries[2].SetActive(false);
@@ -280,7 +315,8 @@ public class CellGameplayScript : MonoBehaviour
                 parent.transform.position = places[I].transform.position;
                 break;
             case 194:
-                parent.GetComponent<LookCamera>().enabled = false;
+                firstLook = true;
+                moveSpeed = .3f;
                 I = 8;
                 break;
             case 204:
@@ -306,14 +342,19 @@ public class CellGameplayScript : MonoBehaviour
                 RenderSettings.fogDensity = 0;
                 break;
             case 213:
-                parent.GetComponent<LookCamera>().enabled = false;
+                if (firstLook)
+                {
+                    firstLook = false;
+                    parent.GetComponent<LookCamera>().enabled = false;
+                }
                 I = 10;
-                moveSpeed = 30;
-                if(t >= 213.5f)
-                if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line21") == false)
-                    SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line21");
+                moveSpeed = .3f;
+                if (t >= 213.5f)
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line21") == false)
+                        SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line21");
                 break;
             case 226:
+                firstLook = true;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line22") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line22");
                 break;
@@ -327,15 +368,19 @@ public class CellGameplayScript : MonoBehaviour
                 SceneManager.LoadScene("MemoryGame");
                 break;
             case (231):
-                parent.GetComponent<LookCamera>().target = rotationTargets[5];
-                parent.GetComponent<LookCamera>().enabled = true;
+                if (firstLook)
+                {
+                    firstLook = false;
+                    parent.GetComponent<LookCamera>().target = rotationTargets[5];
+                    parent.GetComponent<LookCamera>().enabled = true;
+                }
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line23") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line23");
                 break;
             case 238:
-                parent.GetComponent<LookCamera>().enabled = false;
+                firstLook = true;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line24") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line24");
                 break;
@@ -344,9 +389,9 @@ public class CellGameplayScript : MonoBehaviour
                 fadeSpeed = 1.5f;
                 break;
             case 251:
-                if(t >= 251.5)
-                if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line25") == false)
-                    SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line25");
+                if (t >= 251.5)
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line25") == false)
+                        SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line25");
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 break;
@@ -365,17 +410,21 @@ public class CellGameplayScript : MonoBehaviour
                 SceneManager.LoadScene("FightVirus");
                 break;
             case 262:
-                parent.GetComponent<LookCamera>().target = rotationTargets[5];
-                parent.GetComponent<LookCamera>().enabled = true;
+                if (firstLook)
+                {
+                    firstLook = false;
+                    parent.GetComponent<LookCamera>().target = rotationTargets[5];
+                    parent.GetComponent<LookCamera>().enabled = true;
+                }
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line27") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line27");
                 break;
             case 274:
-                
-                    if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line28") == false)
-                        SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line28");
+                firstLook = true;
+                if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line28") == false)
+                    SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line28");
                 break;
             case 285:
                 doAction = LowerCurtain;

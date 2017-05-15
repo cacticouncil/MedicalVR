@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System;
 using UnityEngine.SceneManagement;
@@ -18,6 +19,8 @@ public class Storebullets : MonoBehaviour
     public static int numberofstingsdone;
     public static int neededstings = 5;
     public GameObject theScore, scoreBoard, UI, BulletAmount, TheLevel;
+    public GameObject Username, ProfilePic;
+
     public GameObject theLives;
     public GameObject CenterScreenObj;
     public static float finalScore = 0;
@@ -49,13 +52,20 @@ public class Storebullets : MonoBehaviour
     {
         if (score > finalScore)
             finalScore = score;
-        
+        if (finalScore > PlayerPrefs.GetFloat("CGampScore"))
+            PlayerPrefs.SetFloat("CGampScore", finalScore);
+        else
+            finalScore = PlayerPrefs.GetFloat("CGampScore");
+
         UI.SetActive(false);
         scoreBoard.SetActive(true);
         CGAMPspawnSystem.GetComponent<SpawnCGamp>().enabled = false;
         StingspawnSystem.GetComponent<SpawnSting>().enabled = false;
-        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 4);
+        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
         lives = 3;
+        Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
+        if (FacebookManager.Instance.ProfilePic != null)
+            ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
     public void RestartGame()
     {

@@ -70,6 +70,12 @@ public class MovingCamera : MonoBehaviour
         {
             finalScore = score;
         }
+
+        if (finalScore > PlayerPrefs.GetFloat("DodgeScore"))
+            PlayerPrefs.SetFloat("DodgeScore", finalScore);
+        else
+            finalScore = PlayerPrefs.GetFloat("DodgeScore");
+
         UI.SetActive(false);
         transform.position = orgPos;
         speed = 0;
@@ -77,7 +83,8 @@ public class MovingCamera : MonoBehaviour
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
         int tmp = (int)score;
         Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + tmp.ToString();
-        ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
+        if (FacebookManager.Instance.ProfilePic != null)
+            ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
 
     }
 

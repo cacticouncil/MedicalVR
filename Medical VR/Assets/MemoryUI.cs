@@ -42,6 +42,11 @@ public class MemoryUI : MonoBehaviour
     {
         if (score > finalScore)
             finalScore = score;
+        if (finalScore > PlayerPrefs.GetFloat("MemoryScore"))
+            PlayerPrefs.SetFloat("MemoryScore", finalScore);
+        else
+            finalScore = PlayerPrefs.GetFloat("MemoryScore");
+
         lives = 5;
         UI.SetActive(false);
         Capsules.SetActive(false);
@@ -51,7 +56,8 @@ public class MemoryUI : MonoBehaviour
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
         //scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
-        Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + FacebookManager.Instance.GlobalScore;
+        Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
+        if(FacebookManager.Instance.ProfilePic != null)
         ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
     public void RestartGame()
