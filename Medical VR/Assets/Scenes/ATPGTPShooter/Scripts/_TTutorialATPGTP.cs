@@ -8,6 +8,9 @@ public class _TTutorialATPGTP : MonoBehaviour
     enum TutorialState { dispEnzyme, dispATP, moveATP, dispGTP, moveGTP, pointsDesc, startGame, wait }
     enum TextChild { Top, Right, Left, Bottom }
 
+    public float displayTime = 4;
+    public float rotationSpeed = 1;
+
     public GameObject nucleus;
     public GameObject enzyme;
     public GameObject ATP;
@@ -16,6 +19,8 @@ public class _TTutorialATPGTP : MonoBehaviour
     GameObject enz;
     GameObject atp;
     GameObject gtp;
+
+    float startGameTime;
 
     private TutorialState tState;
     bool run;
@@ -36,7 +41,7 @@ public class _TTutorialATPGTP : MonoBehaviour
         run = GetComponent<_TGameController>().IsTutorial();
         tState = TutorialState.dispEnzyme;
         GetComponent<_TGameController>().FadeScreen();
-        foreach(Transform obj in tutorialStuff.transform.GetChild(0))
+        foreach (Transform obj in tutorialStuff.transform.GetChild(0))
         {
             obj.GetComponent<_TSizeChange>().startSmall = true;
             obj.GetComponent<_TSizeChange>().Inititalize();
@@ -77,22 +82,22 @@ public class _TTutorialATPGTP : MonoBehaviour
         switch (tState)
         {
             case TutorialState.dispEnzyme:
-                Invoke("DispEnzyme", 5);
+                Invoke("DispEnzyme", displayTime);
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.dispATP:
-                Invoke("DispATP", 6 + 6);
+                Invoke("DispATP", displayTime * 2 + 1);
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.moveATP:
-                if(MoveToEnzyme(atp))
+                if (MoveToEnzyme(atp))
                 {
                     ChangeTutorialState(TutorialState.wait);
-                    Invoke("DispGTP", 3);
+                    Invoke("DispGTP", displayTime - 2);
                 }
                 break;
             case TutorialState.moveGTP:
-                if(MoveToEnzyme(gtp))
+                if (MoveToEnzyme(gtp))
                 {
                     ChangeTutorialState(TutorialState.wait);
                     ChangeTutorialState(TutorialState.pointsDesc);
@@ -103,7 +108,8 @@ public class _TTutorialATPGTP : MonoBehaviour
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.startGame:
-                GetComponent<_TGameController>().runGameState(10);
+                StartCoroutine(StartGame(startGameTime));
+                GetComponent<_TGameController>().runGameState(startGameTime + 1);
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.wait:
@@ -118,61 +124,54 @@ public class _TTutorialATPGTP : MonoBehaviour
             return true;
         return false;
     }
-    void DispATP()
+    IEnumerator DispMol(GameObject Mol, float startTime, float duration)
     {
-        atp = Instantiate(ATP, new Vector3(2, 1, 4), Quaternion.identity) as GameObject;
-        Rigidbody rb = atp.GetComponent<Rigidbody>();
-        rb.useGravity = false;
+        yield return new WaitForSeconds(startTime);
 
-        atp.GetComponent<_TSizeChange>().startSmall = true;
+        for (int i = 0; i < 3; ++i)
+        {
+            GameObject mol = Instantiate(Mol, new Vector3(((i - 1) * 1.5f), 1, 4), Quaternion.identity) as GameObject;
+            Rigidbody rb = mol.GetComponent<Rigidbody>();
+            rb.useGravity = false;
 
-        atp.GetComponent<_TSizeChange>().Inititalize();
-        atp.GetComponent<_TSizeChange>().StartGrow();
-        atp.GetComponent<_TMover>().enabled = false;
-        atp.GetComponent<_TDestroyByTime>().CancelDestroy();
-        ChangeTutorialState(TutorialState.moveATP, 9);
-        
-        float initTime = 1.0f;
+            mol.transform.localScale *= 1.5f;
+            mol.GetComponent<_TSizeChange>().startSmall = true;
 
-        string text = "This is ATP.";
-        StartCoroutine(DisplayText(text, TextChild.Right, initTime, 4));
-        initTime += 5;
-
-        text = "Attach the ATP to the Enzyme.";
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
+            mol.GetComponent<_TSizeChange>().Inititalize();
+            mol.GetComponent<_TSizeChange>().StartGrow();
+            mol.GetComponent<_TMover>().enabled = false;
+            mol.GetComponent<_TDestroyByTime>().CancelDestroy();
+            mol.GetComponent<SphereCollider>().enabled = false;
+            StartCoroutine(DestroyMol(mol, duration));
+        }
     }
-    void DispGTP()
+    IEnumerator DestroyMol(GameObject mol, float duration)
     {
-        gtp = Instantiate(GTP, new Vector3(-2, 1, 4), Quaternion.identity) as GameObject;
-        Rigidbody rb = gtp.GetComponent<Rigidbody>();
-        rb.useGravity = false;
+        yield return new WaitForSeconds(duration);
 
-        gtp.GetComponent<_TSizeChange>().startSmall = true;
-
-        gtp.GetComponent<_TSizeChange>().Inititalize();
-        gtp.GetComponent<_TSizeChange>().StartGrow();
-        gtp.GetComponent<_TMover>().enabled = false;
-        gtp.GetComponent<_TDestroyByTime>().CancelDestroy();
-        ChangeTutorialState(TutorialState.moveGTP, 9);
-
-        float initTime = 1.0f;
-
-        string text = "This is GTP.";
-        StartCoroutine(DisplayText(text, TextChild.Left, initTime, 4));
-        initTime += 5;
-
-        text = "Attach the GTP to the Enzyme.";
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
+        mol.GetComponent<_TSizeChange>().StartShrink();
+        Destroy(mol, 2);
     }
+    IEnumerator StartGame(float startTime)
+    {
+        yield return new WaitForSeconds(startTime + 1);
+        GetComponent<_TGameController>().runGameState(0);        
+    }
+
     void DispEnzyme()
     {
-        float moveEnzymeTime = 10;
+        float rotateSpeed = rotationSpeed * 0.9f;
+        float moveEnzymeTime = displayTime;
         enz = Instantiate(enzyme, new Vector3(0, 1, 4), Quaternion.identity) as GameObject;
         enz.GetComponent<_TRandomRotator>().enabled = false;
         Rigidbody rb = enz.GetComponent<Rigidbody>();
-        rb.angularVelocity = new Vector3(0, 1, 0);
+        rb.angularVelocity = new Vector3(0, rotateSpeed, 0);
         rb.velocity = Vector3.zero;
         rb.constraints = RigidbodyConstraints.FreezePosition;
+
+        //      Mathf.Abs()
+
+        //      math
 
         enz.GetComponent<_TSizeChange>().startSmall = true;
 
@@ -186,41 +185,112 @@ public class _TTutorialATPGTP : MonoBehaviour
         ChangeTutorialState(TutorialState.dispATP);
         string text = "This is cGas.";
 
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
 
-        initTime += 5;
+        initTime += displayTime;
         text = "This cGas is infected with Viral DNA.";
 
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
+    }
+    void DispATP()
+    {
+        atp = Instantiate(ATP, new Vector3(2, 1, 4), Quaternion.identity) as GameObject;
+        Rigidbody rb = atp.GetComponent<Rigidbody>();
+        rb.useGravity = false;
+
+        atp.GetComponent<_TSizeChange>().startSmall = true;
+
+        atp.GetComponent<_TSizeChange>().Inititalize();
+        atp.GetComponent<_TSizeChange>().StartGrow();
+        atp.GetComponent<_TMover>().enabled = false;
+        atp.GetComponent<_TDestroyByTime>().CancelDestroy();
+        ChangeTutorialState(TutorialState.moveATP, displayTime * 2 + 1);
+
+        float initTime = 1.0f;
+
+        string text = "This is ATP.";
+        StartCoroutine(DisplayText(text, TextChild.Right, initTime, displayTime - 1));
+        initTime += displayTime;
+
+        text = "Attach the ATP to the Enzyme.";
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
+    }
+    void DispGTP()
+    {
+        gtp = Instantiate(GTP, new Vector3(-2, 1, 4), Quaternion.identity) as GameObject;
+        Rigidbody rb = gtp.GetComponent<Rigidbody>();
+        rb.useGravity = false;
+
+        gtp.GetComponent<_TSizeChange>().startSmall = true;
+
+        gtp.GetComponent<_TSizeChange>().Inititalize();
+        gtp.GetComponent<_TSizeChange>().StartGrow();
+        gtp.GetComponent<_TMover>().enabled = false;
+        gtp.GetComponent<_TDestroyByTime>().CancelDestroy();
+        ChangeTutorialState(TutorialState.moveGTP, displayTime * 2 + 1);
+
+        float initTime = 1.0f;
+
+        string text = "This is GTP.";
+        StartCoroutine(DisplayText(text, TextChild.Left, initTime, displayTime - 1));
+        initTime += displayTime;
+
+        text = "Attach the GTP to the Enzyme.";
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
     }
     void ScoreDescription()
     {
         float initTime = 1.0f;
 
-        string text = "When the cGas is Completed you get 10 points.";
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
-        initTime += 5;
+        string text = "cGas will then move to the Endoplasmic Reticulum";
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
+        initTime += displayTime;
+
+
+
+        text = "You will get 3 rounds of ATP";
+        StartCoroutine(DispMol(ATP, initTime, displayTime));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
+        initTime += displayTime + 1;
+
+        //    text = "Shoot all 3 rounds of ATP";
+        //    StartCoroutine(DisplayText(text, TextChild.Top, initTime + 1, textSpeed - 1));
+        //     initTime += textSpeed + 1;
+
+        text = "You will then get 3 rounds of GTP";
+        StartCoroutine(DispMol(GTP, initTime, displayTime));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime));
+        initTime += displayTime + 1;
+
+        text = "When the cGas is Completed you get 10 points.";
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
+        initTime += displayTime + 1;
 
         text = "10 seconds will also be added to your time.";
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
-        initTime += 5;
-
-        text = "cGas will then return to the Endoplasmic Reticulum";
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, 4));
-        initTime += 5;
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
+        initTime += displayTime + 1;
 
         text = "Complete as many cGas as you can before time runs out.";
-        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 4));
-        initTime += 5;
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
+        initTime += displayTime + 1;
 
         text = "Ready!";
-        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 2));
+        float oldSize = tutorialStuff.transform.GetChild(0).transform.GetChild((int)TextChild.Bottom).gameObject.GetComponent<TextMeshPro>().fontSize;
+        StartCoroutine(ChangeTextSize(48, TextChild.Bottom, initTime));
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 1));
         initTime += 2;
 
         text = "Begin!";
-        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 2));
-    }
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 1));
 
+        startGameTime = initTime + 1;
+        ChangeTutorialState(TutorialState.startGame);
+    }
+    IEnumerator ChangeTextSize(float size, TextChild childNum, float startTime)
+    {
+        yield return new WaitForSeconds(startTime);
+        tutorialStuff.transform.GetChild(0).transform.GetChild((int)childNum).gameObject.GetComponent<TextMeshPro>().fontSize = 36.0f;
+    }
     IEnumerator DisplayText(string text, TextChild childNum, float startText, float displayDuration)
     {
         GameObject obj = tutorialStuff.transform.GetChild(0).transform.GetChild((int)childNum).gameObject;
