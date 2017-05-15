@@ -67,8 +67,8 @@ public class _TRaycastTarget : MonoBehaviour
             }
         for (; i < LineSegmentCount; i++)
         {
-            //    LineSegments.transform.GetChild(i).transform.position = Vector3.zero;
-            LineSegments.transform.GetChild(i).gameObject.SetActive(false);
+            LineSegments.transform.GetChild(i).transform.position = Vector3.zero;
+            //LineSegments.transform.GetChild(i).gameObject.SetActive(false);
         }
     }
 
