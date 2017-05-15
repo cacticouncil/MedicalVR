@@ -10,7 +10,7 @@ public class CellGameplayScript : MonoBehaviour
     public List<GameObject> Sceneries = new List<GameObject>();
     public List<Transform> rotationTargets = new List<Transform>();
     public GameObject subtitles, blackCurtain, virus, rna;
-    public static int loadCase = 4;
+    public static int loadCase;
     public float moveSpeed;
 
     delegate void Func();
