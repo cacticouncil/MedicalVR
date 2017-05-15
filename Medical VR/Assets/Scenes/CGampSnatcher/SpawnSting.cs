@@ -8,7 +8,7 @@ public class SpawnSting : MonoBehaviour
     public Transform[] SpawnPoints;
     [System.NonSerialized]
     public List<Transform> takenPoints = new List<Transform>();
-    public float spawntime = 1.5f;
+    public float spawntime = 7.5f;
     public GameObject Stings;
     public float size;
 
@@ -18,13 +18,7 @@ public class SpawnSting : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        SpawnEnzime();
-        SpawnC();
-    }
-    
-    public void SpawnEnzime()
-    {
-        InvokeRepeating("SpawnC", spawntime, spawntime);
+        InvokeRepeating("SpawnC", 0, spawntime);
     }
 
     public void SpawnC()
