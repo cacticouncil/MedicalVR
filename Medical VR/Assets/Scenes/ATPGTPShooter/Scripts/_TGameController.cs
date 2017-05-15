@@ -88,35 +88,34 @@ public class _TGameController : MonoBehaviour
         SetFacebook();
         isTutorial = GlobalVariables.tutorial;
         // For Testing //
-        if(testTutorial)
+        if (testTutorial)
             isTutorial = testTutorial;
         /////////////////
+        shrinkStuff.listOfLines.SetActive(false);
+        foreach (GameObject obj in uiElements)
+        {
+            _TSizeChange sc = obj.GetComponent<_TSizeChange>();
+            if (sc)
+            {
+                sc.startSmall = true;
+                obj.GetComponent<_TSizeChange>().Inititalize();
+                obj.GetComponent<_TSizeChange>().ResetToSmall();
+            }
+        }
 
         if (isTutorial)
         {
             gameState = GameState.tutorial;
 
-            shrinkStuff.listOfLines.SetActive(false);
-            foreach (GameObject obj in uiElements)
-            {
-                _TSizeChange sc = obj.GetComponent<_TSizeChange>();
-                if (sc)
-                {
-                    sc.startSmall = true;
-                    obj.GetComponent<_TSizeChange>().Inititalize();
-                    obj.GetComponent<_TSizeChange>().ResetToSmall();
-                }
-            }
         }
         else
         {
-            gameState = GameState.play;
-            Invoke("StartScene", 1);
+            runGameState(1);
         }
         //gameState = GameState.tutorial;
         GetComponent<_TTutorialATPGTP>().Initialize();
         ////////////////////////////////////////////////////////////////////////////////
-        
+
     }
 
     private void Update()
@@ -267,11 +266,26 @@ public class _TGameController : MonoBehaviour
             child.GetComponent<_TSizeChange>().StartGrow();
         }
         shrinkStuff.listOfLines.SetActive(true);
+        foreach (GameObject obj in uiElements)
+        {
+            _TSizeChange sc = obj.GetComponent<_TSizeChange>();
+            if (sc)
+            {
+                sc.StartGrow();
+            }
+        }
+    //    Invoke("TurnOnUILights", 1);
+    }
+
+    void TurnOnUILights()
+    {
+        uiElements[0].transform.GetChild(2).gameObject.SetActive(true);
     }
     public void runGameState(float time)
     {
         gameState = GameState.play;
         Invoke("StartScene", time);
+
     }
     public void FadeScreen()
     {

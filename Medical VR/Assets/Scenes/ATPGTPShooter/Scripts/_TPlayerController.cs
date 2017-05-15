@@ -36,16 +36,22 @@ public class _TPlayerController : MonoBehaviour
         
         if (bPressed && Time.time > nextFire)
         {
-            if (isATP)
-                shootATP();
-            else
-                shootGTP();
+            SetFireMode();
+        }
+    }
+    void SetFireMode()
+    {
+        if (isATP)
+            shootATP();
+        else
+            shootGTP();
 
-            if (++currentRound == ShotNumber.reset)
-                currentRound = ShotNumber.ATPOne;
-            if (currentRound == ShotNumber.GTPOne || currentRound == ShotNumber.ATPOne)
-                isATP = !isATP;
-
+        if (++currentRound == ShotNumber.reset)
+            currentRound = ShotNumber.ATPOne;
+        if (currentRound == ShotNumber.GTPOne || currentRound == ShotNumber.ATPOne)
+        {
+            isATP = !isATP;
+            nextFire += fireRate * 3;
         }
     }
     private void FixedUpdate()
