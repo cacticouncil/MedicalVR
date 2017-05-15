@@ -3,8 +3,10 @@ using System.Collections;
 
 public class cGAMP_CellGameplayScript : MonoBehaviour
 {
-    public GameObject target, subtitles;
-    float moveSpeed = .4f;
+    public Transform target;
+    public GameObject subtitles;
+
+    private float moveSpeed = .008f;
 
     // Use this for initialization
     void Start()
@@ -26,9 +28,10 @@ public class cGAMP_CellGameplayScript : MonoBehaviour
             default:
                 break;
         }
+
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 106)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.fixedDeltaTime * moveSpeed);
+            transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed);
         }
     }
 }

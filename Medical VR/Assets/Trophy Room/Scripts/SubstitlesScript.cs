@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-public class SubstitlesScript : MonoBehaviour {
-
+public class SubstitlesScript : MonoBehaviour
+{
     [System.Serializable]
     public class Subtitle
     {
@@ -17,17 +17,17 @@ public class SubstitlesScript : MonoBehaviour {
     public float textSpeed;
     public bool stopTime = false;
     public GameObject pressToContiue;
-    float textTimer =0, voiceTimer =0;
+    float textTimer = 0, voiceTimer = 0;
     string theText = "";
     int textIdx = 0;
     int i = 0;
-    bool stop = false, done = false; 
-	void Start ()
+    bool stop = false, done = false;
+    void Start()
     {
         textSpeed = GlobalVariables.textDelay;
-        if(SceneManager.GetActiveScene().name.Contains("CellGameplay"))
+        if (SceneManager.GetActiveScene().name.Contains("CellGameplay"))
         {
-            switch(CellGameplayScript.loadCase)
+            switch (CellGameplayScript.loadCase)
             {
                 case 1:
                     i = 14;
@@ -45,7 +45,7 @@ public class SubstitlesScript : MonoBehaviour {
                     break;
             }
         }
-        else 
+        else
         {
             switch (VirusGameplayScript.loadCase)
             {
@@ -57,7 +57,7 @@ public class SubstitlesScript : MonoBehaviour {
                     break;
                 case 3:
                     i = 63;
-                    break;              
+                    break;
                 default:
                     break;
             }
@@ -67,48 +67,48 @@ public class SubstitlesScript : MonoBehaviour {
 
         if (theSubtitles.Count == 0)
             stop = true;
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate ()
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
     {
-        if(stop == false)
+        if (stop == false)
         {
-            if(stopTime == false)
-            theTimer += Time.deltaTime;
+            if (stopTime == false)
+                theTimer += Time.deltaTime;
 
             if (theTimer >= theSubtitles[i].start)
             {
-                if(Input.GetButton("Fire1") && stopTime == true)
+                if (Input.GetButton("Fire1") && stopTime == true)
                 {
                     Next();
                 }
                 else
                 {
                     textTimer += Time.deltaTime;
-                    if(textTimer > textSpeed)
+                    if (textTimer > textSpeed)
                     {
-                        textTimer = 0;                                
-                        
+                        textTimer = 0;
+
                         if (textIdx < theSubtitles[i].text.Length)
                         {
                             theText = theText + theSubtitles[i].text[textIdx];
                             textIdx++;
                         }
 
-                        else if(theTimer >= theSubtitles[i].end - 0.1)
+                        else if (theTimer >= theSubtitles[i].end - 0.1)
                         {
                             stopTime = true;
-                            
+
                         }
-                        if(stopTime == true)
+                        if (stopTime == true)
                         {
-                            if(voiceTimer >= 0.01)
+                            if (voiceTimer >= 0.01)
                             {
-                                if(voice != null)
+                                if (voice != null)
                                 {
-                                    if(voice.isPlaying == true && pressToContiue.activeSelf == false)
-                                    Next();
+                                    if (voice.isPlaying == true && pressToContiue.activeSelf == false)
+                                        Next();
                                 }
                                 else
                                 {
@@ -120,17 +120,17 @@ public class SubstitlesScript : MonoBehaviour {
                         }
                         GetComponent<TMPro.TextMeshPro>().text = theText;
                     }
-                    
+
                 }
             }
             else
                 GetComponent<TMPro.TextMeshPro>().text = "";
         }
-        if(done == true)
+        if (done == true)
         {
             theTimer += Time.deltaTime;
-        }   
-	}
+        }
+    }
 
     void Next()
     {
@@ -152,7 +152,7 @@ public class SubstitlesScript : MonoBehaviour {
     }
     public void Replay()
     {
-        if(stop == true)
+        if (stop == true)
         {
             stop = false;
             done = false;

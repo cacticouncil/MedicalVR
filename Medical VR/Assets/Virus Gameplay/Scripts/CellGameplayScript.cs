@@ -5,20 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class CellGameplayScript : MonoBehaviour
 {
-    public GameObject cGAS_pic;
-    public List<GameObject> places;
-    public List<GameObject> Sceneries;
-    public List<Transform> rotationTargets;
-    public GameObject subtitles, blackCurtain, theCamera, virus, rna, parent;
-    public static int loadCase;
-    // Use this for initialization
+    public GameObject cGAS_pic, sting_pic;
+    public List<Transform> places = new List<Transform>();
+    public List<GameObject> Sceneries = new List<GameObject>();
+    public List<Transform> rotationTargets = new List<Transform>();
+    public GameObject subtitles, blackCurtain, virus, rna;
+    public static int loadCase = 4;
+    public float moveSpeed;
+
     delegate void Func();
     Func doAction;
-    public float moveSpeed;
-    float fadeSpeed;
+    private float fadeSpeed = .03f;
     int I = 0;
     private bool firstLook = true;
 
+    // Use this for initialization
     void Start()
     {
         GlobalVariables.tutorial = true;
@@ -35,7 +36,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 3;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 96f;
-                parent.transform.position = places[I].transform.position;
+                transform.position = places[I].position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
                 break;
@@ -45,7 +46,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 4;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 145f;
-                parent.transform.position = places[I].transform.position;
+                transform.position = places[I].position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
                 break;
@@ -55,7 +56,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 10;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 231f;
-                parent.transform.position = places[I].transform.position;
+                transform.position = places[I].position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
                 break;
@@ -65,7 +66,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 10;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 262f;
-                parent.transform.position = places[I].transform.position;
+                transform.position = places[I].position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
                 break;
@@ -91,7 +92,7 @@ public class CellGameplayScript : MonoBehaviour
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a > 255)
             a = 255;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.fixedDeltaTime * fadeSpeed));
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - fadeSpeed);
 
     }
 
@@ -100,13 +101,13 @@ public class CellGameplayScript : MonoBehaviour
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a < 0)
             a = 0;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.fixedDeltaTime * fadeSpeed));
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + fadeSpeed);
     }
 
     void MoveTo()
     {
         if (I != places.Count)
-            parent.transform.position = Vector3.MoveTowards(parent.transform.position, places[I].transform.position, moveSpeed * Time.fixedDeltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, places[I].position, moveSpeed);
     }
 
     void CheckCaases()
@@ -116,7 +117,7 @@ public class CellGameplayScript : MonoBehaviour
         {
             case (0):
                 doAction = RiseCurtain;
-                fadeSpeed = 0.5f;
+                fadeSpeed = 0.01f;
                 break;
             case (1):
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line01") == false)
@@ -129,22 +130,21 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (23):
                 doAction = LowerCurtain;
-                fadeSpeed = 1.5f;
+                fadeSpeed = .03f;
                 virus.SetActive(true);
                 break;
             case (24):
                 if (firstLook)
                 {
                     firstLook = false;
-                    parent.GetComponent<LookCamera>().target = rotationTargets[0];
-                    parent.GetComponent<LookCamera>().enabled = true;
+                    GetComponent<LookCamera>().target = rotationTargets[0];
+                    GetComponent<LookCamera>().enabled = true;
                 }
                 Sceneries[0].SetActive(false);
                 Sceneries[1].SetActive(true);
                 I = 1;
-                parent.transform.position = places[I].transform.position;
+                transform.position = places[I].position;
                 doAction = RiseCurtain;
-                fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line03") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line03");
                 break;
@@ -152,26 +152,23 @@ public class CellGameplayScript : MonoBehaviour
                 firstLook = true;
                 // doAction = NullFunction;
                 I = 2;
-                moveSpeed = 10;
+                moveSpeed = .01f;
                 break;
             case (30):
                 doAction = LowerCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case (31):
                 if (firstLook)
                 {
                     firstLook = false;
-                    parent.GetComponent<LookCamera>().target = rotationTargets[1];
-                    parent.GetComponent<LookCamera>().enabled = true;
+                    GetComponent<LookCamera>().enabled = true;
                 }
                 Sceneries[1].SetActive(false);
                 Sceneries[2].SetActive(true);
                 I = 3;
                 RenderSettings.fogDensity = 0;
-                parent.transform.position = places[I].transform.position;
+                transform.position = places[I].position;
                 doAction = RiseCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case 37:
                 firstLook = true;
@@ -209,7 +206,6 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (94):
                 doAction = LowerCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case (95):
                 GlobalVariables.arcadeMode = false;
@@ -219,11 +215,10 @@ public class CellGameplayScript : MonoBehaviour
                 if (firstLook)
                 {
                     firstLook = false;
-                    parent.GetComponent<LookCamera>().target = rotationTargets[1];
-                    parent.GetComponent<LookCamera>().enabled = true;
+                    GetComponent<LookCamera>().target = rotationTargets[1];
+                    GetComponent<LookCamera>().enabled = true;
                 }
                 doAction = RiseCurtain;
-                fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line10") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line10");
                 break;
@@ -234,7 +229,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (106):
                 I = 4;
-                moveSpeed = .4f;
+                moveSpeed = .008f;
                 break;
             case 113:
                 if (t >= 113.5)
@@ -245,13 +240,16 @@ public class CellGameplayScript : MonoBehaviour
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line13") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line13");
                 break;
+            case 129:
+                sting_pic.SetActive(true);
+                break;
             case 131:
+                sting_pic.SetActive(false);
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line14") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line14");
                 break;
             case (143):
                 doAction = LowerCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case (144):
                 //cGAMP
@@ -262,11 +260,10 @@ public class CellGameplayScript : MonoBehaviour
                 if (firstLook)
                 {
                     firstLook = false;
-                    parent.GetComponent<LookCamera>().target = rotationTargets[2];
-                    parent.GetComponent<LookCamera>().enabled = true;
+                    GetComponent<LookCamera>().target = rotationTargets[2];
+                    GetComponent<LookCamera>().enabled = true;
                 }
                 doAction = RiseCurtain;
-                fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line15") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line15");
                 break;
@@ -277,7 +274,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (159):
                 I = 5;
-                moveSpeed = .2f;
+                moveSpeed = .004f;
                 break;
             case 167:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line17") == false)
@@ -290,7 +287,7 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (182):
                 I = 6;
-                moveSpeed = .05f;
+                moveSpeed = .001f;
                 break;
             case 186:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line19") == false)
@@ -298,25 +295,23 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (190):
                 doAction = LowerCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case (191):
                 if (firstLook)
                 {
                     firstLook = false;
-                    parent.GetComponent<LookCamera>().target = rotationTargets[3];
-                    parent.GetComponent<LookCamera>().enabled = true;
+                    GetComponent<LookCamera>().target = rotationTargets[3];
+                    GetComponent<LookCamera>().enabled = true;
                 }
                 doAction = RiseCurtain;
-                fadeSpeed = 1.5f;
                 Sceneries[2].SetActive(false);
                 Sceneries[3].SetActive(true);
                 I = 7;
-                parent.transform.position = places[I].transform.position;
+                transform.position = places[I].position;
                 break;
             case 194:
                 firstLook = true;
-                moveSpeed = .3f;
+                moveSpeed = .006f;
                 I = 8;
                 break;
             case 204:
@@ -328,27 +323,25 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 211:
                 doAction = LowerCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case 212:
-                parent.GetComponent<LookCamera>().target = rotationTargets[4];
-                parent.GetComponent<LookCamera>().enabled = true;
-                Sceneries[2].SetActive(true);
-                Sceneries[3].SetActive(false);
-                doAction = RiseCurtain;
-                fadeSpeed = 1.5f;
-                I = 9;
-                parent.transform.position = places[I].transform.position;
-                RenderSettings.fogDensity = 0;
-                break;
-            case 213:
                 if (firstLook)
                 {
                     firstLook = false;
-                    parent.GetComponent<LookCamera>().enabled = false;
+                    GetComponent<LookCamera>().target = rotationTargets[4];
+                    GetComponent<LookCamera>().enabled = true;
                 }
+                Sceneries[2].SetActive(true);
+                Sceneries[3].SetActive(false);
+                doAction = RiseCurtain;
+                I = 9;
+                transform.position = places[I].position;
+                RenderSettings.fogDensity = 0;
+                break;
+            case 213:
+                firstLook = true;
                 I = 10;
-                moveSpeed = .3f;
+                //moveSpeed = .3f;
                 if (t >= 213.5f)
                     if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line21") == false)
                         SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line21");
@@ -360,7 +353,6 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 229:
                 doAction = LowerCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case 230:
                 //Memory Game
@@ -371,11 +363,10 @@ public class CellGameplayScript : MonoBehaviour
                 if (firstLook)
                 {
                     firstLook = false;
-                    parent.GetComponent<LookCamera>().target = rotationTargets[5];
-                    parent.GetComponent<LookCamera>().enabled = true;
+                    GetComponent<LookCamera>().target = rotationTargets[5];
+                    GetComponent<LookCamera>().enabled = true;
                 }
                 doAction = RiseCurtain;
-                fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line23") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line23");
                 break;
@@ -386,14 +377,12 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 250:
                 doAction = LowerCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case 251:
                 if (t >= 251.5)
                     if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line25") == false)
                         SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line25");
                 doAction = RiseCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case 258:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line26") == false)
@@ -402,7 +391,6 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 260:
                 doAction = LowerCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case 261:
                 //FightVirus
@@ -413,11 +401,10 @@ public class CellGameplayScript : MonoBehaviour
                 if (firstLook)
                 {
                     firstLook = false;
-                    parent.GetComponent<LookCamera>().target = rotationTargets[5];
-                    parent.GetComponent<LookCamera>().enabled = true;
+                    GetComponent<LookCamera>().target = rotationTargets[5];
+                    GetComponent<LookCamera>().enabled = true;
                 }
                 doAction = RiseCurtain;
-                fadeSpeed = 1.5f;
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line27") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line27");
                 break;
@@ -428,7 +415,6 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 285:
                 doAction = LowerCurtain;
-                fadeSpeed = 1.5f;
                 break;
             case 286:
                 GlobalVariables.CellGameplayCompleted = 1;

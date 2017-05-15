@@ -6,53 +6,49 @@ public class Rna_VirusGameplayScript : MonoBehaviour {
 
     public List<GameObject> places;
     public GameObject subtitltes;
+    public float moveSpeed = .17f;   
+    
+    private float vComparer = .01f;
+    private bool moved = true;
 
-    delegate void Func();
-    Func doAction;
-    public float moveSpeed;   
-    int I = 0;
+    IEnumerator MoveTo(Transform t)
+    {
+        while (!V3Equal(transform.position, t.position))
+        {
+            transform.position = Vector3.MoveTowards(transform.position, t.position, moveSpeed);
+            yield return new WaitForFixedUpdate();
+        }
+        moved = true;
+    }
+
+    private bool V3Equal(Vector3 a, Vector3 b)
+    {
+        return Vector3.SqrMagnitude(a - b) < vComparer;
+    }
+
     void Start()
     {
         gameObject.SetActive(false);
-        doAction = NullFunction;
-        switch (VirusGameplayScript.loadCase)
-        {
-            
-            default:
-                break;
-        }
-    }
-    void NullFunction()
-    {
-
     }
     // Update is called once per frame
     void FixedUpdate()
     {
         CheckCaases();
-        doAction();
-        MoveTo();
     }
-    void MoveTo()
-    {
-       if(I != places.Count) 
-       transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
-    }
-       
+
     void CheckCaases()
     {
         switch ((int)subtitltes.GetComponent<SubstitlesScript>().theTimer)
         {
-            case (288):
-                
-                break;
             case (296):
-                I = 1;
-                transform.position = places[I].transform.position;
+                transform.position = places[0].transform.position;
                 break;
             case (297):
-                I = 2;
-                moveSpeed = 17.5f;
+                if (moved)
+                {
+                    moved = false;
+                    StartCoroutine(MoveTo(places[1].transform));
+                }
                 break;
             default:
                 break;

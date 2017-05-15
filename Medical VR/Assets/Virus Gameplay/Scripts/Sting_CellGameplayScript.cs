@@ -2,28 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Sting_CellGameplayScript : MonoBehaviour {
+public class Sting_CellGameplayScript : MonoBehaviour
+{
+    public List<Transform> places = new List<Transform>();
+    public GameObject subtitles, cGAMP, leftP, rightP;
 
-    public List<GameObject> places = new List<GameObject>();
-    public GameObject sting_pic, subtitles, cGAMP, leftP, rightP;
+    private float vComparer = .01f;
+    private float moveSpeed = .004f;
+    private bool moved = true;
+
     // Use this for initialization
-    float moveSpeed = 0;
-    int I = 0;
-	void Start ()
+    void Start()
     {
-        sting_pic.SetActive(false);
         cGAMP.SetActive(false);
     }
-	
-	// Update is called once per frame
-	void FixedUpdate ()
+
+    // Update is called once per frame
+    void FixedUpdate()
     {
-        MoveTo();
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
-            case (129):
-                sting_pic.SetActive(true);
-                break;
             case (130):
                 subtitles.GetComponent<SubstitlesScript>().Stop();
                 break;
@@ -31,30 +29,46 @@ public class Sting_CellGameplayScript : MonoBehaviour {
                 cGAMP.SetActive(true);
                 break;
             case 159:
-                I = 1;
-                moveSpeed = .2f;
+                if (moved)
+                {
+                    moved = false;
+                    StartCoroutine(MoveTo(places[0]));
+                }
                 break;
             case 182:
-                I = 2;
-                moveSpeed = .2f;
+                if (moved)
+                {
+                    moved = false;
+                    StartCoroutine(MoveTo(places[1]));
+                }
                 break;
             default:
                 break;
         }
-    
+
     }
-    void MoveTo()
+
+    IEnumerator MoveTo(Transform t)
     {
-        if (I != places.Count)
-            transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, moveSpeed * Time.fixedDeltaTime);
+        while (!V3Equal(transform.position, t.position))
+        {
+            transform.position = Vector3.MoveTowards(transform.position, t.position, moveSpeed);
+            yield return new WaitForFixedUpdate();
+        }
+        moved = true;
     }
+
     public void DoAction()
     {
         if (((int)subtitles.GetComponent<SubstitlesScript>().theTimer == 130))
         {
             subtitles.GetComponent<SubstitlesScript>().theTimer += 1;
             subtitles.GetComponent<SubstitlesScript>().Continue();
-            sting_pic.SetActive(false);
         }
+    }
+
+    private bool V3Equal(Vector3 a, Vector3 b)
+    {
+        return Vector3.SqrMagnitude(a - b) < vComparer;
     }
 }
