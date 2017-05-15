@@ -36,6 +36,8 @@ public class Storebullets : MonoBehaviour
     public float fireRate;
     public GameObject bullet;
 
+    public bool finish;
+
     private float nextFire;
     public static void LoseresetPos()
     {
@@ -50,6 +52,7 @@ public class Storebullets : MonoBehaviour
     }
     void ShowScore()
     {
+        finish = true;
         if (score > finalScore)
             finalScore = score;
         if (finalScore > PlayerPrefs.GetFloat("CGampScore"))
@@ -79,6 +82,7 @@ public class Storebullets : MonoBehaviour
     }
     void Start()
     {
+        finish = false;
         score = 0;
         bulletamount = 0;
         BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;

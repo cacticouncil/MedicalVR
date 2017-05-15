@@ -28,8 +28,13 @@ public class CGampBullet : MonoBehaviour
                 Storebullets.bulletamount += 1;
             }
         }
-        
-       
+
+        if(cameras.GetComponent<Storebullets>().finish == true)
+        {
+            Destroy(gameObject);
+        }
+
+
 
 
     }
