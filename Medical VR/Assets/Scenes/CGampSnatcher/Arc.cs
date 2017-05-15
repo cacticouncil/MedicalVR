@@ -1,8 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class _TRaycastTarget : MonoBehaviour
-{
+public class Arc : MonoBehaviour {
+    bool bHeld;
     public GameObject gameController;
     public GameObject gun;
     public GameObject LineSegments;
@@ -72,12 +73,22 @@ public class _TRaycastTarget : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        //bHeld = Input.GetButton("Fire1");
+
+    }
+
     private void FixedUpdate()
     {
-        movementOffset += Time.fixedDeltaTime * .05f;
-        if (movementOffset >= .1f)
-            movementOffset = 0;
-        PlotTrajectory(gun.transform.position, gun.transform.forward * 10, .2f, 1.0f);
+
+        //if (bHeld)
+        //{
+            movementOffset += Time.fixedDeltaTime * .05f;
+            if (movementOffset >= .1f)
+                movementOffset = 0;
+            PlotTrajectory(gun.transform.position, gun.transform.forward * 10, .2f, 1.0f);
+        //}
 
 
         RaycastHit hit;

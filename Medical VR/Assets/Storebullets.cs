@@ -10,6 +10,9 @@ public class Storebullets : MonoBehaviour
     float TutorialTimer = 0.0f;
     int WhatToRead = 0;
     float BeatGameTimer = 0.0f;
+    public static int amount;
+    public static int stingamount;
+
 
     public GameObject EventSystem;
     public GameObject CGAMPspawnSystem;
@@ -82,6 +85,8 @@ public class Storebullets : MonoBehaviour
     }
     void Start()
     {
+        amount = 0;
+        stingamount = 0;
         finish = false;
         score = 0;
         bulletamount = 0;

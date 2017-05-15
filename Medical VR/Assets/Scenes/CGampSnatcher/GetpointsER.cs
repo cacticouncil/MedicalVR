@@ -24,14 +24,16 @@ public class GetpointsER : MonoBehaviour
 
     IEnumerator MoveTo()
     {
+        int x = 0;
         while (true)
         {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y + 20, transform.position.z), 0.1f);
-
+            ++x;
             if (transform.position == new Vector3(transform.position.x, transform.position.y + 20, transform.position.z))
             {
-
+                Debug.Log("In here this many times: " + x);
                 Destroy(gameObject);
+            //    Storebullets.stingamount -= 1;
             }
 
             yield return new WaitForFixedUpdate();

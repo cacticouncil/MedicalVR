@@ -4,7 +4,8 @@ using System.Collections;
 public class IFNB_CellGamePlayScript : MonoBehaviour {
 
     public GameObject subtitles, target, proteins;
-    float moveSpeed;
+
+    private float moveSpeed = .004f;
 	// Use this for initialization
 	void Start ()
     {
@@ -19,7 +20,6 @@ public class IFNB_CellGamePlayScript : MonoBehaviour {
             default:
                 break;
         }
-
     }
 	
 	// Update is called once per frame
@@ -31,8 +31,7 @@ public class IFNB_CellGamePlayScript : MonoBehaviour {
         }
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 244)
         {
-            moveSpeed = .2f;
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.fixedDeltaTime * moveSpeed);
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, moveSpeed);
         }
         if (subtitles.GetComponent<SubstitlesScript>().theTimer > 251)
         {
