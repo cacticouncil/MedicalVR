@@ -8,16 +8,11 @@ public class IRF3_CellGameplayScript : MonoBehaviour {
     public List<GameObject> places;
     int I = 0;
     float moveSpeed = 0;
-	// Use this for initialization
-	void Start ()
-    {
-	
-	}
 	
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, Time.deltaTime * moveSpeed);
+        transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, Time.fixedDeltaTime * moveSpeed);
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
             case 191:
@@ -26,7 +21,7 @@ public class IRF3_CellGameplayScript : MonoBehaviour {
                 break;
             case 194:
                 I = 2;
-                moveSpeed = 20;
+                moveSpeed = .2f;
                 break;
             default:
                 break;

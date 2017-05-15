@@ -25,7 +25,7 @@ public class SubstitlesScript : MonoBehaviour {
 	void Start ()
     {
         textSpeed = GlobalVariables.textDelay;
-        if(SceneManager.GetActiveScene().name == "CellGameplay")
+        if(SceneManager.GetActiveScene().name.Contains("CellGameplay"))
         {
             switch(CellGameplayScript.loadCase)
             {

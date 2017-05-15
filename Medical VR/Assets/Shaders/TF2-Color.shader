@@ -1,6 +1,4 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "Custom/TF2-Color"{
+﻿ Shader "Custom/TF2-Color"{
     Properties {
         _Color ("Main Color", Color) = (1,1,1,1)
         _RimColor ("Rim Color", Color) = (0.97,0.88,1,0.75)
@@ -37,9 +35,10 @@ Shader "Custom/TF2-Color"{
                 fixed3 ramp = tex2D(_RampTex, float2(NdotL * atten, 0)).rgb;
  
                 float nh = max (0, dot (s.Normal, h));
- 
-                fixed4 c;
-                c.rgb = ((_Color.rgb * ramp * _LightColor0.rgb) * (atten * 2));
+				float spec = pow(nh, s.Gloss * 128) * s.Specular * saturate(NdotL);
+
+				fixed4 c;
+				c.rgb = ((_Color.rgb * ramp * _LightColor0.rgb + _LightColor0.rgb * spec) * (atten * 2));
                 return c;
             }
    

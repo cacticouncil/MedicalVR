@@ -10,7 +10,6 @@ public class RNA_CellGameplayScript : MonoBehaviour {
     delegate void Func();
     Func doAction;
     public float moveSpeed;
-    float fadeSpeed;
     int I = 0;
     void Start()
     {
@@ -50,7 +49,7 @@ public class RNA_CellGameplayScript : MonoBehaviour {
                 break;
             case (213):
                 I = 2;
-                moveSpeed = 30;
+                moveSpeed = .3f;
                 break;
             default:
                 break;
