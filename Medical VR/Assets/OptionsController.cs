@@ -58,7 +58,7 @@ public class OptionsController : MonoBehaviour
 
     public void OnSpeedChanged()
     {
-        StopCoroutine(Draw());
+        StopAllCoroutines();
         StartCoroutine(Draw());
     }
 

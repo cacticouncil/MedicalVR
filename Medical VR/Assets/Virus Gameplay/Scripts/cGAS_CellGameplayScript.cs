@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class cGAS_CellGameplayScript : MonoBehaviour
 {
     public SubstitlesScript subtitles;
-    private float moveSpeed = 5;
-    private float vComparer = .04f;
+    private float moveSpeed = .1f;
+    private float vComparer = .01f;
 
     IEnumerator MoveTo(Transform t)
     {
@@ -15,7 +15,7 @@ public class cGAS_CellGameplayScript : MonoBehaviour
 
         while (!V3Equal(t.position, pos))
         {
-            t.position = Vector3.MoveTowards(t.position, pos, moveSpeed * Time.deltaTime);
+            t.position = Vector3.MoveTowards(t.position, pos, moveSpeed);
             yield return new WaitForFixedUpdate();
         }
     }
