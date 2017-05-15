@@ -183,12 +183,12 @@ public class _TTutorialATPGTP : MonoBehaviour
         float initTime = 1.0f;
 
         ChangeTutorialState(TutorialState.dispATP);
-        string text = "This is cGas.";
+        string text = "This is the enzyme cGas.";
 
         StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
 
         initTime += displayTime;
-        text = "This cGas is infected with Viral DNA.";
+        text = "This cGas detects Viral DNA.";
 
         StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
     }
