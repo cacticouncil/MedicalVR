@@ -25,11 +25,18 @@ public class CGampBullet : MonoBehaviour
             if (transform.position == cameras.transform.position + new Vector3(0, 0, 1))
             {
                 Destroy(gameObject);
+                Storebullets.amount -= 1;
                 Storebullets.bulletamount += 1;
             }
         }
-        
-       
+
+        if(cameras.GetComponent<Storebullets>().finish == true)
+        {
+            Destroy(gameObject);
+            Storebullets.amount -= 1;
+        }
+
+
 
 
     }

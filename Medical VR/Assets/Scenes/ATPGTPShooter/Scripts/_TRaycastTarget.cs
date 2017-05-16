@@ -67,8 +67,8 @@ public class _TRaycastTarget : MonoBehaviour
             }
         for (; i < LineSegmentCount; i++)
         {
-            //    LineSegments.transform.GetChild(i).transform.position = Vector3.zero;
-            LineSegments.transform.GetChild(i).gameObject.SetActive(false);
+            LineSegments.transform.GetChild(i).transform.position = Vector3.zero;
+            //LineSegments.transform.GetChild(i).gameObject.SetActive(false);
         }
     }
 
@@ -85,7 +85,7 @@ public class _TRaycastTarget : MonoBehaviour
         {
             Physics.Raycast(gun.transform.position, gun.transform.TransformDirection(Vector3.forward), out hit);
 
-            if (hit.transform.CompareTag("Finish") || hasWon)
+            if ((hit.collider && hit.transform.CompareTag("Finish")) || hasWon)
                 rayOn = false;
             else
                 rayOn = true;

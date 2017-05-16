@@ -6,12 +6,13 @@ public class Virus_VirusGameplay : MonoBehaviour
 {
     public List<GameObject> places;
     public GameObject subtitles, virusWithMesh, capsid, dna, virions;
+    public float moveSpeed;
 
     delegate void Func();
     Func doAction;
-    public float moveSpeed;
-    float fadeSpeed;
+    float fadeSpeed = .01f;
     int I = 0;
+
     void Start()
     {
         doAction = NullFunction;
@@ -43,26 +44,27 @@ public class Virus_VirusGameplay : MonoBehaviour
             if (I == 10)
             {
                 if (dna.transform.rotation == places[I].transform.rotation)
-                    dna.transform.position = Vector3.MoveTowards(dna.transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
+                    dna.transform.position = Vector3.MoveTowards(dna.transform.position, places[I].transform.position, moveSpeed);
             }
             else
-                transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
-
+            {
+                transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, moveSpeed);
+            }
     }
     void fadeCapsid()
     {
         float a = capsid.GetComponent<Renderer>().material.color.a;
-        capsid.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - Time.deltaTime);
+        capsid.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - fadeSpeed);
     }
     void fadeEnvelope()
     {
         float a = virusWithMesh.GetComponent<Renderer>().material.color.a;
-        virusWithMesh.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - Time.deltaTime);
+        virusWithMesh.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - fadeSpeed);
     }
     void RotateTo()
     {
         if (I != places.Count)
-            dna.transform.rotation = Quaternion.RotateTowards(dna.transform.rotation, places[I].transform.rotation, 100 * Time.deltaTime);
+            dna.transform.rotation = Quaternion.RotateTowards(dna.transform.rotation, places[I].transform.rotation, 1);
     }
     void CheckCaases()
     {

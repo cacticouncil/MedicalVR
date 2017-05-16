@@ -8,7 +8,7 @@ public class SpawnSting : MonoBehaviour
     public Transform[] SpawnPoints;
     [System.NonSerialized]
     public List<Transform> takenPoints = new List<Transform>();
-    public float spawntime = 1.5f;
+    public float spawntime = 7.5f;
     public GameObject Stings;
     public float size;
 
@@ -18,37 +18,28 @@ public class SpawnSting : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        SpawnEnzime();
-        SpawnC();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKey(KeyCode.Q))
-        {
-            SpawnEnzime();
-        }
-    }
-
-    public void SpawnEnzime()
-    {
-        InvokeRepeating("SpawnC", spawntime, spawntime);
+        InvokeRepeating("SpawnC", 0, spawntime);
     }
 
     public void SpawnC()
     {
         while (takenPoints.Count != SpawnPoints.Length)
         {
+            Debug.Log("taken points size" + takenPoints.Count);
+            Debug.Log("spawn points size" + SpawnPoints.Length);
             int index = Random.Range(0, SpawnPoints.Length);
             if (!takenPoints.Contains(SpawnPoints[index]))
             {
-                takenPoints.Add(SpawnPoints[index]);
-                GameObject obj = Instantiate(Stings, SpawnPoints[index].position, Quaternion.identity, stingHolder);
-                obj.GetComponent<GetpointsER>().storebullets = mainCamera;
-                obj.GetComponent<GetpointsER>().parent = this;
-                obj.GetComponent<GetpointsER>().position = SpawnPoints[index];
-                return;
+            //    if(Storebullets.stingamount < 6)
+            //    {
+                    takenPoints.Add(SpawnPoints[index]);
+                    GameObject obj = Instantiate(Stings, SpawnPoints[index].position, Quaternion.identity, stingHolder);
+            //        Storebullets.stingamount += 1;
+                    obj.GetComponent<GetpointsER>().storebullets = mainCamera;
+                    obj.GetComponent<GetpointsER>().parent = this;
+                    obj.GetComponent<GetpointsER>().position = SpawnPoints[index];
+                    return;
+            //    }
             }
         }
     }

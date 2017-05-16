@@ -3,18 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class Virus_CellGameplayScript : MonoBehaviour {
-
-    public List<GameObject> places;
+public class Virus_CellGameplayScript : MonoBehaviour
+{
+    public List<Transform> places = new List<Transform>();
     public GameObject subtitles, virusWithMesh, capsid, dna;
 
-    delegate void Func();
-    Func doAction;
-    public float moveSpeed;
     int I = 0;
+    private float moveSpeed = .01f;
+    private bool fade = true;
+
     void Start()
     {
-        doAction = NullFunction;
         switch (CellGameplayScript.loadCase)
         {
             case (1):
@@ -27,94 +26,87 @@ public class Virus_CellGameplayScript : MonoBehaviour {
                 break;
         }
     }
-    void NullFunction()
-    {
 
-    }
     // Update is called once per frame
     void FixedUpdate()
     {
         CheckCaases();
-        doAction();
         MoveTo();
     }
+
     void MoveTo()
     {
         if (I != places.Count)
+        {
             if (I == 10)
             {
-                if (dna.transform.rotation == places[I].transform.rotation)
-                    dna.transform.position = Vector3.MoveTowards(dna.transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
+                if (dna.transform.rotation == places[I].rotation)
+                    dna.transform.position = Vector3.MoveTowards(dna.transform.position, places[I].position, moveSpeed);
             }
             else
-                transform.position = Vector3.MoveTowards(transform.position, places[I].transform.position, moveSpeed * Time.deltaTime);
+            {
+                transform.position = Vector3.MoveTowards(transform.position, places[I].position, moveSpeed);
+            }
+        }
+    }
 
-    }
-    void fadeCapsid()
+    IEnumerator FadeOutObject(Renderer g)
     {
-        float a = capsid.GetComponent<Renderer>().material.color.a;
-        capsid.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - Time.deltaTime);
+        if (g.material.HasProperty("_Color"))
+        {
+            Color c = g.material.color;
+            float startTime = Time.time;
+            float t = 0.0f;
+            while (c.a > 0)
+            {
+                t = Time.time - startTime;
+                c.a = 1.0f - t;
+                g.material.color = c;
+                g.material.SetColor("_OutlineColor", new Color(0, 0, 0, c.a));
+                yield return 0;
+            }
+            c.a = 0.0f;
+            g.material.color = c;
+            g.enabled = false;
+        }
+        fade = true;
     }
-    void RotateTo()
-    {
-        if (I != places.Count)
-            dna.transform.rotation = Quaternion.RotateTowards(dna.transform.rotation, places[I].transform.rotation, 100 * Time.deltaTime);
-    }
+
     void CheckCaases()
     {
         switch ((int)subtitles.GetComponent<SubstitlesScript>().theTimer)
         {
             case (24):
-                I = 1;
-                transform.position = places[I].transform.position;
-                moveSpeed = 5;
+                I = 0;
+                transform.position = places[I].position;
                 break;
             case (25):
-                I = 2;
-                moveSpeed = 5;
+                I = 1;
                 break;
             case (26):
-                I = 3;
-                moveSpeed = 5;
+                I = 2;
                 break;
             case (31):
-                I = 4;
-                transform.position = places[I].transform.position;
-                virusWithMesh.SetActive(false);
+                I = 3;
+                transform.position = places[I].position;
                 break;
-            case (32):
-                doAction = fadeCapsid;
+            case 32:
+                if (fade)
+                {
+                    fade = false;
+                    StartCoroutine(FadeOutObject(GetComponent<Renderer>()));
+                }
                 break;
-            case (33):
+            case (34):
+                if (fade)
+                {
+                    fade = false;
+                    StartCoroutine(FadeOutObject(capsid.GetComponent<Renderer>()));
+                }
+                break;
+            case (35):
                 capsid.SetActive(false);
-                doAction = NullFunction;
-                I = 5;
-                moveSpeed = 25;
                 break;
-            //case 200:
-            //    I = 6;
-            //    moveSpeed = 250;
-            //    break;
-            //case (227):
-            //    doAction = NullFunction;
-            //    I = 7;
-            //    moveSpeed = 250;
-            //    break;
-            //case (249):
-            //    doAction = NullFunction;
-            //    I = 8;
-            //    transform.position = places[I].transform.position;
-            //    break;
-            //case (252):
-            //    doAction = NullFunction;
-            //    I = 9;
-            //    moveSpeed = 50;
-            //    break;
-            //case (256):
-            //    doAction = RotateTo;
-            //    I = 10;
-            //    moveSpeed = 50;
-            //    break;
             default:
                 break;
         }
