@@ -13,9 +13,19 @@ public class _TFadeScreen : MonoBehaviour
     bool turnToScene;
     Color startColor;
     float curfade;
+    bool isInit = false;
 
     void Start()
     {
+        Initialize();
+    }
+
+    void Initialize()
+    {
+        if (isInit)
+            return;
+        isInit = true;
+
         if (cameraPosition)
             camPos = cameraPosition.position;
         else
@@ -33,6 +43,9 @@ public class _TFadeScreen : MonoBehaviour
 
     void Update()
     {
+        if (!isInit)
+            return;
+
         if (turnToBlack)
             TurnToBlack();
         else if (turnToScene)

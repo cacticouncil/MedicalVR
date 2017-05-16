@@ -56,7 +56,10 @@ public class _TGameController : MonoBehaviour
     [HideInInspector]
     public int score;
     public float winTime;
+    [HideInInspector]
+    public float remainingTime;
     public float timePerEnzyme;
+    public float startTimeDelay;
     public int maxNumEnzymes;
     public GameObject[] enzyme;
     public GameObject nucleus;
@@ -92,7 +95,9 @@ public class _TGameController : MonoBehaviour
         // For Testing //
         if (testTutorial)
             isTutorial = testTutorial;
-        /////////////////
+
+        remainingTime = winTime;
+
         shrinkStuff.listOfLines.SetActive(false);
         foreach (GameObject obj in uiElements)
         {
@@ -126,6 +131,7 @@ public class _TGameController : MonoBehaviour
         {
             case GameState.play:
                 RunMode();
+                TimeDisplay();
                 break;
         }
     }
@@ -147,6 +153,27 @@ public class _TGameController : MonoBehaviour
             Invoke("ShrinkObjects", 2);
             if (finalATPScore < score)
                 finalATPScore = score;
+        }
+    }
+
+    bool startTime = false;
+    void TimeDisplay()
+    {
+        if (startTime && remainingTime > 0)
+        {
+            remainingTime -= Time.deltaTime;
+            if (remainingTime < 0)
+                remainingTime = 0;
+            return;
+        }
+        else if (startTimeDelay >= 0.0f)
+        {
+            startTimeDelay -= Time.deltaTime;
+        }
+        else
+        {
+            startTimeDelay = 0;
+            startTime = true;
         }
     }
 
@@ -276,7 +303,7 @@ public class _TGameController : MonoBehaviour
                 sc.StartGrow();
             }
         }
-    //    Invoke("TurnOnUILights", 1);
+        //    Invoke("TurnOnUILights", 1);
     }
 
     void TurnOnUILights()
