@@ -44,6 +44,7 @@
    
             void surf (Input IN, inout SurfaceOutput o)
             {
+				o.Albedo = _Color.rgb;
 				_Color.rgb *= 2;
  
                 half3 rim = pow(max(0, dot(float3(0, 1, 0), WorldNormalVector (IN, o.Normal))), _RimPower) * _RimColor.rgb * _RimColor.a;

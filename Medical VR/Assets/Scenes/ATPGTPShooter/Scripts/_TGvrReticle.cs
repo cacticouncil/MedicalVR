@@ -7,10 +7,10 @@ using System.Collections;
 public class _TGvrReticle : GvrReticlePointer
 {
     /// Number of segments making the reticle circle.
-    public int reticleSegments = 20;
+    public new int reticleSegments = 20;
 
     /// Growth speed multiplier for the reticle/
-    public float reticleGrowthSpeed = 8.0f;
+    public new float reticleGrowthSpeed = 8.0f;
 
     // Private members
     private Material materialComp;

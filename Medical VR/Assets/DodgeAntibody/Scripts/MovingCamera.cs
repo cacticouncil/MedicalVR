@@ -9,27 +9,29 @@ public class MovingCamera : MonoBehaviour
     public static float finalScore;
     public GameObject subtitles, cam;
     public float speed;
+    public float orgSpeed;
     public GameObject theScore, theLives, scoreBoard, UI, Username, ProfilePic;
     public float score = 0;
     public Color fogColor;
     public Vector3 orgPos;
     public int lives = 3;
-    public float orgSpeed;
     public bool stopMoving = false, startSpeed = true, resetting = false;
 
     private float vComparer = .01f;
-
+    public DodgeAntiBodyTutorial DABT; 
     void Start()
     {
         orgPos = transform.position;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         orgSpeed = speed;
+
         if (GlobalVariables.arcadeMode == false && GlobalVariables.tutorial == true)
         {
             subtitles.SetActive(true);
             UI.SetActive(false);
             speed = 0;
         }
+
         if (GlobalVariables.arcadeMode == false)
         {
             UI.SetActive(false);
@@ -43,20 +45,24 @@ public class MovingCamera : MonoBehaviour
             lives--;
             theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
             GetComponent<SphereCollider>().enabled = false;
-            StartCoroutine(LoseReset());
+            StartCoroutine(LoseReset(orgPos));
         }
         //transform.position = originPos;
     }
 
-    IEnumerator LoseReset()
+    public IEnumerator LoseReset(Vector3 pos)
     {
-        while (!V3Equal(transform.position, orgPos))
+        while (!V3Equal(transform.position, pos))
         {
             speed = -10;
             yield return 0;
         }
-        speed = orgSpeed;
-        GetComponent<SphereCollider>().enabled = true;
+
+        if (DABT.MoveText != 7)
+        {
+            speed = orgSpeed;
+            GetComponent<SphereCollider>().enabled = true;
+        }
     }
 
     public void WinResetPos()
@@ -106,28 +112,18 @@ public class MovingCamera : MonoBehaviour
             BannerScript.UnlockTrophy("Platelet");
         }
 
-        if (GlobalVariables.arcadeMode == false)
-        {
-            if (startSpeed == true)
-            {
-                if (subtitles.GetComponent<SubstitlesScript>().IsDone() == true)
-                {
-                    speed = orgSpeed;
-                    startSpeed = false;
-                }
-            }
-        }
-
         AvoidBack();
 
         if (lives < 1)
         {
             ShowScore();
         }
+
         else if (speed < 0)
         {
             transform.position = Vector3.MoveTowards(transform.position, orgPos, Time.fixedDeltaTime * -speed);
         }
+
         else if (!stopMoving)
         {
             transform.position += cam.transform.forward * speed * Time.fixedDeltaTime;
@@ -145,6 +141,7 @@ public class MovingCamera : MonoBehaviour
         {
             stopMoving = true;
         }
+
         else if (speed >= 0)
         {
             stopMoving = false;
