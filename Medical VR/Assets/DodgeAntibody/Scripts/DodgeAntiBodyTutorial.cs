@@ -124,8 +124,6 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
             case 9:
                 Player.GetComponent<MovingCamera>().speed = 5.0f;
                 Player.GetComponent<MovingCamera>().stopMoving = false;
-                Debug.Log("in Case 9");
-
                 break;
 
             default:
@@ -163,7 +161,6 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
         {
             Player.GetComponent<MovingCamera>().speed = 5.0f;
             Player.GetComponent<MovingCamera>().stopMoving = false;
-            Debug.Log("in WaitForPlayer");
 
             if (WhiteCell)
                 WhiteCell.transform.position = Vector3.MoveTowards(WhiteCell.transform.position, Player.transform.position, 1.0f * Time.fixedDeltaTime);
