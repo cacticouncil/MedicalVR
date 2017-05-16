@@ -168,11 +168,7 @@ public class _TTutorialATPGTP : MonoBehaviour
         rb.angularVelocity = new Vector3(0, rotateSpeed, 0);
         rb.velocity = Vector3.zero;
         rb.constraints = RigidbodyConstraints.FreezePosition;
-
-        //      Mathf.Abs()
-
-        //      math
-
+        
         enz.GetComponent<_TSizeChange>().startSmall = true;
 
         enz.GetComponent<_TSizeChange>().Inititalize();
@@ -212,7 +208,7 @@ public class _TTutorialATPGTP : MonoBehaviour
         StartCoroutine(DisplayText(text, TextChild.Right, initTime, displayTime - 1));
         initTime += displayTime;
 
-        text = "Attach the ATP to the Enzyme.";
+        text = "Attach the ATP to the Enzyme binding pocket.";
         StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
     }
     void DispGTP()
@@ -235,7 +231,7 @@ public class _TTutorialATPGTP : MonoBehaviour
         StartCoroutine(DisplayText(text, TextChild.Left, initTime, displayTime - 1));
         initTime += displayTime;
 
-        text = "Attach the GTP to the Enzyme.";
+        text = "Attach the GTP to the Enzyme binding pocket.";
         StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
     }
     void ScoreDescription()
@@ -246,27 +242,23 @@ public class _TTutorialATPGTP : MonoBehaviour
         StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
         initTime += displayTime;
 
-
-
         text = "You will get 3 rounds of ATP";
         StartCoroutine(DispMol(ATP, initTime, displayTime));
         StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
         initTime += displayTime + 1;
-
-        //    text = "Shoot all 3 rounds of ATP";
-        //    StartCoroutine(DisplayText(text, TextChild.Top, initTime + 1, textSpeed - 1));
-        //     initTime += textSpeed + 1;
 
         text = "You will then get 3 rounds of GTP";
         StartCoroutine(DispMol(GTP, initTime, displayTime));
         StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime));
         initTime += displayTime + 1;
 
+        float timePerEnzyme = GetComponent<_TGameController>().timePerEnzyme;
+
         text = "When the cGas is Completed you get 10 points.";
         StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
         initTime += displayTime + 1;
 
-        text = "10 seconds will also be added to your time.";
+        text = timePerEnzyme.ToString() + " seconds will also be added to your time.";
         StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
         initTime += displayTime + 1;
 
