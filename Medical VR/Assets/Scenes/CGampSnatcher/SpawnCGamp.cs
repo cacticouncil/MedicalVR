@@ -4,7 +4,7 @@ using System.Collections;
 public class SpawnCGamp : MonoBehaviour {
 
     public GameObject Cgampprefab;
-
+//    public int amount;
     public GameObject Center;
     public float size;
 
@@ -26,11 +26,15 @@ public class SpawnCGamp : MonoBehaviour {
 
     public void SpawnC()
     {
-        Vector3 pos = /*Center.transform.position + */Random.insideUnitSphere * size;
-        pos.y += 10;
-        GameObject ent = Instantiate(Cgampprefab, pos, Quaternion.identity);
-        ent.GetComponent<_TSizeChange>().Inititalize();
-        ent.GetComponent<_TSizeChange>().StartGrow();
+        if(Storebullets.amount < 10)
+        {
+            Vector3 pos = /*Center.transform.position + */Random.insideUnitSphere * size;
+            pos.y += 10;
+            GameObject ent = Instantiate(Cgampprefab, pos, Quaternion.identity);
+            Storebullets.amount += 1;
+            ent.GetComponent<_TSizeChange>().Inititalize();
+            ent.GetComponent<_TSizeChange>().StartGrow();
+        }
     }
 
     private void OnDrawGizmosSelected()
