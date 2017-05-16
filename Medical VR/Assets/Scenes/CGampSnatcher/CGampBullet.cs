@@ -9,15 +9,21 @@ public class CGampBullet : MonoBehaviour
    
     public GameObject cameras;
     bool isgrabbed = false;
+    float timer = 0;
 
     void Start()
     {
         Instantiate(Trial, transform.position, transform.rotation, transform);
         Trial.GetComponent<ParticleSystem>().Play();
     }
+    private void Update()
+    {
+        timer += Time.deltaTime;
+    }
 
     private void FixedUpdate()
     {
+        
         if(isgrabbed == true)
         {
             transform.position = Vector3.MoveTowards(transform.position, cameras.transform.position + new Vector3(0,0,1), 0.3f);
@@ -30,7 +36,7 @@ public class CGampBullet : MonoBehaviour
             }
         }
 
-        if(cameras.GetComponent<Storebullets>().finish == true)
+        if(cameras.GetComponent<Storebullets>().finish == true || timer > 30)
         {
             Destroy(gameObject);
             Storebullets.amount -= 1;
