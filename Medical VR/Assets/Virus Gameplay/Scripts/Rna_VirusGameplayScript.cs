@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Rna_VirusGameplayScript : MonoBehaviour {
-
-    public List<GameObject> places;
+public class Rna_VirusGameplayScript : MonoBehaviour
+{
+    public List<Transform> places = new List<Transform>();
     public GameObject subtitltes;
-    public float moveSpeed = .17f;   
-    
+
+    private float moveSpeed = .006f;
     private float vComparer = .01f;
     private bool moved = true;
 
