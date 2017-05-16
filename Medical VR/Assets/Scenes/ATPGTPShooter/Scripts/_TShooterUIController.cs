@@ -16,10 +16,11 @@ public class _TShooterUIController : MonoBehaviour
    // private TextMesh textField;
     private TMPro.TextMeshPro tmPro;
     //    private float fps = 60;
+    float changeRounds = .75f;
 
     public Camera cam;
     bool isInit = false;
-    bool firstShot;
+    bool firstShot = false;
 
     void Awake()
     {
@@ -33,8 +34,7 @@ public class _TShooterUIController : MonoBehaviour
         tmPro = GetComponent<TextMeshPro>();
         firstShot = false;
         foreach(Transform child in transform)
-        {
-            
+        {            
             child.GetComponent<_TSizeChange>().Inititalize();
             child.GetComponent<_TSizeChange>().ResetToSmall();
         }
@@ -60,43 +60,57 @@ public class _TShooterUIController : MonoBehaviour
             return;
         firstShot = true;
 
-        if (currentShot == ShotNumber.ATPOne || currentShot == ShotNumber.GTPOne)
-            Invoke("SetText", 1);
-        else
-            SetText();
         currentShot = (ShotNumber)player.GetComponent<_TPlayerController>().GetShotNumber();
 
+        if (currentShot == ShotNumber.ATPOne)
+        {
+            selectShot("GTP ");
+            transform.GetChild((int)ShotNumber.GTPOne).GetComponent<_TSizeChange>().StartShrink();
+            Invoke("SetText", changeRounds);
+        }
+        else if(currentShot == ShotNumber.GTPOne)
+        {
+            selectShot("ATP ");
+            transform.GetChild((int)ShotNumber.ATPOne).GetComponent<_TSizeChange>().StartShrink();
+            Invoke("SetText", changeRounds);
+        }
+        else
+            SetText();
+    }
+    void ShrinkFirstOnes()
+    {
+       
+    }
+    void selectShot(string mol)
+    {
+        tmPro.text = string.Format(DISPLAY_TEXT_FORMAT,
+                mol, 0);
     }
     void SetText()
     {
-        
-        Debug.Log("We are here");
-
         switch (currentShot)
         {
             case ShotNumber.ATPOne:
-                transform.GetChild(3).GetComponent<_TSizeChange>().StartShrink();
-                transform.GetChild(0).GetComponent<_TSizeChange>().StartGrow();
-                transform.GetChild(1).GetComponent<_TSizeChange>().StartGrow();
-                transform.GetChild(2).GetComponent<_TSizeChange>().StartGrow();
+                transform.GetChild((int)ShotNumber.ATPOne).GetComponent<_TSizeChange>().StartGrow();
+                transform.GetChild((int)ShotNumber.ATPTwo).GetComponent<_TSizeChange>().StartGrow();
+                transform.GetChild((int)ShotNumber.ATPThree).GetComponent<_TSizeChange>().StartGrow();
                 break;
             case ShotNumber.ATPTwo:
-                transform.GetChild(2).GetComponent<_TSizeChange>().StartShrink();
+                transform.GetChild((int)ShotNumber.ATPThree).GetComponent<_TSizeChange>().StartShrink();
                 break;
             case ShotNumber.ATPThree:
-                transform.GetChild(1).GetComponent<_TSizeChange>().StartShrink();
+                transform.GetChild((int)ShotNumber.ATPTwo).GetComponent<_TSizeChange>().StartShrink();
                 break;
             case ShotNumber.GTPOne:
-                transform.GetChild(0).GetComponent<_TSizeChange>().StartShrink();
-                transform.GetChild(3).GetComponent<_TSizeChange>().StartGrow();
-                transform.GetChild(4).GetComponent<_TSizeChange>().StartGrow();
-                transform.GetChild(5).GetComponent<_TSizeChange>().StartGrow();
+                transform.GetChild((int)ShotNumber.GTPOne).GetComponent<_TSizeChange>().StartGrow();
+                transform.GetChild((int)ShotNumber.GTPTwo).GetComponent<_TSizeChange>().StartGrow();
+                transform.GetChild((int)ShotNumber.GTPThree).GetComponent<_TSizeChange>().StartGrow();
                 break;
             case ShotNumber.GTPTwo:
-                transform.GetChild(3).GetComponent<_TSizeChange>().StartShrink();
+                transform.GetChild((int)ShotNumber.GTPThree).GetComponent<_TSizeChange>().StartShrink();
                 break;
             case ShotNumber.GTPThree:
-                transform.GetChild(4).GetComponent<_TSizeChange>().StartShrink();
+                transform.GetChild((int)ShotNumber.GTPTwo).GetComponent<_TSizeChange>().StartShrink();
                 break;
 
         }

@@ -5,6 +5,7 @@ public static class GlobalVariables
     public static bool tutorial = false;
     public static bool arcadeMode = true;
     public static int difficulty = 0;
+
     public static int subtitles
     {
         get
