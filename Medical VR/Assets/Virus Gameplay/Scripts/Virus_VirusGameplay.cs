@@ -6,12 +6,12 @@ public class Virus_VirusGameplay : MonoBehaviour
 {
     public List<GameObject> places;
     public GameObject subtitles, virusWithMesh, capsid, dna, virions;
-    public float moveSpeed;
 
     delegate void Func();
     Func doAction;
-    float fadeSpeed = .01f;
-    int I = 0;
+    private float moveSpeed;
+    private float fadeSpeed = .01f;
+    private int I = 0;
 
     void Start()
     {
@@ -72,18 +72,18 @@ public class Virus_VirusGameplay : MonoBehaviour
         {
             case (105):
                 I = 1;
-                moveSpeed = 45;
+                moveSpeed = .9f;
                 break;
             case (151):
                 I = 3;
-                moveSpeed = 5;
+                moveSpeed = .1f;
                 break;
             case (173):
                 doAction = fadeEnvelope;
                 break;
             case (177):
                 I = 4;
-                moveSpeed = 5;
+                moveSpeed = .1f;
                 virusWithMesh.SetActive(false);
                 break;
             case (182):
@@ -98,12 +98,12 @@ public class Virus_VirusGameplay : MonoBehaviour
                 capsid.SetActive(false);
                 doAction = NullFunction;
                 I = 6;
-                moveSpeed = 5;
+                moveSpeed = .1f;
                 break;
             case (227):
                 doAction = NullFunction;
                 I = 7;
-                moveSpeed = 25;
+                moveSpeed = .5f;
                 break;
             case (249):
                 doAction = NullFunction;
@@ -113,12 +113,12 @@ public class Virus_VirusGameplay : MonoBehaviour
             case (252):
                 doAction = NullFunction;
                 I = 9;
-                moveSpeed = 5;
+                moveSpeed = .1f;
                 break;
             case (256):
                 doAction = RotateTo;
                 I = 10;
-                moveSpeed = 5;
+                moveSpeed = .1f;
                 break;
             case (323):
                 virions.SetActive(true);

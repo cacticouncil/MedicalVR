@@ -10,11 +10,11 @@ public class VirusGameplayScript : MonoBehaviour
     public List<Transform> rotationTargets;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna, parent;
     public bool disableMovement = false;
-    public static int loadCase =0;
+    public static int loadCase = 0;
     // Use this for initialization
     delegate void Func();
     Func doAction;
-    public float moveSpeed;
+    private float moveSpeed;
     float fadeSpeed;
     int I = 0;
     void Start()
@@ -30,7 +30,7 @@ public class VirusGameplayScript : MonoBehaviour
             case (1):
                 Sceneries[0].SetActive(false);
                 Sceneries[1].SetActive(true);
-               
+
                 I = 2;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 132.5f;
                 parent.transform.position = places[I].transform.position;
@@ -77,7 +77,7 @@ public class VirusGameplayScript : MonoBehaviour
         disableMovement = false;
         subtitles.GetComponent<SubstitlesScript>().Continue();
         parent.GetComponent<CameraMovement_VirusGameplay>().speed = 0;
-         I = 6;
+        I = 6;
         parent.GetComponent<LookCamera>().target = rotationTargets[2];
         parent.GetComponent<LookCamera>().enabled = true;
         Sceneries[3].SetActive(true);
@@ -101,7 +101,7 @@ public class VirusGameplayScript : MonoBehaviour
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a > 255)
             a = 255;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (fadeSpeed/10));
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (fadeSpeed / 10));
     }
 
     public void LowerCurtain()
@@ -109,7 +109,7 @@ public class VirusGameplayScript : MonoBehaviour
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a < 0)
             a = 0;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (fadeSpeed/10));
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (fadeSpeed / 10));
     }
 
     void MoveTo()
@@ -194,7 +194,7 @@ public class VirusGameplayScript : MonoBehaviour
 
                 doAction = NullFunction;
                 I = 1;
-                moveSpeed = 40;
+                moveSpeed = .8f;
                 break;
             case (116):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-012") == false)
@@ -211,7 +211,7 @@ public class VirusGameplayScript : MonoBehaviour
                     SceneManager.LoadScene("DodgeAntibodies");
                 break;
             case (133):
-               
+
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-013") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-013");
                 break;
@@ -224,7 +224,7 @@ public class VirusGameplayScript : MonoBehaviour
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-015") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-015");
                 I = 3;
-                moveSpeed = 10;
+                moveSpeed = .2f;
                 break;
             case (158):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-016") == false)
@@ -283,7 +283,7 @@ public class VirusGameplayScript : MonoBehaviour
                 disableMovement = true;
                 doAction = NullFunction;
                 I = 5;
-                moveSpeed = 25;
+                moveSpeed = .5f;
                 break;
             case (236):
                 parent.GetComponent<CameraMovement_VirusGameplay>().speed = 5f;
@@ -298,19 +298,19 @@ public class VirusGameplayScript : MonoBehaviour
                 //subtitles.GetComponent<SubstitlesScript>().Stop();
                 break;
             case (248):
-                
+
                 //doAction = LowerCurtain;
                 //fadeSpeed = 1.5f;
                 break;
             case (249):
-                if(parent.GetComponent<CameraMovement_VirusGameplay>().speed != 0)
-                subtitles.GetComponent<SubstitlesScript>().Stop();
+                if (parent.GetComponent<CameraMovement_VirusGameplay>().speed != 0)
+                    subtitles.GetComponent<SubstitlesScript>().Stop();
                 break;
             case (252):
                 parent.GetComponent<LookCamera>().enabled = false;
                 doAction = NullFunction;
                 I = 7;
-                moveSpeed = 5;
+                moveSpeed = .1f;
                 break;
             case (257):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-029") == false)
@@ -366,7 +366,7 @@ public class VirusGameplayScript : MonoBehaviour
             case (297):
                 parent.GetComponent<LookCamera>().enabled = false;
                 I = 9;
-                moveSpeed = 17.5f;
+                moveSpeed = .35f;
                 break;
             case (303):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-035") == false)
@@ -401,7 +401,7 @@ public class VirusGameplayScript : MonoBehaviour
             case (352):
                 GlobalVariables.arcadeMode = false;
                 SceneManager.LoadScene("DestroyTheCell");
-                
+
                 break;
             case (353):
                 parent.GetComponent<LookCamera>().target = rotationTargets[5];
