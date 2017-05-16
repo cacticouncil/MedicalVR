@@ -13,7 +13,7 @@ public class EventsText : MonoBehaviour
         nextEvent = nextEvent.Replace('_', ' ');
         nextEvent = nextEvent.Replace('z', '-');
         GetComponent<TMPro.TextMeshPro>().text =
-           "\nLast Event: " + c.parent.lastEvent +
+           "Last Event: " + c.parent.lastEvent +
            "\nNext Event: " + nextEvent +
            " in " + (c.parent.eventTurns - c.parent.turnNumber % c.parent.eventTurns) + " turns";
     }
