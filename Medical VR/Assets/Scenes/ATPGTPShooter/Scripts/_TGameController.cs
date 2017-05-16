@@ -55,6 +55,8 @@ public class _TGameController : MonoBehaviour
 
     [HideInInspector]
     public int score;
+    public float winTime;
+    public float timePerEnzyme;
     public int maxNumEnzymes;
     public GameObject[] enzyme;
     public GameObject nucleus;
