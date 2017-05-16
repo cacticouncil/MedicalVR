@@ -23,6 +23,7 @@ public class SimonDNATutorial : MonoBehaviour
     private string[] TextList = new string[10];
     private bool last = false, text = false, finish = false;
 
+    bool deleteme;
     void Start()
     {
         if (GlobalVariables.tutorial == true)
