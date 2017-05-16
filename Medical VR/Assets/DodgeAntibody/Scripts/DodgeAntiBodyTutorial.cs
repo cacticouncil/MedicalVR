@@ -34,6 +34,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
 
     void Start()
     {
+        Text = Subtitles.GetComponent<TMPro.TextMeshPro>();
         if (GlobalVariables.tutorial)
         {
             prevState = GlobalVariables.arcadeMode;
