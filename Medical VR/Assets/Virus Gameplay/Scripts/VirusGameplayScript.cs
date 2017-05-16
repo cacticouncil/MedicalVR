@@ -101,7 +101,7 @@ public class VirusGameplayScript : MonoBehaviour
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a > 255)
             a = 255;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (fadeSpeed));
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (fadeSpeed/10));
     }
 
     public void LowerCurtain()
@@ -109,7 +109,7 @@ public class VirusGameplayScript : MonoBehaviour
         float a = blackCurtain.GetComponent<Renderer>().material.color.a;
         if (a < 0)
             a = 0;
-        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (fadeSpeed));
+        blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (fadeSpeed/10));
     }
 
     void MoveTo()
