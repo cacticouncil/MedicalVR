@@ -130,7 +130,7 @@ public class VirusManager : MonoBehaviour
                 {
                     case 1:
                         EnemyCount = 3;
-                        SmallVirusSpeed = 0.003f;
+                        SmallVirusSpeed = 0.005f;
                         SmallVirusHealth = 20;
                         BigVirusSpeed = 0.007f;
                         BigVirusHealth = 40;
@@ -191,7 +191,7 @@ public class VirusManager : MonoBehaviour
             CheckCount = false;
         }
 
-        WaveNumber += 1;
+        //WaveNumber += 1;
     }
 
     public void CreateSmallVirus(GameObject pos)

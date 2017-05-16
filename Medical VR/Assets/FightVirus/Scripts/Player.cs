@@ -17,16 +17,9 @@ public class Player : MonoBehaviour
     public GameObject ScoreBoard;
     public FacebookStuff FB;
 
-    //Variables for tutorial
-    float TutorialTimer = 0.0f;
-    int WhatToRead = 0;
-    bool SpawnWaveOnce = false;
-    bool SpawnWaveTwice = false;
-
     //Variables for game
     public static float BestScoreForFightVirus;
     public float CurrentScore = 0.0f;
-    float ScoreMultiplier = 0.0f;
     public int VirusLeaveCount = 0;
 
     float RuleTimer = 0.0f;
@@ -40,6 +33,15 @@ public class Player : MonoBehaviour
     public bool isGameOver;
     public bool DisplayWaveNumber = false;
     public bool BeatBoss = false;
+
+    //For text
+    bool StopInput = false;
+    public int WhatToRead = 0;
+    public bool CanIRead = true;
+    public TextMeshPro Text;
+    private string[] TextList = new string[7];
+    private bool last = false, text = false, finish = false;
+
     void Start()
     {
         BannerScript.LockTrophy("Virus Trophy");
@@ -49,6 +51,18 @@ public class Player : MonoBehaviour
 
         if (GlobalVariables.tutorial == false)
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+
+        else
+        {
+            TextList[0] = "Welcome to Fight Virus.";
+            TextList[1] = "Your objective is to " + "\n" + "prevent any viruses from leaving the cell.";
+            TextList[2] = "If you look around " + "\n" + "there are four zones to protect.";
+            TextList[3] = "Don't let any virus get to these zones.";
+            TextList[4] = "If three of them meet up they " + "\n" + "will create bigger viruses, Don't let any leave.";
+            TextList[5] = "Click the button on the " + "\n" + "headset to destroy the viruses, press it again to stop.";
+            TextList[6] = "Remember that viruses can spawn behind you.";
+            TextForTutorial();
+        }
     }
 
     void Update()
@@ -195,158 +209,132 @@ public class Player : MonoBehaviour
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Set up how turtorial will show players basic gameplay
+        //Set up turtorial 
         else if (GlobalVariables.tutorial == true)
         {
+            if (StopInput == false)
+            {
+                bool held = Input.GetButton("Fire1");
+                if (held && !last)
+                {
+                    if (text)
+                        finish = true;
+
+                    else
+                        TextForTutorial();
+                }
+                last = held;
+            }
+
             //Need to fade in
             float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
-
-            switch (WhatToRead)
-            {
-                case 0:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Welcome to Fight Virus";
-
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 1:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Your objective is to " + "\n" + "prevent any viruses from leaving the cell";
-
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 2:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  If you look around " + "\n" + "there are four zones to protect";
-
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 3:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Don't let any virus get to these zones";
-
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 4:
-                    TutorialTimer += Time.deltaTime;
-                    if (SpawnWaveOnce == false)
-                    {
-                        SpawnWaveOnce = true;
-                        EnemyManger.GetComponent<VirusManager>().CanISpawn = true;
-                        EnemyManger.GetComponent<VirusManager>().WaveNumber = 1;
-                    }
-
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  If three of them meet up they " + "\n" + "will create bigger viruses";
-
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 5:
-                    TutorialTimer += Time.deltaTime;
-
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Don't let any leave";
-
-                    if (VirusLeaveCount == 1)
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 6:
-                    TutorialTimer += Time.deltaTime;
-                    BulletSpawn.GetComponent<BulletManager>().CanIShoot = true;
-
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Click the button on the " + "\n" + "headset to destroy the viruses";
-
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-
-                    break;
-
-                case 7:
-                    TutorialTimer += Time.deltaTime;
-
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Press it again to stop";
-
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 8:
-                    if (SpawnWaveTwice == false)
-                    {
-                        SpawnWaveTwice = true;
-                        EnemyManger.GetComponent<VirusManager>().CanISpawn = true;
-                        EnemyManger.GetComponent<VirusManager>().WaveNumber = 2;
-                    }
-
-                    TutorialTimer += Time.deltaTime;
-
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "  Remember that viruses can spawn behind you";
-
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                default:
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = " ";
-                    break;
-            }
         }
 
+        if (VirusLeaveCount == 1 && WhatToRead == 5)
+        {
+            StopInput = false;
+            WhatToRead += 1;
+        }
+        
         //For tutorial only it will either transition to story mode or only play once
-        if (WhatToRead >= 9 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
+        if (WhatToRead >= 10 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
         {
             BeatGameTimer += Time.deltaTime;
             CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now you're ready to play";
 
             if (BeatGameTimer >= 2.0f)
-                StoryMode();         
+                StoryMode();
         }
+    }
+
+    void TextForTutorial()
+    {
+        switch (WhatToRead)
+        {
+            case 0:
+                StartCoroutine(TurnTextOn(0));
+                SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-001");
+                break;
+
+            case 1:
+                StartCoroutine(TurnTextOn(1));
+                SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-002");
+                break;
+
+            case 2:
+                StartCoroutine(TurnTextOn(2));
+                SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-003");
+                break;
+
+            case 3:
+                StartCoroutine(TurnTextOn(3));
+                SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-004");
+                break;
+
+            case 4:
+                StartCoroutine(TurnTextOn(4));
+                SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-005");
+                break;
+
+            case 5:
+                //Need to spawn the wave only once but wait for them to create a big virus
+                EnemyManger.GetComponent<VirusManager>().WaveNumber = 1;
+                EnemyManger.GetComponent<VirusManager>().CanISpawn = true;
+                StopInput = true;
+                break;
+
+            case 6:
+                StartCoroutine(TurnTextOn(5));
+                SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-006");
+                break;
+
+            case 7:
+                BulletSpawn.GetComponent<BulletManager>().CanIShoot = true;
+                WhatToRead++;
+                break;
+
+
+            case 8:
+                StartCoroutine(TurnTextOn(6));
+                SoundManager.PlaySFX("Medical_VR_Fight_Virus_Tutorial_Line-007");
+                break;
+
+            case 9:
+                EnemyManger.GetComponent<VirusManager>().WaveNumber = 2;
+                EnemyManger.GetComponent<VirusManager>().CanISpawn = true;
+                WhatToRead++;
+                break;
+
+            default:
+                CenterScreenObj.GetComponent<TextMeshPro>().text = " ";
+                break;
+        }
+    }
+
+    IEnumerator TurnTextOn(int index)
+    {
+        while (text)
+            yield return 0;
+
+        text = true;
+        Text.text = " ";
+
+        while (Text.text != TextList[index] && !finish)
+        {
+            yield return new WaitForSeconds(GlobalVariables.textDelay);
+
+            if (Text.text.Length == TextList[index].Length)
+                Text.text = TextList[index];
+
+            else
+                Text.text = Text.text.Insert(Text.text.Length - 1, TextList[index][Text.text.Length - 1].ToString());
+        }
+
+        Text.text = TextList[index];
+        finish = false;
+        text = false;
+        WhatToRead++;
     }
 
     public void HandleTimeInput()

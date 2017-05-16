@@ -74,10 +74,11 @@ public class RnaMessengerScript : MonoBehaviour
         if (GlobalVariables.arcadeMode == false && simon.GetComponent<SimonSays>().polys != simon.GetComponent<SimonSays>().polysDone)
         {
             timer += Time.deltaTime;
-            if (timer > 1 && timer < 2)
-            {
-                subtitles.GetComponent<SubstitlesScript>().Continue();
-            }
+            //if (timer > 1 && timer < 2)
+            //{
+            //    subtitles.GetComponent<SubstitlesScript>().Continue();
+            //}
+
             float a = blackCurtain.GetComponent<Renderer>().material.color.a;
             if (a > 255)
                 a = 255;
