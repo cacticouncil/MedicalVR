@@ -47,7 +47,7 @@ public class VirusManager : MonoBehaviour
                     case 1:
                         if (GlobalVariables.arcadeMode == true)
                         {
-                            EnemyCount = 12;
+                            EnemyCount = 10;
                             SmallVirusSpeed = 0.003f;
                             SmallVirusHealth = 20;
                             BigVirusSpeed = 0.001f;
@@ -56,7 +56,7 @@ public class VirusManager : MonoBehaviour
 
                         else if (GlobalVariables.arcadeMode == false)
                         {
-                            EnemyCount = 7;
+                            EnemyCount = 5;
                             SmallVirusSpeed = 0.003f;
                             SmallVirusHealth = 20;
                             BigVirusSpeed = 0.001f;
@@ -67,7 +67,7 @@ public class VirusManager : MonoBehaviour
                     case 2:
                         if (GlobalVariables.arcadeMode == true)
                         {
-                            EnemyCount = 16;
+                            EnemyCount = 15;
                             SmallVirusSpeed = 0.004f;
                             SmallVirusHealth = 40;
                             BigVirusSpeed = 0.002f;
@@ -76,7 +76,7 @@ public class VirusManager : MonoBehaviour
 
                         else if (GlobalVariables.arcadeMode == false)
                         {
-                            EnemyCount = 12;
+                            EnemyCount = 10;
                             SmallVirusSpeed = 0.003f;
                             SmallVirusHealth = 40;
                             BigVirusSpeed = 0.002f;
@@ -96,7 +96,7 @@ public class VirusManager : MonoBehaviour
 
                         else if (GlobalVariables.arcadeMode == false)
                         {
-                            EnemyCount = 17;
+                            EnemyCount = 15;
                             SmallVirusSpeed = 0.004f;
                             SmallVirusHealth = 60;
                             BigVirusSpeed = 0.003f;
@@ -108,8 +108,8 @@ public class VirusManager : MonoBehaviour
                         SpawnBoss = true;
                         SmallVirusSpeed = 0.01f;
                         SmallVirusHealth = 20;
-                        BossVirusSpeed = 0.1f;
-                        BossVirusHealth = 400;
+                        BossVirusSpeed = 0.2f;
+                        BossVirusHealth = 500;
                         break;
 
                     default:
@@ -141,7 +141,7 @@ public class VirusManager : MonoBehaviour
                         EnemyCount = 7;
                         SmallVirusSpeed = 0.002f;
                         SmallVirusHealth = 20;
-                        BigVirusSpeed = 0.001f;
+                        BigVirusSpeed = 0.007f;
                         BigVirusHealth = 40;
                         Invoke("CreateWave", 2);
                         break;
@@ -191,7 +191,7 @@ public class VirusManager : MonoBehaviour
             CheckCount = false;
         }
 
-        //WaveNumber += 1;
+        WaveNumber += 1;
     }
 
     public void CreateSmallVirus(GameObject pos)
