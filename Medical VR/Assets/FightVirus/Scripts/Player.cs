@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     public int WhatToRead = 0;
     public bool CanIRead = true;
     public TextMeshPro Text;
-    private string[] TextList = new string[7];
+    private string[] TextList = new string[8];
     private bool last = false, text = false, finish = false;
 
     void Start()
@@ -61,6 +61,7 @@ public class Player : MonoBehaviour
             TextList[4] = "If three of them meet up they " + "\n" + "will create bigger viruses, Don't let any leave.";
             TextList[5] = "Click the button on the " + "\n" + "headset to destroy the viruses, press it again to stop.";
             TextList[6] = "Remember that viruses can spawn behind you.";
+            TextList[7] = "Great now you're ready to play.";
             TextForTutorial();
         }
     }
@@ -236,15 +237,11 @@ public class Player : MonoBehaviour
             StopInput = false;
             WhatToRead += 1;
         }
-        
-        //For tutorial only it will either transition to story mode or only play once
-        if (WhatToRead >= 10 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
-        {
-            BeatGameTimer += Time.deltaTime;
-            CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now you're ready to play";
 
-            if (BeatGameTimer >= 2.0f)
-                StoryMode();
+        if (EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0 && EnemyManger.GetComponent<VirusManager>().WaveNumber == 3 && WhatToRead == 9)
+        {
+            StopInput = false;
+            WhatToRead++;
         }
     }
 
@@ -259,21 +256,25 @@ public class Player : MonoBehaviour
 
             case 1:
                 StartCoroutine(TurnTextOn(1));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-001", false);
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-002");
                 break;
 
             case 2:
                 StartCoroutine(TurnTextOn(2));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-002", false);
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-003");
                 break;
 
             case 3:
                 StartCoroutine(TurnTextOn(3));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-003", false);
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-004");
                 break;
 
             case 4:
                 StartCoroutine(TurnTextOn(4));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-004", false);
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-005");
                 break;
 
@@ -285,25 +286,37 @@ public class Player : MonoBehaviour
                 break;
 
             case 6:
+                //StopInput = true;
                 StartCoroutine(TurnTextOn(5));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-005", false);
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-006");
                 break;
 
             case 7:
+                //StopInput = false;
                 BulletSpawn.GetComponent<BulletManager>().CanIShoot = true;
                 WhatToRead++;
                 break;
 
-
             case 8:
                 StartCoroutine(TurnTextOn(6));
-                SoundManager.PlaySFX("Medical_VR_Fight_Virus_Tutorial_Line-007");
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-006", false);
+                SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-007");
                 break;
 
             case 9:
+                Text.text = "";
                 EnemyManger.GetComponent<VirusManager>().WaveNumber = 2;
                 EnemyManger.GetComponent<VirusManager>().CanISpawn = true;
-                WhatToRead++;
+                StopInput = true;
+                break;
+
+            case 10:
+                StartCoroutine(TurnTextOn(7));
+                break;
+
+            case 11:
+                StoryMode();
                 break;
 
             default:
@@ -344,7 +357,7 @@ public class Player : MonoBehaviour
 
     void SetFacebook()
     {
-        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + CurrentScore.ToString(); /// + FacebookManager.Instance.GlobalScore /;
+        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + CurrentScore.ToString();
         if (FacebookManager.Instance.ProfilePic != null)
             FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
