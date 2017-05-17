@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 
 using TMPro;
+
 public class _TScoreUI : MonoBehaviour
 {
     private Camera cam;

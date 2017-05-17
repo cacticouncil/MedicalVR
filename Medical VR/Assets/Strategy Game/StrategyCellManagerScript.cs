@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -60,7 +59,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     private float randomRange = .5f;
     private float p2Modifier = 1, p3Modifier = .5f;
     private bool victory = false, defeat = false;
-    private int virusTurns = 15, virusDelay = 30;
+    private float virusReset = 50, virusTurn = 50, virusTurnMod = 2.5f;
 
     private float xOffset = 2.0f;
     private float yOffset = 2.0f;
@@ -153,8 +152,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                     medium = 2;
                     hard = 4;
 
-                    virusDelay = 40;
-                    virusTurns = 20;
+                    virusTurnMod = 2.5f;
 
                     GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
                     t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
@@ -180,8 +178,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                     medium = 1;
                     hard = 2;
 
-                    virusDelay = 30;
-                    virusTurns = 15;
+                    virusTurnMod = 3;
 
                     GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
                     t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
@@ -205,8 +202,7 @@ public class StrategyCellManagerScript : MonoBehaviour
 
                     easy = medium = hard = 0;
 
-                    virusDelay = 1;
-                    virusTurns = 15;
+                    virusTurnMod = 5;
 
                     GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
                     t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
@@ -306,8 +302,10 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
         yield return new WaitForEndOfFrame();
 
-        if (turnNumber >= virusDelay && turnNumber % virusTurns == 0)
+        virusTurn -= virusTurnMod;
+        while (virusTurn <= 0)
         {
+            virusTurn += virusReset;
             SpawnVirus();
         }
 
@@ -1551,6 +1549,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         virus1.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
         virus2.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
         virus3.GetComponent<StrategyVirusScript>().turnSpeed *= 1.5f;
+        virusTurnMod *= 1.5f;
     }
 
     void Mutate_Viruses()

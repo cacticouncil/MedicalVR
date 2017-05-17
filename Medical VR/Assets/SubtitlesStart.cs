@@ -7,7 +7,7 @@ public class SubtitlesStart : MonoBehaviour
     {
         if (GlobalVariables.subtitles == 0)
         {
-            gameObject.SetActive(false);
+            GetComponent<TMPro.TextMeshPro>().enabled = false;
         }
         GetComponent<TMPro.TextMeshPro>().fontSize = GlobalVariables.textSize;
     }

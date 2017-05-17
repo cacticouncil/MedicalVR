@@ -25,8 +25,8 @@ public class SpawnSting : MonoBehaviour
     {
         while (takenPoints.Count != SpawnPoints.Length)
         {
-            Debug.Log("taken points size" + takenPoints.Count);
-            Debug.Log("spawn points size" + SpawnPoints.Length);
+            //Debug.Log("taken points size" + takenPoints.Count);
+            //Debug.Log("spawn points size" + SpawnPoints.Length);
             int index = Random.Range(0, SpawnPoints.Length);
             if (!takenPoints.Contains(SpawnPoints[index]))
             {
