@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class TrophyScript : MonoBehaviour {
 
-    public GameObject pedestal, trophyPos, selectPos, trophyName, sub;
+    public GameObject pedestal, trophyPos, selectPos, trophyName, sub, unlock;
     public float speed, rotationSpeed;
     public List<SubstitlesScript.Subtitle> subtitle = new List<SubstitlesScript.Subtitle>();
     bool moveForward, inPedestal;
