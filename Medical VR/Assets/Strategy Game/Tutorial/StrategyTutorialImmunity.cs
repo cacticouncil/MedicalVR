@@ -7,8 +7,9 @@ public class StrategyTutorialImmunity : MonoBehaviour
     public Transform cam;
     public GameObject eventSystem;
     public GameObject fade;
+    public LookCamera lc;
+    public GameObject reticle;
     public GameObject immunityParticles;
-    public GameObject holder;
     public GameObject objects;
     public GameObject antigen, interferon, protein;
     public GameObject proOutline;
@@ -23,6 +24,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
     public List<TMPro.TextMeshPro> texts = new List<TMPro.TextMeshPro>();
 
     private Vector3 prevPos;
+    private Quaternion prevRotation;
     private bool last = false, text = false, finish = false, advance = false;
     private List<Coroutine> stop = new List<Coroutine>();
 
@@ -33,6 +35,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
             cam = Camera.main.transform.parent;
 
         prevPos = cam.position;
+        prevRotation = lc.transform.rotation;
         StartCoroutine(Advance());
     }
 
@@ -60,13 +63,11 @@ public class StrategyTutorialImmunity : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         //Fade Out
+        objects.SetActive(true);
+        reticle.SetActive(false);
         cam.position = transform.position;
-        Vector3 forward = cam.forward;
-        forward.y = 0.0f;
-        holder.transform.position = forward + transform.position;
-        yield return 0;
-        holder.transform.LookAt(cam);
-        holder.SetActive(true);
+        lc.target = cells[0].transform;
+        lc.enabled = true;
         immDes.text = "Immunity: 0";
 
         fade.GetComponent<FadeOut>().enabled = true;
@@ -390,7 +391,9 @@ public class StrategyTutorialImmunity : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         //Fade Out
+        reticle.SetActive(true);
         cam.position = prevPos;
+        lc.transform.rotation = prevRotation;
         fade.GetComponent<FadeOut>().enabled = true;
         yield return new WaitForSeconds(1.0f);
 
@@ -405,7 +408,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
         }
         pro.SetActive(false);
 
-        holder.SetActive(false);
+        objects.SetActive(false);
         eventSystem.SetActive(true);
         enabled = false;
     }

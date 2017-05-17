@@ -4,12 +4,13 @@ using System.Collections.Generic;
 
 public class StrategyTutorial : MonoBehaviour
 {
+    public GameObject reticle;
+    public TMPro.TextMeshPro subtitles;
     public GameObject plane;
     public GameObject planeDes;
     public GameObject cellManager;
     public GameObject strategyBox;
     public GameObject strategyBoxMesh;
-    public TMPro.TextMeshPro subtitles;
     public GameObject objects;
     public GameObject whiteCell;
     public GameObject[] cells = new GameObject[8];
@@ -32,6 +33,7 @@ public class StrategyTutorial : MonoBehaviour
         }
         else
         {
+            reticle.SetActive(true);
             cellManager.SetActive(true);
             strategyBox.SetActive(true);
             Destroy(gameObject);
@@ -286,6 +288,7 @@ public class StrategyTutorial : MonoBehaviour
             case 27:
                 subtitles.text = "";
                 StopAllCoroutines();
+                reticle.SetActive(true);
                 cellManager.SetActive(true);
                 strategyBox.SetActive(true);
                 Destroy(gameObject);
