@@ -6,18 +6,39 @@ public class StrategyTutorial : MonoBehaviour
 {
     public GameObject reticle;
     public TMPro.TextMeshPro subtitles;
-    public GameObject plane;
-    public GameObject planeDes;
     public GameObject cellManager;
     public GameObject strategyBox;
     public GameObject strategyBoxMesh;
     public GameObject objects;
-    public GameObject whiteCell;
-    public GameObject[] cells = new GameObject[8];
+    public GameObject ui;
+    public GameObject[] cells = new GameObject[7];
     public GameObject[] viruses = new GameObject[3];
-    public List<TMPro.TextMeshPro> texts = new List<TMPro.TextMeshPro>();
 
-    private int cNum = 1;
+    private string[] texts =
+        {
+        "Hello, Human." ,
+        "This will be your final challenge." ,
+        "Your goal is to raise a colony of 50 red blood cells against attacking viruses." ,
+        "This is one of your cells." ,
+        "Each cell has 3 stats that benefit itself and the colony." ,
+        "These stats are Reproduction, Defense, and Immunity." ,
+        "Each stat can be infinitely increased." ,
+        "Increasing a stat will advance you forward a turn." ,
+        "Cells can reproduce and spread immunity on each turn." ,
+        "Viruses can also spawn and attack cells on each turn." ,
+        "For more insight on each stat, activate its respective tutorial button." ,
+        "Random events will also occur." ,
+        "These events can increase cells’ stats as well as the viruses’." ,
+        "You can learn more about it by clicking on the Events tab." ,
+        "This is the Strategy Box." ,
+        "Using it also advances turns." ,
+        "And you can receive a random power-up." ,
+        "These power-ups can give large stat boosts or defend your cell." ,
+        "Check your inventory at the Strategy Box to learn more." ,
+        "That’s all I have for you human. I leave this cell in your hands." ,
+        "Good luck and have fun."
+        };
+    private int cNum = -1;
     private bool last = false, text = false, finish = false;
     private Vector3 cellPosition = new Vector3(1, 0, 0);
     private List<Vector3> nextPos = new List<Vector3>();
@@ -25,19 +46,18 @@ public class StrategyTutorial : MonoBehaviour
 
     void Start()
     {
-        if (GlobalVariables.tutorial)
-        {
-            stop.Add(StartCoroutine(SpawnObject(cells[0], objects.transform.position)));
-            stop.Add(StartCoroutine(CallOnTimer()));
-            StartCoroutine(TurnTextOn(1));
-        }
-        else
-        {
-            reticle.SetActive(true);
-            cellManager.SetActive(true);
-            strategyBox.SetActive(true);
-            Destroy(gameObject);
-        }
+        Click();
+        //if (GlobalVariables.tutorial)
+        //{
+        //    Click();
+        //}
+        //else
+        //{
+        //    reticle.SetActive(true);
+        //    cellManager.SetActive(true);
+        //    strategyBox.SetActive(true);
+        //    Destroy(gameObject);
+        //}
     }
 
     void Update()
@@ -61,195 +81,117 @@ public class StrategyTutorial : MonoBehaviour
     {
         switch (cNum)
         {
+            case -1:
+                //Hello, Human.
+                StartCoroutine(TurnTextOn(0));
+                stop.Add(StartCoroutine(SpawnObject(cells[0], objects.transform.position)));
+                break;
+            case 0:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                cells[0].transform.position = nextPos[0];
+                nextPos.Clear();
+                cells[0].transform.localScale = Vector3.one;
+                //This will be your final challenge.
+                StartCoroutine(TurnTextOn(1));
+                break;
+
             //Cells
             case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                cells[cNum - 1].transform.position = nextPos[0];
-                nextPos.Clear();
-                cells[cNum - 1].transform.localScale = Vector3.one;
-
-                stop.Add(StartCoroutine(SpawnObject(cells[cNum], objects.transform.position)));
-                if (cNum < 6)
-                    stop.Add(StartCoroutine(CallOnTimer()));
+                //Your goal is to raise a colony of 50 red blood cells against attacking viruses.
+                StartCoroutine(TurnTextOn(2));
+                stop.Add(StartCoroutine(SpawnCells()));
                 break;
-
-            //Virus
-            case 7:
+            case 2:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
                 }
                 stop.Clear();
-                cells[cNum - 1].transform.position = nextPos[0];
                 nextPos.Clear();
-                cells[cNum - 1].transform.localScale = Vector3.one;
-
-                StartCoroutine(TurnTextOn(1));
-                stop.Add(StartCoroutine(SpawnObject(viruses[0], objects.transform.position + new Vector3(0, 10, 0))));
-                stop.Add(StartCoroutine(CallOnTimer()));
+                //This is one of your cells.
+                StartCoroutine(TurnTextOn(3));
+                stop.Add(StartCoroutine(ShrinkCells()));
+                break;
+            case 3:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                cells[1].SetActive(false);
+                cells[2].SetActive(false);
+                cells[3].SetActive(false);
+                cells[4].SetActive(false);
+                cells[5].SetActive(false);
+                cells[6].SetActive(false);
+                //Each cell has 3 stats that benefit itself and the colony.
+                stop.Add(StartCoroutine(SpawnObject(ui, objects.transform.position)));
+                StartCoroutine(TurnTextOn(4));
+                break;
+            case 4:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                ui.transform.position = nextPos[0];
+                nextPos.Clear();
+                ui.transform.localScale = Vector3.one;
+                //These stats are Reproduction, Defense, and Immunity.
+                StartCoroutine(TurnTextOn(5));
+                break;
+            case 5:
+                //Each stat can be infinitely increased.
+                StartCoroutine(TurnTextOn(6));
+                break;
+            case 6:
+                //Increasing a stat will advance you forward a turn.
+                StartCoroutine(TurnTextOn(7));
+                break;
+            case 7:
+                //Cells can reproduce and spread immunity on each turn.
+                StartCoroutine(TurnTextOn(8));
                 break;
             case 8:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                viruses[0].transform.position = nextPos[0];
-                nextPos.Clear();
-                viruses[0].transform.localScale = Vector3.one;
-
-                stop.Add(StartCoroutine(VirusAttack()));
-                stop.Add(StartCoroutine(CallOnTimer()));
+                //Viruses can also spawn and attack cells on each turn.
+                StartCoroutine(TurnTextOn(9));
                 break;
             case 9:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                viruses[0].GetComponent<Rotate>().enabled = false;
-                cells[0].GetComponent<Rotate>().enabled = false;
-                cells[0].GetComponent<Renderer>().material.color = cells[1].GetComponent<Renderer>().material.color;
-
-                stop.Add(StartCoroutine(Dying()));
-                stop.Add(StartCoroutine(CallOnTimer()));
+                //For more insight on each stat, activate its respective tutorial button.
+                StartCoroutine(TurnTextOn(10));
                 break;
             case 10:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                viruses[0].SetActive(false);
-                cells[0].GetComponent<Renderer>().material.color = Color.black;
-
-                stop.Add(StartCoroutine(KillRedCell()));
+                //Random events will also occur.
+                StartCoroutine(TurnTextOn(11));
                 break;
-
-            //White Cells
             case 11:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                viruses[1].transform.position = nextPos[0];
-                viruses[1].transform.localScale = Vector3.one;
-                viruses[2].transform.position = nextPos[1];
-                viruses[2].transform.localScale = Vector3.one;
-                nextPos.Clear();
-                cells[0].SetActive(false);
-
-                StartCoroutine(TurnTextOn(2));
-                stop.Add(StartCoroutine(ArriveWhiteCell()));
-                stop.Add(StartCoroutine(CallOnTimer()));
+                //These events can increase cells’ stats as well as the viruses’.
+                StartCoroutine(TurnTextOn(12));
                 break;
             case 12:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                whiteCell.transform.position = viruses[2].transform.position;
-                whiteCell.transform.localScale = Vector3.one;
-                viruses[2].SetActive(false);
-
-                stop.Add(StartCoroutine(MoveWhiteCell()));
-                stop.Add(StartCoroutine(CallOnTimer()));
+                //You can learn more about it by clicking on the Events tab.
+                StartCoroutine(TurnTextOn(13));
                 break;
+
+            //Strategy Box
             case 13:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
                 }
                 stop.Clear();
-                whiteCell.transform.position = viruses[1].transform.position;
-                viruses[1].SetActive(false);
 
-                stop.Add(StartCoroutine(LeaveWhiteCell()));
-                break;
-
-            //Your Cell
-            case 14:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                whiteCell.SetActive(false);
-
-                StartCoroutine(TurnTextOn(3));
-                stop.Add(StartCoroutine(ShrinkCells()));
-                stop.Add(StartCoroutine(SpawnObject(cells[7], objects.transform.position)));
-                break;
-            case 15:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                for (int i = 1; i < 7; i++)
-                {
-                    cells[i].SetActive(false);
-                }
-                cells[7].SetActive(true);
-                cells[7].transform.position = nextPos[0];
-                nextPos.Clear();
-                cells[7].transform.localScale = Vector3.one;
-
-                StartCoroutine(TurnTextOn(4));
-                break;
-            case 16:
-                StartCoroutine(TurnTextOn(5));
-                break;
-            case 17:
-                StartCoroutine(TurnTextOn(6));
-                stop.Add(StartCoroutine(FadeInObject(plane)));
-                break;
-            case 18:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                plane.GetComponent<Renderer>().material.color = Color.red;
-
-                StartCoroutine(TurnTextOn(7));
-                break;
-            case 19:
-                StartCoroutine(TurnTextOn(8));
-                break;
-            case 20:
-                StartCoroutine(TurnTextOn(9));
-                stop.Add(StartCoroutine(FadeOutObject(plane)));
-                stop.Add(StartCoroutine(FadeInObject(planeDes)));
-                break;
-
-            //Strategy Box
-            case 21:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                plane.GetComponent<Renderer>().material.color = Color.clear;
-                planeDes.GetComponent<Renderer>().material.color = Color.red;
-
-                StartCoroutine(TurnTextOn(10));
-                cells[7].transform.GetChild(0).gameObject.SetActive(false);
+                //This is the Strategy Box.
+                StartCoroutine(TurnTextOn(14));
+                ui.gameObject.SetActive(false);
                 stop.Add(StartCoroutine(SpawnObject(strategyBoxMesh, strategyBox.transform.position)));
-                stop.Add(StartCoroutine(MoveObject(cells[7], cellPosition)));
+                stop.Add(StartCoroutine(MoveObject(cells[0], cellPosition)));
                 break;
-            case 22:
+            case 14:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -258,22 +200,26 @@ public class StrategyTutorial : MonoBehaviour
                 strategyBoxMesh.transform.position = nextPos[0];
                 nextPos.Clear();
                 strategyBoxMesh.transform.localScale = Vector3.one;
-                cells[7].transform.position = cellPosition;
+                cells[0].transform.position = cellPosition;
 
-                StartCoroutine(TurnTextOn(11));
+                //Using it also advances turns.
+                StartCoroutine(TurnTextOn(15));
                 break;
-            case 23:
-                StartCoroutine(TurnTextOn(12));
+            case 15:
+                //And you can receive a random power-up.
+                StartCoroutine(TurnTextOn(16));
                 break;
-            case 24:
-                StartCoroutine(TurnTextOn(13));
+            case 16:
+                //These power-ups can give large stat boosts or defend your cell.
+                StartCoroutine(TurnTextOn(17));
                 break;
-            case 25:
-                StartCoroutine(TurnTextOn(14));
+            case 17:
+                //Check your inventory at the Strategy Box to learn more.
+                StartCoroutine(TurnTextOn(18));
                 stop.Add(StartCoroutine(MoveObject(strategyBoxMesh, strategyBox.transform.position)));
                 strategyBoxMesh.transform.GetChild(0).gameObject.SetActive(false);
                 break;
-            case 26:
+            case 18:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -281,11 +227,16 @@ public class StrategyTutorial : MonoBehaviour
                 stop.Clear();
                 strategyBoxMesh.transform.position = strategyBox.transform.position;
 
-                StartCoroutine(TurnTextOn(15));
+                //That’s all I have for you human. I leave this cell in your hands.
+                StartCoroutine(TurnTextOn(19));
                 break;
 
+            case 19:
+                //Good luck and have fun.  
+                StartCoroutine(TurnTextOn(20));
+                break;
             //Clean Up 
-            case 27:
+            case 20:
                 subtitles.text = "";
                 StopAllCoroutines();
                 reticle.SetActive(true);
@@ -412,39 +363,47 @@ public class StrategyTutorial : MonoBehaviour
         text = true;
         subtitles.text = "_";
 
-        while (subtitles.text != texts[index].text && !finish)
+        while (subtitles.text != texts[index] && !finish)
         {
             yield return new WaitForSeconds(GlobalVariables.textDelay);
 
-            if (subtitles.text.Length == texts[index].text.Length)
+            if (subtitles.text.Length == texts[index].Length)
             {
-                subtitles.text = texts[index].text;
+                subtitles.text = texts[index];
             }
             else
             {
-                subtitles.text = subtitles.text.Insert(subtitles.text.Length - 1, texts[index].text[subtitles.text.Length - 1].ToString());
+                subtitles.text = subtitles.text.Insert(subtitles.text.Length - 1, texts[index][subtitles.text.Length - 1].ToString());
             }
         }
-        subtitles.text = texts[index].text;
+        subtitles.text = texts[index];
         finish = false;
         text = false;
     }
     #endregion
 
     #region RedCells
-
     IEnumerator ShrinkCells()
     {
         float startTime = Time.time;
         float t = Time.time - startTime;
+        float[] s =
+        {
+            cells[1].transform.localScale.x,
+            cells[2].transform.localScale.x,
+            cells[3].transform.localScale.x,
+            cells[4].transform.localScale.x,
+            cells[5].transform.localScale.x,
+            cells[6].transform.localScale.x
+        };
         while (t < 1.0f)
         {
             t = Time.time - startTime;
-            float s = 1.0f - t;
-            Mathf.Max(s, 0.0f);
-            for (int i = 1; i < 7; i++)
+            for (int i = 1; i < 6; i++)
             {
-                cells[i].transform.localScale = new Vector3(s, s, s);
+                float f = s[i] * (1.0f - t / 1.0f);
+                Mathf.Max(f, 0.0f);
+                cells[i].transform.localScale = new Vector3(f, f, f);
             }
             yield return 0;
         }
@@ -456,9 +415,9 @@ public class StrategyTutorial : MonoBehaviour
 
     IEnumerator SpawnCells()
     {
-        for (int i = 0; i < 7; i++)
+        for (int i = 1; i < 6 && !finish; i++)
         {
-            StartCoroutine(SpawnObject(cells[i], objects.transform.position));
+            stop.Add(StartCoroutine(SpawnObject(cells[i], objects.transform.position)));
             yield return new WaitForSeconds(1.0f);
         }
     }
@@ -540,58 +499,6 @@ public class StrategyTutorial : MonoBehaviour
         viruses[2].transform.position = nextPos[1];
         viruses[2].transform.localScale = Vector3.one;
         cells[0].SetActive(false);
-    }
-    #endregion
-
-    #region WhiteCell
-    IEnumerator ArriveWhiteCell()
-    {
-        Vector3 startPos = new Vector3(5, 15, 0);
-        whiteCell.SetActive(true);
-        whiteCell.transform.localScale = Vector3.zero;
-
-        float t = 0;
-        float startTime = Time.time;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            whiteCell.transform.position = Vector3.Lerp(startPos, viruses[2].transform.position, t);
-            whiteCell.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t * 2.0f);
-            yield return 0;
-        }
-
-        whiteCell.transform.position = viruses[2].transform.position;
-        whiteCell.transform.localScale = Vector3.one;
-        viruses[2].SetActive(false);
-    }
-    IEnumerator MoveWhiteCell()
-    {
-        float startTime = Time.time;
-        float t = 0;
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            whiteCell.transform.position = Vector3.Lerp(viruses[2].transform.position, viruses[1].transform.position, t);
-            yield return 0;
-        }
-        whiteCell.transform.position = viruses[1].transform.position;
-        viruses[1].SetActive(false);
-    }
-
-    IEnumerator LeaveWhiteCell()
-    {
-        float startTime = Time.time;
-        float t = 0;
-        Vector3 endPos = new Vector3(-5, 15, 0);
-        while (t < 1.0f)
-        {
-            t = Time.time - startTime;
-            whiteCell.transform.position = Vector3.Lerp(viruses[1].transform.position, endPos, t);
-            float temp = Mathf.Clamp01(1.0f - (t - .5f) * 2.0f);
-            whiteCell.transform.localScale = new Vector3(temp, temp, temp);
-            yield return 0;
-        }
-        whiteCell.SetActive(false);
     }
     #endregion
 }
