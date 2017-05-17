@@ -66,7 +66,8 @@ public class RedCellScript : MonoBehaviour
             if (GlobalVariables.arcadeMode == true)
             {
                 virus.GetComponent<MovingCamera>().WinResetPos();
-                virus.GetComponent<MovingCamera>().speed *= 1.5f;
+                virus.GetComponent<MovingCamera>().speed+= 0.75f;
+                virus.GetComponent<MovingCamera>().orgSpeed = virus.GetComponent<MovingCamera>().speed;
                 spawner.GenerateObstacles();
             }
             else
