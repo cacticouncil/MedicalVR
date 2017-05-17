@@ -5,9 +5,10 @@ using System.Collections.Generic;
 public class StrategyTutorialReproduction : MonoBehaviour
 {
     public Transform cam;
-    public GameObject eventSystem;
     public GameObject fade;
-    public GameObject holder;
+    public LookCamera lc;
+    public GameObject reticle;
+    public GameObject eventSystem;
     public GameObject objects;
     public GameObject CDK, TGF;
     public TMPro.TextMeshPro repDes;
@@ -19,6 +20,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
     public List<TMPro.TextMeshPro> texts = new List<TMPro.TextMeshPro>();
 
     private Vector3 prevPos;
+    private Quaternion prevRotation;
     private bool last = false, text = false, finish = false, advance = false;
     private List<Vector3> nextPos = new List<Vector3>();
     private List<Coroutine> stop = new List<Coroutine>();
@@ -30,6 +32,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
             cam = Camera.main.transform.parent;
 
         prevPos = cam.position;
+        prevRotation = lc.transform.rotation;
         StartCoroutine(Advance());
     }
 
@@ -57,13 +60,11 @@ public class StrategyTutorialReproduction : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         //Fade Out
+        objects.SetActive(true);
+        reticle.SetActive(false);
         cam.position = transform.position;
-        Vector3 forward = cam.forward;
-        forward.y = 0.0f;
-        holder.transform.position = forward + transform.position;
-        yield return 0;
-        holder.transform.LookAt(cam.transform);
-        holder.SetActive(true);
+        lc.target = cells[0].transform;
+        lc.enabled = true;
         repDes.text = "Reproduction: 0";
         fade.GetComponent<FadeOut>().enabled = true;
         yield return new WaitForSeconds(1.0f);
@@ -71,11 +72,12 @@ public class StrategyTutorialReproduction : MonoBehaviour
 
         //The Reproduction stat is vital to growing your colony. 
         StartCoroutine(TurnTextOn(0));
-        stop.Add(StartCoroutine(SpawnObject(cells[0], objects.transform.position)));
+        stop.Add(StartCoroutine(SpawnObject(cells[0], cells[0].transform.position)));
 
         while (!advance)
             yield return 0;
         advance = false;
+
 
         foreach (Coroutine co in stop)
         {
@@ -83,6 +85,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
         }
         stop.Clear();
         cells[0].transform.position = nextPos[0];
+        cells[0].transform.localScale = Vector3.one;
         nextPos.Clear();
 
         //At 0 Reproduction, it takes 50 turns to reproduce. 
@@ -92,7 +95,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
             stop.Add(StartCoroutine(FadeInObject(item)));
             stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
         }
-        stop.Add(StartCoroutine(SpawnObject(cells[1], objects.transform.position)));
+        stop.Add(StartCoroutine(SpawnObject(cells[1], cells[0].transform.position)));
         
         while (!advance)
             yield return 0;
@@ -111,12 +114,13 @@ public class StrategyTutorialReproduction : MonoBehaviour
             item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
         }
         cells[1].transform.position = nextPos[0];
+        cells[1].transform.localScale = Vector3.one;
         nextPos.Clear();
 
         //At 10 Reproduction, it takes 5 turns to reproduce. 
         StartCoroutine(TurnTextOn(2));
         repDes.text = "Reproduction: 10";
-        stop.Add(StartCoroutine(SpawnObject(cells[2], objects.transform.position)));
+        stop.Add(StartCoroutine(SpawnObject(cells[2], cells[0].transform.position)));
 
         while (!advance)
             yield return 0;
@@ -128,6 +132,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
         }
         stop.Clear();
         cells[2].transform.position = nextPos[0];
+        cells[2].transform.localScale = Vector3.one;
         nextPos.Clear();
 
         //The CDK powerup temporarily adds 5 extra stat points.
@@ -146,6 +151,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
         }
         stop.Clear();
         CDK.GetComponent<Renderer>().material.color = Color.red;
+        CDK.GetComponent<Renderer>().material.SetColor("_OutlineColor", Color.black);
 
         //These points aren’t depreciated in value. 
         StartCoroutine(TurnTextOn(4));
@@ -155,6 +161,13 @@ public class StrategyTutorialReproduction : MonoBehaviour
         advance = false;
 
         stop.Add(StartCoroutine(FadeOutObject(CDK)));
+        Color col = Color.red;
+        col.a = 0;
+        CDK.GetComponent<Renderer>().material.color = col;
+        col = Color.black;
+        col.a = 0;
+        CDK.GetComponent<Renderer>().material.SetColor("_OutlineColor", col);
+        CDK.SetActive(false);
         foreach (GameObject item in bas)
         {
             stop.Add(StartCoroutine(FadeOutObject(item)));
@@ -204,7 +217,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
             stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
         }
         stop.Add(StartCoroutine(FadeInObject(TGF)));
-        stop.Add(StartCoroutine(SpawnObject(cells[3], objects.transform.position)));
+        stop.Add(StartCoroutine(SpawnObject(cells[3], cells[0].transform.position)));
         
         while (!advance)
             yield return 0;
@@ -229,7 +242,9 @@ public class StrategyTutorialReproduction : MonoBehaviour
         }
 
         TGF.GetComponent<Renderer>().material.color = Color.red;
+        TGF.GetComponent<Renderer>().material.SetColor("_OutlineColor", Color.black);
         cells[3].transform.position = nextPos[0];
+        cells[3].transform.localScale = Vector3.one;
         nextPos.Clear();
 
         //The child will also have the exact same stats. 
@@ -244,7 +259,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
         StartCoroutine(TurnTextOn(8));
         stop.Add(StartCoroutine(FadeOutObject(TGF)));
         stop.Add(StartCoroutine(PaintItBlack(cells[0])));
-        stop.Add(StartCoroutine(SpawnObject(viruses[0], objects.transform.position + new Vector3(0, 10, 0))));
+        stop.Add(StartCoroutine(SpawnObject(viruses[0], cells[0].transform.position + new Vector3(0, 10, 0))));
         cells[0].GetComponent<Rotate>().enabled = false;
         viruses[0].GetComponent<Rotate>().enabled = false;
 
@@ -257,15 +272,19 @@ public class StrategyTutorialReproduction : MonoBehaviour
             StopCoroutine(co);
         }
         stop.Clear();
-        Color r = Color.red;
-        r.a = 0;
-        TGF.GetComponent<Renderer>().material.color = r;
+        col = Color.red;
+        col.a = 0;
+        TGF.GetComponent<Renderer>().material.color = col;
+        col = Color.black;
+        col.a = 0;
+        TGF.GetComponent<Renderer>().material.SetColor("_OutlineColor", col);
+        TGF.SetActive(false);
         cells[0].GetComponent<Renderer>().material.color = Color.black;
         viruses[0].transform.position = nextPos[0];
         nextPos.Clear();
         viruses[0].transform.localScale = Vector3.one;
         
-        stop.Add(StartCoroutine(SpawnObject(viruses[1], objects.transform.position)));
+        stop.Add(StartCoroutine(SpawnObject(viruses[1], cells[0].transform.position)));
 
         while (!advance)
             yield return 0;
@@ -280,7 +299,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
         nextPos.Clear();
         viruses[1].transform.localScale = Vector3.one;
         
-        stop.Add(StartCoroutine(SpawnObject(viruses[2], objects.transform.position)));
+        stop.Add(StartCoroutine(SpawnObject(viruses[2], cells[0].transform.position)));
 
         while (!advance)
             yield return 0;
@@ -295,7 +314,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
         nextPos.Clear();
         viruses[2].transform.localScale = Vector3.one;
 
-        stop.Add(StartCoroutine(SpawnObject(viruses[3], objects.transform.position)));
+        stop.Add(StartCoroutine(SpawnObject(viruses[3], cells[0].transform.position)));
 
         while (!advance)
             yield return 0;
@@ -323,7 +342,9 @@ public class StrategyTutorialReproduction : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         //Fade Out
+        reticle.SetActive(true);
         cam.position = prevPos;
+        lc.transform.rotation = prevRotation;
         fade.GetComponent<FadeOut>().enabled = true;
         yield return new WaitForSeconds(1.0f);
 
@@ -339,7 +360,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
         viruses[0].GetComponent<Rotate>().enabled = true;
         cells[0].GetComponent<Renderer>().material.color = Color.grey;
 
-        holder.SetActive(false);
+        objects.SetActive(false);
         eventSystem.SetActive(true);
         enabled = false;
     }

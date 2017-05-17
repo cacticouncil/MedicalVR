@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Cedits : MonoBehaviour
+public class CreditsScript : MonoBehaviour
 {
     float TutorialTimer = 0.0f;
     int WhatToRead = 0;

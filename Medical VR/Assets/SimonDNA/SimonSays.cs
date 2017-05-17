@@ -259,14 +259,19 @@ public class SimonSays : MonoBehaviour
         {
             finalScore = score;
         }
+        if (finalScore > PlayerPrefs.GetFloat("SimonScore"))
+            PlayerPrefs.SetFloat("SimonScore", finalScore);
+        else
+            finalScore = PlayerPrefs.GetFloat("SimonScore");
         UI.SetActive(false);
        
         scoreBoard.SetActive(true);
-        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
+        scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + .5f);
         //scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
         transform.position = new Vector3(transform.position.x, transform.position.y, 10000);
         Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString(); //FacebookManager.Instance.GlobalScore;
-        ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
+        if (FacebookManager.Instance.ProfilePic != null)
+            ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
         round = 1;
     }
     void ResetStuff()
