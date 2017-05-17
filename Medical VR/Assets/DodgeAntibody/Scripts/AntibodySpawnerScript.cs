@@ -105,7 +105,7 @@ public class AntibodySpawnerScript : MonoBehaviour
                 {
                     GameObject tmp = Instantiate(spawnType, new Vector3(obstacles[j].position.x + Random.Range(-1.0f, 1.0f), obstacles[j].position.y + Random.Range(-1.0f, 1.0f), z + loc), Quaternion.identity, transform) as GameObject;
                     tmp.transform.localScale = new Vector3(tmp.transform.localScale.x + size, tmp.transform.localScale.y + size, tmp.transform.localScale.z + size);
-                    tmp.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)));
+                    //tmp.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)));
                     instances.Add(tmp);
                 }
             }
