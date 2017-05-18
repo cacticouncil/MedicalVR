@@ -8,7 +8,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
     public GameObject Subtitles;
     public GameObject Player;
     public GameObject RedCell;
-    public GameObject WhiteCell;
+    public GameObject WhiteCell, press;
 
     public Transform PlayerTutorialLocation;
     public Transform CellTutorialLocation;
@@ -34,6 +34,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
 
     void Start()
     {
+        GlobalVariables.tutorial = true;
         Text = Subtitles.GetComponent<TMPro.TextMeshPro>();
         if (GlobalVariables.tutorial)
         {
@@ -69,10 +70,16 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
             if (held && !last)
             {
                 if (text)
+                {
+                    //Text.text = "";
                     finish = true;
+                }
 
                 else
+                {
+                    press.SetActive(false);
                     TextForTutorial();
+                }
             }
 
             last = held;
@@ -140,6 +147,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
 
             if (RedCell.transform.position == SavedRedCellPosition)
             {
+                press.SetActive(true);
                 MoveText += 1;
                 WaitForRedCell = false;
                 StopInput = false;
@@ -152,6 +160,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
             if (WhiteCell.transform.position == CellTutorialLocation.position)
             {
                 WhiteCell.GetComponent<SphereCollider>().enabled = true;
+                press.SetActive(true);
                 MoveText += 1;
                 WaitForWhiteCell = false;
                 StopInput = false;
@@ -160,6 +169,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
 
         if (WaitForPlayerMovement == true)
         {
+            press.SetActive(true);
             Player.GetComponent<MovingCamera>().speed = 5.0f;
             Player.GetComponent<MovingCamera>().stopMoving = false;
 
@@ -201,6 +211,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
         Text.text = TextList[index];
         finish = false;
         text = false;
+        press.SetActive(true);
         MoveText += 1;
     }
 }

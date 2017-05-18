@@ -15,42 +15,40 @@ public enum Proteins
 
 public class StrategyCellScript : MonoBehaviour
 {
+    //In inspector
     public float reproduction = 0, defense = 0, immunity = 0;
     public Proteins protein = Proteins.None;
-    public TMPro.TextMeshPro r;
-    public TMPro.TextMeshPro d;
-    public TMPro.TextMeshPro i;
-    public TMPro.TextMeshPro p;
     public Renderer render;
-    public Vector2 key;
-    public bool targeted = false;
-    public bool hosted = false;
-    public float Treproduction = 50;
-    public int reproductionReset = 50;
-    public float rBonus = 15, dBonus = 5, iBonus = 10;
-    public int powerupDuration = 25;
-
-    [System.NonSerialized]
-    public GameObject virus;
     public GameObject itemWhiteBloodCellPrefab;
-
-    public int turnSpawned = 0;
-    public int childrenSpawned = 0;
-    public float immunitySpread = 0;
-    public float startSpeed = 15.0f;
-
-    public int RDur = 0;
-    public int I2Dur = 0;
-
-    public StrategyCellManagerScript parent;
     public ParticleSystem deathParticles;
-
+    public Vector2 key;
+    public bool targeted = false, hosted = false;
     public TMPro.TextMeshPro[] texts;
 
+    //Not in inspector
+    [System.NonSerialized]
+    public float Treproduction = 50;
+    [System.NonSerialized]
+    public int reproductionReset = 50;
+    [System.NonSerialized]
+    public float rBonus = 15, dBonus = 5, iBonus = 10;
+    [System.NonSerialized]
+    public int powerupDuration = 25, RDur = 0, I2Dur = 0;
+    [System.NonSerialized]
+    public GameObject virus;
+    [System.NonSerialized]
+    public int turnSpawned = 0, childrenSpawned = 0;
+    [System.NonSerialized]
+    public float immunitySpread = 0, startSpeed = 15.0f;
+    [System.NonSerialized]
+    public StrategyCellManagerScript parent;
+    [System.NonSerialized]
+    public TMPro.TextMeshPro r, d, i, p;
+
+    //Private
     private float tImmunity;
     private float camOffset = 1.5f;
     private float scaledDistance = 1.3f;
-
 
     void Awake()
     {
