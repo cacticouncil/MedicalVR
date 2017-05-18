@@ -20,8 +20,8 @@ public class RnaMessengerScript : MonoBehaviour
         tmpLives = simon.GetComponent<SimonSays>().lives;
         if (GlobalVariables.arcadeMode == false)
         {
-            subtitles.SetActive(false);
-            subtitles.GetComponent<SubstitlesScript>().Stop();
+            //subtitles.SetActive(false);
+            //subtitles.GetComponent<SubstitlesScript>().Stop();
             simon.GetComponent<SimonSays>().lives = 0;
             simon.GetComponent<SimonSays>().sign.SetActive(false);
             if (GlobalVariables.arcadeMode == false && GlobalVariables.tutorial == false)
