@@ -359,6 +359,7 @@ public class Player : MonoBehaviour
     void StoryMode()
     {
         GlobalVariables.tutorial = false;
+        GlobalVariables.arcadeMode = true;
         SceneManager.LoadScene("FightVirus");
     }
 }
