@@ -34,7 +34,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
 
     void Start()
     {
-        GlobalVariables.tutorial = true;
+        //GlobalVariables.tutorial = true;
         Text = Subtitles.GetComponent<TMPro.TextMeshPro>();
         if (GlobalVariables.tutorial)
         {
@@ -130,6 +130,7 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                 break;
 
             case 9:
+                Text.text = "";
                 Player.GetComponent<MovingCamera>().speed = 5.0f;
                 Player.GetComponent<MovingCamera>().stopMoving = false;
                 break;
