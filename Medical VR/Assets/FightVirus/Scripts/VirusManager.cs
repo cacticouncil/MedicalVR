@@ -128,7 +128,7 @@ public class VirusManager : MonoBehaviour
                 {
                     case 1:
                         EnemyCount = 3;
-                        SmallVirusSpeed = 0.005f;
+                        SmallVirusSpeed = 0.006f;
                         SmallVirusHealth = 20;
                         BigVirusSpeed = 0.007f;
                         BigVirusHealth = 40;
