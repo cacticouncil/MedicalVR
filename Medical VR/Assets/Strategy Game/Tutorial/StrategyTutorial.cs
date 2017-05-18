@@ -28,14 +28,14 @@ public class StrategyTutorial : MonoBehaviour
         "Viruses can also spawn and attack cells on each turn." ,
         "For more insight on each stat, activate its respective tutorial button." ,
         "Random events will also occur." ,
-        "These events can increase cells’ stats as well as the viruses’." ,
+        "These events can increase cells' stats as well as the viruses'." ,
         "You can learn more about it by clicking on the Events tab." ,
         "This is the Strategy Box." ,
         "Using it also advances turns." ,
         "And you can receive a random power-up." ,
         "These power-ups can give large stat boosts or defend your cell." ,
         "Check your inventory at the Strategy Box to learn more." ,
-        "That’s all I have for you human. I leave this cell in your hands." ,
+        "That's all I have for you human. I leave this cell in your hands." ,
         "Good luck and have fun."
         };
     private int cNum = -1;
@@ -46,18 +46,17 @@ public class StrategyTutorial : MonoBehaviour
 
     void Start()
     {
-        Click();
-        //if (GlobalVariables.tutorial)
-        //{
-        //    Click();
-        //}
-        //else
-        //{
-        //    reticle.SetActive(true);
-        //    cellManager.SetActive(true);
-        //    strategyBox.SetActive(true);
-        //    Destroy(gameObject);
-        //}
+        if (GlobalVariables.tutorial)
+        {
+            Click();
+        }
+        else
+        {
+            reticle.SetActive(true);
+            cellManager.SetActive(true);
+            strategyBox.SetActive(true);
+            Destroy(gameObject);
+        }
     }
 
     void Update()
@@ -169,7 +168,7 @@ public class StrategyTutorial : MonoBehaviour
                 StartCoroutine(TurnTextOn(11));
                 break;
             case 11:
-                //These events can increase cells’ stats as well as the viruses’.
+                //These events can increase cells' stats as well as the viruses'.
                 StartCoroutine(TurnTextOn(12));
                 break;
             case 12:
@@ -216,24 +215,23 @@ public class StrategyTutorial : MonoBehaviour
             case 17:
                 //Check your inventory at the Strategy Box to learn more.
                 StartCoroutine(TurnTextOn(18));
+                break;
+            case 18:
+                //That's all I have for you human. I leave this cell in your hands.
+                StartCoroutine(TurnTextOn(19));
                 stop.Add(StartCoroutine(MoveObject(strategyBoxMesh, strategyBox.transform.position)));
                 strategyBoxMesh.transform.GetChild(0).gameObject.SetActive(false);
                 break;
-            case 18:
+
+            case 19:
+                //Good luck and have fun.  
+                StartCoroutine(TurnTextOn(20));
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
                 }
                 stop.Clear();
                 strategyBoxMesh.transform.position = strategyBox.transform.position;
-
-                //That’s all I have for you human. I leave this cell in your hands.
-                StartCoroutine(TurnTextOn(19));
-                break;
-
-            case 19:
-                //Good luck and have fun.  
-                StartCoroutine(TurnTextOn(20));
                 break;
             //Clean Up 
             case 20:

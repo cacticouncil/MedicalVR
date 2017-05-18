@@ -51,7 +51,7 @@ using System.Linq;
 /// The Inspector panel for this script includes a button _Update Stereo Cameras_.
 /// This performs the same action as described above for startup, but in the Editor.
 /// Use this to generate the rig if you intend to customize it.  This action is also
-/// available via _Component -> GVR -> Update Stereo Cameras_ in the Editor’s
+/// available via _Component -> GVR -> Update Stereo Cameras_ in the Editor's
 /// main menu, and in the context menu for the `Camera` component.
 [RequireComponent(typeof(Camera))]
 [AddComponentMenu("GoogleVR/StereoController")]
