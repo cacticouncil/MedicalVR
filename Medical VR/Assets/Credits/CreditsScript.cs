@@ -16,57 +16,92 @@ public class CreditsScript : MonoBehaviour
     public bool CanIRead = true;
 
     private bool last = false, text = false, finish = false;
-    private string[] TextList = new string[32];
+    const int size = 32;
+    private string[] TextList = new string[size];
 
 
     private void Start()
     {
-        TextList[0] = "Medical VR";
-        TextList[1] = "Director:" + "\n" + "";
-        TextList[2] = "Lead Designer:" + "\n" + "";
-        TextList[3] = "Designer:" + "\n" + "";
-        TextList[4] = "Level / Scenario Design:" + "\n" + "";
-        TextList[5] = "Writing / Dialogue / Story:" + "\n" + "";
-        TextList[6] = "Research:" + "\n" + "";
-        TextList[7] = "Technical Director:" + "\n" + "";
-        TextList[8] = "Lead Programming:" + "\n" + "";
-        TextList[9] = "Programming:" + "\n" + "";
-        TextList[10] = "Additional Programming:" + "\n" + "";
-        TextList[11] = "Game Engie / Development System:" + "\n" + "";
-        TextList[12] = "3D / Graphics Programming:" + "\n" + "";
-        TextList[13] = "Music / Sound Programming:" + "\n" + "";
-        TextList[14] = "Libraries / Utilities" + "\n" + "";
-        TextList[15] = "AI Programming:" + "\n" + "";
-        TextList[16] = "Art Director:" + "\n" + "";
-        TextList[17] = "Lead Artisr:" + "\n" + "";
-        TextList[18] = "Graphics / Artwork:" + "\n" + "";
-        TextList[19] = "Additional Graphics / Artwork:" + "\n" + "";
-        TextList[20] = "Animation" + "\n" + "";
-        TextList[21] = "3D Modeling" + "\n" + "";
-        TextList[22] = "Movie Crew:" + "\n" + "";
-        TextList[23] = "Music:" + "\n" + "";
-        TextList[24] = "Sound:" + "\n" + "";
-        TextList[25] = "Acting / Voiceovers:" + "\n" + "";
-        TextList[26] = "Project Leader:" + "\n" + "";
-        TextList[27] = "Producer:" + "\n" + "";
-        TextList[28] = "Executive Producer:" + "\n" + "";
-        TextList[29] = "Associate Producer:" + "\n" + "";
-        TextList[30] = "Assistant Producer:" + "\n" + "";
-        TextList[31] = "Product Manager:" + "\n" + "";
+        int x = 0;
+        TextList[x++] = "Vir-ed";
+        TextList[x++] = "Director:" + "\n" + "";
+        TextList[x++] = "Lead Designer:" + "\n" + "";
+        TextList[x++] = "Designer:" + "\n" + "";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     Virus Story Mode:" + "\n" + "Josue Cortes";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     Cell Story Mode:" + "\n" + "Josue Cortes";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     SimonDNA:" + "\n" + "Josue Cortes" + "\n" + "Jayson Levario";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     Dodge Antibodies:" + "\n" + "Josue Cortes" + "\n" + "Jayson Levario";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     Trophy Room:" + "\n" + "Josue Cortes" + "\n" + "Jayson Levario";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     cGamp Snatcher:" + "\n" + "Sebastian Diaz Portillo" + "\n" + "Michael Toronto";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     Memory Game :" + "\n" + "Sebastian Diaz Portillo" + "\n" + "Jordan Sanderson";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     Main Menu:" + "\n" + "Sebastian Diaz Portillo" + "\n" + "Jordan Sanderson";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     ATP/GTP Shooter:" + "\n" + "Michael Toronto";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     Fight Virus:" + "\n" + "Jayson Levario";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     Destroy Cell:" + "\n" + "Jayson Levario";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     Strategy Game:" + "\n" + "Jordan Sanderson";
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "     Main Menu:" + "\n" + "Sebastian Diaz Portillo" + "\n" + "Jordan Sanderson";
+
+
+
+
+
+
+
+
+        TextList[x++] = "Level / Scenario Design:" + "\n" + "Strategy Game: Josue Cortes" + "\n" + "Main Menu: Josue Cortes" + "\n" + "Virus Story Mode: Josue Cortes" + "\n" + "Cell Story Mode: Josue Cortes";
+        TextList[x++] = "Writing / Dialogue / Story:" + "\n" + "";
+        TextList[x++] = "Research:" + "\n" + "";
+        TextList[x++] = "Technical Director:" + "\n" + "";
+        TextList[x++] = "Lead Programming:" + "\n" + "";
+        TextList[x++] = "Programming:" + "\n" + "";
+        TextList[x++] = "Additional Programming:" + "\n" + "";
+        TextList[x++] = "Game Engie / Development System:" + "\n" + "";
+        TextList[x++] = "3D / Graphics Programming:" + "\n" + "";
+        TextList[x++] = "Music / Sound Programming:" + "\n" + "";
+        TextList[x++] = "Libraries / Utilities" + "\n" + "";
+        TextList[x++] = "AI Programming:" + "\n" + "";
+        TextList[x++] = "Art Director:" + "\n" + "";
+        TextList[x++] = "Lead Artisr:" + "\n" + "";
+        TextList[x++] = "Graphics / Artwork:" + "\n" + "";
+        TextList[x++] = "Additional Graphics / Artwork:" + "\n" + "";
+        TextList[x++] = "Animation" + "\n" + "";
+        TextList[x++] = "3D Modeling" + "\n" + "";
+        TextList[x++] = "Movie Crew:" + "\n" + "";
+        TextList[x++] = "Music:" + "\n" + "";
+        TextList[x++] = "Sound:" + "\n" + "";
+        TextList[x++] = "Acting / Voiceovers:" + "\n" + "";
+        TextList[x++] = "Project Leader:" + "\n" + "";
+        TextList[x++] = "Producer:" + "\n" + "Jason Hinders";
+        TextList[x++] = "Executive Producer:" + "\n" + "";
+        TextList[x++] = "Associate Producer:" + "\n" + "";
+        TextList[x++] = "Assistant Producer:" + "\n" + "";
+        TextList[x++] = "No Viruses or Cells got harmed during the making of this game..." + "\n" + "";
     }
+    bool isInit = false;
 
     void Update()
     {
         if (!text)
-                Texticles();
+            OptimizedStuff();
+        //   Texticles();
+    }
+
+
+    void OptimizedStuff()
+    {
+        if (isInit)
+            return;
+        isInit = true;
+        for (int i = 0; i < TextList.Length; ++i)
+            StartCoroutine(TurnTextOn(i, 4 * i + 4));
     }
 
     private void Texticles()
-        {
+    {
         switch (WhatToRead)
         {
             case 0:
-                StartCoroutine(TurnTextOn(0,4));
+                StartCoroutine(TurnTextOn(0, 4));
 
                 break;
 
