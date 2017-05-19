@@ -33,8 +33,8 @@ public class _TSizeChange : MonoBehaviour
         isShrinking = false;
         isGrowing = false;
     }
-
-    void Update()
+    
+    void FixedUpdate()
     {
         if (isShrinking)
             Shrink();
@@ -75,12 +75,12 @@ public class _TSizeChange : MonoBehaviour
         float curValue = curShrink / shrinkSpeed;
         if (smallSizeChange)
         {
-            curShrink += Time.deltaTime;
+            curShrink += Time.fixedDeltaTime;
             if (curValue >= 1.2)
                 smallSizeChange = false;
         }
         else
-            curShrink -= Time.deltaTime;
+            curShrink -= Time.fixedDeltaTime;
         transform.localScale = curValue * initialScale;
         if (curShrink <= 0)
             ResetToSmall();
@@ -90,12 +90,12 @@ public class _TSizeChange : MonoBehaviour
         float curValue = curShrink / shrinkSpeed;
         if (smallSizeChange)
         {
-            curShrink += Time.deltaTime;
+            curShrink += Time.fixedDeltaTime;
             if (curValue >= 1.2)
                 smallSizeChange = false;
         }
         else
-            curShrink -= Time.deltaTime;
+            curShrink -= Time.fixedDeltaTime;
 
         transform.localScale = curValue * initialScale;
         if (curShrink <= shrinkSpeed && !smallSizeChange)

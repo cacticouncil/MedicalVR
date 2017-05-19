@@ -18,21 +18,28 @@ public class _TPlayerController : MonoBehaviour
     private float nextFire;
     private bool isATP;
     //private AudioSource audioSource;
-
-    void Start()
+    bool isActive = false;
+    
+    bool isInit = false;
+    
+    public void Initialize()
     {
+        if (isInit)
+            return;
+        isInit = true;
+
         currentRound = ShotNumber.ATPOne;
         isATP = true;
-        //audioSource = GetComponent<AudioSource>();
+    }
+
+    public void SetActiveShooting(bool setActive)
+    {
+        isActive = setActive;
     }
 
     void Update()
     {
         bool bPressed = Input.GetButtonDown("Fire1");
-   //     bool bHeld = Input.GetButton("Fire1");
-   //     bool bUp = Input.GetButtonUp("Fire1");
-
-       
         
         if (bPressed && Time.time > nextFire)
         {
@@ -41,6 +48,9 @@ public class _TPlayerController : MonoBehaviour
     }
     void SetFireMode()
     {
+        if (!isActive)
+            return;
+
         if (isATP)
             shootATP();
         else

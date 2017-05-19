@@ -32,18 +32,18 @@ public class _TMover : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (keepVelocity)
+        if (keepVelocity && rb)
             rb.velocity = rb.velocity.normalized * speed;
     }
     private void OnCollisionExit(Collision collision)
     {
-        if (keepVelocity)
+        if (keepVelocity && rb)
             rb.velocity = rb.velocity.normalized * speed;
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        if (keepVelocity)
+        if (keepVelocity && rb)
             rb.velocity = rb.velocity.normalized * speed;
     }
 }
