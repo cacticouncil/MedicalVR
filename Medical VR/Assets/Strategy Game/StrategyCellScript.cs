@@ -23,6 +23,7 @@ public class StrategyCellScript : MonoBehaviour
     public ParticleSystem deathParticles;
     public Vector2 key;
     public bool targeted = false, hosted = false;
+    public TMPro.TextMeshPro r, d, i, p;
     public TMPro.TextMeshPro[] texts;
 
     //Not in inspector
@@ -42,13 +43,9 @@ public class StrategyCellScript : MonoBehaviour
     public float immunitySpread = 0, startSpeed = 15.0f;
     [System.NonSerialized]
     public StrategyCellManagerScript parent;
-    [System.NonSerialized]
-    public TMPro.TextMeshPro r, d, i, p;
 
     //Private
-    private float tImmunity;
-    private float camOffset = 1.5f;
-    private float scaledDistance = 1.3f;
+    private float tImmunity, camOffset = 1.5f, scaledDistance = 1.3f;
 
     void Awake()
     {
