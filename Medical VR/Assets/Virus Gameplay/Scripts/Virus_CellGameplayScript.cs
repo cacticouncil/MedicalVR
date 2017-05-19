@@ -17,7 +17,7 @@ public class Virus_CellGameplayScript : MonoBehaviour
         switch (CellGameplayScript.loadCase)
         {
             case (1):
-                I = 5;
+                I = 4;
                 virusWithMesh.SetActive(false);
                 capsid.SetActive(false);
                 transform.position = places[I].transform.position;
@@ -106,6 +106,7 @@ public class Virus_CellGameplayScript : MonoBehaviour
                 break;
             case (35):
                 capsid.SetActive(false);
+                I = 4;
                 break;
             default:
                 break;
