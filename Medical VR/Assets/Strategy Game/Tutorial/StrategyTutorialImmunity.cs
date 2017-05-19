@@ -11,15 +11,14 @@ public class StrategyTutorialImmunity : MonoBehaviour
     public GameObject reticle;
     public GameObject immunityParticles;
     public GameObject objects;
-    public GameObject antigen, interferon, protein;
-    public GameObject proOutline;
-    public GameObject virusImm;
     public GameObject virus;
+    public GameObject virusImm;
+    public TMPro.TextMeshPro virusImmDes;
     public TMPro.TextMeshPro immDes;
     public TMPro.TextMeshPro proDes;
-    public GameObject pro;
     public TMPro.TextMeshPro subtitles;
-    public GameObject[] imm;
+    public Renderer antigen, interferon, protein;
+    public GameObject @base;
     public GameObject[] cells;
 
     private string[] texts =
@@ -92,6 +91,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 lc.target = cells[0].transform;
                 lc.enabled = true;
                 immDes.text = "Immunity: 0";
+                proDes.text = "Protein: None";
                 fade.GetComponent<FadeOut>().enabled = true;
                 Invoke("Click", 1);
                 break;
@@ -105,10 +105,18 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 stop.Add(StartCoroutine(GrowInObject(cells[4])));
                 stop.Add(StartCoroutine(GrowInObject(cells[5])));
                 stop.Add(StartCoroutine(GrowInObject(cells[6])));
-                foreach (GameObject item in imm)
+                foreach (Transform item in @base.GetComponentsInChildren<Transform>(true))
                 {
-                    stop.Add(StartCoroutine(FadeInObject(item)));
-                    stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
+                    item.gameObject.SetActive(true);
+                }
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
+                {
+                    if (item.material.HasProperty("_Color"))
+                        stop.Add(StartCoroutine(FadeInObject(item)));
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    stop.Add(StartCoroutine(FadeInText(item)));
                 }
                 clickable = true;
                 break;
@@ -123,12 +131,18 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 {
                     cells[i].transform.localScale = Vector3.one;
                 }
-                foreach (GameObject item in imm)
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
                 {
-                    c = item.GetComponent<Renderer>().material.color;
-                    c.a = 1;
-                    item.GetComponent<Renderer>().material.color = c;
-                    item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
+                    if (item.material.HasProperty("_Color"))
+                    {
+                        c = item.material.color;
+                        c.a = 1.0f;
+                        item.material.color = c;
+                    }
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    item.color = Color.black;
                 }
 
                 //With at least 1 Immunity, cells will spread Immunity to adjacent cells.
@@ -170,23 +184,10 @@ public class StrategyTutorialImmunity : MonoBehaviour
             case 6:
                 //At 10 Immunity, a cell spawns a random protein.
                 StartCoroutine(TurnTextOn(4));
-                proDes.text = "Protein: RNase L";
-                stop.Add(StartCoroutine(FadeInObject(pro)));
-                stop.Add(StartCoroutine(FadeInText(pro.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
                 immDes.text = "Immunity: 10";
+                proDes.text = "Protein: RNase L";
                 break;
             case 7:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-
-                c = pro.GetComponent<Renderer>().material.color;
-                c.a = 1;
-                pro.GetComponent<Renderer>().material.color = c;
-                pro.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
-
                 //Most stop the virus from replicating when it kills the cell.
                 StartCoroutine(TurnTextOn(5));
                 break;
@@ -210,21 +211,22 @@ public class StrategyTutorialImmunity : MonoBehaviour
             case 14:
                 //You can click on the Protein tab to see the list of proteins and what each does.
                 StartCoroutine(TurnTextOn(7));
-                stop.Add(StartCoroutine(FadeInObject(proOutline)));
                 break;
             case 15:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                proOutline.GetComponent<Renderer>().material.color = Color.red;
-
                 //Each virus has an Immunity value that the cell's immunity value must be higher than to kill the virus.
                 StartCoroutine(TurnTextOn(8));
-                stop.Add(StartCoroutine(FadeOutObject(proOutline)));
-                stop.Add(StartCoroutine(FadeInObject(virus)));
-                stop.Add(StartCoroutine(FadeInObject(virusImm)));
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
+                {
+                    if (item.material.HasProperty("_Color"))
+                        stop.Add(StartCoroutine(FadeOutObject(item)));
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    stop.Add(StartCoroutine(FadeOutText(item)));
+                }
+                stop.Add(StartCoroutine(FadeInObject(virus.GetComponent<Renderer>())));
+                stop.Add(StartCoroutine(FadeInObject(virusImm.GetComponent<Renderer>())));
+                stop.Add(StartCoroutine(FadeInText(virusImmDes)));
                 cells[0].GetComponent<Rotate>().enabled = false;
                 stop.Add(StartCoroutine(PaintItBlack(cells[0])));
                 immDes.text = "Immunity: 20";
@@ -235,7 +237,23 @@ public class StrategyTutorialImmunity : MonoBehaviour
                     StopCoroutine(co);
                 }
                 stop.Clear();
-                proOutline.SetActive(false);
+                foreach (Transform item in @base.GetComponentsInChildren<Transform>(true))
+                {
+                    item.gameObject.SetActive(false);
+                }
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
+                {
+                    if (item.material.HasProperty("_Color"))
+                    {
+                        c = item.material.color;
+                        c.a = 0.0f;
+                        item.material.color = c;
+                    }
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    item.color = Color.black;
+                }
                 cells[0].GetComponent<Renderer>().material.color = Color.black;
                 c = virus.GetComponent<Renderer>().material.color;
                 c.a = 1;
@@ -244,11 +262,26 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 c = virusImm.GetComponent<Renderer>().material.color;
                 c.a = 1;
                 virusImm.GetComponent<Renderer>().material.color = c;
+                virusImmDes.color = Color.black;
 
                 //When a virus is killed with Immunity that value is subtracted from the cell's Immunity.
                 StartCoroutine(TurnTextOn(9));
-                stop.Add(StartCoroutine(FadeOutObject(virus)));
-                stop.Add(StartCoroutine(FadeOutObject(virusImm)));
+                stop.Add(StartCoroutine(FadeOutObject(virus.GetComponent<Renderer>())));
+                stop.Add(StartCoroutine(FadeOutObject(virusImm.GetComponent<Renderer>())));
+                stop.Add(StartCoroutine(FadeOutText(virusImmDes)));
+                foreach (Transform item in @base.GetComponentsInChildren<Transform>(true))
+                {
+                    item.gameObject.SetActive(true);
+                }
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
+                {
+                    if (item.material.HasProperty("_Color"))
+                        stop.Add(StartCoroutine(FadeInObject(item)));
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    stop.Add(StartCoroutine(FadeInText(item)));
+                }
                 Invoke("Immunity0", 1);
                 break;
             case 17:
@@ -259,6 +292,19 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 stop.Clear();
                 virus.SetActive(false);
                 virusImm.SetActive(false);
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
+                {
+                    if (item.material.HasProperty("_Color"))
+                    {
+                        c = item.material.color;
+                        c.a = 1.0f;
+                        item.material.color = c;
+                    }
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    item.color = Color.black;
+                }
                 immDes.text = "Immunity: 0";
                 cells[0].GetComponent<Renderer>().material.color = Color.grey;
                 cells[0].GetComponent<Rotate>().enabled = true;
@@ -301,7 +347,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
                     StopCoroutine(co);
                 }
                 stop.Clear();
-                antigen.SetActive(false);
+                antigen.gameObject.SetActive(false);
                 c = interferon.GetComponent<Renderer>().material.color;
                 c.a = 1;
                 interferon.GetComponent<Renderer>().material.color = c;
@@ -319,7 +365,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 }
                 stop.Clear();
 
-                interferon.SetActive(false);
+                interferon.gameObject.SetActive(false);
                 c = protein.GetComponent<Renderer>().material.color;
                 c.a = 1;
                 protein.GetComponent<Renderer>().material.color = c;
@@ -334,7 +380,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
                     StopCoroutine(co);
                 }
                 stop.Clear();
-                protein.SetActive(false);
+                protein.gameObject.SetActive(false);
 
                 //Fade In
                 fade.GetComponent<FadeIn>().enabled = true;
@@ -355,12 +401,8 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 {
                     cell.SetActive(false);
                 }
+                @base.SetActive(false);
                 virus.SetActive(false);
-                foreach (GameObject item in imm)
-                {
-                    item.SetActive(false);
-                }
-                pro.SetActive(false);
                 objects.SetActive(false);
                 eventSystem.SetActive(true);
                 enabled = false;
@@ -372,16 +414,16 @@ public class StrategyTutorialImmunity : MonoBehaviour
     }
 
     #region Objects
-    IEnumerator FadeInObject(GameObject g)
+    IEnumerator FadeInObject(Renderer g)
     {
-        g.SetActive(true);
-        Color c = g.GetComponent<Renderer>().material.color;
+        g.gameObject.SetActive(true);
+        Color c = g.material.color;
         Color outline = Color.black;
         bool o = false;
-        if (g.GetComponent<Renderer>().material.HasProperty("_OutlineColor"))
+        if (g.material.HasProperty("_OutlineColor"))
         {
             o = true;
-            outline = g.GetComponent<Renderer>().material.GetColor("_OutlineColor");
+            outline = g.material.GetColor("_OutlineColor");
         }
         float startTime = Time.time;
         float t = 0.0f;
@@ -389,25 +431,25 @@ public class StrategyTutorialImmunity : MonoBehaviour
         {
             t = Time.time - startTime;
             c.a = t;
-            g.GetComponent<Renderer>().material.color = c;
+            g.material.color = c;
             if (o)
             {
                 outline.a = t;
-                g.GetComponent<Renderer>().material.SetColor("_OutlineColor", outline);
+                g.material.SetColor("_OutlineColor", outline);
             }
             yield return 0;
         }
     }
 
-    IEnumerator FadeOutObject(GameObject g)
+    IEnumerator FadeOutObject(Renderer g)
     {
-        Color c = g.GetComponent<Renderer>().material.color;
+        Color c = g.material.color;
         Color outline = Color.black;
         bool o = false;
-        if (g.GetComponent<Renderer>().material.HasProperty("_OutlineColor"))
+        if (g.material.HasProperty("_OutlineColor"))
         {
             o = true;
-            outline = g.GetComponent<Renderer>().material.GetColor("_OutlineColor");
+            outline = g.material.GetColor("_OutlineColor");
         }
         float startTime = Time.time;
         float t = 0.0f;
@@ -415,15 +457,15 @@ public class StrategyTutorialImmunity : MonoBehaviour
         {
             t = Time.time - startTime;
             c.a = 1.0f - t;
-            g.GetComponent<Renderer>().material.color = c;
+            g.material.color = c;
             if (o)
             {
                 outline.a = 1.0f - t;
-                g.GetComponent<Renderer>().material.SetColor("_OutlineColor", outline);
+                g.material.SetColor("_OutlineColor", outline);
             }
             yield return 0;
         }
-        g.SetActive(false);
+        g.gameObject.SetActive(false);
     }
 
     IEnumerator GrowInObject(GameObject g)

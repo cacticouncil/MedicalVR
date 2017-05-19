@@ -1,6 +1,4 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "Custom/TF2-Color-Transparent"{
+﻿Shader "Custom/TF2-Outline/Color-Transparent"{
     Properties {
         _Color ("Main Color", Color) = (1,1,1,1)
         _RimColor ("Rim Color", Color) = (0.97,0.88,1,0.75)
@@ -85,7 +83,6 @@ Shader "Custom/TF2-Color-Transparent"{
 
 				o.pos.xy += norm.xy * _Outline;
 				o.color = _OutlineColor;
-				o.color.a = _OutlineColor.a;
 				return o;
             }
             ENDCG

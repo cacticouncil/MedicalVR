@@ -11,12 +11,11 @@ public class StrategyTutorialDefense : MonoBehaviour
     public GameObject reticle;
     public GameObject immunityParticles;
     public GameObject objects;
-    public GameObject fuzeon;
+    public Renderer fuzeon;
     public TMPro.TextMeshPro defDes;
     public TMPro.TextMeshPro immDes;
     public TMPro.TextMeshPro subtitles;
-    public GameObject[] def = new GameObject[0];
-    public GameObject[] imm = new GameObject[0];
+    public GameObject @base;
     public GameObject[] cells = new GameObject[7];
     public GameObject[] viruses = new GameObject[4];
 
@@ -98,10 +97,18 @@ public class StrategyTutorialDefense : MonoBehaviour
                 //The Defense stat delays viruses from killing your cells.
                 StartCoroutine(TurnTextOn(0));
                 stop.Add(StartCoroutine(GrowInObject(cells[0])));
-                foreach (GameObject item in def)
+                foreach (Transform item in @base.GetComponentsInChildren<Transform>(true))
                 {
-                    stop.Add(StartCoroutine(FadeInObject(item)));
-                    stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
+                    item.gameObject.SetActive(true);
+                }
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
+                {
+                    if (item.material.HasProperty("_Color"))
+                        stop.Add(StartCoroutine(FadeInObject(item)));
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    stop.Add(StartCoroutine(FadeInText(item)));
                 }
                 clickable = true;
                 break;
@@ -112,12 +119,18 @@ public class StrategyTutorialDefense : MonoBehaviour
                 }
                 stop.Clear();
                 cells[0].transform.localScale = Vector3.one;
-                foreach (GameObject item in def)
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
                 {
-                    c = item.GetComponent<Renderer>().material.color;
-                    c.a = 1;
-                    item.GetComponent<Renderer>().material.color = c;
-                    item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
+                    if (item.material.HasProperty("_Color"))
+                    {
+                        c = item.material.color;
+                        c.a = 1.0f;
+                        item.material.color = c;
+                    }
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    item.color = Color.black;
                 }
 
                 //When a virus spawns, it targets a random cell.
@@ -162,23 +175,8 @@ public class StrategyTutorialDefense : MonoBehaviour
 
                 //You can't upgrade the cell while it is defending itself.
                 StartCoroutine(TurnTextOn(4));
-                foreach (GameObject item in def)
-                {
-                    stop.Add(StartCoroutine(FadeOutObject(item)));
-                    stop.Add(StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
-                }
                 break;
             case 7:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                foreach (GameObject item in def)
-                {
-                    item.SetActive(false);
-                }
-
                 //But, other cells can spread immunity to it.
                 StartCoroutine(TurnTextOn(5));
                 stop.Add(StartCoroutine(GrowInObject(cells[1])));
@@ -187,11 +185,6 @@ public class StrategyTutorialDefense : MonoBehaviour
                 stop.Add(StartCoroutine(GrowInObject(cells[4])));
                 stop.Add(StartCoroutine(GrowInObject(cells[5])));
                 stop.Add(StartCoroutine(GrowInObject(cells[6])));
-                foreach (GameObject item in imm)
-                {
-                    StartCoroutine(FadeInObject(item));
-                    StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
-                }
                 break;
             case 8:
                 foreach (Coroutine co in stop)
@@ -221,36 +214,8 @@ public class StrategyTutorialDefense : MonoBehaviour
 
                 //Defense is also the only stat that is copied to the child.
                 StartCoroutine(TurnTextOn(7));
-                foreach (GameObject item in imm)
-                {
-                    stop.Add(StartCoroutine(FadeOutObject(item)));
-                    stop.Add(StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
-                }
-                foreach (GameObject item in def)
-                {
-                    stop.Add(StartCoroutine(FadeInObject(item)));
-                    stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
-                }
                 break;
             case 10:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-
-                foreach (GameObject item in imm)
-                {
-                    item.SetActive(false);
-                }
-                foreach (GameObject item in def)
-                {
-                    c = item.GetComponent<Renderer>().material.color;
-                    c.a = 1;
-                    item.GetComponent<Renderer>().material.color = c;
-                    item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
-                }
-
                 //Due to this, it is highly advised that you invest into this stat early on. 
                 StartCoroutine(TurnTextOn(8));
                 break;
@@ -289,7 +254,7 @@ public class StrategyTutorialDefense : MonoBehaviour
                     StopCoroutine(co);
                 }
                 stop.Clear();
-                fuzeon.SetActive(false);
+                fuzeon.gameObject.SetActive(false);
                 fuzeon.GetComponent<Renderer>().material.color = Color.green;
                 fuzeon.GetComponent<Renderer>().material.SetColor("_OutlineColor", Color.black);
 
@@ -300,18 +265,22 @@ public class StrategyTutorialDefense : MonoBehaviour
             case 15:
                 //Be careful, different viruses have different attack values.
                 StartCoroutine(TurnTextOn(13));
-                foreach (GameObject item in def)
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
                 {
-                    stop.Add(StartCoroutine(FadeOutObject(item)));
-                    stop.Add(StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
+                    if (item.material.HasProperty("_Color"))
+                        stop.Add(StartCoroutine(FadeOutObject(item)));
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    stop.Add(StartCoroutine(FadeOutText(item)));
                 }
                 foreach (GameObject cell in cells)
                 {
-                    stop.Add(StartCoroutine(FadeOutObject(cell)));
+                    stop.Add(StartCoroutine(FadeOutObject(cell.GetComponent<Renderer>())));
                 }
-                stop.Add(StartCoroutine(FadeInObject(viruses[1])));
-                stop.Add(StartCoroutine(FadeInObject(viruses[2])));
-                stop.Add(StartCoroutine(FadeInObject(viruses[3])));
+                stop.Add(StartCoroutine(FadeInObject(viruses[1].GetComponent<Renderer>())));
+                stop.Add(StartCoroutine(FadeInObject(viruses[2].GetComponent<Renderer>())));
+                stop.Add(StartCoroutine(FadeInObject(viruses[3].GetComponent<Renderer>())));
                 break;
             case 16:
                 foreach (Coroutine co in stop)
@@ -319,9 +288,9 @@ public class StrategyTutorialDefense : MonoBehaviour
                     StopCoroutine(co);
                 }
                 stop.Clear();
-                foreach (GameObject item in def)
+                foreach (Transform item in @base.GetComponentsInChildren<Transform>(true))
                 {
-                    item.SetActive(false);
+                    item.gameObject.SetActive(false);
                 }
                 foreach (GameObject cell in cells)
                 {
@@ -374,16 +343,16 @@ public class StrategyTutorialDefense : MonoBehaviour
     }
 
     #region Objects
-    IEnumerator FadeInObject(GameObject g)
+    IEnumerator FadeInObject(Renderer g)
     {
-        g.SetActive(true);
-        Color c = g.GetComponent<Renderer>().material.color;
+        g.gameObject.SetActive(true);
+        Color c = g.material.color;
         Color outline = Color.black;
         bool o = false;
-        if (g.GetComponent<Renderer>().material.HasProperty("_OutlineColor"))
+        if (g.material.HasProperty("_OutlineColor"))
         {
             o = true;
-            outline = g.GetComponent<Renderer>().material.GetColor("_OutlineColor");
+            outline = g.material.GetColor("_OutlineColor");
         }
         float startTime = Time.time;
         float t = 0.0f;
@@ -391,25 +360,25 @@ public class StrategyTutorialDefense : MonoBehaviour
         {
             t = Time.time - startTime;
             c.a = t;
-            g.GetComponent<Renderer>().material.color = c;
+            g.material.color = c;
             if (o)
             {
                 outline.a = t;
-                g.GetComponent<Renderer>().material.SetColor("_OutlineColor", outline);
+                g.material.SetColor("_OutlineColor", outline);
             }
             yield return 0;
         }
     }
 
-    IEnumerator FadeOutObject(GameObject g)
+    IEnumerator FadeOutObject(Renderer g)
     {
-        Color c = g.GetComponent<Renderer>().material.color;
+        Color c = g.material.color;
         Color outline = Color.black;
         bool o = false;
-        if (g.GetComponent<Renderer>().material.HasProperty("_OutlineColor"))
+        if (g.material.HasProperty("_OutlineColor"))
         {
             o = true;
-            outline = g.GetComponent<Renderer>().material.GetColor("_OutlineColor");
+            outline = g.material.GetColor("_OutlineColor");
         }
         float startTime = Time.time;
         float t = 0.0f;
@@ -417,15 +386,15 @@ public class StrategyTutorialDefense : MonoBehaviour
         {
             t = Time.time - startTime;
             c.a = 1.0f - t;
-            g.GetComponent<Renderer>().material.color = c;
+            g.material.color = c;
             if (o)
             {
                 outline.a = 1.0f - t;
-                g.GetComponent<Renderer>().material.SetColor("_OutlineColor", outline);
+                g.material.SetColor("_OutlineColor", outline);
             }
             yield return 0;
         }
-        g.SetActive(false);
+        g.gameObject.SetActive(false);
     }
 
     IEnumerator GrowInObject(GameObject g)

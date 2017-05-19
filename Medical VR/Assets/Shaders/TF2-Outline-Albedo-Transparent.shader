@@ -1,4 +1,4 @@
-﻿Shader "Custom/TF2-Outline/Default"{
+﻿Shader "Custom/TF2-Outline/Albedo-Transparent"{
     Properties {
         _Color ("Main Color", Color) = (1,1,1,1)
         _RimColor ("Rim Color", Color) = (0.97,0.88,1,0.75)
@@ -6,16 +6,19 @@
         _OutlineColor ("Outline Color", Color) = (0,0,0,1)
         _Outline ("Outline Width", Range (.002, 0.03)) = .005
         _MainTex ("Texture", 2D) = "white" {}
-        _BumpMap ("Normal Map", 2D) = "bump" {}
-        _SpecularTex ("Specular Map", 2D) = "gray" {}
         _RampTex ("Shading Ramp", 2D) = "white" {}
     }
    
     SubShader {
-        Tags { "RenderType" = "Opaque" }
-       
+		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
+
+		Pass
+	{
+		ColorMask 0
+	}
+
         CGPROGRAM
-            #pragma surface surf TF2
+            #pragma surface surf TF2 alpha
             #pragma target 3.0
  
             struct Input
@@ -25,7 +28,7 @@
                 INTERNAL_DATA
             };
            
-            sampler2D _MainTex, _SpecularTex, _BumpMap, _RampTex;
+            sampler2D _MainTex, _RampTex;
             float4 _RimColor;
             float  _RimPower;
             fixed4 _Color;
@@ -38,23 +41,19 @@
                 fixed3 ramp = tex2D(_RampTex, float2(NdotL * atten, 0)).rgb;
  
                 float nh = max (0, dot (s.Normal, h));
-                float spec = pow (nh, s.Gloss * 128) * s.Specular * saturate(NdotL);
  
                 fixed4 c;
-                c.rgb = ((s.Albedo * _Color.rgb * ramp * _LightColor0.rgb + _LightColor0.rgb * spec) * (atten * 2));
+                c.rgb = ((s.Albedo * _Color.rgb * ramp * _LightColor0.rgb) * (atten * 2));
+				c.a = _Color.a;
                 return c;
             }
    
             void surf (Input IN, inout SurfaceOutput o)
             {
                 o.Albedo = tex2D(_MainTex, IN.uv_MainTex).rgb;
-                o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_MainTex));
-                float3 specGloss = tex2D(_SpecularTex, IN.uv_MainTex).rgb;
-                o.Specular = specGloss.r;
-                o.Gloss = specGloss.g;
 				_Color.rgb *= 2;
  
-                half3 rim = pow(max(0, dot(float3(0, 1, 0), WorldNormalVector (IN, o.Normal))), _RimPower) * _RimColor.rgb * _RimColor.a * specGloss.b;
+                half3 rim = pow(max(0, dot(float3(0, 1, 0), WorldNormalVector (IN, o.Normal))), _RimPower) * _RimColor.rgb * _RimColor.a;
                 o.Emission = rim;
             }
    
@@ -92,7 +91,7 @@
        
             Pass {
                 Name "OUTLINE"
-                Tags { "LightMode" = "Always" }
+				Tags{ "LightMode" = "Always" "Queue" = "Transparent" "RenderType" = "Transparent" }
                 Cull Front
                 ZWrite On
                 ColorMask RGB
