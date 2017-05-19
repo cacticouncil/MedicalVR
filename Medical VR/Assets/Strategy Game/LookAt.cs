@@ -3,18 +3,18 @@ using System.Collections;
 
 public class LookAt : MonoBehaviour
 {
-    public GameObject l;
+    public Transform l;
 
     // Update is called once per frame
     void OnEnable()
     {
         if (GetComponent<Rigidbody>())
         {
-            GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(l.transform.position - transform.position));
+            GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(l.position - transform.position));
         }
         else
         {
-            transform.LookAt(l.transform);
+            transform.LookAt(l);
         }
     }
 }

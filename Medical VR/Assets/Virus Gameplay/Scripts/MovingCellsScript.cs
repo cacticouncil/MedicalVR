@@ -4,7 +4,7 @@ using System.Collections;
 public class MovingCellsScript : MonoBehaviour
 {
     public GameObject Cam;
-    float speed = .1f;
+    public float speed = .1f;
 
     // Update is called once per frame
     void Update()

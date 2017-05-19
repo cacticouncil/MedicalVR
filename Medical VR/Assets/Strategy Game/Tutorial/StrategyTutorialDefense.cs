@@ -7,32 +7,56 @@ public class StrategyTutorialDefense : MonoBehaviour
     public Transform cam;
     public GameObject eventSystem;
     public GameObject fade;
+    public LookCamera lc;
+    public GameObject reticle;
     public GameObject immunityParticles;
-    public GameObject holder;
     public GameObject objects;
-    public GameObject fuzeon;
+    public Renderer fuzeon;
     public TMPro.TextMeshPro defDes;
     public TMPro.TextMeshPro immDes;
     public TMPro.TextMeshPro subtitles;
-    public GameObject[] def = new GameObject[0];
-    public GameObject[] imm = new GameObject[0];
+    public GameObject @base;
     public GameObject[] cells = new GameObject[7];
     public GameObject[] viruses = new GameObject[4];
-    public List<TMPro.TextMeshPro> texts = new List<TMPro.TextMeshPro>();
-    
+
+    private string[] texts =
+        {
+        "The Defense stat delays viruses from killing your cells.",
+        "When a virus spawns, it targets a random cell.",
+        "When a cell is targeted, it turns black.",
+        "Once the virus reaches the cell it attempts to penetrate the cell's membrane.",
+        "You can't upgrade the cell while it is defending itself.",
+        "But, other cells can spread immunity to it.",
+        "During this time immunity is received at twice the value.",
+        "Defense is also the only stat that is copied to the child.",
+        "Due to this, it is highly advised that you invest into this stat early on.",
+        "Alternatively, you could put points into a cell when it becomes targeted by a virus.",
+        "The Fuzeon power-up permanently increases defense by 5.",
+        "If you are lucky enough you can get the Defense event.",
+        "It raises all your cells defense to the max defense in your colony +5.",
+        "Be careful, different viruses have different attack values.",
+        "The attack values will also increase as the game continues.",
+        };
     private Vector3 prevPos;
-    private int im = 0;
-    private bool last = false, text = false, finish = false, advance = false;
+    private Quaternion prevRotation;
+    private int index = 1;
+    private bool last = false, text = false, finish = false, clickable = false;
     private List<Coroutine> stop = new List<Coroutine>();
+    private Color c;
 
     void OnEnable()
     {
         eventSystem.SetActive(false);
+        clickable = false;
         if (cam == null)
             cam = Camera.main.transform.parent;
 
         prevPos = cam.position;
-        StartCoroutine(Advance());
+        prevRotation = lc.transform.rotation;
+        //Fade In
+        fade.GetComponent<FadeIn>().enabled = true;
+        index = 1;
+        Invoke("Click", 1);
     }
 
     void Update()
@@ -46,354 +70,289 @@ public class StrategyTutorialDefense : MonoBehaviour
             }
             else
             {
-                advance = true;
+                if (clickable)
+                    Click();
             }
         }
         last = held;
     }
 
-    IEnumerator Advance()
+    void Click()
     {
-        //Fade In
-        fade.GetComponent<FadeIn>().enabled = true;
-        yield return new WaitForSeconds(1.0f);
-
-        //Fade Out
-        cam.position = transform.position;
-        Vector3 forward = cam.forward;
-        forward.y = 0.0f;
-        holder.transform.position = forward + transform.position;
-        yield return 0;
-        holder.transform.LookAt(cam);
-        holder.SetActive(true);
-        defDes.text = "Defense: 0";
-        immDes.text = "Immunity: 0";
-        im = 0;
-
-        fade.GetComponent<FadeOut>().enabled = true;
-        yield return new WaitForSeconds(1.0f);
-
-        //The Defense stat delays viruses from killing your cells. 
-        StartCoroutine(TurnTextOn(0));
-        stop.Add(StartCoroutine(GrowInObject(cells[0])));
-        foreach (GameObject item in def)
+        switch (index)
         {
-            stop.Add(StartCoroutine(FadeInObject(item)));
-            stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
+            case 1:
+                //Fade Out
+                objects.SetActive(true);
+                reticle.SetActive(false);
+                cam.position = transform.position;
+                lc.target = cells[0].transform;
+                lc.enabled = true;
+                defDes.text = "Defense: 0";
+                immDes.text = "Immunity: 0";
+                fade.GetComponent<FadeOut>().enabled = true;
+                Invoke("Click", 1);
+                break;
+            case 2:
+                //The Defense stat delays viruses from killing your cells.
+                StartCoroutine(TurnTextOn(0));
+                stop.Add(StartCoroutine(GrowInObject(cells[0])));
+                foreach (Transform item in @base.GetComponentsInChildren<Transform>(true))
+                {
+                    item.gameObject.SetActive(true);
+                }
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
+                {
+                    if (item.material.HasProperty("_Color"))
+                        stop.Add(StartCoroutine(FadeInObject(item)));
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    stop.Add(StartCoroutine(FadeInText(item)));
+                }
+                clickable = true;
+                break;
+            case 3:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                cells[0].transform.localScale = Vector3.one;
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
+                {
+                    if (item.material.HasProperty("_Color"))
+                    {
+                        c = item.material.color;
+                        c.a = 1.0f;
+                        item.material.color = c;
+                    }
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    item.color = Color.black;
+                }
+
+                //When a virus spawns, it targets a random cell.
+                StartCoroutine(TurnTextOn(1));
+                viruses[0].transform.position = cells[0].transform.position + new Vector3(0, 2, 0);
+                stop.Add(StartCoroutine(GrowInObject(viruses[0])));
+                break;
+            case 4:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                viruses[0].SetActive(true);
+                viruses[0].transform.localScale = Vector3.one;
+
+                //When a cell is targeted, it turns black.
+                StartCoroutine(TurnTextOn(2));
+                stop.Add(StartCoroutine(PaintItBlack(cells[0])));
+                break;
+            case 5:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                cells[0].GetComponent<Renderer>().material.color = Color.black;
+
+                //Once the virus reaches the cell it attempts to penetrate the cell's membrane.
+                StartCoroutine(TurnTextOn(3));
+                stop.Add(StartCoroutine(MoveVirus()));
+                break;
+            case 6:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                viruses[0].GetComponent<Rotate>().enabled = false;
+                cells[0].GetComponent<Rotate>().enabled = false;
+                viruses[0].transform.position = cells[0].transform.position + new Vector3(0, .9f, 0);
+
+                //You can't upgrade the cell while it is defending itself.
+                StartCoroutine(TurnTextOn(4));
+                break;
+            case 7:
+                //But, other cells can spread immunity to it.
+                StartCoroutine(TurnTextOn(5));
+                stop.Add(StartCoroutine(GrowInObject(cells[1])));
+                stop.Add(StartCoroutine(GrowInObject(cells[2])));
+                stop.Add(StartCoroutine(GrowInObject(cells[3])));
+                stop.Add(StartCoroutine(GrowInObject(cells[4])));
+                stop.Add(StartCoroutine(GrowInObject(cells[5])));
+                stop.Add(StartCoroutine(GrowInObject(cells[6])));
+                break;
+            case 8:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                for (int i = 1; i < 7; i++)
+                {
+                    cells[i].transform.localScale = Vector3.one;
+                }
+
+                //During this time immunity is received at twice the value.
+                StartCoroutine(TurnTextOn(6));
+                for (int i = 1; i < 7; i++)
+                {
+                    GameObject p = Instantiate(immunityParticles, cells[i].transform.position, Quaternion.LookRotation(cells[0].transform.position - cells[i].transform.position), cells[0].transform) as GameObject;
+                    p.GetComponent<ImmunityParticles>().target = cells[0].transform;
+                    p.GetComponent<ImmunityParticles>().immunity = 1;
+                    p.GetComponent<ImmunityParticles>().startSpeed = 15;
+                    p.GetComponent<ImmunityParticles>().enabled = true;
+                }
+                Invoke("Immunity12", 1);
+                break;
+            case 9:
+                immDes.text = "Immunity: 12";
+
+                //Defense is also the only stat that is copied to the child.
+                StartCoroutine(TurnTextOn(7));
+                break;
+            case 10:
+                //Due to this, it is highly advised that you invest into this stat early on. 
+                StartCoroutine(TurnTextOn(8));
+                break;
+            case 11:
+                //Alternatively, you could put points into a cell when it becomes targeted by a virus.
+                StartCoroutine(TurnTextOn(9));
+                break;
+            case 12:
+                //The Fuzeon power-up permanently increases defense by 5.
+                StartCoroutine(TurnTextOn(10));
+                stop.Add(StartCoroutine(FadeInObject(fuzeon)));
+                stop.Add(StartCoroutine(UnPaintItBlack(cells[0])));
+                cells[0].GetComponent<Rotate>().enabled = true;
+                stop.Add(StartCoroutine(ShrinkOutObject(viruses[0])));
+                defDes.text = "Defense: 5";
+                break;
+            case 13:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                c = fuzeon.GetComponent<Renderer>().material.color;
+                c.a = 1.0f;
+                fuzeon.GetComponent<Renderer>().material.color = c;
+                cells[0].GetComponent<Renderer>().material.color = Color.grey;
+                viruses[0].SetActive(false);
+
+                //If you are lucky enough you can get the Defense event.
+                StartCoroutine(TurnTextOn(11));
+                stop.Add(StartCoroutine(FadeOutObject(fuzeon)));
+                break;
+            case 14:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                fuzeon.gameObject.SetActive(false);
+                fuzeon.GetComponent<Renderer>().material.color = Color.green;
+                fuzeon.GetComponent<Renderer>().material.SetColor("_OutlineColor", Color.black);
+
+                //It raises all your cells defense to the max defense in your colony +5.
+                StartCoroutine(TurnTextOn(12));
+                defDes.text = "Defense: 10";
+                break;
+            case 15:
+                //Be careful, different viruses have different attack values.
+                StartCoroutine(TurnTextOn(13));
+                foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
+                {
+                    if (item.material.HasProperty("_Color"))
+                        stop.Add(StartCoroutine(FadeOutObject(item)));
+                }
+                foreach (TMPro.TextMeshPro item in @base.GetComponentsInChildren<TMPro.TextMeshPro>(true))
+                {
+                    stop.Add(StartCoroutine(FadeOutText(item)));
+                }
+                foreach (GameObject cell in cells)
+                {
+                    stop.Add(StartCoroutine(FadeOutObject(cell.GetComponent<Renderer>())));
+                }
+                stop.Add(StartCoroutine(FadeInObject(viruses[1].GetComponent<Renderer>())));
+                stop.Add(StartCoroutine(FadeInObject(viruses[2].GetComponent<Renderer>())));
+                stop.Add(StartCoroutine(FadeInObject(viruses[3].GetComponent<Renderer>())));
+                break;
+            case 16:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                foreach (Transform item in @base.GetComponentsInChildren<Transform>(true))
+                {
+                    item.gameObject.SetActive(false);
+                }
+                foreach (GameObject cell in cells)
+                {
+                    cell.SetActive(false);
+                }
+                c = viruses[1].GetComponent<Renderer>().material.color;
+                c.a = 1;
+                viruses[1].GetComponent<Renderer>().material.color = c;
+                viruses[1].GetComponent<Renderer>().material.SetColor("_OutlineColor", Color.black);
+                c = viruses[2].GetComponent<Renderer>().material.color;
+                c.a = 1;
+                viruses[2].GetComponent<Renderer>().material.color = c;
+                viruses[2].GetComponent<Renderer>().material.SetColor("_OutlineColor", Color.black);
+                c = viruses[3].GetComponent<Renderer>().material.color;
+                c.a = 1;
+                viruses[3].GetComponent<Renderer>().material.color = c;
+                viruses[3].GetComponent<Renderer>().material.SetColor("_OutlineColor", Color.black);
+
+                //The attack values will also increase as the game continues.
+                StartCoroutine(TurnTextOn(14));
+                break;
+            case 17:
+                //Fade In
+                fade.GetComponent<FadeIn>().enabled = true;
+                subtitles.text = "";
+                clickable = false;
+                Invoke("Click", 1);
+                break;
+            case 18:
+                //Fade Out
+                reticle.SetActive(true);
+                cam.position = prevPos;
+                lc.transform.rotation = prevRotation;
+                fade.GetComponent<FadeOut>().enabled = true;
+                Invoke("Click", 1);
+                break;
+            case 19:
+                foreach (GameObject cell in viruses)
+                {
+                    cell.SetActive(false);
+                }
+                objects.SetActive(false);
+                eventSystem.SetActive(true);
+                enabled = false;
+                break;
+            default:
+                break;
         }
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        foreach (Coroutine co in stop)
-        {
-            StopCoroutine(co);
-        }
-        stop.Clear();
-        cells[0].transform.localScale = Vector3.one;
-        foreach (GameObject item in def)
-        {
-            Color c = item.GetComponent<Renderer>().material.color;
-            c.a = 1;
-            item.GetComponent<Renderer>().material.color = c;
-            item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
-        }
-
-        //When a virus spawns, it targets a random cell. 
-        StartCoroutine(TurnTextOn(1));
-        viruses[0].transform.position = cells[0].transform.position + new Vector3(0, 2, 0);
-        stop.Add(StartCoroutine(GrowInObject(viruses[0])));
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        foreach (Coroutine co in stop)
-        {
-            StopCoroutine(co);
-        }
-        stop.Clear();
-        viruses[0].SetActive(true);
-        viruses[0].transform.localScale = Vector3.one;
-
-        //When a cell is targeted, it turns black.
-        StartCoroutine(TurnTextOn(2));
-        stop.Add(StartCoroutine(PaintItBlack(cells[0])));
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        foreach (Coroutine co in stop)
-        {
-            StopCoroutine(co);
-        }
-        stop.Clear();
-        cells[0].GetComponent<Renderer>().material.color = Color.black;
-
-        //Once the virus reaches the cell it enters a hosted state. 
-        StartCoroutine(TurnTextOn(3));
-        stop.Add(StartCoroutine(MoveVirus()));
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        foreach (Coroutine co in stop)
-        {
-            StopCoroutine(co);
-        }
-        stop.Clear();
-        viruses[0].GetComponent<Rotate>().enabled = false;
-        cells[0].GetComponent<Rotate>().enabled = false;
-        viruses[0].transform.position = cells[0].transform.position + new Vector3(0, .9f, 0);
-
-        //During this time the virus attempts to penetrate the cell’s membrane. 
-        StartCoroutine(TurnTextOn(4));
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        //You can’t upgrade the cell once it becomes hosted.
-        StartCoroutine(TurnTextOn(5));
-        foreach (GameObject item in def)
-        {
-            stop.Add(StartCoroutine(FadeOutObject(item)));
-            stop.Add(StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
-        }
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        foreach (Coroutine co in stop)
-        {
-            StopCoroutine(co);
-        }
-        stop.Clear();
-
-        foreach (GameObject item in def)
-        {
-            item.SetActive(false);
-        }
-
-        //But, other cells can spread immunity to it. 
-        StartCoroutine(TurnTextOn(6));
-        stop.Add(StartCoroutine(GrowInObject(cells[1])));
-        stop.Add(StartCoroutine(GrowInObject(cells[2])));
-        stop.Add(StartCoroutine(GrowInObject(cells[3])));
-        stop.Add(StartCoroutine(GrowInObject(cells[4])));
-        stop.Add(StartCoroutine(GrowInObject(cells[5])));
-        stop.Add(StartCoroutine(GrowInObject(cells[6])));
-        foreach (GameObject item in imm)
-        {
-            StartCoroutine(FadeInObject(item));
-            StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>()));
-        }
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        foreach (Coroutine co in stop)
-        {
-            StopCoroutine(co);
-        }
-        stop.Clear();
-
-        for (int i = 1; i < 7; i++)
-        {
-            cells[i].transform.localScale = Vector3.one;
-        }
-
-        for (int i = 1; i < 7; i++)
-        {
-            GameObject p = Instantiate(immunityParticles, cells[i].transform.position, Quaternion.LookRotation(cells[0].transform.position - cells[i].transform.position), objects.transform) as GameObject;
-            p.GetComponent<ImmunityParticles>().target = cells[0].transform;
-            p.GetComponent<ImmunityParticles>().immunity = 1;
-            p.GetComponent<ImmunityParticles>().startSpeed = 15;
-            p.GetComponent<ImmunityParticles>().enabled = true;
-        }
-        yield return new WaitForSeconds(.1f);
-        for (int i = 0; i < 6; i++)
-        {
-            im += 2;
-            immDes.text = "Immunity: " + im;
-            yield return new WaitForSeconds(.2f);
-        }
-
-        //During this time immunity is received at twice the value.  
-        StartCoroutine(TurnTextOn(7));
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        //Defense is also the only stat that is copied to the child. 
-        StartCoroutine(TurnTextOn(8));
-        foreach (GameObject item in imm)
-        {
-            stop.Add(StartCoroutine(FadeOutObject(item)));
-            stop.Add(StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
-        }
-        foreach (GameObject item in def)
-        {
-            stop.Add(StartCoroutine(FadeInObject(item)));
-            stop.Add(StartCoroutine(FadeInText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
-        }
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        foreach (Coroutine co in stop)
-        {
-            StopCoroutine(co);
-        }
-        stop.Clear();
-        
-        foreach (GameObject item in imm)
-        {
-            item.SetActive(false);
-        }
-        foreach (GameObject item in def)
-        {
-            Color c = item.GetComponent<Renderer>().material.color;
-            c.a = 1;
-            item.GetComponent<Renderer>().material.color = c;
-            item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>().color = Color.black;
-        }
-
-        //Due to this, it is highly advised that you invest into this stat early on. 
-        StartCoroutine(TurnTextOn(9));
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        //Alternatively, you could put points into a cell when it becomes targeted by a virus.
-        StartCoroutine(TurnTextOn(10));
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        //The Fuzeon powerup permanently increases defense by 5.
-        StartCoroutine(TurnTextOn(11));
-        stop.Add(StartCoroutine(FadeInObject(fuzeon)));
-        stop.Add(StartCoroutine(UnPaintItBlack(cells[0])));
-        cells[0].GetComponent<Rotate>().enabled = true;
-        stop.Add(StartCoroutine(ShrinkOutObject(viruses[0])));
-        defDes.text = "Defense: 5";
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        foreach (Coroutine co in stop)
-        {
-            StopCoroutine(co);
-        }
-        stop.Clear();
-
-        fuzeon.GetComponent<Renderer>().material.color = Color.green;
-        cells[0].GetComponent<Renderer>().material.color = Color.grey;
-        viruses[0].SetActive(false);
-
-        ////If you are lucky enough you can get the Defense event.
-        //StartCoroutine(FadeOutObject(fuzeon));
-        //StartCoroutine(TurnTextOn(12));
-        //yield return new WaitForSeconds(3);
-
-        ////It raises all your cells defense to the max defense in your colony +5. 
-        //StartCoroutine(TurnTextOn(13));
-        //yield return new WaitForSeconds(1);
-        //defDes.text = "Defense: 10";
-        //yield return new WaitForSeconds(2);
-
-        //Be careful, different viruses have different attack values. 
-        StartCoroutine(TurnTextOn(14));
-        stop.Add(StartCoroutine(FadeOutObject(fuzeon)));
-        foreach (GameObject item in def)
-        {
-            stop.Add(StartCoroutine(FadeOutObject(item)));
-            stop.Add(StartCoroutine(FadeOutText(item.transform.GetChild(0).GetComponent<TMPro.TextMeshPro>())));
-        }
-        stop.Add(StartCoroutine(FadeInObject(viruses[1])));
-        stop.Add(StartCoroutine(FadeInObject(viruses[2])));
-        stop.Add(StartCoroutine(FadeInObject(viruses[3])));
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        foreach (Coroutine co in stop)
-        {
-            StopCoroutine(co);
-        }
-        stop.Clear();
-
-        fuzeon.SetActive(false);
-        foreach (GameObject item in def)
-        {
-            item.SetActive(false);
-        }
-
-        Color col = viruses[1].GetComponent<Renderer>().material.color;
-        col.a = 1;
-        viruses[1].GetComponent<Renderer>().material.color = col;
-        col = viruses[2].GetComponent<Renderer>().material.color;
-        col.a = 1;
-        viruses[2].GetComponent<Renderer>().material.color = col;
-        col = viruses[3].GetComponent<Renderer>().material.color;
-        col.a = 1;
-        viruses[3].GetComponent<Renderer>().material.color = col;
-
-        //The attack values will also increase as the game continues. 
-        StartCoroutine(TurnTextOn(15));
-
-        while (!advance)
-            yield return 0;
-        advance = false;
-
-        subtitles.text = "";
-
-        //Fade In
-        fade.GetComponent<FadeIn>().enabled = true;
-        yield return new WaitForSeconds(1.0f);
-
-        //Fade Out
-        cam.position = prevPos;
-        fade.GetComponent<FadeOut>().enabled = true;
-        yield return new WaitForSeconds(1.0f);
-
-        foreach (GameObject cell in cells)
-        {
-            cell.SetActive(false);
-        }
-        foreach (GameObject cell in viruses)
-        {
-            cell.SetActive(false);
-        }
-        
-        holder.SetActive(false);
-        eventSystem.SetActive(true);
-        enabled = false;
+        index++;
     }
 
     #region Objects
-    IEnumerator FadeInObject(GameObject g)
+    IEnumerator FadeInObject(Renderer g)
     {
-        g.SetActive(true);
-        Color c = g.GetComponent<Renderer>().material.color;
+        g.gameObject.SetActive(true);
+        Color c = g.material.color;
         Color outline = Color.black;
         bool o = false;
-        if (g.GetComponent<Renderer>().material.HasProperty("_OutlineColor"))
+        if (g.material.HasProperty("_OutlineColor"))
         {
             o = true;
-            outline = g.GetComponent<Renderer>().material.GetColor("_OutlineColor");
+            outline = g.material.GetColor("_OutlineColor");
         }
         float startTime = Time.time;
         float t = 0.0f;
@@ -401,25 +360,25 @@ public class StrategyTutorialDefense : MonoBehaviour
         {
             t = Time.time - startTime;
             c.a = t;
-            g.GetComponent<Renderer>().material.color = c;
+            g.material.color = c;
             if (o)
             {
                 outline.a = t;
-                g.GetComponent<Renderer>().material.SetColor("_OutlineColor", outline);
+                g.material.SetColor("_OutlineColor", outline);
             }
             yield return 0;
         }
     }
 
-    IEnumerator FadeOutObject(GameObject g)
+    IEnumerator FadeOutObject(Renderer g)
     {
-        Color c = g.GetComponent<Renderer>().material.color;
+        Color c = g.material.color;
         Color outline = Color.black;
         bool o = false;
-        if (g.GetComponent<Renderer>().material.HasProperty("_OutlineColor"))
+        if (g.material.HasProperty("_OutlineColor"))
         {
             o = true;
-            outline = g.GetComponent<Renderer>().material.GetColor("_OutlineColor");
+            outline = g.material.GetColor("_OutlineColor");
         }
         float startTime = Time.time;
         float t = 0.0f;
@@ -427,15 +386,15 @@ public class StrategyTutorialDefense : MonoBehaviour
         {
             t = Time.time - startTime;
             c.a = 1.0f - t;
-            g.GetComponent<Renderer>().material.color = c;
+            g.material.color = c;
             if (o)
             {
                 outline.a = 1.0f - t;
-                g.GetComponent<Renderer>().material.SetColor("_OutlineColor", outline);
+                g.material.SetColor("_OutlineColor", outline);
             }
             yield return 0;
         }
-        g.SetActive(false);
+        g.gameObject.SetActive(false);
     }
 
     IEnumerator GrowInObject(GameObject g)
@@ -501,20 +460,20 @@ public class StrategyTutorialDefense : MonoBehaviour
         text = true;
         subtitles.text = "_";
 
-        while (subtitles.text != texts[index].text && !finish)
+        while (subtitles.text != texts[index] && !finish)
         {
             yield return new WaitForSeconds(GlobalVariables.textDelay);
 
-            if (subtitles.text.Length == texts[index].text.Length)
+            if (subtitles.text.Length == texts[index].Length)
             {
-                subtitles.text = texts[index].text;
+                subtitles.text = texts[index];
             }
             else
             {
-                subtitles.text = subtitles.text.Insert(subtitles.text.Length - 1, texts[index].text[subtitles.text.Length - 1].ToString());
+                subtitles.text = subtitles.text.Insert(subtitles.text.Length - 1, texts[index][subtitles.text.Length - 1].ToString());
             }
         }
-        subtitles.text = texts[index].text;
+        subtitles.text = texts[index];
         finish = false;
         text = false;
     }
@@ -570,4 +529,9 @@ public class StrategyTutorialDefense : MonoBehaviour
         cells[0].GetComponent<Rotate>().enabled = false;
     }
     #endregion
+
+    void Immunity12()
+    {
+        immDes.text = "Immunity: 12";
+    }
 }

@@ -4,7 +4,7 @@ using System.Collections;
 
 public class SoundController : MonoBehaviour
 {
-    public string MainMenu, Options, Memory, Minigame, Dodge, Simon, ATP, Throphy, DestroyCell, DestroyVirus, Cgamp, Strategy, Jordan;
+    public string MainMenu, Options, Memory, Minigame, Dodge, Simon, ATP, Throphy, DestroyCell, DestroyVirus, Cgamp, Strategy, credits;
     public int Samples;
 
     void Start()
@@ -66,12 +66,6 @@ public class SoundController : MonoBehaviour
                     SoundManager.FadeInBGM(DestroyVirus);
                 }
                 break;
-            case "Jordan's Scene For Testing Shit":
-                if (Jordan != null)
-                {
-                    SoundManager.FadeInBGM(Jordan);
-                }
-                break;
             case "MemoryGame":
                 if (Memory != null)
                 {
@@ -112,6 +106,12 @@ public class SoundController : MonoBehaviour
                 if (ATP != null)
                 {
                     SoundManager.FadeInBGM(ATP);
+                }
+                break;
+            case "Credits":
+                if (credits != null)
+                {
+                    SoundManager.FadeInBGM(credits);
                 }
                 break;
             default:

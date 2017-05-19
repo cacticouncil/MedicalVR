@@ -22,16 +22,9 @@ public class Player : MonoBehaviour
     public float CurrentScore = 0.0f;
     public int VirusLeaveCount = 0;
 
-    float RuleTimer = 0.0f;
-    float Wave1Timer = 0.0f;
-    float Wave2Timer = 0.0f;
-    float Wave3Timer = 0.0f;
-    float Wave4Timer = 0.0f;
-    float BeatGameTimer = 0.0f;
-
-    bool DisplayRules;
     public bool isGameOver;
     public bool DisplayWaveNumber = false;
+    float BeatGameTimer = 0.0f;
     public bool BeatBoss = false;
 
     //For text
@@ -39,18 +32,20 @@ public class Player : MonoBehaviour
     public int WhatToRead = 0;
     public bool CanIRead = true;
     public TextMeshPro Text;
-    private string[] TextList = new string[7];
+    private string[] TextList = new string[8];
     private bool last = false, text = false, finish = false;
 
     void Start()
     {
         BannerScript.LockTrophy("Virus Trophy");
-        DisplayRules = true;
         isGameOver = false;
         SetFacebook();
 
         if (GlobalVariables.tutorial == false)
+        {
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+            TextForArcade();
+        }
 
         else
         {
@@ -61,6 +56,7 @@ public class Player : MonoBehaviour
             TextList[4] = "If three of them meet up they " + "\n" + "will create bigger viruses, Don't let any leave.";
             TextList[5] = "Click the button on the " + "\n" + "headset to destroy the viruses, press it again to stop.";
             TextList[6] = "Remember that viruses can spawn behind you.";
+            TextList[7] = "Great now you're ready to play.";
             TextForTutorial();
         }
     }
@@ -69,79 +65,16 @@ public class Player : MonoBehaviour
     {
         if (GlobalVariables.tutorial == false)
         {
-            if (isGameOver == false)
-            {
-                VirusCount.GetComponent<TextMeshPro>().text = "VirusCount: " + VirusLeaveCount.ToString();
-
-                if (RuleTimer >= 4.0f && RuleTimer <= 5.0f)
-                {
-                    RuleTimer = 10.0f;
-                    DisplayRules = false;
-                    EnemyManger.GetComponent<VirusManager>().CheckCount = true;
-                }
-
-                if (DisplayRules)
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "  Prevent the Virus " + "\n" + "from leaving the cell";
-                else
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "";
-
-                if (DisplayWaveNumber == true)
-                {
-                    switch (EnemyManger.GetComponent<VirusManager>().WaveNumber)
-                    {
-                        case 1:
-                            if (Wave1Timer <= 2.0f)
-                                CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 1";
-
-                            else
-                                DisplayWaveNumber = false;
-
-                            Wave1Timer += Time.deltaTime;
-                            break;
-
-                        case 2:
-                            if (Wave2Timer <= 2.0f)
-                                CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 2";
-
-                            else
-                                DisplayWaveNumber = false;
-
-                            Wave2Timer += Time.deltaTime;
-                            break;
-
-                        case 3:
-                            if (Wave3Timer <= 2.0f)
-                                CenterScreenObj.GetComponent<TextMeshPro>().text = "    Wave 3";
-
-                            else
-                                DisplayWaveNumber = false;
-
-                            Wave3Timer += Time.deltaTime;
-
-                            break;
-
-                        case 4:
-                            if (Wave4Timer <= 2.0f)
-                                CenterScreenObj.GetComponent<TextMeshPro>().text = "    Boss";
-
-                            else
-                                DisplayWaveNumber = false;
-
-                            Wave4Timer += Time.deltaTime;
-
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-
-                RuleTimer += Time.deltaTime;
-            }
-
             if (GlobalVariables.arcadeMode)
             {
-                ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + CurrentScore.ToString();
+                DisplayCountAndScore();
+
+                //Checking if you completed a wave
+                if (EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0 && EnemyManger.GetComponent<VirusManager>().DoneSpawning == true)
+                {
+                    EnemyManger.GetComponent<VirusManager>().DoneSpawning = false;
+                    TextForArcade();
+                }
 
                 //If you lose arcade bring up scorebaord
                 if (VirusLeaveCount == 10)
@@ -194,6 +127,7 @@ public class Player : MonoBehaviour
                     isGameOver = true;
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You win story mode";
                     BeatGameTimer += Time.deltaTime;
+
                     float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
                     if (a < 0)
                         a = 0;
@@ -212,6 +146,11 @@ public class Player : MonoBehaviour
         //Set up turtorial 
         else if (GlobalVariables.tutorial == true)
         {
+            //Need to fade in
+            float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
+            BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
+
+            //Player input to skip text
             if (StopInput == false)
             {
                 bool held = Input.GetButton("Fire1");
@@ -226,25 +165,47 @@ public class Player : MonoBehaviour
                 last = held;
             }
 
-            //Need to fade in
-            float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
-            BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
-        }
+            //Checking for events
+            if (VirusLeaveCount == 1 && WhatToRead == 5)
+            {
+                StopInput = false;
+                WhatToRead += 1;
+            }
 
-        if (VirusLeaveCount == 1 && WhatToRead == 5)
-        {
-            StopInput = false;
-            WhatToRead += 1;
+            if (EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0 && EnemyManger.GetComponent<VirusManager>().WaveNumber == 3 && WhatToRead == 9)
+            {
+                StopInput = false;
+                WhatToRead++;
+            }
         }
-        
-        //For tutorial only it will either transition to story mode or only play once
-        if (WhatToRead >= 10 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
-        {
-            BeatGameTimer += Time.deltaTime;
-            CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now you're ready to play";
+    }
 
-            if (BeatGameTimer >= 2.0f)
-                StoryMode();
+    void TextForArcade()
+    {
+        switch (WhatToRead)
+        {
+            case 0:
+                StartCoroutine(DisplayText("Prevent the Virus " + "\n" + "from leaving the cell", 2.0f));
+                break;
+
+            case 1:
+                StartCoroutine(DisplayText("Wave 1", 2.0f));
+                break;
+
+            case 2:
+                StartCoroutine(DisplayText("Wave 2", 2.0f));
+                break;
+
+            case 3:
+                StartCoroutine(DisplayText("Wave 3", 2.0f));
+                break;
+
+            case 4:
+                StartCoroutine(DisplayText("Boss", 2.0f));
+                break;
+
+            default:
+                break;
         }
     }
 
@@ -259,21 +220,25 @@ public class Player : MonoBehaviour
 
             case 1:
                 StartCoroutine(TurnTextOn(1));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-001", false);
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-002");
                 break;
 
             case 2:
                 StartCoroutine(TurnTextOn(2));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-002", false);
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-003");
                 break;
 
             case 3:
                 StartCoroutine(TurnTextOn(3));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-003", false);
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-004");
                 break;
 
             case 4:
                 StartCoroutine(TurnTextOn(4));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-004", false);
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-005");
                 break;
 
@@ -285,30 +250,72 @@ public class Player : MonoBehaviour
                 break;
 
             case 6:
+                //StopInput = true;
                 StartCoroutine(TurnTextOn(5));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-005", false);
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-006");
                 break;
 
             case 7:
+                //StopInput = false;
                 BulletSpawn.GetComponent<BulletManager>().CanIShoot = true;
                 WhatToRead++;
                 break;
 
-
             case 8:
                 StartCoroutine(TurnTextOn(6));
-                SoundManager.PlaySFX("Medical_VR_Fight_Virus_Tutorial_Line-007");
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-006", false);
+                SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-007");
                 break;
 
             case 9:
+                Text.text = "";
                 EnemyManger.GetComponent<VirusManager>().WaveNumber = 2;
                 EnemyManger.GetComponent<VirusManager>().CanISpawn = true;
-                WhatToRead++;
+                StopInput = true;
+                break;
+
+            case 10:
+                StartCoroutine(TurnTextOn(7));
+                SoundManager.stopSFX("Fight Virus Tutorial/Medical_VR_Fight_Virus_Tutorial_Line-007");
+                SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_VO_Great_Now_Youre_Ready_to_Play");
+                break;
+
+            case 11:
+                StoryMode();
                 break;
 
             default:
                 CenterScreenObj.GetComponent<TextMeshPro>().text = " ";
                 break;
+        }
+    }
+
+    void DisplayCountAndScore()
+    {
+        if (isGameOver == false)
+            VirusCount.GetComponent<TextMeshPro>().text = "VirusCount: " + VirusLeaveCount.ToString();
+
+        ScoreObj.GetComponent<TextMeshPro>().text = "Score: " + CurrentScore.ToString();
+    }
+
+    IEnumerator DisplayText(string message, float duration)
+    {
+        CenterScreenObj.GetComponent<TextMeshPro>().enabled = true;
+        CenterScreenObj.GetComponent<TextMeshPro>().text = message;
+        yield return new WaitForSeconds(duration);
+        CenterScreenObj.GetComponent<TextMeshPro>().enabled = false;
+
+        if (WhatToRead == 0)
+        {
+            WhatToRead++;
+            TextForArcade();
+        }
+
+        else
+        {
+            EnemyManger.GetComponent<VirusManager>().CheckCount = true;
+            WhatToRead++;
         }
     }
 
@@ -344,7 +351,7 @@ public class Player : MonoBehaviour
 
     void SetFacebook()
     {
-        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + CurrentScore.ToString(); /// + FacebookManager.Instance.GlobalScore /;
+        FB.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + CurrentScore.ToString();
         if (FacebookManager.Instance.ProfilePic != null)
             FB.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
@@ -352,6 +359,7 @@ public class Player : MonoBehaviour
     void StoryMode()
     {
         GlobalVariables.tutorial = false;
+        GlobalVariables.arcadeMode = true;
         SceneManager.LoadScene("FightVirus");
     }
 }

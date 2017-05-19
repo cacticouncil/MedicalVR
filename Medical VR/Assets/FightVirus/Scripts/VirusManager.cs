@@ -30,6 +30,8 @@ public class VirusManager : MonoBehaviour
     public int BossVirusHealth;
 
     public bool CanISpawn = false;
+    public bool DoneSpawning = false;
+
     void Start()
     {
         WaveNumber = 1;
@@ -38,88 +40,84 @@ public class VirusManager : MonoBehaviour
 
     void Update()
     {
-        if (CheckCount == true && GlobalVariables.tutorial == false)
+        if (CheckCount == true && GlobalVariables.tutorial == false && VirusList.Count == 0)
         {
-            if (VirusList.Count == 0)
+            switch (WaveNumber)
             {
-                switch (WaveNumber)
-                {
-                    case 1:
-                        if (GlobalVariables.arcadeMode == true)
-                        {
-                            EnemyCount = 12;
-                            SmallVirusSpeed = 0.003f;
-                            SmallVirusHealth = 20;
-                            BigVirusSpeed = 0.001f;
-                            BigVirusHealth = 40;
-                        }
-
-                        else if (GlobalVariables.arcadeMode == false)
-                        {
-                            EnemyCount = 7;
-                            SmallVirusSpeed = 0.003f;
-                            SmallVirusHealth = 20;
-                            BigVirusSpeed = 0.001f;
-                            BigVirusHealth = 40;
-                        }
-                        break;
-
-                    case 2:
-                        if (GlobalVariables.arcadeMode == true)
-                        {
-                            EnemyCount = 16;
-                            SmallVirusSpeed = 0.004f;
-                            SmallVirusHealth = 40;
-                            BigVirusSpeed = 0.002f;
-                            BigVirusHealth = 50;
-                        }
-
-                        else if (GlobalVariables.arcadeMode == false)
-                        {
-                            EnemyCount = 12;
-                            SmallVirusSpeed = 0.003f;
-                            SmallVirusHealth = 40;
-                            BigVirusSpeed = 0.002f;
-                            BigVirusHealth = 50;
-                        }
-                        break;
-
-                    case 3:
-                        if (GlobalVariables.arcadeMode == true)
-                        {
-                            EnemyCount = 20;
-                            SmallVirusSpeed = 0.009f;
-                            SmallVirusHealth = 60;
-                            BigVirusSpeed = 0.003f;
-                            BigVirusHealth = 60;
-                        }
-
-                        else if (GlobalVariables.arcadeMode == false)
-                        {
-                            EnemyCount = 17;
-                            SmallVirusSpeed = 0.004f;
-                            SmallVirusHealth = 60;
-                            BigVirusSpeed = 0.003f;
-                            BigVirusHealth = 60;
-                        }
-                        break;
-
-                    case 4:
-                        SpawnBoss = true;
-                        SmallVirusSpeed = 0.01f;
+                case 1:
+                    if (GlobalVariables.arcadeMode == true)
+                    {
+                        EnemyCount = 10;
+                        SmallVirusSpeed = 0.003f;
                         SmallVirusHealth = 20;
-                        BossVirusSpeed = 0.1f;
-                        BossVirusHealth = 400;
-                        break;
+                        BigVirusSpeed = 0.001f;
+                        BigVirusHealth = 40;
+                    }
 
-                    default:
-                        break;
-                }
+                    else if (GlobalVariables.arcadeMode == false)
+                    {
+                        EnemyCount = 5;
+                        SmallVirusSpeed = 0.003f;
+                        SmallVirusHealth = 20;
+                        BigVirusSpeed = 0.001f;
+                        BigVirusHealth = 40;
+                    }
+                    break;
 
-                CheckCount = false;
-                FightVirusPlayer.GetComponent<Player>().DisplayWaveNumber = true;
-                Invoke("CreateWave", 5);
+                case 2:
+                    if (GlobalVariables.arcadeMode == true)
+                    {
+                        EnemyCount = 15;
+                        SmallVirusSpeed = 0.004f;
+                        SmallVirusHealth = 40;
+                        BigVirusSpeed = 0.002f;
+                        BigVirusHealth = 50;
+                    }
+
+                    else if (GlobalVariables.arcadeMode == false)
+                    {
+                        EnemyCount = 10;
+                        SmallVirusSpeed = 0.003f;
+                        SmallVirusHealth = 40;
+                        BigVirusSpeed = 0.002f;
+                        BigVirusHealth = 50;
+                    }
+                    break;
+
+                case 3:
+                    if (GlobalVariables.arcadeMode == true)
+                    {
+                        EnemyCount = 20;
+                        SmallVirusSpeed = 0.009f;
+                        SmallVirusHealth = 60;
+                        BigVirusSpeed = 0.003f;
+                        BigVirusHealth = 60;
+                    }
+
+                    else if (GlobalVariables.arcadeMode == false)
+                    {
+                        EnemyCount = 15;
+                        SmallVirusSpeed = 0.004f;
+                        SmallVirusHealth = 60;
+                        BigVirusSpeed = 0.003f;
+                        BigVirusHealth = 60;
+                    }
+                    break;
+
+                case 4:
+                    SpawnBoss = true;
+                    SmallVirusSpeed = 0.01f;
+                    SmallVirusHealth = 20;
+                    BossVirusSpeed = 0.2f;
+                    BossVirusHealth = 500;
+                    break;
+
+                default:
+                    break;
             }
+
+            CheckCount = false;
+            Invoke("CreateWave", 5);
         }
 
         if (GlobalVariables.tutorial == true)
@@ -141,7 +139,7 @@ public class VirusManager : MonoBehaviour
                         EnemyCount = 7;
                         SmallVirusSpeed = 0.002f;
                         SmallVirusHealth = 20;
-                        BigVirusSpeed = 0.001f;
+                        BigVirusSpeed = 0.007f;
                         BigVirusHealth = 40;
                         Invoke("CreateWave", 2);
                         break;
@@ -163,6 +161,7 @@ public class VirusManager : MonoBehaviour
 
     void CreateWave()
     {
+        Debug.Log("WaveNumberIncrease");
         VirusList = new List<GameObject>();
 
         if (SpawnBoss == false)
@@ -177,8 +176,6 @@ public class VirusManager : MonoBehaviour
                 VC.GetComponent<Virus>().Health = SmallVirusHealth;
                 VirusList.Add(VC);
             }
-
-            CheckCount = true;
         }
 
         else if (SpawnBoss == true)
@@ -191,7 +188,8 @@ public class VirusManager : MonoBehaviour
             CheckCount = false;
         }
 
-        //WaveNumber += 1;
+        DoneSpawning = true;
+        WaveNumber++;
     }
 
     public void CreateSmallVirus(GameObject pos)
