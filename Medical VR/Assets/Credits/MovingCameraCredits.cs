@@ -9,20 +9,13 @@ public class MovingCameraCredits : MonoBehaviour
     public Renderer bloodVessel;
     public float texMod = .001f;
 
-    private Rigidbody rig;
-
-    // Use this for initialization
-    void Start()
-    {
-        rig = GetComponent<Rigidbody>();
-    }
-
     // Update is called once per frame
     void FixedUpdate()
     {
-        rig.velocity = new Vector3(0, 0, cam.forward.z * speed);
+        float zMovement = cam.forward.z * speed;
+        transform.position += new Vector3(0, 0, zMovement);
         Vector2 bOff = bloodVessel.material.mainTextureOffset;
-        bOff.y += rig.velocity.z * texMod; // same thing you were adding to mainTex
+        bOff.y += zMovement * texMod; // same thing you were adding to mainTex
                                   // throw in a multiplier, above, if the textures aren't scaled the same
         bloodVessel.material.mainTextureOffset = bOff;
     }
