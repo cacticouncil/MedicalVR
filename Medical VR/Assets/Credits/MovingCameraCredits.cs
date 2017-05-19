@@ -7,6 +7,7 @@ public class MovingCameraCredits : MonoBehaviour
     public float speed;
     public Transform cam;
     public Renderer bloodVessel;
+    public float texMod = .001f;
 
     private Rigidbody rig;
 
@@ -21,7 +22,7 @@ public class MovingCameraCredits : MonoBehaviour
     {
         rig.velocity = new Vector3(0, 0, cam.forward.z * speed);
         Vector2 bOff = bloodVessel.material.mainTextureOffset;
-        bOff.y += rig.velocity.z * .001f; // same thing you were adding to mainTex
+        bOff.y += rig.velocity.z * texMod; // same thing you were adding to mainTex
                                   // throw in a multiplier, above, if the textures aren't scaled the same
         bloodVessel.material.mainTextureOffset = bOff;
     }
