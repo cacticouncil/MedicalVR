@@ -4,28 +4,24 @@ using System.Collections;
 public class StrategyVirusScript : MonoBehaviour
 {
     public StrategyCellScript target;
-    public float movementSpeed = 10.0f;
-    public float turnSpeed = .1f;
-    public float attackValue = .5f;
-    public float attackDuration = 0;
-    public float health = 15.0f;
-    public float percentTraveled = 0.0f;
-    public bool standby = false;
-    public bool targeted = false;
-    public bool selected = false;
-
-    public Vector3 startingPosition, prevPosition, nextPosition;
-
     public Renderer render;
     public ParticleSystem deathParticles;
-    public StrategyCellManagerScript parent;
-    public TMPro.TextMeshPro attack, speed, immunity;
+    public GameObject itemWhiteBloodCellPrefab;
+    public TMPro.TextMeshPro attack, speed, immunity, powerup;
 
+    [System.NonSerialized]
+    public StrategyCellManagerScript parent;
+    [System.NonSerialized]
+    public float turnSpeed = .1f, attackValue = .5f, attackDuration = 0, health = 15.0f, percentTraveled = 0.0f;
+    [System.NonSerialized]
+    public bool standby = false, targeted = false, selected = false;
+
+    private float movementSpeed = 10.0f;
     private float distance = .1f;
     private float startTime = 0.0f;
     private bool trav = false;
+    private Vector3 startingPosition, prevPosition, nextPosition;
     private Vector2 key = new Vector2(-500, 500);
-    
     private float scaledDistance = 1.3f;
 
     // Use this for initialization
@@ -202,6 +198,28 @@ public class StrategyVirusScript : MonoBehaviour
         }
     }
 
+    public void UseV()
+    {
+        //check for item
+        if (parent.inventory[6].count > 0)
+        {
+            parent.inventory[6].count--;
+            ToggleUI(false);
+            Vector3 camPos = Camera.main.GetComponent<Transform>().position;
+            Vector3 dir = camPos - transform.position;
+            dir.Normalize();
+            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(camPos + dir);
+            Invoke("SpawnW", .5f);
+        }
+    }
+
+    void SpawnW()
+    {
+        GameObject w = Instantiate(itemWhiteBloodCellPrefab, Camera.main.GetComponent<Transform>().position, Quaternion.identity, transform.parent) as GameObject;
+        w.GetComponent<StrategyItemWhiteBloodCell>().target = this;
+        w.GetComponent<StrategyItemWhiteBloodCell>().enabled = true;
+    }
+
     public void ToggleUI(bool b)
     {
         if (b)
@@ -218,7 +236,13 @@ public class StrategyVirusScript : MonoBehaviour
             attack.text = "Attack: " + (int)(attackValue * 10) * .1f;
             speed.text = "Speed: " + (int)(turnSpeed * 10) * .1f;
             immunity.text = "Immunity To Kill: " + Mathf.CeilToInt(health);
+            powerup.text = parent.inventory[6].count.ToString();
+            if (parent.inventory[6].count < 1)
+                powerup.color = Color.red;
+            else
+                powerup.color = Color.white;
         }
+        GetComponent<Collider>().enabled = b;
         selected = b;
         transform.GetChild(0).gameObject.SetActive(b);
     }

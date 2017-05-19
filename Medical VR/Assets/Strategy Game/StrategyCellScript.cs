@@ -271,14 +271,14 @@ public class StrategyCellScript : MonoBehaviour
             Vector3 camPos = Camera.main.GetComponent<Transform>().position;
             Vector3 dir = camPos - transform.position;
             dir.Normalize();
-            Camera.main.GetComponent<MoveCamera>().SetDestination(camPos + dir);
+            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(camPos + dir);
             Invoke("SpawnW", .5f);
         }
     }
 
     void SpawnW()
     {
-        GameObject w = Instantiate(itemWhiteBloodCellPrefab, Camera.main.GetComponent<Transform>().position, Quaternion.identity) as GameObject;
+        GameObject w = Instantiate(itemWhiteBloodCellPrefab, Camera.main.GetComponent<Transform>().position, Quaternion.identity, transform.parent) as GameObject;
         w.GetComponent<StrategyItemWhiteBloodCell>().target = virus.GetComponent<StrategyVirusScript>();
         w.GetComponent<StrategyItemWhiteBloodCell>().enabled = true;
     }

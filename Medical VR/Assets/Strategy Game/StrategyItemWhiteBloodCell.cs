@@ -44,10 +44,10 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
         Vector3 camPos = Camera.main.GetComponent<Transform>().position;
         Vector3 dir = transform.position - camPos;
         dir.Normalize();
-        Camera.main.GetComponent<MoveCamera>().SetDestination(camPos + dir);
+        Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(camPos + dir);
 
-        cell.RefreshUI();
-        cell.ToggleUI(true);
+        if (transform.parent.GetComponent<StrategyCellManagerScript>().selected == cell.key)
+            cell.ToggleUI(true);
         float t = 0;
         while (t < 10.0f)
         {
