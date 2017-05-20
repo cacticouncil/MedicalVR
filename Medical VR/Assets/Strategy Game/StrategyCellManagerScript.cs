@@ -26,6 +26,13 @@ public class StrategyCellManagerScript : MonoBehaviour
     public StrategyTutorialReproduction str;
     public StrategyTutorialDefense std;
     public StrategyTutorialImmunity sti;
+    [Space(2)]
+
+    [Header("Scoreboard")]
+    public GameObject scoreBoard;
+    public TMPro.TextMeshPro username;
+    public UnityEngine.UI.Image profilePicture;
+    public static int finalScore;
 
     //Automatically not shown in inspector
     public Dictionary<Vector2, StrategyCellScript> tiles = new Dictionary<Vector2, StrategyCellScript>(new Vector2Comparer());
@@ -249,7 +256,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         else if (selected == victoryIndex && victoryObject)
         {
             if (victory)
-                victoryObject.GetComponent<Destroy>().Kill();
+                Destroy(victoryObject.gameObject);
             else
                 victoryObject.SetActive(false);
         }
@@ -337,6 +344,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 "\nAt this point you can continue in sandbox mode, retry, or return to the main menu.";
             Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
             SetSelected(victoryIndex);
+            ShowScore();
         }
         else if (virNum > cellNum && !defeat && victoryObject)
         {
@@ -352,7 +360,25 @@ public class StrategyCellManagerScript : MonoBehaviour
                 "\nYou killed " + virusKills + " viruses.";
             Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
             SetSelected(victoryIndex);
+            ShowScore();
         }
+    }
+
+    void ShowScore()
+    {
+        int score = (int)((cellsSpawned * .01f + immunitySpread * .00001f + virusKills * .1f) / turnNumber * ((GlobalVariables.difficulty + 1.0f) * 2.0f));
+        if (defeat && !victory)
+            score = Mathf.Max(100, score);
+        if (score > finalScore)
+            finalScore = score;
+        if (finalScore > PlayerPrefs.GetInt("StrategyScore"))
+            PlayerPrefs.SetInt("StrategyScore", score);
+        else
+            finalScore = PlayerPrefs.GetInt("StrategyScore");
+        scoreBoard.SetActive(true);
+        username.text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
+        if (FacebookManager.Instance.ProfilePic != null)
+            profilePicture.sprite = FacebookManager.Instance.ProfilePic;
     }
     #endregion
 
