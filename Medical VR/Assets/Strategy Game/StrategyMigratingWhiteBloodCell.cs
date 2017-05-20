@@ -47,7 +47,7 @@ public class StrategyMigratingWhiteBloodCell : MonoBehaviour
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 if (target)
                 {
-                    Destroy(target.gameObject);
+                    target.StartCoroutine(target.Die());
                     kill = true;
                 }
             }

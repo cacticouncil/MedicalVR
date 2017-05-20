@@ -8,7 +8,7 @@ public class Set : MonoBehaviour
 
     public void SetDifficulty(int i)
     {
-        GlobalVariables.difficulty = i;
+        StrategyCellManagerScript.difficulty = i;
     }
 
     public void SetTutorial(bool s)

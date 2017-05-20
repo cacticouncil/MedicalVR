@@ -12,7 +12,7 @@ public class StrategyVirusScript : MonoBehaviour
     [System.NonSerialized]
     public StrategyCellManagerScript parent;
     [System.NonSerialized]
-    public float turnSpeed = .1f, attackValue = .5f, attackDuration = 0, health = 15.0f, percentTraveled = 0.0f;
+    public float turnSpeed = .1f, attackValue = .5f, attackDuration = 0, immunityToKill = 15.0f, percentTraveled = 0.0f;
     [System.NonSerialized]
     public bool standby = false, targeted = false, selected = false;
 
@@ -122,12 +122,12 @@ public class StrategyVirusScript : MonoBehaviour
             if (target.protein != Proteins.Mx1 || (target.protein == Proteins.Mx1 && Random.Range(0.0f, 100.0f) <= 50))
             {
                 attackDuration += attackValue;
-                if (target.immunity > health)
+                if (target.immunity > immunityToKill)
                 {
-                    target.immunity -= health;
-                    Destroy(gameObject);
+                    target.immunity -= immunityToKill;
+                    StartCoroutine(Die());
                 }
-                if (attackDuration >= Mathf.Sqrt(target.defense * 5))
+                if (attackDuration >= target.defense)
                 {
                     Attack();
                 }
@@ -135,26 +135,6 @@ public class StrategyVirusScript : MonoBehaviour
         }
         StopCoroutine(Move());
         StartCoroutine(Move());
-    }
-
-    //This virus destroys the cell it is attacking and itself, then spawns 2 viruses
-    public virtual void Attack()
-    {
-        bool spawned = false;
-        if (target.protein == Proteins.None || target.protein == Proteins.CH25H || target.protein == Proteins.Mx1)
-        {
-            spawned = true;
-            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
-            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
-        }
-        if (spawned ||
-            target.protein == Proteins.RNase_L ||
-            target.protein == Proteins.PKR ||
-            target.protein == Proteins.TRIM22 ||
-            (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
-            parent.KillCell(target.key);
-        parent.viruses.Remove(this);
-        StartCoroutine(Die());
     }
 
     void OnCollisionEnter(Collision collision)
@@ -238,7 +218,7 @@ public class StrategyVirusScript : MonoBehaviour
             }
             attack.text = "Attack: " + (int)(attackValue * 10) * .1f;
             speed.text = "Speed: " + (int)(turnSpeed * 10) * .1f;
-            immunity.text = "Immunity To Kill: " + Mathf.CeilToInt(health);
+            immunity.text = "Immunity To Kill: " + Mathf.CeilToInt(immunityToKill);
             powerup.text = parent.inventory[6].count.ToString();
             if (parent.inventory[6].count < 1)
                 powerup.color = Color.red;
@@ -250,13 +230,46 @@ public class StrategyVirusScript : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(b);
     }
 
+    //This virus kills the cell it is attacking and itself, then spawns 2 viruses
+    public virtual void Attack()
+    {
+        bool spawned = false;
+        if (target.protein == Proteins.None || target.protein == Proteins.CH25H || target.protein == Proteins.Mx1)
+        {
+            spawned = true;
+            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
+            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
+        }
+        if (spawned ||
+            target.protein == Proteins.RNase_L ||
+            target.protein == Proteins.PKR ||
+            target.protein == Proteins.TRIM22 ||
+            (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 75))
+            parent.KillCell(target.key);
+        StartCoroutine(Die());
+    }
+
     public IEnumerator Die()
     {
+        if (target)
+        {
+            target.hosted = false;
+            target.targeted = false;
+            target.transform.GetChild(1).GetComponent<Rotate>().enabled = true;
+            target = null;
+        }
+        if (parent)
+        {
+            parent.virusKills++;
+            parent.viruses.Remove(this);
+            parent = null;
+        }
+
         float startTime = Time.time;
         Color c = render.material.color;
         Color o = render.material.GetColor("_OutlineColor");
-        deathParticles.Play();
 
+        deathParticles.Play();
         float t = 0;
         while (t < 1.0f)
         {
