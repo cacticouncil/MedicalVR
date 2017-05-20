@@ -16,7 +16,7 @@ public class StrategyVirusScript : MonoBehaviour
     [System.NonSerialized]
     public bool standby = false, targeted = false, selected = false;
 
-    private float movementSpeed = 10.0f;
+    private float movementSpeed = 70.0f;
     private float distance = .1f;
     private float startTime = 0.0f;
     private bool trav = false;
@@ -137,7 +137,7 @@ public class StrategyVirusScript : MonoBehaviour
         StartCoroutine(Move());
     }
 
-    //This virus destroys the cell it is attacking, changes to a new cell, and spawns a virus
+    //This virus destroys the cell it is attacking and itself, then spawns 2 viruses
     public virtual void Attack()
     {
         bool spawned = false;
@@ -161,10 +161,13 @@ public class StrategyVirusScript : MonoBehaviour
     {
         if (target && collision.transform.parent && collision.transform.parent.transform.GetComponent<StrategyCellScript>() && collision.transform.parent.transform.GetComponent<StrategyCellScript>().key == target.key)
         {
-            nextPosition = transform.position;
             collision.transform.GetComponent<Rotate>().enabled = false;
             transform.GetChild(1).GetComponent<Rotate>().enabled = false;
+            nextPosition = transform.position;
+            transform.parent = collision.transform;
+            StopCoroutine(Move());
             GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().isKinematic = true;
         }
     }
 
