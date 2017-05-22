@@ -112,7 +112,7 @@ public class MemoryUI : MonoBehaviour
                     {
                         if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-002") == false)
                             SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-002");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Nucleic acids to comprise DNA pair in very specific ways";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Nucleic acids construct DNA pairs in very specific ways";
                     }
                     else
                     {
@@ -152,7 +152,7 @@ public class MemoryUI : MonoBehaviour
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 2.0f)
                     {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "A binds to U,";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "G binds to C,";
                     }
                     else
                     {
@@ -165,7 +165,7 @@ public class MemoryUI : MonoBehaviour
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 2.0f)
                     {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "G binds to C,";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "C binds to G,";
                     }
                     else
                     {
@@ -178,7 +178,7 @@ public class MemoryUI : MonoBehaviour
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 2.0f)
                     {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "C binds to G,";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "A binds to U,";
                     }
                     else
                     {

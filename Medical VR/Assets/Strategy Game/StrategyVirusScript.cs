@@ -126,6 +126,7 @@ public class StrategyVirusScript : MonoBehaviour
                 {
                     target.immunity -= immunityToKill;
                     StartCoroutine(Die());
+                    return;
                 }
                 if (attackDuration >= target.defense)
                 {
@@ -281,20 +282,5 @@ public class StrategyVirusScript : MonoBehaviour
             yield return 0;
         }
         Destroy(gameObject);
-    }
-
-    public void OnDestroy()
-    {
-        if (target)
-        {
-            target.hosted = false;
-            target.targeted = false;
-            target.transform.GetChild(1).GetComponent<Rotate>().enabled = true;
-        }
-        if (parent)
-        {
-            parent.virusKills++;
-            parent.viruses.Remove(this);
-        }
     }
 }
