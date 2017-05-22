@@ -28,10 +28,8 @@ public class Set : MonoBehaviour
         if (fade)
         {
             fade.GetComponent<FadeIn>().enabled = true;
-            StartCoroutine(EnterDelay());
         }
-        else
-            ChangeScene.EnterEvent();
+        StartCoroutine(EnterDelay());
     }
 
     public void SetAndEnter(int i)
@@ -41,10 +39,8 @@ public class Set : MonoBehaviour
         if (fade)
         {
             fade.GetComponent<FadeIn>().enabled = true;
-            StartCoroutine(EnterDelay());
         }
-        else
-            ChangeScene.EnterEvent();
+        StartCoroutine(EnterDelay());
     }
 
     IEnumerator EnterDelay()

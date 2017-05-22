@@ -41,16 +41,16 @@ public class _TGvrReticle : GvrReticlePointer
     private float reticleInnerDiameter = 0.0f;
     private float reticleOuterDiameter = 0.0f;
 
-    private float gazeStartTime;
-    private GameObject gazedAt;
+    // private float gazeStartTime;
+    // private GameObject gazedAt;
 
     void Start()
     {
         CreateReticleVertices();
 
         materialComp = gameObject.GetComponent<Renderer>().material;
-        gazeStartTime = -1f;
-        gazedAt = null;
+    //    gazeStartTime = -1f;
+    //    gazedAt = null;
 
     }
 
@@ -84,8 +84,8 @@ public class _TGvrReticle : GvrReticlePointer
             if (targetObject.transform.CompareTag("Finish"))
                 return;
         SetGazeTarget(intersectionPosition, isInteractive);
-        gazedAt = targetObject;
-        gazeStartTime = Time.time;
+    //    gazedAt = targetObject;
+    //    gazeStartTime = Time.time;
     }
 
     /// Called every frame the user is still looking at a valid GameObject. This
