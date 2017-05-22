@@ -40,6 +40,8 @@ enum GameState { tutorial, arcadePlay, storyPlay, end }
 public class _TGameController : MonoBehaviour
 {
     public bool testTutorial;
+    public bool testStory;
+    public int currentSceneNum = 6;
     public GameObject gvrReticle;
 
     [HideInInspector]
@@ -98,6 +100,8 @@ public class _TGameController : MonoBehaviour
         // For Testing //
         if (testTutorial)
             isTutorial = testTutorial;
+        if (testStory)
+            isArcade = false;
 
         remainingTime = winTime;
 
@@ -116,6 +120,7 @@ public class _TGameController : MonoBehaviour
         if (isTutorial)
         {
             gameState = GameState.tutorial;
+
         }
         else
         {
@@ -125,6 +130,7 @@ public class _TGameController : MonoBehaviour
         GetComponent<_TTutorialATPGTP>().Initialize();
         shrinkStuff.Player.GetComponent<_TPlayerController>().Initialize();
         gvrReticle.SetActive(false);
+        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
     }
 
     private void Update()
@@ -144,58 +150,54 @@ public class _TGameController : MonoBehaviour
     void RunStoryMode()
     {
         // Lose Condition
-        if(remainingTime <= 0 && !hasWon && winScore > score)
+
+        if (remainingTime <= 0 && !hasWon && winScore > score)
         {
-            hasWon = true;
-            StopCoroutine("SpawnWaves");
-            StopCoroutine("SpawnHazards");
-
-            shrinkStuff.Player.GetComponent<_TPlayerController>().SetActiveShooting(false);
-
+            StopGameObjects();
+            StartCoroutine(ReloadGame(8));
         }
 
-        if (winScore <= score && !hasWon)
+        else if (winScore <= score && !hasWon)
         {
-            hasWon = true;
-            StopCoroutine("SpawnWaves");
-            StopCoroutine("SpawnHazards");
-            if (scoreBoard && gameCamera)
-                scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
-            Invoke("MoveToNewScene", 5);
-            Invoke("ShrinkObjects", 2);
-            if (finalATPScore < score)
-                finalATPScore = score;
-            shrinkStuff.Player.GetComponent<_TPlayerController>().SetActiveShooting(false);
-
+            StopGameObjects();
+            StartCoroutine(MoveToNewScene(8));
         }
+    }
+
+    void StopGameObjects()
+    {
+        hasWon = true;
+        StopCoroutine("SpawnWaves");
+        StopCoroutine("SpawnHazards");
+
+        shrinkStuff.Player.GetComponent<_TPlayerController>().SetActiveShooting(false);
+        Invoke("ShrinkObjects", 2);
+        shrinkStuff.listOfLines.SetActive(false);
     }
 
     void RunArcadeMode()
     {
-        if (winScore <= score && !hasWon)
+        if (remainingTime <= 0 && !hasWon)
         {
-            hasWon = true;
-            StopCoroutine("SpawnWaves");
-            StopCoroutine("SpawnHazards");
+            StopGameObjects();
             if (scoreBoard && gameCamera)
             {
                 scoreBoard.GetComponent<_TSizeChange>().ResetToSmall();
                 scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
             }
-            
+
             Invoke("DisplayScore", 3);
-            Invoke("ShrinkObjects", 2);
             if (finalATPScore < score)
                 finalATPScore = score;
-            shrinkStuff.Player.GetComponent<_TPlayerController>().SetActiveShooting(false);
             gvrReticle.SetActive(true);
-
         }
     }
 
     bool startTime = false;
     void TimeDisplay()
     {
+        if (hasWon)
+            return;
         if (startTime && remainingTime > 0)
         {
             remainingTime -= Time.deltaTime;
@@ -235,7 +237,7 @@ public class _TGameController : MonoBehaviour
         foreach (Transform child in shrinkStuff.mitocondriaCollector.transform)
             child.GetComponent<_TSizeChange>().StartShrink();
 
-        shrinkStuff.shotsUI.GetComponent<_TSizeChange>().StartShrink();
+        // shrinkStuff.shotsUI.GetComponent<_TSizeChange>().StartShrink();
         // shrinkStuff.scoreUI.GetComponent<_TSizeChange>().StartShrink();
     }
     void ShrinkChild(Transform child)
@@ -315,15 +317,39 @@ public class _TGameController : MonoBehaviour
         fbManager.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString()/*+ FacebookManager.Instance.GlobalScore*/;
         fbManager.facebookPic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
-
-    void MoveToNewScene()
+    void FadeStuff()
     {
+        foreach (GameObject obj in uiElements)
+        {
+            _TSizeChange sc = obj.GetComponent<_TSizeChange>();
+            if (sc)
+            {
+                sc.StartShrink();
+            }
+        }
+
+        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().enabled = true;
+        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartBlackScreen();
+    }
+    IEnumerator ReloadGame(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime - 2);
+        FadeStuff();
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("ATPGTPShooter");
+    }
+    IEnumerator MoveToNewScene(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime - 2);
+        FadeStuff();
+        yield return new WaitForSeconds(2);
         CellGameplayScript.loadCase = 1;
         SceneManager.LoadScene("CellGameplay");
     }
     void StartScene()
     {
-        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
+        //    shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
+        GlobalVariables.tutorial = false;
         StartCoroutine("SpawnWaves");
         StartCoroutine("SpawnHazards");
         shrinkStuff.mitocondriaCollector.SetActive(true);
@@ -333,7 +359,15 @@ public class _TGameController : MonoBehaviour
             child.GetComponent<_TSizeChange>().ResetToSmall();
             child.GetComponent<_TSizeChange>().StartGrow();
         }
+
         shrinkStuff.listOfLines.SetActive(true);
+        //shrinkStuff.listOfLines.GetComponent<_TCreateObjects>().Initialize();
+        //foreach(Transform obj in shrinkStuff.listOfLines.transform)
+        //{
+        //    obj.GetComponent<_TSizeChange>().Inititalize();
+        //    obj.GetComponent<_TSizeChange>().ResetToSmall();
+        //    obj.GetComponent<_TSizeChange>().StartGrow();
+        //}
         foreach (GameObject obj in uiElements)
         {
             _TSizeChange sc = obj.GetComponent<_TSizeChange>();
@@ -353,7 +387,7 @@ public class _TGameController : MonoBehaviour
     }
     public void runGameState(float time)
     {
-    //    Debug.Log("current Time is" + Time.time);
+        //    Debug.Log("current Time is" + Time.time);
         if (isArcade)
             gameState = GameState.arcadePlay;
         else
@@ -363,6 +397,7 @@ public class _TGameController : MonoBehaviour
     }
     public void FadeScreen()
     {
-        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
+        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartBlackScreen();
+        FadeStuff();
     }
 }
