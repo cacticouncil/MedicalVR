@@ -28,11 +28,12 @@ public class FBscript : MonoBehaviour
 
     public GameObject ScoreEntryPanel;
     public GameObject ScrollScoreList;
+
     void Awake()
     {
-        FacebookManager.Instance.InitFB();
-        DealWithFBMenus(FB.IsLoggedIn);
+        StartCoroutine(FacebookManager.Instance.InitFB(HandleTimeInput));
     }
+
     void SetInit()
     {
         if (FB.IsLoggedIn)
@@ -42,6 +43,7 @@ public class FBscript : MonoBehaviour
 
         DealWithFBMenus(FB.IsLoggedIn);
     }
+
     void OnHideUnity(bool IsGameShown)
     {
         if (!IsGameShown)
@@ -59,21 +61,13 @@ public class FBscript : MonoBehaviour
 
     void AuthCallBack(IResult result)
     {
-        if (result.Error != null)
-            Debug.Log(result.Error);
-        else
+        if (FB.IsLoggedIn)
         {
-            if (FB.IsLoggedIn)
-            {
-                FacebookManager.Instance.IsLoggedIn = true;
-                FacebookManager.Instance.GetProfile();
-                Debug.Log("FB is Logged in");
-            }
-            else
-                Debug.Log("FB is Not Logged in");
-
-            DealWithFBMenus(FB.IsLoggedIn);
+            FacebookManager.Instance.IsLoggedIn = true;
+            FacebookManager.Instance.GetProfile();
         }
+
+        DealWithFBMenus(FB.IsLoggedIn);
     }
 
     void DealWithFBMenus(bool isLoggedIn)

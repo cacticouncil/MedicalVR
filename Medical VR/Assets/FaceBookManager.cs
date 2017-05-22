@@ -4,24 +4,25 @@ using System.Collections;
 using System.Collections.Generic;
 using Facebook.Unity;
 using System;
-public class FacebookManager : MonoBehaviour {
+public class FacebookManager : MonoBehaviour
+{
 
     private static FacebookManager _instance;
     public static FacebookManager Instance
     {
         get
-        { 
-            if(_instance == null)
+        {
+            if (_instance == null)
             {
                 GameObject fbm = new GameObject("FBManager");
                 fbm.AddComponent<FacebookManager>();
             }
-            return _instance;   
+            return _instance;
         }
     }
 
-    public bool IsLoggedIn { get; set;}
-    public string ProfileName { get; set;}
+    public bool IsLoggedIn { get; set; }
+    public string ProfileName { get; set; }
     public Sprite ProfilePic { get; set; }
 
     public int GlobalScore { get; set; }
@@ -41,22 +42,25 @@ public class FacebookManager : MonoBehaviour {
         IsLoggedIn = true;
     }
 
-    public void InitFB()
+    public IEnumerator InitFB(Action t = null)
     {
         if (!FB.IsInitialized)
             FB.Init(SetInit, OnHideUnity);
-        else
+
+        while (!FB.IsInitialized)
+            yield return 0;
+
         IsLoggedIn = FB.IsLoggedIn;
+        t();
     }
 
     void SetInit()
     {
         if (FB.IsLoggedIn)
         {
-            FB.Mobile.RefreshCurrentAccessToken(null);
             GetProfile();
+            FB.Mobile.RefreshCurrentAccessToken(null);
         }
-
         IsLoggedIn = FB.IsLoggedIn;
     }
     void OnHideUnity(bool IsGameShown)
@@ -74,7 +78,7 @@ public class FacebookManager : MonoBehaviour {
         FB.GetAppLink(DealWithAppLink);
     }
 
-   public void DisplayUsername(IResult result)
+    public void DisplayUsername(IResult result)
     {
         if (result.Error == null)
             ProfileName = "" + result.ResultDictionary["first_name"];
@@ -116,7 +120,7 @@ public class FacebookManager : MonoBehaviour {
 
     void ShareCallBack(IResult result)
     {
-        if(result.Cancelled)
+        if (result.Cancelled)
         {
             Debug.Log("Share Cancelled");
         }
@@ -160,7 +164,7 @@ public class FacebookManager : MonoBehaviour {
         FB.AppRequest(
             "Come and join me, I bet you can't beat my score! " + gscore.ToString(),
             null,
-            new List<object>() { "app_users"},
+            new List<object>() { "app_users" },
             null,
             null,
             null,
