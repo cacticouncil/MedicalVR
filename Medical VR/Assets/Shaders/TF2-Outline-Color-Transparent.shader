@@ -42,14 +42,15 @@
                 float nh = max (0, dot (s.Normal, h));
  
                 fixed4 c;
-                c.rgb = ((_Color.rgb * ramp * _LightColor0.rgb) * (atten * 2));		
-				c.a = _Color.a;
+                c.rgb = ((s.Albedo * ramp * _LightColor0.rgb) * (atten * 2));		
+				c.a = s.Alpha;
                 return c;
             }
    
             void surf (Input IN, inout SurfaceOutput o)
             {
-				_Color.rgb *= 2;
+				o.Albedo = _Color.rgb;
+				o.Alpha = _Color.a;
  
                 half3 rim = pow(max(0, dot(float3(0, 1, 0), WorldNormalVector (IN, o.Normal))), _RimPower) * _RimColor.rgb * _RimColor.a;
                 o.Emission = rim;

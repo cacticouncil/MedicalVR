@@ -1602,7 +1602,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     {
         Vector3 ogDirection = Random.onUnitSphere;
         ogDirection.y = Mathf.Clamp(ogDirection.y, 0.65f, 1f);
-        int migTotal = turnNumber / 10 + 1;
+        int migTotal = turnNumber / 100 + 1;
         for (int i = 0; i < migTotal; i++)
         {
             float distance = Random.Range(98.0f, 102.0f);

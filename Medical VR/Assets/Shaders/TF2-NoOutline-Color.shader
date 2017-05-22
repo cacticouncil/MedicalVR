@@ -38,14 +38,13 @@
 				float spec = pow(nh, s.Gloss * 128) * s.Specular * saturate(NdotL);
 
 				fixed4 c;
-				c.rgb = ((_Color.rgb * ramp * _LightColor0.rgb + _LightColor0.rgb * spec) * (atten * 2));
+				c.rgb = ((s.Albedo.rgb * ramp * _LightColor0.rgb + _LightColor0.rgb * spec) * (atten * 2));
                 return c;
             }
    
             void surf (Input IN, inout SurfaceOutput o)
             {
 				o.Albedo = _Color.rgb;
-				_Color.rgb *= 2;
  
                 half3 rim = pow(max(0, dot(float3(0, 1, 0), WorldNormalVector (IN, o.Normal))), _RimPower) * _RimColor.rgb * _RimColor.a;
                 o.Emission = rim;
