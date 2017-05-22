@@ -66,6 +66,10 @@ public class SimonSays : MonoBehaviour
     {
         if (lives > 0)
         {
+            if(score >= 500)
+            {
+                BannerScript.UnlockTrophy("Nucleus");
+            }
             timer += Time.deltaTime;
             if(makeInput == true)
             {
