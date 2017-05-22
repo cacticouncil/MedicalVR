@@ -83,33 +83,31 @@ public class FBscript : MonoBehaviour
             DialogLoggedIn.SetActive(true);
             DialogLoggedOut.SetActive(false);
 
-            if (FacebookManager.Instance.ProfileName != null)
-            {
-                TextMeshPro UserName = DialogUsername.GetComponent<TextMeshPro>();
-                UserName.text = "Hi, " + FacebookManager.Instance.ProfileName;
-            }
-            else
-            {
-                StartCoroutine("WaitForProfileName");
-            }
-
-            if (FacebookManager.Instance.ProfilePic != null)
-            {
-                Image ProfilePic = DialogProfilePic.GetComponent<Image>();
-                ProfilePic.sprite = FacebookManager.Instance.ProfilePic;
-            }
-            else
-            {
-                StartCoroutine("WaitForProfilePic");
-            }
-            SetScore();
-            QueryScore();
+            StartCoroutine(LogIn());
         }
         else
         {
             DialogLoggedIn.SetActive(false);
             DialogLoggedOut.SetActive(true);
         }
+    }
+
+    IEnumerator LogIn()
+    {
+        while (FacebookManager.Instance.ProfileName == null)
+            yield return 0;
+
+        TextMeshPro UserName = DialogUsername.GetComponent<TextMeshPro>();
+        UserName.text = "Hi, " + FacebookManager.Instance.ProfileName;
+
+        while (FacebookManager.Instance.ProfilePic == null)
+            yield return 0;
+
+        Image ProfilePic = DialogProfilePic.GetComponent<Image>();
+        ProfilePic.sprite = FacebookManager.Instance.ProfilePic;
+
+        SetScore();
+        QueryScore();
     }
 
     IEnumerator WaitForProfileName()
@@ -169,7 +167,7 @@ public class FBscript : MonoBehaviour
 
         foreach (Transform child in ScrollScoreList.transform)
         {
-            GameObject.Destroy(child.gameObject);
+            Destroy(child.gameObject);
         }
 
         foreach (object obj in scoreList)
@@ -177,7 +175,7 @@ public class FBscript : MonoBehaviour
             var entry = (Dictionary<string, object>)obj;
             var user = (Dictionary<string, object>)entry["user"];
 
-            Debug.Log(user["name"].ToString() + " , " + entry["score"].ToString());
+            //Debug.Log(user["name"].ToString() + " , " + entry["score"].ToString());
 
             GameObject ScorePanel;
             ScorePanel = Instantiate(ScoreEntryPanel) as GameObject;
