@@ -26,7 +26,16 @@ public class StrategyCellManagerScript : MonoBehaviour
     public StrategyTutorialReproduction str;
     public StrategyTutorialDefense std;
     public StrategyTutorialImmunity sti;
+    [Space(2)]
 
+    [Header("Scoreboard")]
+    public GameObject scoreBoard;
+    public TMPro.TextMeshPro username;
+    public UnityEngine.UI.Image profilePicture;
+    public static int finalScore;
+
+    //Automatically not shown in inspector
+    public static int difficulty = 0;
     //Automatically not shown in inspector
     public Dictionary<Vector2, StrategyCellScript> tiles = new Dictionary<Vector2, StrategyCellScript>(new Vector2Comparer());
     [System.NonSerialized]
@@ -105,7 +114,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 if (e <= .25f)
                     return Migrating_White_Cells;
                 else if (e <= .5f)
-                    return Spread_Immunity_Faster;
+                    return Protein_Chaos;
                 else if (e <= .75f)
                     return Free_Powerzups;
                 return Defend_Cells;
@@ -141,17 +150,39 @@ public class StrategyCellManagerScript : MonoBehaviour
         virus2 = Instantiate(virusPrefab2, new Vector3(-10000, -10000, -10000), Quaternion.identity) as GameObject;
         virus3 = Instantiate(virusPrefab3, new Vector3(-10000, -10000, -10000), Quaternion.identity) as GameObject;
 
-        switch (GlobalVariables.difficulty)
+        switch (difficulty)
         {
+            //Easy
             default:
                 {
+                    //Base virus stats
+                    StrategyVirusScript v = virus1.GetComponent<StrategyVirusScript>();
+                    v.turnSpeed = .09f;
+                    v.attackValue = .5f;
+                    v.immunityToKill = 15.0f;
+
+                    //Host virus stats
+                    v = virus2.GetComponent<StrategyVirusScript>();
+                    v.turnSpeed = .09f;
+                    v.attackValue = 2.0f;
+                    v.immunityToKill = 30.0f;
+
+                    //Explosion virus stats
+                    v = virus3.GetComponent<StrategyVirusScript>();
+                    v.turnSpeed = .09f;
+                    v.attackValue = 1.0f;
+                    v.immunityToKill = 20.0f;
+
+                    //Chances of spawning stronger viruses
                     p2Modifier = .5f;
                     p3Modifier = .25f;
 
+                    //Chances of events happening, inverted
                     easy = 0;
                     medium = 2;
                     hard = 4;
 
+                    //Virus spawn rate
                     virusTurnMod = 2.5f;
 
                     GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
@@ -169,15 +200,37 @@ public class StrategyCellManagerScript : MonoBehaviour
                 }
                 break;
 
+            //Normal
             case 1:
                 {
+                    //Base virus stats
+                    StrategyVirusScript v = virus1.GetComponent<StrategyVirusScript>();
+                    v.turnSpeed = .1f;
+                    v.attackValue = 1.0f;
+                    v.immunityToKill = 20.0f;
+
+                    //Host virus stats
+                    v = virus2.GetComponent<StrategyVirusScript>();
+                    v.turnSpeed = .1f;
+                    v.attackValue = 4.0f;
+                    v.immunityToKill = 30.0f;
+
+                    //Explosion virus stats
+                    v = virus3.GetComponent<StrategyVirusScript>();
+                    v.turnSpeed = .1f;
+                    v.attackValue = 1.5f;
+                    v.immunityToKill = 25.0f;
+
+                    //Chances of spawning stronger viruses
                     p2Modifier = 1;
                     p3Modifier = .5f;
 
+                    //Chances of events happening, inverted
                     easy = 0;
                     medium = 1;
                     hard = 2;
 
+                    //Virus spawn rate
                     virusTurnMod = 3;
 
                     GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
@@ -195,14 +248,36 @@ public class StrategyCellManagerScript : MonoBehaviour
                 }
                 break;
 
+            //Hard
             case 2:
                 {
+                    //Base virus stats
+                    StrategyVirusScript v = virus1.GetComponent<StrategyVirusScript>();
+                    v.turnSpeed = .11f;
+                    v.attackValue = 2.5f;
+                    v.immunityToKill = 20.0f;
+
+                    //Host virus stats
+                    v = virus2.GetComponent<StrategyVirusScript>();
+                    v.turnSpeed = .11f;
+                    v.attackValue = 5.0f;
+                    v.immunityToKill = 30.0f;
+
+                    //Explosion virus stats
+                    v = virus3.GetComponent<StrategyVirusScript>();
+                    v.turnSpeed = .11f;
+                    v.attackValue = 2.0f;
+                    v.immunityToKill = 25.0f;
+
+                    //Chances of spawning stronger viruses
                     p2Modifier = 2;
                     p3Modifier = 1;
 
+                    //Chances of events happening, inverted
                     easy = medium = hard = 0;
 
-                    virusTurnMod = 5;
+                    //Virus spawn rate
+                    virusTurnMod = 3.5f;
 
                     GameObject t = Instantiate(cellPrefab, new Vector3(xOffset * .5f, 0, 0), cellPrefab.transform.rotation, transform) as GameObject;
                     t.GetComponent<StrategyCellScript>().key = new Vector2(0, 0);
@@ -249,7 +324,7 @@ public class StrategyCellManagerScript : MonoBehaviour
         else if (selected == victoryIndex && victoryObject)
         {
             if (victory)
-                victoryObject.GetComponent<Destroy>().Kill();
+                Destroy(victoryObject.gameObject);
             else
                 victoryObject.SetActive(false);
         }
@@ -318,6 +393,24 @@ public class StrategyCellManagerScript : MonoBehaviour
             lastEvent = lastEvent.Replace('z', '-');
             nextEvent();
             nextEvent = sEvent;
+            switch (difficulty)
+            {
+                default:
+                    break;
+                case 1:
+                    float m = Random.Range(0.0f, 1.0f);
+                    if (m <= .333f)
+                        Strengthen_Viruses();
+                    else if (m <= .666f)
+                        Accelerate_Viruses();
+                    Mutate_Viruses();
+                    break;
+                case 2:
+                    Strengthen_Viruses();
+                    Accelerate_Viruses();
+                    Mutate_Viruses();
+                    break;
+            }
         }
 
         cellNum = cells.Count;
@@ -337,6 +430,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 "\nAt this point you can continue in sandbox mode, retry, or return to the main menu.";
             Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
             SetSelected(victoryIndex);
+            ShowScore();
         }
         else if (virNum > cellNum && !defeat && victoryObject)
         {
@@ -352,7 +446,25 @@ public class StrategyCellManagerScript : MonoBehaviour
                 "\nYou killed " + virusKills + " viruses.";
             Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
             SetSelected(victoryIndex);
+            ShowScore();
         }
+    }
+
+    void ShowScore()
+    {
+        int score = (int)((cellsSpawned * .01f + immunitySpread * .00001f + virusKills * .1f) / turnNumber * ((difficulty + 1.0f) * 2.0f));
+        if (defeat && !victory)
+            score = Mathf.Max(100, score);
+        if (score > finalScore)
+            finalScore = score;
+        if (finalScore > PlayerPrefs.GetInt("StrategyScore"))
+            PlayerPrefs.SetInt("StrategyScore", score);
+        else
+            finalScore = PlayerPrefs.GetInt("StrategyScore");
+        scoreBoard.SetActive(true);
+        username.text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
+        if (FacebookManager.Instance.ProfilePic != null)
+            profilePicture.sprite = FacebookManager.Instance.ProfilePic;
     }
     #endregion
 
@@ -1504,11 +1616,20 @@ public class StrategyCellManagerScript : MonoBehaviour
         }
     }
 
-    void Spread_Immunity_Faster()
+    void Protein_Chaos()
     {
         for (int i = 0; i < cells.Count; i++)
         {
-            cells[i].UseI2();
+            Proteins prev = cells[i].protein;
+            while (cells[i].protein == prev)
+            {
+                cells[i].protein = (Proteins)Random.Range(1, 7);
+            }
+            cells[i].p.text = "Protein: " + cells[i].protein.ToString();
+            if (cells[i].key == selected)
+            {
+                cells[i].RefreshUI();
+            }
         }
     }
 
@@ -1536,11 +1657,11 @@ public class StrategyCellManagerScript : MonoBehaviour
 
     void Strengthen_Viruses()
     {
-        virus1.GetComponent<StrategyVirusScript>().health *= 1.5f;
+        virus1.GetComponent<StrategyVirusScript>().immunityToKill *= 1.5f;
         virus1.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
-        virus2.GetComponent<StrategyVirusScript>().health *= 1.5f;
+        virus2.GetComponent<StrategyVirusScript>().immunityToKill *= 1.5f;
         virus2.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
-        virus3.GetComponent<StrategyVirusScript>().health *= 1.5f;
+        virus3.GetComponent<StrategyVirusScript>().immunityToKill *= 1.5f;
         virus3.GetComponent<StrategyVirusScript>().attackValue *= 1.5f;
     }
 

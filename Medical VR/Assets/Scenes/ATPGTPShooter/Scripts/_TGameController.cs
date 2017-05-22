@@ -35,11 +35,12 @@ public class FacebookStuff
     private int score;
 }
 
-enum GameState { tutorial, play, end }
+enum GameState { tutorial, arcadePlay, storyPlay, end }
 
 public class _TGameController : MonoBehaviour
 {
     public bool testTutorial;
+    public GameObject gvrReticle;
 
     [HideInInspector]
     public static float finalATPScore;
@@ -75,6 +76,7 @@ public class _TGameController : MonoBehaviour
     private bool hasWon;
     private bool isTutorial;
     public bool IsTutorial() { return isTutorial; }
+    bool isArcade;
 
     public bool HasWon() { return hasWon; }
     bool isInit = false;
@@ -92,6 +94,7 @@ public class _TGameController : MonoBehaviour
         score = 0;
         SetFacebook();
         isTutorial = GlobalVariables.tutorial;
+        isArcade = GlobalVariables.arcadeMode;
         // For Testing //
         if (testTutorial)
             isTutorial = testTutorial;
@@ -113,7 +116,6 @@ public class _TGameController : MonoBehaviour
         if (isTutorial)
         {
             gameState = GameState.tutorial;
-
         }
         else
         {
@@ -121,23 +123,54 @@ public class _TGameController : MonoBehaviour
         }
         //gameState = GameState.tutorial;
         GetComponent<_TTutorialATPGTP>().Initialize();
-        ////////////////////////////////////////////////////////////////////////////////
-
+        shrinkStuff.Player.GetComponent<_TPlayerController>().Initialize();
+        gvrReticle.SetActive(false);
     }
 
     private void Update()
     {
         switch (gameState)
         {
-            case GameState.play:
-                RunMode();
+            case GameState.arcadePlay:
+                RunArcadeMode();
+                TimeDisplay();
+                break;
+            case GameState.storyPlay:
+                RunStoryMode();
                 TimeDisplay();
                 break;
         }
     }
+    void RunStoryMode()
+    {
+        // Lose Condition
+        if(remainingTime <= 0 && !hasWon && winScore > score)
+        {
+            hasWon = true;
+            StopCoroutine("SpawnWaves");
+            StopCoroutine("SpawnHazards");
 
+            shrinkStuff.Player.GetComponent<_TPlayerController>().SetActiveShooting(false);
 
-    void RunMode()
+        }
+
+        if (winScore <= score && !hasWon)
+        {
+            hasWon = true;
+            StopCoroutine("SpawnWaves");
+            StopCoroutine("SpawnHazards");
+            if (scoreBoard && gameCamera)
+                scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
+            Invoke("MoveToNewScene", 5);
+            Invoke("ShrinkObjects", 2);
+            if (finalATPScore < score)
+                finalATPScore = score;
+            shrinkStuff.Player.GetComponent<_TPlayerController>().SetActiveShooting(false);
+
+        }
+    }
+
+    void RunArcadeMode()
     {
         if (winScore <= score && !hasWon)
         {
@@ -146,13 +179,14 @@ public class _TGameController : MonoBehaviour
             StopCoroutine("SpawnHazards");
             if (scoreBoard && gameCamera)
                 scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
-            if (GlobalVariables.arcadeMode)
-                Invoke("DisplayScore", 3);
-            else
-                Invoke("MoveToNewScene", 5);
+            
+            Invoke("DisplayScore", 3);
             Invoke("ShrinkObjects", 2);
             if (finalATPScore < score)
                 finalATPScore = score;
+            shrinkStuff.Player.GetComponent<_TPlayerController>().SetActiveShooting(false);
+            gvrReticle.SetActive(true);
+
         }
     }
 
@@ -269,6 +303,7 @@ public class _TGameController : MonoBehaviour
     public void AddToScore(int _points)
     {
         score += _points;
+        remainingTime += timePerEnzyme;
     }
 
     void SetFacebook()
@@ -303,6 +338,8 @@ public class _TGameController : MonoBehaviour
                 sc.StartGrow();
             }
         }
+        shrinkStuff.Player.GetComponent<_TPlayerController>().SetActiveShooting(true);
+
         //    Invoke("TurnOnUILights", 1);
     }
 
@@ -312,9 +349,13 @@ public class _TGameController : MonoBehaviour
     }
     public void runGameState(float time)
     {
-        gameState = GameState.play;
-        Invoke("StartScene", time);
+    //    Debug.Log("current Time is" + Time.time);
+        if (isArcade)
+            gameState = GameState.arcadePlay;
+        else
+            gameState = GameState.storyPlay;
 
+        Invoke("StartScene", time);
     }
     public void FadeScreen()
     {

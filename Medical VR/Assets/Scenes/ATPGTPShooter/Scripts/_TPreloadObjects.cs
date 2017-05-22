@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class _TPreloadObjects : MonoBehaviour
 {
-    GameObject enzyme;
-    GameObject atpOrb;
-    GameObject gtpOrb;
+    public GameObject enzyme;
+    public GameObject atpOrb;
+    public GameObject gtpOrb;
 
     bool ItemsAreSet = false;
+    bool isInit = false;
 
     // Use this for initialization
     void Start()
     {
-        InstantiateThese();
+        Initialize();
     }
 
     // Update is called once per frame
@@ -22,9 +23,18 @@ public class _TPreloadObjects : MonoBehaviour
 
     }
 
+    void Initialize()
+    {
+        if (isInit)
+            return;
+        isInit = true;
+
+        InstantiateThese();
+    }
+
     void InstantiateThese()
     {
-        GameObject enz = Instantiate(enzyme, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity) as GameObject;
+        GameObject enz = Instantiate(enzyme, new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), Quaternion.identity) as GameObject;
         enz.GetComponent<_TRandomRotator>().enabled = false;
         Rigidbody rb = enz.GetComponent<Rigidbody>();
         rb.velocity = Vector3.zero;
@@ -33,7 +43,7 @@ public class _TPreloadObjects : MonoBehaviour
         enz.GetComponent<_TTravelToNucleus>().enabled = false;
 
 
-        GameObject atp = Instantiate(atpOrb, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity) as GameObject;
+        GameObject atp = Instantiate(atpOrb, new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), Quaternion.identity) as GameObject;
         Rigidbody atpRB = atp.GetComponent<Rigidbody>();
         atpRB.useGravity = false;
 
@@ -45,7 +55,7 @@ public class _TPreloadObjects : MonoBehaviour
         atp.GetComponent<_TDestroyByTime>().CancelDestroy();
 
 
-        GameObject gtp = Instantiate(gtpOrb, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity) as GameObject;
+        GameObject gtp = Instantiate(gtpOrb, new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), Quaternion.identity) as GameObject;
         Rigidbody gtpRB = gtp.GetComponent<Rigidbody>();
         gtpRB.useGravity = false;
 

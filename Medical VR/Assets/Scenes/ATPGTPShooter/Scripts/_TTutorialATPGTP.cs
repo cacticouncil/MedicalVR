@@ -29,7 +29,7 @@ public class _TTutorialATPGTP : MonoBehaviour
 
     void Start()
     {
-        //Initialize();
+        // Initialize();
     }
 
     public void Initialize()
@@ -109,7 +109,8 @@ public class _TTutorialATPGTP : MonoBehaviour
                 break;
             case TutorialState.startGame:
                 StartCoroutine(StartGame(startGameTime));
-                GetComponent<_TGameController>().runGameState(startGameTime + 1);
+                Debug.Log("current Time is" + Time.time);
+                
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.wait:
@@ -244,7 +245,7 @@ public class _TTutorialATPGTP : MonoBehaviour
 
         text = "You will get 3 rounds of ATP";
         StartCoroutine(DispMol(ATP, initTime, displayTime));
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime));
         initTime += displayTime + 1;
 
         text = "You will then get 3 rounds of GTP";
@@ -258,11 +259,11 @@ public class _TTutorialATPGTP : MonoBehaviour
         StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
         initTime += displayTime + 1;
 
-        text = timePerEnzyme.ToString() + " seconds will also be added to your time.";
+        text = "The Timer will also increase.";
         StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
         initTime += displayTime + 1;
 
-        text = "Complete as many cGas as you can before time runs out.";
+        text = "Build as many cGas as you can before time runs out.";
         StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
         initTime += displayTime + 1;
 
@@ -275,7 +276,7 @@ public class _TTutorialATPGTP : MonoBehaviour
         text = "Begin!";
         StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 1));
 
-        startGameTime = initTime + 1;
+        startGameTime += initTime + 1;
         ChangeTutorialState(TutorialState.startGame);
     }
     IEnumerator ChangeTextSize(float size, TextChild childNum, float startTime)

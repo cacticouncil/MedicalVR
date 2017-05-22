@@ -23,6 +23,7 @@ public class StrategyCellScript : MonoBehaviour
     public ParticleSystem deathParticles;
     public Vector2 key;
     public bool targeted = false, hosted = false;
+    public TMPro.TextMeshPro r, d, i, p;
     public TMPro.TextMeshPro[] texts;
 
     //Not in inspector
@@ -42,13 +43,9 @@ public class StrategyCellScript : MonoBehaviour
     public float immunitySpread = 0, startSpeed = 15.0f;
     [System.NonSerialized]
     public StrategyCellManagerScript parent;
-    [System.NonSerialized]
-    public TMPro.TextMeshPro r, d, i, p;
 
     //Private
-    private float tImmunity;
-    private float camOffset = 1.5f;
-    private float scaledDistance = 1.3f;
+    private float tImmunity, camOffset = 1.5f, scaledDistance = 1.3f;
 
     void Awake()
     {
@@ -197,7 +194,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseR()
     {
         //check for item
-        if (!hosted && parent.inventory[0].count > 0)
+        if (parent.inventory[0].count > 0)
         {
             parent.inventory[0].count--;
             RDur += powerupDuration;
@@ -209,7 +206,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseR2()
     {
         //check for item
-        if (!hosted && parent.inventory[1].count > 0)
+        if (parent.inventory[1].count > 0)
         {
             parent.inventory[1].count--;
             parent.duplicate = true;
@@ -220,7 +217,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseD()
     {
         //check for item
-        if (!hosted && parent.inventory[2].count > 0)
+        if (parent.inventory[2].count > 0)
         {
             parent.inventory[2].count--;
             IncreaseDefenseGreatly();
@@ -230,7 +227,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseI()
     {
         //check for item
-        if (!hosted && parent.inventory[3].count > 0)
+        if (parent.inventory[3].count > 0)
         {
             parent.inventory[3].count--;
             IncreaseImmunityGreatly();
@@ -240,7 +237,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseI2()
     {
         //check for item
-        if (!hosted && parent.inventory[4].count > 0)
+        if (parent.inventory[4].count > 0)
         {
             parent.inventory[4].count--;
             I2Dur += powerupDuration;
@@ -251,7 +248,7 @@ public class StrategyCellScript : MonoBehaviour
     public void UseP()
     {
         //check for item
-        if (!hosted && protein != Proteins.None && parent.inventory[5].count > 0)
+        if (protein != Proteins.None && parent.inventory[5].count > 0)
         {
             parent.inventory[5].count--;
             Proteins prev = protein;
@@ -270,18 +267,17 @@ public class StrategyCellScript : MonoBehaviour
         {
             parent.inventory[6].count--;
             ToggleUI(false);
-            //RefreshUI();
             Vector3 camPos = Camera.main.GetComponent<Transform>().position;
             Vector3 dir = camPos - transform.position;
             dir.Normalize();
-            Camera.main.GetComponent<MoveCamera>().SetDestination(camPos + dir);
+            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(camPos + dir);
             Invoke("SpawnW", .5f);
         }
     }
 
     void SpawnW()
     {
-        GameObject w = Instantiate(itemWhiteBloodCellPrefab, Camera.main.GetComponent<Transform>().position, Quaternion.identity) as GameObject;
+        GameObject w = Instantiate(itemWhiteBloodCellPrefab, Camera.main.GetComponent<Transform>().position, Quaternion.identity, transform.parent) as GameObject;
         w.GetComponent<StrategyItemWhiteBloodCell>().target = virus.GetComponent<StrategyVirusScript>();
         w.GetComponent<StrategyItemWhiteBloodCell>().enabled = true;
     }

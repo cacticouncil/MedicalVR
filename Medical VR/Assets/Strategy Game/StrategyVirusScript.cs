@@ -4,28 +4,24 @@ using System.Collections;
 public class StrategyVirusScript : MonoBehaviour
 {
     public StrategyCellScript target;
-    public float movementSpeed = 10.0f;
-    public float turnSpeed = .1f;
-    public float attackValue = .5f;
-    public float attackDuration = 0;
-    public float health = 15.0f;
-    public float percentTraveled = 0.0f;
-    public bool standby = false;
-    public bool targeted = false;
-    public bool selected = false;
-
-    public Vector3 startingPosition, prevPosition, nextPosition;
-
     public Renderer render;
     public ParticleSystem deathParticles;
-    public StrategyCellManagerScript parent;
-    public TMPro.TextMeshPro attack, speed, immunity;
+    public GameObject itemWhiteBloodCellPrefab;
+    public TMPro.TextMeshPro attack, speed, immunity, powerup;
 
+    [System.NonSerialized]
+    public StrategyCellManagerScript parent;
+    [System.NonSerialized]
+    public float turnSpeed = .1f, attackValue = .5f, attackDuration = 0, immunityToKill = 15.0f, percentTraveled = 0.0f;
+    [System.NonSerialized]
+    public bool standby = false, targeted = false, selected = false;
+
+    private float movementSpeed = 70.0f;
     private float distance = .1f;
     private float startTime = 0.0f;
     private bool trav = false;
+    private Vector3 startingPosition, prevPosition, nextPosition;
     private Vector2 key = new Vector2(-500, 500);
-    
     private float scaledDistance = 1.3f;
 
     // Use this for initialization
@@ -126,12 +122,12 @@ public class StrategyVirusScript : MonoBehaviour
             if (target.protein != Proteins.Mx1 || (target.protein == Proteins.Mx1 && Random.Range(0.0f, 100.0f) <= 50))
             {
                 attackDuration += attackValue;
-                if (target.immunity > health)
+                if (target.immunity > immunityToKill)
                 {
-                    target.immunity -= health;
-                    Destroy(gameObject);
+                    target.immunity -= immunityToKill;
+                    StartCoroutine(Die());
                 }
-                if (attackDuration >= Mathf.Sqrt(target.defense * 5))
+                if (attackDuration >= target.defense)
                 {
                     Attack();
                 }
@@ -141,34 +137,17 @@ public class StrategyVirusScript : MonoBehaviour
         StartCoroutine(Move());
     }
 
-    //This virus destroys the cell it is attacking, changes to a new cell, and spawns a virus
-    public virtual void Attack()
-    {
-        bool spawned = false;
-        if (target.protein == Proteins.None || target.protein == Proteins.CH25H || target.protein == Proteins.Mx1)
-        {
-            spawned = true;
-            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
-            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
-        }
-        if (spawned ||
-            target.protein == Proteins.RNase_L ||
-            target.protein == Proteins.PKR ||
-            target.protein == Proteins.TRIM22 ||
-            (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
-            parent.KillCell(target.key);
-        parent.viruses.Remove(this);
-        StartCoroutine(Die());
-    }
-
     void OnCollisionEnter(Collision collision)
     {
         if (target && collision.transform.parent && collision.transform.parent.transform.GetComponent<StrategyCellScript>() && collision.transform.parent.transform.GetComponent<StrategyCellScript>().key == target.key)
         {
-            nextPosition = transform.position;
             collision.transform.GetComponent<Rotate>().enabled = false;
             transform.GetChild(1).GetComponent<Rotate>().enabled = false;
+            nextPosition = transform.position;
+            transform.parent = collision.transform;
+            StopCoroutine(Move());
             GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().isKinematic = true;
         }
     }
 
@@ -202,6 +181,28 @@ public class StrategyVirusScript : MonoBehaviour
         }
     }
 
+    public void UseV()
+    {
+        //check for item
+        if (parent.inventory[6].count > 0)
+        {
+            parent.inventory[6].count--;
+            ToggleUI(false);
+            Vector3 camPos = Camera.main.GetComponent<Transform>().position;
+            Vector3 dir = camPos - transform.position;
+            dir.Normalize();
+            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(camPos + dir);
+            Invoke("SpawnW", .5f);
+        }
+    }
+
+    void SpawnW()
+    {
+        GameObject w = Instantiate(itemWhiteBloodCellPrefab, Camera.main.GetComponent<Transform>().position, Quaternion.identity, transform.parent) as GameObject;
+        w.GetComponent<StrategyItemWhiteBloodCell>().target = this;
+        w.GetComponent<StrategyItemWhiteBloodCell>().enabled = true;
+    }
+
     public void ToggleUI(bool b)
     {
         if (b)
@@ -217,19 +218,58 @@ public class StrategyVirusScript : MonoBehaviour
             }
             attack.text = "Attack: " + (int)(attackValue * 10) * .1f;
             speed.text = "Speed: " + (int)(turnSpeed * 10) * .1f;
-            immunity.text = "Immunity To Kill: " + Mathf.CeilToInt(health);
+            immunity.text = "Immunity To Kill: " + Mathf.CeilToInt(immunityToKill);
+            powerup.text = parent.inventory[6].count.ToString();
+            if (parent.inventory[6].count < 1)
+                powerup.color = Color.red;
+            else
+                powerup.color = Color.white;
         }
+        GetComponent<Collider>().enabled = b;
         selected = b;
         transform.GetChild(0).gameObject.SetActive(b);
     }
 
+    //This virus kills the cell it is attacking and itself, then spawns 2 viruses
+    public virtual void Attack()
+    {
+        bool spawned = false;
+        if (target.protein == Proteins.None || target.protein == Proteins.CH25H || target.protein == Proteins.Mx1)
+        {
+            spawned = true;
+            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
+            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
+        }
+        if (spawned ||
+            target.protein == Proteins.RNase_L ||
+            target.protein == Proteins.PKR ||
+            target.protein == Proteins.TRIM22 ||
+            (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 75))
+            parent.KillCell(target.key);
+        StartCoroutine(Die());
+    }
+
     public IEnumerator Die()
     {
+        if (target)
+        {
+            target.hosted = false;
+            target.targeted = false;
+            target.transform.GetChild(1).GetComponent<Rotate>().enabled = true;
+            target = null;
+        }
+        if (parent)
+        {
+            parent.virusKills++;
+            parent.viruses.Remove(this);
+            parent = null;
+        }
+
         float startTime = Time.time;
         Color c = render.material.color;
         Color o = render.material.GetColor("_OutlineColor");
-        deathParticles.Play();
 
+        deathParticles.Play();
         float t = 0;
         while (t < 1.0f)
         {

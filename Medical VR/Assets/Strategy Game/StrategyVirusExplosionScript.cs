@@ -16,8 +16,8 @@ public class StrategyVirusExplosionScript : StrategyVirusScript
             target.protein == Proteins.RNase_L ||
             target.protein == Proteins.PKR ||
             target.protein == Proteins.TRIM22 ||
-            (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90))
+            (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 75))
             parent.KillCell(target.key);
-        Destroy(gameObject);
+        StartCoroutine(Die());
     }
 }

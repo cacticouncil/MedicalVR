@@ -5,23 +5,16 @@ using UnityEngine;
 public class MovingCameraCredits : MonoBehaviour
 {
     public float speed;
-    public Transform cam;
     public Renderer bloodVessel;
-
-    private Rigidbody rig;
-
-    // Use this for initialization
-    void Start()
-    {
-        rig = GetComponent<Rigidbody>();
-    }
+    public float texMod = .001f;
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        rig.velocity = new Vector3(0, 0, cam.forward.z * speed);
+        float zMovement = speed;
+        transform.position += new Vector3(0, 0, zMovement);
         Vector2 bOff = bloodVessel.material.mainTextureOffset;
-        bOff.y += rig.velocity.z * .001f; // same thing you were adding to mainTex
+        bOff.y += zMovement * texMod; // same thing you were adding to mainTex
                                   // throw in a multiplier, above, if the textures aren't scaled the same
         bloodVessel.material.mainTextureOffset = bOff;
     }

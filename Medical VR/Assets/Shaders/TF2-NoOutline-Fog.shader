@@ -1,4 +1,4 @@
-﻿Shader "Custom/TF2-NoOutline-Fog"
+﻿Shader "Custom/TF2-NoOutline/Fog"
 {
 	Properties
 	{

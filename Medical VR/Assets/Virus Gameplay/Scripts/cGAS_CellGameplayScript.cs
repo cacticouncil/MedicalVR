@@ -5,17 +5,18 @@ using System.Collections.Generic;
 public class cGAS_CellGameplayScript : MonoBehaviour
 {
     public SubstitlesScript subtitles;
+    public Transform dna;
     private float moveSpeed = .1f;
     private float vComparer = .01f;
 
     IEnumerator MoveTo(Transform t)
     {
         Vector3 start = t.position;
-        Vector3 pos = t.position + (Camera.main.transform.position - t.position) * .95f;
+        Vector3 pos = t.position + (dna.position - t.position) * .95f;
 
         while (!V3Equal(t.position, pos))
         {
-            t.position = Vector3.MoveTowards(t.position, pos, moveSpeed);
+            t.position = Vector3.MoveTowards(t.position, pos, moveSpeed/4);
             yield return new WaitForFixedUpdate();
         }
     }

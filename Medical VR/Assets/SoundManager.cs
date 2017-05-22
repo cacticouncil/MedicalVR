@@ -88,7 +88,7 @@ public static class SoundManager
             Loops.Add("DRUMS", new LoopData(317732, 2570388));
             Loops.Add("SYNTHS", new LoopData(709131, 2515920));
             Loops.Add("WEIRD N BASS", new LoopData(0, 2094594));
-            Loops.Add("Boss3-3", new LoopData(194755, 2404985));
+            Loops.Add("J_Game_Amb_Bright_loop_01", new LoopData(194755, 2404985));
             Loops.Add("Title", new LoopData(351905, 1056500));
             Loops.Add("World1", new LoopData(990062, 2227651));
             Loops.Add("World2", new LoopData(0, 1834968));
