@@ -30,7 +30,7 @@ public class WaveManager : MonoBehaviour
 
     public bool CanISpawnCellReceptor = false;
     public bool CanISpawnAntiViralProtein = false;
-
+    public bool DoneSpawningCellReceptors = false;
     void Update()
     {
         if (GlobalVariables.tutorial == false)
@@ -168,6 +168,7 @@ public class WaveManager : MonoBehaviour
                     break;
             }
         }
+        DoneSpawningCellReceptors = true;
     }
 
     void CreateAntiViralProteinWave()

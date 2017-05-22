@@ -7,13 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class VirusPlayer : MonoBehaviour
 {
-    //Variables for Tutorial
-    public int WhatToRead = 1;
-    public bool CanIRead = true;
-    public bool TutorialModeCompleted = false;
 
     //Variables for Game
-    public GameObject LivesGameobject;
+    public TextMeshPro LivesGameobject;
     public GameObject Spawn;
     public GameObject WaveManager;
     public GameObject BlackCurtain;
@@ -30,7 +26,6 @@ public class VirusPlayer : MonoBehaviour
     public int Lives;
     public bool isGameover = false;
 
-    public GameObject Instructions;
     bool InstructionsDone = false;
 
     public bool CanIMove = false;
@@ -44,6 +39,15 @@ public class VirusPlayer : MonoBehaviour
     float CurrentScore = 0.0f;
     public static float FinalScore;
     public static float BestScoreForDestroyCell;
+
+    //Variables for Text
+    public bool TutorialModeCompleted = false;
+    bool StopInput = false;
+    public int WhatToRead = 0;
+    public TextMeshPro Text;
+    private string[] TextList = new string[9];
+    private bool last = false, text = false, finish = false;
+
     void Start()
     {
         currSpeed = baseSpeed;
@@ -55,6 +59,19 @@ public class VirusPlayer : MonoBehaviour
             StartCoroutine(DisplayText("Target the Cell Receptors" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
         }
+
+        else
+        {
+            TextList[0] = "Welcome to Destroy the Cell.";
+            TextList[1] = "Your objective is to find the cell receptors.";
+            TextList[2] = "You can search for the cell receptors near the cell membrane.";
+            TextList[3] = "Use your cursor to automatically fire viruses at them.";
+            TextList[4] = "Good job!";
+            TextList[5] = "You need to avoid anti viral proteins or they will set you back to the spawn area.";
+            TextList[6] = "Now practice targeting these cell receptors.";
+            TextList[7] = "Great! now you're ready to play.";
+            TextForTutorial();
+        }
     }
 
     void Update()
@@ -64,7 +81,7 @@ public class VirusPlayer : MonoBehaviour
         {
             if (GlobalVariables.arcadeMode)
             {
-                LivesGameobject.GetComponent<TextMeshPro>().text = "           Lives: " + Lives.ToString();
+                LivesGameobject.text = "           Lives: " + Lives.ToString();
             }
 
             //Display wave text
@@ -143,11 +160,11 @@ public class VirusPlayer : MonoBehaviour
                         if (CurrentScore > FinalScore)
                             FinalScore = CurrentScore;
 
-                        if( FinalScore > PlayerPrefs.GetFloat("DestroyCellScore"))
-                        PlayerPrefs.SetFloat("DestroyCellScore", FinalScore);
+                        if (FinalScore > PlayerPrefs.GetFloat("DestroyCellScore"))
+                            PlayerPrefs.SetFloat("DestroyCellScore", FinalScore);
                         else
                             FinalScore = PlayerPrefs.GetFloat("DestroyCellScore");
-                        
+
 
                         ScoreBoard.SetActive(true);
                         ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
@@ -176,7 +193,7 @@ public class VirusPlayer : MonoBehaviour
 
                         if (CurrentScore > BestScoreForDestroyCell)
                             BestScoreForDestroyCell = CurrentScore;
-                        
+
                         ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
                     }
                 }
@@ -185,93 +202,128 @@ public class VirusPlayer : MonoBehaviour
 
         else if (GlobalVariables.tutorial == true)
         {
+            //Need to fade in 
             float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
 
-            if (WhatToRead == 3 && IsCellDoneIdling == true)
-                CanIRead = true;
+            //Player input to skip text
+            if (StopInput == false)
+            {
+                bool held = Input.GetButton("Fire1");
+                if (held && !last)
+                {
+                    if (text)
+                        finish = true;
+
+                    else
+                        TextForTutorial();
+                }
+                last = held;
+            }
+
+            //Checking for events
+            if (WhatToRead == 2 && IsCellDoneIdling == true)
+                StopInput = false;
 
             if (WhatToRead == 4 && IsCellDoneMoving == true)
-                CanIRead = true;
+                StopInput = false;
 
-            if (WhatToRead == 6 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0)
-                CanIRead = true;
+            if (WhatToRead == 5 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0)
+                StopInput = false;
 
-            if (WhatToRead == 9 && WaveManager.GetComponent<WaveManager>().AntiViralProteinList.Count == 0)
-                CanIRead = true;
+            if (WhatToRead == 7 && WaveManager.GetComponent<WaveManager>().AntiViralProteinList.Count == 0)
+                StopInput = false;
 
-            if (WhatToRead == 10 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0)
-                CanIRead = true;
-
-            if (CanIRead == true)
-            {
-                switch (WhatToRead)
-                {
-                    case 1:
-                        StartCoroutine(DisplayText("Welcome to Destroy the Cell", 3.5f));
-                        break;
-
-                    case 2:
-                        StartCoroutine(DisplayText("Your objective is to find the cell receptors", 3.5f));
-                        WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
-                        break;
-
-                    case 3:
-                        StartCoroutine(DisplayText("You can search for the cell receptors near the cell membrane", 3.5f));
-                        break;
-
-                    case 4:
-                        StartCoroutine(DisplayText("Use the button to automatically fire viruses at them", 3.5f));
-                        CanIMove = true;
-                        currSpeed = baseSpeed;
-                        break;
-
-                    case 5:
-                        StartCoroutine(DisplayText(" ", 3.5f));
-                        break;
-
-                    case 6:
-                        StartCoroutine(DisplayText("Good job", 3.0f));
-                        CanIMove = false;
-                        Respawn();
-                        break;
-
-                    case 7:
-                        StartCoroutine(DisplayText("You need to avoid anti viral proteins", 3.5f));
-                        break;
-
-                    case 8:
-                        StartCoroutine(DisplayText("or they will set you back to the spawn area", 3.5f));
-                        WaveManager.GetComponent<WaveManager>().CanISpawnAntiViralProtein = true;
-                        break;
-
-                    case 9:
-                        StartCoroutine(DisplayText("Now practice targeting these cell receptors", 3.5f));
-                        CanIMove = true;
-                        currSpeed = baseSpeed;
-                        WaveManager.GetComponent<WaveManager>().WaveNumber = 2;
-                        WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
-                        WaveManager.GetComponent<WaveManager>().CanISpawnAntiViralProtein = true;
-                        break;
-
-                    case 10:
-                        StartCoroutine(DisplayText("Great! now you're ready to play", 3.5f));
-                        break;
-
-                    default:
-                        Instructions.GetComponent<TextMeshPro>().enabled = true;
-                        Instructions.GetComponent<TextMeshPro>().text = " ";
-                        break;
-                }
-
-                CanIRead = false;
-                WhatToRead += 1;
-            }
+            if (WhatToRead == 9 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0 && WaveManager.GetComponent<WaveManager>().DoneSpawningCellReceptors == true)  
+                StopInput = false;
         }
+    }
 
-        //After you beat tutorial play the story mode
-        if (TutorialModeCompleted == true)
-            PlayStory();
+    void TextForTutorial()
+    {
+        switch (WhatToRead)
+        {
+            case 0:
+                StartCoroutine(TurnTextOn(0));
+                SoundManager.PlaySFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-001");
+                break;
+
+            case 1:
+                StartCoroutine(TurnTextOn(1));
+                SoundManager.stopSFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-001");
+                SoundManager.PlaySFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-002");
+                WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
+                StopInput = true;
+                break;
+
+            case 2:
+                StartCoroutine(TurnTextOn(2));
+                SoundManager.stopSFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-002");
+                SoundManager.PlaySFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-003");
+                break;
+
+            case 3:
+                StartCoroutine(TurnTextOn(3));
+                SoundManager.stopSFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-003");
+                SoundManager.PlaySFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-004");
+                StopInput = true;
+                break;
+
+            case 4:
+                Text.text = " ";
+                CanIMove = true;
+                currSpeed = baseSpeed;
+                WhatToRead++;
+                StopInput = true;
+                break;
+
+            case 5:
+                StartCoroutine(TurnTextOn(4));
+                SoundManager.stopSFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-004");
+                SoundManager.PlaySFX("Destroy the Cell Tutorial/Medical_VR_VO_Good_Job-001");
+                CanIMove = false;
+                Respawn();
+                break;
+
+            case 6:
+                StartCoroutine(TurnTextOn(5));
+                SoundManager.stopSFX("Destroy the Cell Tutorial/Medical_VR_VO_Good_Job-001");
+                SoundManager.PlaySFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-005");
+                WaveManager.GetComponent<WaveManager>().CanISpawnAntiViralProtein = true;
+                StopInput = true;
+                break;
+
+            case 7:
+                StartCoroutine(TurnTextOn(6));
+                SoundManager.stopSFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-005");
+                SoundManager.PlaySFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-006");
+                break;
+
+            case 8:
+                Text.text = " ";
+                CanIMove = true;
+                currSpeed = baseSpeed;
+                WaveManager.GetComponent<WaveManager>().DoneSpawningCellReceptors = false;
+                WaveManager.GetComponent<WaveManager>().WaveNumber = 2;
+                WaveManager.GetComponent<WaveManager>().CanISpawnCellReceptor = true;
+                WaveManager.GetComponent<WaveManager>().CanISpawnAntiViralProtein = true;
+                WhatToRead++;
+                StopInput = true;
+                break;
+
+            case 9:
+                StartCoroutine(TurnTextOn(7));
+                SoundManager.stopSFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-006");
+                SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_VO_Great_Now_Youre_Ready_to_Play");
+                break;
+
+            case 10:
+                PlayStory();
+                break;
+
+            default:
+                break;
+        }
     }
 
     void FixedUpdate()
@@ -310,33 +362,38 @@ public class VirusPlayer : MonoBehaviour
 
     IEnumerator DisplayText(string message, float duration)
     {
-        Instructions.GetComponent<TextMeshPro>().enabled = true;
-        Instructions.GetComponent<TextMeshPro>().text = message;
+        Text.enabled = true;
+        Text.text = message;
         yield return new WaitForSeconds(duration);
-        Instructions.GetComponent<TextMeshPro>().enabled = false;
+        Text.enabled = false;
 
         if (InstructionsDone == false)
             InstructionsDone = true;
+    }
 
-        //Events for tutorial
-        CanIRead = true;
-        if (WhatToRead == 3 && IsCellDoneIdling == false)
-            CanIRead = false;
+    IEnumerator TurnTextOn(int index)
+    {
+        while (text)
+            yield return 0;
 
-        if (WhatToRead == 4 && IsCellDoneMoving == false)
-            CanIRead = false;
+        text = true;
+        Text.text = " ";
 
-        if (WhatToRead == 6 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count != 0)
-            CanIRead = false;
+        while (Text.text != TextList[index] && !finish)
+        {
+            yield return new WaitForSeconds(GlobalVariables.textDelay);
 
-        if (WhatToRead == 9 && WaveManager.GetComponent<WaveManager>().AntiViralProteinList.Count != 0)
-            CanIRead = false;
+            if (Text.text.Length == TextList[index].Length)
+                Text.text = TextList[index];
 
-        if (WhatToRead == 10 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count != 0)
-            CanIRead = false;
+            else
+                Text.text = Text.text.Insert(Text.text.Length - 1, TextList[index][Text.text.Length - 1].ToString());
+        }
 
-        if (WhatToRead == 11)
-            TutorialModeCompleted = true;
+        Text.text = TextList[index];
+        finish = false;
+        text = false;
+        WhatToRead++;
     }
 
     public void Respawn()
