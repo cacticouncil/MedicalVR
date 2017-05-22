@@ -5,9 +5,16 @@ using System.Collections;
 public class DisplayScore : MonoBehaviour
 {
     public GameObject GetLists;
+    public Player P;
 
     void Update()
     {
+        if (true)
+        {
+            if (P.isGameOver == true)
+                this.gameObject.SetActive(false);
+        }
+
         if (transform.name == "Zone 1")
         {
             transform.GetComponent<TextMeshPro>().text = "Zone 1 " + "\n" + "     " + GetLists.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Count;

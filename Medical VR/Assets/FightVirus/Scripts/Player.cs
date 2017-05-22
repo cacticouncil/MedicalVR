@@ -30,7 +30,6 @@ public class Player : MonoBehaviour
     //For text
     bool StopInput = false;
     public int WhatToRead = 0;
-    public bool CanIRead = true;
     public TextMeshPro Text;
     private string[] TextList = new string[8];
     private bool last = false, text = false, finish = false;

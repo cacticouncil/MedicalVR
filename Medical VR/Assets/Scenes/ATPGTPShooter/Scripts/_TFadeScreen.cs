@@ -19,6 +19,10 @@ public class _TFadeScreen : MonoBehaviour
     {
         Initialize();
     }
+    private void OnEnable()
+    {
+
+    }
 
     void Initialize()
     {
@@ -94,7 +98,7 @@ public class _TFadeScreen : MonoBehaviour
     {
         float curValue = curfade / fadeTime;
         curfade += Time.deltaTime;
-        if (curfade >= fadeTime)
+        if (curfade >= fadeTime || GetComponent<Renderer>().material.color.a >= .95f)
         {
             ResetToBlack();
             return;

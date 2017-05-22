@@ -12,7 +12,7 @@ public class CellReceptors : MonoBehaviour
     private bool NeverTargetAgain = false;
 
     public int Health = 4;
-    private float SpeedForTutorial = .008f;
+    private float SpeedForTutorial = .01f;
     public float TutorialCellReceptorTimer = 0.0f;
     bool DontCheckAgain = false;
     Vector3 SavedLocation;
@@ -74,7 +74,7 @@ public class CellReceptors : MonoBehaviour
 
     public void OnGazeEnter()
     {
-        if (AmITargeted == false && NeverTargetAgain == false)
+        if (AmITargeted == false && NeverTargetAgain == false && Player.GetComponent<VirusPlayer>().IsCellDoneIdling == true)
         {
             Player.GetComponent<VirusPlayer>().currSpeed = 0;
             AmITargeted = true;

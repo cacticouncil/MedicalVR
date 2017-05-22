@@ -29,7 +29,7 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
         }
         transform.localScale = scale;
         transform.position = target.transform.position;
-        Destroy(target.gameObject);
+        target.StartCoroutine(target.Die());
         yield return new WaitForSeconds(1.0f);
         StartCoroutine(Leave());
     }
