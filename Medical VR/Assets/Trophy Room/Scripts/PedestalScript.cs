@@ -89,7 +89,7 @@ public class PedestalScript : MonoBehaviour
 
     public void SecondClick()
     {
-        if (theCamera.MoveText == 7 && SecondClickOnly == false)
+        if (theCamera.MoveText == 5 && SecondClickOnly == false)
         {
             theCamera.MoveText += 1;
             theCamera.CanIRead = true;

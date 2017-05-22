@@ -6,7 +6,6 @@ using TMPro;
 public class TrophyRoomScript : MonoBehaviour
 {
     public TextMeshPro Text;
-    public MeshCollider TrophyPedestal;
     public MeshCollider Station1Pedestal;
     public MeshCollider Station2Pedestal;
     public GameObject GVRSystem;
@@ -23,20 +22,18 @@ public class TrophyRoomScript : MonoBehaviour
             return;
         }
         
-        TrophyPedestal.enabled = false;
         Station1Pedestal.enabled = false;
         Station2Pedestal.enabled = false;
         TextList[0] = "Welcome to the Trophy Room";
         TextList[1] = "This is where all of your achievements are shown.";
-        TextList[2] = "If you click on the pedestal in front of the big board.";
-        TextList[3] = "You can see all the trophies with descriptions that you can unlock.";
-        TextList[4] = "You must play mini games in order to do so.";
-        TextList[5] = "You can click on the other pedestals to move around in the room.";
-        TextList[6] = "You can see the trophies on the shelves are all parts of the cell.";
-        TextList[7] = "Click on any trophy to bring it to the pedestal.";
-        TextList[8] = "You can see there is a description button that gives you more information about it.";
-        TextList[9] = "Click back on the trophy to put it back.";
-        Texticles();
+        TextList[2] = "You can see all the trophies with descriptions that you can unlock.";
+        TextList[3] = "You must play mini games in order to do so.";
+        TextList[4] = "You can click on the other pedestals to move around in the room.";
+        TextList[5] = "You can see the trophies on the shelves are all parts of the cell.";
+        TextList[6] = "Click on any trophy to bring it to the pedestal.";
+        TextList[7] = "You can see there is a description button that gives you more information about it.";
+        TextList[8] = "Click back on the trophy to put it back.";
+        TextForTutorial();
     }
 
     void Update()
@@ -48,13 +45,13 @@ public class TrophyRoomScript : MonoBehaviour
                 finish = true;
             
             else
-                Texticles();
+                TextForTutorial();
         }
 
         last = held;
     }
 
-    void Texticles()
+    void TextForTutorial()
     {
         switch (MoveText)
         {
@@ -75,40 +72,32 @@ public class TrophyRoomScript : MonoBehaviour
                 break;
 
             case 4:
-                TrophyPedestal.enabled = true;
-                break;
-
-            case 5:
                 StartCoroutine(TurnTextOn(4));
                 break;
 
-            case 6:
-                StartCoroutine(TurnTextOn(5));
-                break;
-
-            case 7:
+            case 5:
                 Station1Pedestal.enabled = true;
                 Station2Pedestal.enabled = true;
                 break;
 
-            case 8:
+            case 6:
                 GVRSystem.SetActive(false);
+                StartCoroutine(TurnTextOn(5));
+                break;
+
+            case 7:
                 StartCoroutine(TurnTextOn(6));
                 break;
 
-            case 9:
+            case 8:
                 StartCoroutine(TurnTextOn(7));
                 break;
 
-            case 10:
+            case 9:
                 StartCoroutine(TurnTextOn(8));
                 break;
 
-            case 11:
-                StartCoroutine(TurnTextOn(9));
-                break;
-
-            case 12:
+            case 10:
                 GVRSystem.SetActive(true);
                 Text.text = " ";
                 break;
