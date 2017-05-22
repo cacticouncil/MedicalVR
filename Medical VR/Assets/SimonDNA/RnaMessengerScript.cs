@@ -38,8 +38,12 @@ public class RnaMessengerScript : MonoBehaviour
         }
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        if(chain.Count >= 45)
+        {
+            BannerScript.UnlockTrophy("DNA");
+        }
         StoryModeStuff();
         BreakAnimation();
         if (tmpLives != simon.GetComponent<SimonSays>().lives)
