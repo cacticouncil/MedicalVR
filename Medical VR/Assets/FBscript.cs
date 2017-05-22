@@ -20,10 +20,10 @@ enum MiniGames
 
 public class FBscript : MonoBehaviour
 {
-  public  GameObject DialogLoggedIn;
-  public  GameObject DialogLoggedOut;
-  public GameObject DialogUsername;
-  public GameObject DialogProfilePic;
+    public GameObject DialogLoggedIn;
+    public GameObject DialogLoggedOut;
+    public GameObject DialogUsername;
+    public GameObject DialogProfilePic;
     public static int GlobalScore;
 
     public GameObject ScoreEntryPanel;
@@ -44,7 +44,7 @@ public class FBscript : MonoBehaviour
     }
     void OnHideUnity(bool IsGameShown)
     {
-        if(!IsGameShown)
+        if (!IsGameShown)
             Time.timeScale = 0;
         else
             Time.timeScale = 1;
@@ -59,7 +59,7 @@ public class FBscript : MonoBehaviour
 
     void AuthCallBack(IResult result)
     {
-        if(result.Error != null)
+        if (result.Error != null)
             Debug.Log(result.Error);
         else
         {
@@ -76,14 +76,14 @@ public class FBscript : MonoBehaviour
         }
     }
 
-    void DealWithFBMenus( bool isLoggedIn)
+    void DealWithFBMenus(bool isLoggedIn)
     {
         if (isLoggedIn)
         {
             DialogLoggedIn.SetActive(true);
             DialogLoggedOut.SetActive(false);
 
-            if(FacebookManager.Instance.ProfileName != null)
+            if (FacebookManager.Instance.ProfileName != null)
             {
                 TextMeshPro UserName = DialogUsername.GetComponent<TextMeshPro>();
                 UserName.text = "Hi, " + FacebookManager.Instance.ProfileName;
@@ -114,9 +114,9 @@ public class FBscript : MonoBehaviour
 
     IEnumerator WaitForProfileName()
     {
-        while(FacebookManager.Instance.ProfileName == null)
+        while (FacebookManager.Instance.ProfileName == null)
         {
-          yield return null;
+            yield return null;
         }
 
         DealWithFBMenus(FacebookManager.Instance.IsLoggedIn);
@@ -153,7 +153,7 @@ public class FBscript : MonoBehaviour
     {
         FB.API("/app/scores?fields=score,user.limit(30)", HttpMethod.GET, getScoresCallback);
     }
-    
+
     public void NewQueryScore(string filename)
     {
         string filepath = "/app/scores/" + filename + "?fields=score,user.limit(30)";
@@ -194,8 +194,9 @@ public class FBscript : MonoBehaviour
             Fnametext.text = user["name"].ToString();
             Fscoretext.text = entry["score"].ToString();
 
-            FB.API("/" + user["id"].ToString() + "/picture?type=square&height=40&width=40", HttpMethod.GET, delegate(IGraphResult picResult) {
-                if(picResult.Texture != null)
+            FB.API("/" + user["id"].ToString() + "/picture?type=square&height=40&width=40", HttpMethod.GET, delegate (IGraphResult picResult)
+            {
+                if (picResult.Texture != null)
                 {
                     FUserAvatar.sprite = Sprite.Create(picResult.Texture, new Rect(0, 0, 40, 40), new Vector2());
                 }

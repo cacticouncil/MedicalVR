@@ -53,11 +53,9 @@ public class FacebookManager : MonoBehaviour {
     {
         if (FB.IsLoggedIn)
         {
-            Debug.Log("FB is Logged in");
+            FB.Mobile.RefreshCurrentAccessToken(null);
             GetProfile();
         }
-        else
-            Debug.Log("FB is Not Logged in");
 
         IsLoggedIn = FB.IsLoggedIn;
     }
