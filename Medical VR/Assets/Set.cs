@@ -5,6 +5,7 @@ using UnityEngine;
 public class Set : MonoBehaviour
 {
     public GameObject fade;
+    public float fadeWaitDelay = 1.0f;
 
     public void SetDifficulty(int i)
     {
@@ -48,7 +49,7 @@ public class Set : MonoBehaviour
 
     IEnumerator EnterDelay()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(fadeWaitDelay);
         ChangeScene.EnterEvent();
     }
 }
