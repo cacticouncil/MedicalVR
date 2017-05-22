@@ -253,7 +253,7 @@ public class _TTutorialATPGTP : MonoBehaviour
         StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime));
         initTime += displayTime + 1;
 
-        float timePerEnzyme = GetComponent<_TGameController>().timePerEnzyme;
+        // float timePerEnzyme = GetComponent<_TGameController>().timePerEnzyme;
 
         text = "When the cGas is Completed you get 10 points.";
         StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));

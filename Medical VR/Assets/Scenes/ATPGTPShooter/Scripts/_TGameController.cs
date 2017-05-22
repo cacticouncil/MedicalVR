@@ -178,7 +178,10 @@ public class _TGameController : MonoBehaviour
             StopCoroutine("SpawnWaves");
             StopCoroutine("SpawnHazards");
             if (scoreBoard && gameCamera)
+            {
+                scoreBoard.GetComponent<_TSizeChange>().ResetToSmall();
                 scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
+            }
             
             Invoke("DisplayScore", 3);
             Invoke("ShrinkObjects", 2);
@@ -213,6 +216,7 @@ public class _TGameController : MonoBehaviour
 
     void DisplayScore()
     {
+        scoreBoard.GetComponent<_TSizeChange>().ResetToSmall();
         shrinkStuff.Player.GetComponent<_TRaycastTarget>().hasWon = true;
         scoreBoard.transform.GetComponent<_TSizeChange>().StartGrow();
     }

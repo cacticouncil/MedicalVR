@@ -8,7 +8,7 @@ public class _TPreloadObjects : MonoBehaviour
     public GameObject atpOrb;
     public GameObject gtpOrb;
 
-    bool ItemsAreSet = false;
+    // bool ItemsAreSet = false;
     bool isInit = false;
 
     // Use this for initialization
