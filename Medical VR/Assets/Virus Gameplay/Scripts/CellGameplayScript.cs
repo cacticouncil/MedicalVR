@@ -13,6 +13,7 @@ public class CellGameplayScript : MonoBehaviour
     public static int loadCase = 0;
     public float moveSpeed;
 
+    Color orgAmb;
     delegate void Func();
     Func doAction;
     private float fadeSpeed = .03f;
@@ -22,6 +23,7 @@ public class CellGameplayScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        orgAmb = RenderSettings.ambientLight;
         GlobalVariables.tutorial = true;
         doAction = NullFunction;
         virus.SetActive(false);
@@ -39,6 +41,7 @@ public class CellGameplayScript : MonoBehaviour
                 transform.position = places[I].position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
+                RenderSettings.ambientLight = Color.black;
                 break;
             case (2):
                 Sceneries[0].SetActive(false);
@@ -49,6 +52,7 @@ public class CellGameplayScript : MonoBehaviour
                 transform.position = places[I].position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
+                RenderSettings.ambientLight = Color.black;
                 break;
             case (3):
                 Sceneries[0].SetActive(false);
@@ -59,6 +63,7 @@ public class CellGameplayScript : MonoBehaviour
                 transform.position = places[I].position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
+                RenderSettings.ambientLight = Color.black;
                 break;
             case 4:
                 Sceneries[0].SetActive(false);
@@ -69,6 +74,7 @@ public class CellGameplayScript : MonoBehaviour
                 transform.position = places[I].position;
                 virus.SetActive(true);
                 RenderSettings.fogDensity = 0;
+                RenderSettings.ambientLight = Color.black;
                 break;
             default:
                 break;
@@ -167,6 +173,7 @@ public class CellGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 3;
                 RenderSettings.fogDensity = 0;
+                RenderSettings.ambientLight = Color.black;
                 transform.position = places[I].position;
                 doAction = RiseCurtain;
                 break;
@@ -303,6 +310,7 @@ public class CellGameplayScript : MonoBehaviour
                     GetComponent<LookCamera>().target = rotationTargets[3];
                     GetComponent<LookCamera>().enabled = true;
                 }
+                RenderSettings.ambientLight = orgAmb;
                 doAction = RiseCurtain;
                 Sceneries[2].SetActive(false);
                 Sceneries[3].SetActive(true);
@@ -337,6 +345,7 @@ public class CellGameplayScript : MonoBehaviour
                 I = 9;
                 transform.position = places[I].position;
                 RenderSettings.fogDensity = 0;
+                RenderSettings.ambientLight = Color.black;
                 break;
             case 213:
                 firstLook = true;
