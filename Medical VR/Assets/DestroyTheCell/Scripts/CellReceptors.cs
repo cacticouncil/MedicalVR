@@ -101,7 +101,7 @@ public class CellReceptors : MonoBehaviour
         for (int i = 0; i < num; i++)
         {
             SpawnAttackVirus();
-            SoundManager.PlaySFX("Fight Virus Tutorial/Laser_Shoot20");
+            SoundManager.PlaySFX("Fight Virus Tutorial/sfx_sounds_interaction16");
             yield return new WaitForSeconds(duration);
         }
     }
