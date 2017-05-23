@@ -9,6 +9,9 @@ public class LooseLifesER : MonoBehaviour {
     {
         if (collision.transform.tag == "CBullet")
         {
+            if (SoundManager.IsJordanPlaying("341633__padsterpat__karplus-strong") == false)
+                SoundManager.PlayJordanVoice("341633__padsterpat__karplus-strong");
+            
             storebullets.GetComponent<Storebullets>().score -= 50;
             Storebullets.LoseresetPos();
             Destroy(collision.gameObject);

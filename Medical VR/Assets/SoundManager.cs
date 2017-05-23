@@ -416,8 +416,64 @@ public static class SoundManager
         return stopped;
     }
 
+    public static void PlayJordanVoice(string _title)
+    {
+        if (Controller)
+        {
+            AudioSource source = Controller.AddComponent<AudioSource>();
+            source.clip = (AudioClip)Resources.Load("SFX/JordanSFX/" + _title);
+            if (source.clip == null)
+            {
+                Debug.Log("Sound '" + _title + "' was not found in the SFX folder!");
+            }
+            source.volume = MaxSFXVolume;
+            source.Play();
+            SubstitlesScript.voice = source;
+            SFX.Add(source);
+        }
+    }
+    public static bool IsJordanPlaying(string _title)
+    {
+        if (Controller)
+        {
+            AudioClip c = (AudioClip)Resources.Load("SFX/JordanSFX/" + _title);
+            for (int i = SFX.Count - 1; i >= 0; i--)
+            {
+                if (SFX[i].clip == c)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static bool StopJordanVoice(string _title, bool _all = false)
+    {
+        bool stopped = false;
+        if (Controller)
+        {
+            AudioClip c = (AudioClip)Resources.Load("SFX/JordanSFX/" + _title);
+            for (int i = SFX.Count - 1; i >= 0; i--)
+            {
+                if (SFX[i].clip == c)
+                {
+                    SFX[i].Stop();
+                    if (!_all)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        stopped = true;
+                    }
+                }
+            }
+        }
+        return stopped;
+    }
 
-    
+
+
 
     public static bool IsSFXPlaying(string _title)
     {
