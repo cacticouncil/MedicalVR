@@ -161,7 +161,6 @@ public class VirusManager : MonoBehaviour
 
     void CreateWave()
     {
-        Debug.Log("WaveNumberIncrease");
         VirusList = new List<GameObject>();
 
         if (SpawnBoss == false)

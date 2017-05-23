@@ -256,6 +256,8 @@ public class Virus : MonoBehaviour
             else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Contains(transform.gameObject))
                 GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
         }
+
+        SoundManager.PlaySFX("Fight Virus Tutorial/Hit_Hurt12");
     }
 
     void SpawnSmallViruses()

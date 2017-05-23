@@ -16,6 +16,7 @@ public class CellReceptors : MonoBehaviour
     public float TutorialCellReceptorTimer = 0.0f;
     bool DontCheckAgain = false;
     Vector3 SavedLocation;
+
     void Start()
     {
         WaveManager = gameObject.transform.parent.gameObject;
@@ -100,6 +101,7 @@ public class CellReceptors : MonoBehaviour
         for (int i = 0; i < num; i++)
         {
             SpawnAttackVirus();
+            SoundManager.PlaySFX("Fight Virus Tutorial/Laser_Shoot20");
             yield return new WaitForSeconds(duration);
         }
     }

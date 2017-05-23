@@ -142,6 +142,7 @@ public class AntiViralProtein : MonoBehaviour
             FlashScreen = true;
             return true;
         }
+
         return false;
     }
 
