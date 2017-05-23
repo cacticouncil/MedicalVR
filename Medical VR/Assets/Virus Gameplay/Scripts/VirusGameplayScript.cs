@@ -17,8 +17,10 @@ public class VirusGameplayScript : MonoBehaviour
     private float moveSpeed;
     float fadeSpeed;
     int I = 0;
+    Color orgAmb;
     void Start()
     {
+        orgAmb = RenderSettings.ambientLight;
         GlobalVariables.tutorial = true;
         doAction = NullFunction;
         virus.SetActive(false);
@@ -60,6 +62,7 @@ public class VirusGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 Sceneries[3].SetActive(false);
                 RenderSettings.fogDensity = 0;
+                RenderSettings.ambientLight = Color.black;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 353f;
                 I = 9;
                 parent.transform.position = places[I].transform.position;
@@ -82,6 +85,7 @@ public class VirusGameplayScript : MonoBehaviour
         parent.GetComponent<LookCamera>().enabled = true;
         Sceneries[3].SetActive(true);
         RenderSettings.fogDensity = 0;
+        RenderSettings.ambientLight = orgAmb;
         parent.transform.position = places[I].transform.position;
         doAction = RiseCurtain;
         fadeSpeed = 1.5f;
@@ -253,6 +257,7 @@ public class VirusGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 4;
                 RenderSettings.fogDensity = 0;
+                RenderSettings.ambientLight = Color.black;
                 parent.transform.position = places[I].transform.position;
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
@@ -357,6 +362,7 @@ public class VirusGameplayScript : MonoBehaviour
                 Sceneries[2].SetActive(true);
                 I = 8;
                 RenderSettings.fogDensity = 0;
+                RenderSettings.ambientLight = Color.black;
                 parent.transform.position = places[I].transform.position;
                 doAction = RiseCurtain;
                 fadeSpeed = 1.5f;
@@ -366,7 +372,7 @@ public class VirusGameplayScript : MonoBehaviour
             case (297):
                 parent.GetComponent<LookCamera>().enabled = false;
                 I = 9;
-                moveSpeed = .35f;
+                moveSpeed = .5f;
                 break;
             case (303):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-035") == false)

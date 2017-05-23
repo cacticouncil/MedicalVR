@@ -43,12 +43,16 @@ public class _TSizeChange : MonoBehaviour
     }
     public void StartShrink()
     {
+        if (transform.localScale == Vector3.zero)
+            return;
         isGrowing = false;
         isShrinking = true;
         smallSizeChange = true;
     }
     public void StartGrow()
     {
+        if (transform.localScale == initialScale)
+            return;
         isShrinking = false;
         isGrowing = true;
         smallSizeChange = true;

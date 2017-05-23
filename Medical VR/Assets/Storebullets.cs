@@ -287,6 +287,8 @@ public class Storebullets : MonoBehaviour
 
         if (bPressed && Time.time > nextFire)
         {
+            if (SoundManager.IsJordanPlaying("28860__junggle__btn050") == false)
+                    SoundManager.PlayJordanVoice("28860__junggle__btn050");
             shootCGamp();
         }
     }
@@ -335,6 +337,7 @@ public class Storebullets : MonoBehaviour
                 nextFire = Time.time + fireRate;
                 GameObject obj = Instantiate(bullet, shotSpawn.transform.position, shotSpawn.transform.rotation) as GameObject;
                 obj.GetComponent<Rigidbody>().angularVelocity = UnityEngine.Random.insideUnitSphere * tumble;
+                
                 bulletamount -= 1;
                 BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
             }
