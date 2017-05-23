@@ -264,7 +264,18 @@ public static class SoundManager
             Fade = FadeType.FADEOUT;
         }
     }
+    public static AudioSource GetSFXSource(string name)
+    {
+        for(int i = 0; i < SFX.Count; i++)
+        {
+            if(SFX[i].clip.name == name)
+            {
+                return SFX[i];
+            }
 
+        }
+        return null;
+    }
     public static void PlaySFX(string _title)
     {
         if (Controller)

@@ -48,6 +48,7 @@ public class AntibodyScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            SoundManager.PlaySFX("wall");
             if (!GlobalVariables.tutorial)
             {
                 // other.transform.position -= other.transform.forward * 50;

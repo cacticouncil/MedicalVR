@@ -7,6 +7,7 @@ public class PlateletScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            SoundManager.PlaySFX("wall");
             StartCoroutine(Reverse(other.gameObject.GetComponent<MovingCamera>()));
         }
     }
