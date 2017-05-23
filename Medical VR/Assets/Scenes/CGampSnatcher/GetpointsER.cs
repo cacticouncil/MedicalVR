@@ -35,7 +35,6 @@ public class GetpointsER : MonoBehaviour
             {
                 Debug.Log("In here this many times: " + x);
                 Destroy(gameObject);
-            //    Storebullets.stingamount -= 1;
             }
 
             yield return new WaitForFixedUpdate();

@@ -81,10 +81,11 @@ public class Storebullets : MonoBehaviour
         level = 1;
         score = 0;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
-        //theScore.GetComponent<TextMesh>().text = "SCORE: " + tmp.ToString();
     }
     void Start()
     {
+       // BannerScript.LockTrophy("Endoplasmic reticulum");
+
         amount = 0;
         stingamount = 0;
         finish = false;
@@ -218,7 +219,6 @@ public class Storebullets : MonoBehaviour
 
                 case 7:
                     TutorialTimer += Time.deltaTime;
-                    //BulletSpawn.GetComponent<BulletManager>().CanIShoot = true;
 
                     if (TutorialTimer <= 4.0f)
                     {
@@ -294,6 +294,11 @@ public class Storebullets : MonoBehaviour
     }
     void FixedUpdate()
     {
+
+        if(score >= 1000 )
+        {
+            BannerScript.UnlockTrophy("Endoplasmic reticulum");
+        }
 
         if (GlobalVariables.arcadeMode == false)
         {
