@@ -121,7 +121,7 @@ public class Player : MonoBehaviour
                 }
 
                 //If you win story mode continue to next scene and don't forget to fade out
-                if (EnemyManger.GetComponent<VirusManager>().WaveNumber >= 5 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
+                if (EnemyManger.GetComponent<VirusManager>().WaveNumber == 4 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
                 {
                     isGameOver = true;
                     CenterScreenObj.GetComponent<TextMeshPro>().text = "You win story mode";
