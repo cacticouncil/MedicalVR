@@ -8,6 +8,7 @@ public class _TRedAttacher : MonoBehaviour
     public bool _debug;
     public GameObject shotToAttack;
     public GameObject ConnectionParticle;
+    public AudioClip attachSound;
     public float ParticleSize;
 
     private Position caseSwitch = Position.none;
@@ -15,7 +16,13 @@ public class _TRedAttacher : MonoBehaviour
     //private Collider moleculeCol;
     private float moverSpeed;
     private Transform colliders;
+    private AudioSource source;
 
+
+    private void Awake()
+    {
+        source = GetComponent<AudioSource>();
+    }
 
     private void Start()
     {
@@ -105,6 +112,7 @@ public class _TRedAttacher : MonoBehaviour
             flash = Instantiate(ConnectionParticle, transform.position, transform.rotation, transform) as GameObject;
             flash.transform.localScale = new Vector3(ParticleSize, ParticleSize, ParticleSize);
             flash.transform.localPosition = new Vector3(0, -0.1f, 0);
+            source.PlayOneShot(attachSound);
         }
         else
             Debug.Log("No Connection Particle to Instatiate.");

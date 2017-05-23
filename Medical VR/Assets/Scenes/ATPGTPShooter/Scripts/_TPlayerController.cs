@@ -7,6 +7,7 @@ enum ShotNumber { ATPOne, ATPTwo, ATPThree, GTPOne, GTPTwo, GTPThree, reset };
 public class _TPlayerController : MonoBehaviour
 {
     private ShotNumber currentRound;
+    public AudioClip[] shotSounds;
 
     public GameObject Camera;
 
@@ -17,11 +18,15 @@ public class _TPlayerController : MonoBehaviour
 
     private float nextFire;
     private bool isATP;
-    //private AudioSource audioSource;
+    private AudioSource source;
     bool isActive = false;
-    
+
     bool isInit = false;
-    
+
+    private void Awake()
+    {
+        source = GetComponent<AudioSource>();
+    }
     public void Initialize()
     {
         if (isInit)
@@ -40,7 +45,7 @@ public class _TPlayerController : MonoBehaviour
     void Update()
     {
         bool bPressed = Input.GetButtonDown("Fire1");
-        
+
         if (bPressed && Time.time > nextFire)
         {
             SetFireMode();
@@ -52,9 +57,9 @@ public class _TPlayerController : MonoBehaviour
             return;
 
         if (isATP)
-            shootATP();
+            Shoot(0);
         else
-            shootGTP();
+            Shoot(1);
 
         if (++currentRound == ShotNumber.reset)
             currentRound = ShotNumber.ATPOne;
@@ -68,22 +73,21 @@ public class _TPlayerController : MonoBehaviour
     {
         gameObject.transform.rotation = Camera.transform.rotation;
     }
-    private void shootATP()
+    private void Shoot(int i)
     {
-        if (shot[0])
+        if (shot[i])
         {
             nextFire = Time.time + fireRate;
-            Instantiate(shot[0], shotSpawn.position, shotSpawn.rotation);
+            Instantiate(shot[i], shotSpawn.position, shotSpawn.rotation);
+
+            if (shotSounds.Length > 0)
+            {
+                int randomShot = Random.Range(0, shotSounds.Length);
+                source.PlayOneShot(shotSounds[randomShot]);
+            }
         }
     }
-    private void shootGTP()
-    {
-        if (shot[1])
-        {
-            nextFire = Time.time + fireRate;
-            Instantiate(shot[1], shotSpawn.position, shotSpawn.rotation);
-        }
-    }
+
     public int GetShotNumber()
     {
         return (int)currentRound;

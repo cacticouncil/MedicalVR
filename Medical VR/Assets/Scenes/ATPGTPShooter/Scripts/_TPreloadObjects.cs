@@ -41,6 +41,7 @@ public class _TPreloadObjects : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezePosition;
         enz.GetComponent<_TSizeChange>().Inititalize();
         enz.GetComponent<_TTravelToNucleus>().enabled = false;
+        enz.GetComponent<AudioSource>().enabled = false;
 
 
         GameObject atp = Instantiate(atpOrb, new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), Quaternion.identity) as GameObject;
