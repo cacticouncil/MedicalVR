@@ -22,6 +22,7 @@ public class CollectiblePoints : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            SoundManager.PlaySFX("part");
             pointEffect.GetComponent<ParticleSystem>().Stop();
             other.gameObject.GetComponent<MovingCamera>().score += score;
             pointEffect.GetComponent<ParticleSystem>().Play();

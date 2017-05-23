@@ -64,4 +64,28 @@ public static class GlobalVariables
             PlayerPrefs.SetInt("CellComplete", value);
         }
     }
+
+    public static float sfxVolume
+    {
+        get
+        {
+            return PlayerPrefs.GetFloat("InitialSFXVolume");
+        }
+        set
+        {
+            PlayerPrefs.SetFloat("InitialSFXVolume", value);
+        }
+    }
+
+    public static float bgmVolume
+    {
+        get
+        {
+            return PlayerPrefs.GetFloat("InitialBGMVolume");
+        }
+        set
+        {
+            PlayerPrefs.SetFloat("InitialBGMVolume", value);
+        }
+    }
 }

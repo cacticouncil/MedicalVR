@@ -17,6 +17,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     private GameObject virusPrefab3;
     public GameObject transporter;
     public GameObject particleToTarget;
+    public StrategySoundHolder soundSource;
     [Space(2)]
 
     [Header("Instances")]
@@ -345,6 +346,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     #region Turns
     public void ActionPreformed()
     {
+        soundSource.PlayRandomSound();
         StartCoroutine(TurnUpdate());
     }
 

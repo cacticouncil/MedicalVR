@@ -9,10 +9,8 @@ public class OptionsController : MonoBehaviour
     public TMPro.TextMeshPro subtitles;
     public Toggle subEnabled;
     public Slider textSpeed, textSize;
-
     public AudioSource sfx;
     public Slider BGMSlider, SFXSlider;
-
     public Image reticleImage;
     public Material reticleMaterial;
     public GameObject reticle;
@@ -35,8 +33,8 @@ public class OptionsController : MonoBehaviour
         textSize.value = GlobalVariables.textSize;
 
         // Set initial volumes
-        BGMSlider.value = InitialSFXVolume = PlayerPrefs.GetFloat("InitialSFXVolume", 1);
-        SFXSlider.value = InitialBGMVolume = PlayerPrefs.GetFloat("InitialBGMVolume", 1);
+        SFXSlider.value = InitialSFXVolume = GlobalVariables.sfxVolume;
+        BGMSlider.value = InitialBGMVolume = GlobalVariables.bgmVolume;
     }
 
     void OnDisable()
@@ -93,10 +91,8 @@ public class OptionsController : MonoBehaviour
         GlobalVariables.textDelay = textSpeed.value;
         GlobalVariables.textSize = textSize.value;
 
-        InitialSFXVolume = SoundManager.MaxSFXVolume;
-        InitialBGMVolume = SoundManager.MaxBGMVolume;
-        PlayerPrefs.SetFloat("InitialSFXVolume", SoundManager.MaxSFXVolume);
-        PlayerPrefs.SetFloat("InitialBGMVolume", SoundManager.MaxBGMVolume);
+        GlobalVariables.sfxVolume = InitialSFXVolume = SoundManager.MaxSFXVolume;
+        GlobalVariables.bgmVolume = InitialBGMVolume = SoundManager.MaxBGMVolume;
 
         reticle.GetComponent<Renderer>().sharedMaterial.color = reticleMaterial.color = reticleImage.color;
     }

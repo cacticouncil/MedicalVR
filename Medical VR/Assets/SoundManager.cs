@@ -91,7 +91,7 @@ public static class SoundManager
             Loops.Add("J_Game_Amb_Bright_loop_01", new LoopData(194755, 2404985));
             Loops.Add("J_Game_Amb_Dark_loop_02", new LoopData(351905, 1056500));
             Loops.Add("J_Game_Amb_Energy_1", new LoopData(990062, 2227651));
-            Loops.Add("World2", new LoopData(0, 1834968));
+            Loops.Add("nullsound", new LoopData(0, 1834968));
             Loops.Add("Pause", new LoopData(0, 1321853));
         }
     }
@@ -264,7 +264,18 @@ public static class SoundManager
             Fade = FadeType.FADEOUT;
         }
     }
+    public static AudioSource GetSFXSource(string name)
+    {
+        for(int i = 0; i < SFX.Count; i++)
+        {
+            if(SFX[i].clip.name == name)
+            {
+                return SFX[i];
+            }
 
+        }
+        return null;
+    }
     public static void PlaySFX(string _title)
     {
         if (Controller)
@@ -421,7 +432,7 @@ public static class SoundManager
         if (Controller)
         {
             AudioSource source = Controller.AddComponent<AudioSource>();
-            source.clip = (AudioClip)Resources.Load("SFX/JordanSFX/" + _title);
+            source.clip = (AudioClip)Resources.Load("SFX/StrategyGame/" + _title);
             if (source.clip == null)
             {
                 Debug.Log("Sound '" + _title + "' was not found in the SFX folder!");
@@ -436,7 +447,7 @@ public static class SoundManager
     {
         if (Controller)
         {
-            AudioClip c = (AudioClip)Resources.Load("SFX/JordanSFX/" + _title);
+            AudioClip c = (AudioClip)Resources.Load("SFX/StrategyGame/" + _title);
             for (int i = SFX.Count - 1; i >= 0; i--)
             {
                 if (SFX[i].clip == c)
@@ -452,7 +463,7 @@ public static class SoundManager
         bool stopped = false;
         if (Controller)
         {
-            AudioClip c = (AudioClip)Resources.Load("SFX/JordanSFX/" + _title);
+            AudioClip c = (AudioClip)Resources.Load("SFX/StrategyGame/" + _title);
             for (int i = SFX.Count - 1; i >= 0; i--)
             {
                 if (SFX[i].clip == c)
