@@ -421,7 +421,7 @@ public static class SoundManager
         if (Controller)
         {
             AudioSource source = Controller.AddComponent<AudioSource>();
-            source.clip = (AudioClip)Resources.Load("SFX/JordanSFX/" + _title);
+            source.clip = (AudioClip)Resources.Load("SFX/StrategyGame/" + _title);
             if (source.clip == null)
             {
                 Debug.Log("Sound '" + _title + "' was not found in the SFX folder!");
@@ -436,7 +436,7 @@ public static class SoundManager
     {
         if (Controller)
         {
-            AudioClip c = (AudioClip)Resources.Load("SFX/JordanSFX/" + _title);
+            AudioClip c = (AudioClip)Resources.Load("SFX/StrategyGame/" + _title);
             for (int i = SFX.Count - 1; i >= 0; i--)
             {
                 if (SFX[i].clip == c)
@@ -452,7 +452,7 @@ public static class SoundManager
         bool stopped = false;
         if (Controller)
         {
-            AudioClip c = (AudioClip)Resources.Load("SFX/JordanSFX/" + _title);
+            AudioClip c = (AudioClip)Resources.Load("SFX/StrategyGame/" + _title);
             for (int i = SFX.Count - 1; i >= 0; i--)
             {
                 if (SFX[i].clip == c)
