@@ -26,12 +26,6 @@ public class MemoryUI : MonoBehaviour
     public float startTime = 60.0f;
     public bool finnished = false;
     public float timeRemaining = 60.0f;
-
-
-    //public void Start()
-    //{
-    //    GlobalVariables.arcadeMode = false;
-    //}
     public void LoseresetPos()
     {
             lives--;
@@ -55,7 +49,6 @@ public class MemoryUI : MonoBehaviour
         Spheres.GetComponent<Randomsphere>().Getclonek().SetActive(false);
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
-        //scoreBoard.GetComponent<ScoreBoardScript>().GenerateScore();
         Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
         if(FacebookManager.Instance.ProfilePic != null)
         ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
@@ -294,11 +287,7 @@ public class MemoryUI : MonoBehaviour
 
             if (BeatGameTimer >= 2.5)
             {
-                //if ()
-                //{
-                //Story mode verion will play after completing
-
-                //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
+                //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO Game
                 GlobalVariables.tutorial = false;
                 if (GlobalVariables.arcadeMode == true)
                 {
