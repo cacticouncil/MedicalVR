@@ -24,14 +24,13 @@ public class FBscript : MonoBehaviour
     public GameObject DialogLoggedOut;
     public GameObject DialogUsername;
     public GameObject DialogProfilePic;
-    public static int GlobalScore;
-
     public GameObject ScoreEntryPanel;
     public GameObject ScrollScoreList;
+    public static int GlobalScore;
 
     void Awake()
     {
-        StartCoroutine(FacebookManager.Instance.InitFB(HandleTimeInput));
+        StartCoroutine(FacebookManager.Instance.InitFB(LoginFunction));
     }
 
     void SetInit()
@@ -52,7 +51,14 @@ public class FBscript : MonoBehaviour
             Time.timeScale = 1;
     }
 
-    public void HandleTimeInput()
+    public void LoginFunction()
+    {
+        List<string> permissions = new List<string>();
+        permissions.Add("public_profile");
+        FB.LogInWithReadPermissions(permissions, AuthCallBack);
+    }
+
+    public void LoginButton()
     {
         List<string> permissions = new List<string>();
         permissions.Add("public_profile");
@@ -76,7 +82,6 @@ public class FBscript : MonoBehaviour
         {
             DialogLoggedIn.SetActive(true);
             DialogLoggedOut.SetActive(false);
-
             StartCoroutine(LogIn());
         }
         else
