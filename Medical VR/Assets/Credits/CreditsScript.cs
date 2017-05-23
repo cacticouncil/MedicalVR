@@ -6,9 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class CreditsScript : MonoBehaviour
 {
-    float TutorialTimer = 0.0f;
-    int WhatToRead = 0;
-    float BeatGameTimer = 0.0f;
     public GameObject EventSystem;
     public TextMeshPro CenterScreenObj;
     public GameObject LabLogo;
@@ -18,8 +15,8 @@ public class CreditsScript : MonoBehaviour
 
     public int MoveText = 0;
 
-    private bool last = false, text = false, finish = false;
-    const int size = 36;
+    private bool text = false, finish = false;
+    const int size = 32;
     private string[] TextList = new string[size];
 
 
@@ -49,17 +46,13 @@ public class CreditsScript : MonoBehaviour
         TextList[x++] = "Music / Sound Programming"         + "\n\n" + "Sebastian Diaz Portillo";
         TextList[x++] = "Facebook API Programming"          + "\n\n" + "Sebastian Diaz Portillo";
         TextList[x++] = "Google Cardboard API Programming"  + "\n\n" + "Jordan Sanderson"        + "\n" + "Sebastian Diaz Portillo";
-        TextList[x++] = "Lead Artist"                       + "\n\n" + "";
         TextList[x++] = "Graphics / Artwork"                + "\n\n" + "Alexandre Thorpe";
-        TextList[x++] = "Additional Graphics / Artwork"     + "\n\n" + "";
-        TextList[x++] = "Animation"                         + "\n\n" + "";
+        TextList[x++] = "Animation"                         + "\n\n" + "Sebastian Diaz Portillo" + "\n" + "Josue Cortes"            + "\n" + "Jordan Sanderson" + "\n" + "Jayson Levario" + "\n" + "Michael Toronto";
         TextList[x++] = "3D Modeling"                       + "\n\n" + "Alexandre Thorpe";
-        TextList[x++] = "Movie Crew"                        + "\n\n" + "";
-        TextList[x++] = "Music"                             + "\n\n" + "";
+        TextList[x++] = "Music"                             + "\n\n" + "Tommy Ascough"           + "\n" + "Dwight Gifford";
         TextList[x++] = "Sound"                             + "\n\n" + "Eric Nethery"            + "\n" + "Armin Munoz";
         TextList[x++] = "Acting / Voiceovers"               + "\n\n" + "Josue Cortes";
-        TextList[x++] = "Project Leader"                    + "\n\n" + "";
-        TextList[x++] = "Producers"                         + "\n\n" + "Jason Hinders"           + "\n" + "Haifa Maamar"       + "\n" + "Jason Shoemaker" + "\n" + "Robert Gregg";
+        TextList[x++] = "Producers"                         + "\n\n" + "Jason Hinders"           + "\n" + "Haifa Maamar"            + "\n" + "Jason Shoemaker"  + "\n" + "Robert Gregg";
         TextList[x++] = "No Viruses or Cells got harmed during the making of this game...";
         TextList[x++] = "     ";
         TextList[x++] = "     ";
@@ -82,7 +75,7 @@ public class CreditsScript : MonoBehaviour
         isInit = true;
         for (int i = 0; i < TextList.Length; ++i)
         {
-            StartCoroutine(TurnTextOn(i,/* 4 * i + 4*/1));
+            StartCoroutine(TurnTextOn(i,2));
         }
     }
 
@@ -95,19 +88,19 @@ public class CreditsScript : MonoBehaviour
         text = true;
         CenterScreenObj.text = " ";
 
-            if (index == 33)
+            if (index == 29)
             {
                 LabLogo.SetActive(true);
                 UniversityLogo.SetActive(false);
             }
 
-        if (index == 34)
+        if (index == 30)
         {
             LabLogo.SetActive(false);
             UniversityLogo.SetActive(true);
         }
 
-        if( index == 35)
+        if( index == 31)
          {
              SceneManager.LoadScene("MainMenu");
          }

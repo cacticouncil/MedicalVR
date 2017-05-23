@@ -1,6 +1,4 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-// Copyright 2015 Google Inc. All rights reserved.
+﻿// Copyright 2015 Google Inc. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +21,7 @@ Shader "GoogleVR/Reticle" {
   }
 
   SubShader {
-    Tags { "Queue"="Overlay" "IgnoreProjector"="True" "RenderType"="Transparent" }
+    Tags { "Queue"="Overlay" "IgnoreProjector"="True" "RenderType"="Overlay" }
     Pass {
       Blend SrcAlpha OneMinusSrcAlpha
       AlphaTest Off

@@ -33,7 +33,8 @@ public class Fade : MonoBehaviour
         }
         foreach (Renderer item in @in.GetComponentsInChildren<Renderer>(true))
         {
-            fade.StartCoroutine(fade.FadeInObject(item));
+            if (item.material.HasProperty("_Color"))
+                fade.StartCoroutine(fade.FadeInObject(item));
         }
         foreach (TMPro.TextMeshPro item in @in.GetComponentsInChildren<TMPro.TextMeshPro>(true))
         {
@@ -53,7 +54,8 @@ public class Fade : MonoBehaviour
 
         foreach (Renderer item in @out.GetComponentsInChildren<Renderer>(true))
         {
-            fade.StartCoroutine(fade.FadeOutObject(item));
+            if (item.material.HasProperty("_Color"))
+                fade.StartCoroutine(fade.FadeOutObject(item));
         }
         foreach (TMPro.TextMeshPro item in @out.GetComponentsInChildren<TMPro.TextMeshPro>(true))
         {
@@ -75,7 +77,8 @@ public class Fade : MonoBehaviour
 
         foreach (Renderer item in outin.@out.GetComponentsInChildren<Renderer>(true))
         {
-            fade.StartCoroutine(fade.FadeOutObject(item));
+            if (item.material.HasProperty("_Color"))
+                fade.StartCoroutine(fade.FadeOutObject(item));
         }
         foreach (TMPro.TextMeshPro item in outin.@out.GetComponentsInChildren<TMPro.TextMeshPro>(true))
         {
@@ -83,39 +86,6 @@ public class Fade : MonoBehaviour
         }
 
         fade.StartCoroutine(fade.TurnOff(outin.@out, outin.@in));
-    }
-
-    public static void TypeIn(GameObject @in)
-    {
-        if (fade == null)
-        {
-            GameObject o = new GameObject("Fade");
-            localInstance = o.AddComponent<Fade>();
-        }
-
-        fade.StartCoroutine(fade.Draw(@in));
-    }
-
-    public static void DeleteOut(GameObject @out, GameObject @in)
-    {
-        if (fade == null)
-        {
-            GameObject o = new GameObject("Fade");
-            localInstance = o.AddComponent<Fade>();
-        }
-
-        fade.StartCoroutine(fade.Erase(@out, @in));
-    }
-
-    public void DeleteOut(OutIn outin)
-    {
-        if (fade == null)
-        {
-            GameObject o = new GameObject("Fade");
-            localInstance = o.AddComponent<Fade>();
-        }
-
-        fade.StartCoroutine(fade.Erase(outin.@out, outin.@in));
     }
 
     #region Enumerators

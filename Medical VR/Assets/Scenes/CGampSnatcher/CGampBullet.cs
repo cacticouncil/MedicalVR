@@ -48,6 +48,8 @@ public class CGampBullet : MonoBehaviour
     }
     public void HandleTimeInput()
     {
+        if (SoundManager.IsJordanPlaying("50565__broumbroum__sf3-sfx-menu-validate") == false)
+            SoundManager.PlayJordanVoice("50565__broumbroum__sf3-sfx-menu-validate");
         isgrabbed = true;
     }
 }

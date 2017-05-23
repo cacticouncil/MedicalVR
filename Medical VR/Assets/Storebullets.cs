@@ -115,8 +115,13 @@ public class Storebullets : MonoBehaviour
                 case 0:
                     TutorialTimer += Time.deltaTime;
                     EventSystem.SetActive(false);
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 2.0f)
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-001") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-001");
+                        
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "Welcome to cGAMP Snatcher";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -127,7 +132,11 @@ public class Storebullets : MonoBehaviour
                 case 1:
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 4.0f)
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-002") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-002");
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "Your objective is to grab cGAMP and guide them towards the STING molecules on the Endoplasmic Recticulum.";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -177,8 +186,12 @@ public class Storebullets : MonoBehaviour
                 case 5:
                     TutorialTimer += Time.deltaTime;
 
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 3.0f)
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004");
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "Perfect!" + "\n" + "Now help them reach the STING molecules by shooting them pressing the button.";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -208,7 +221,11 @@ public class Storebullets : MonoBehaviour
                     //BulletSpawn.GetComponent<BulletManager>().CanIShoot = true;
 
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Awesome!";
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005");
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Awesome!" + "\n" + "Remember that cGAMP can spawn behind you";
+                    }
 
                     else
                     {
@@ -216,19 +233,6 @@ public class Storebullets : MonoBehaviour
                         WhatToRead += 1;
                     }
 
-                    break;
-
-                case 8:
-                    TutorialTimer += Time.deltaTime;
-
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Remember that cGAMP can spawn behind you";
-
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
                     break;
 
                 default:
@@ -238,10 +242,12 @@ public class Storebullets : MonoBehaviour
         }
 
         //For tutorial only it will either transition to story mode or only play once
-        if (WhatToRead >= 9)
+        if (WhatToRead >= 8)
         {
             BeatGameTimer += Time.deltaTime;
-            CenterScreenObj.GetComponent<TextMeshPro>().text = "Great now your ready to play";
+            if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-007") == false)
+                SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-007");
+            CenterScreenObj.GetComponent<TextMeshPro>().text = "Awesome! Now your ready to play.";
 
             if (BeatGameTimer >= 3.5)
             {
@@ -281,6 +287,8 @@ public class Storebullets : MonoBehaviour
 
         if (bPressed && Time.time > nextFire)
         {
+            if (SoundManager.IsJordanPlaying("28860__junggle__btn050") == false)
+                    SoundManager.PlayJordanVoice("28860__junggle__btn050");
             shootCGamp();
         }
     }
@@ -329,6 +337,7 @@ public class Storebullets : MonoBehaviour
                 nextFire = Time.time + fireRate;
                 GameObject obj = Instantiate(bullet, shotSpawn.transform.position, shotSpawn.transform.rotation) as GameObject;
                 obj.GetComponent<Rigidbody>().angularVelocity = UnityEngine.Random.insideUnitSphere * tumble;
+                
                 bulletamount -= 1;
                 BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
             }

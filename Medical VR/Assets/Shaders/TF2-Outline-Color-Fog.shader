@@ -7,9 +7,6 @@
 		_RimPower("Rim Power", Range(0.5,8.0)) = 3.0
 		_OutlineColor("Outline Color", Color) = (0,0,0,1)
 		_Outline("Outline Width", Range(.002, 0.03)) = .005
-		_MainTex("Texture", 2D) = "white" {}
-		_BumpMap("Normal Map", 2D) = "bump" {}
-		_SpecularTex("Specular Map", 2D) = "gray" {}
 		_RampTex("Shading Ramp", 2D) = "white" {}
 	}
 
@@ -33,7 +30,7 @@
 				INTERNAL_DATA
 			};
 
-			sampler2D _MainTex, _SpecularTex, _BumpMap, _RampTex;
+			sampler2D _RampTex;
 			float4 _RimColor;
 			float  _RimPower;
 			fixed4 _Color;
@@ -62,20 +59,15 @@
 				float spec = pow(nh, s.Gloss * 128) * s.Specular * saturate(NdotL);
 
 				fixed4 c;
-				c.rgb = ((s.Albedo * _Color.rgb * ramp * _LightColor0.rgb + _LightColor0.rgb * spec) * (atten * 2));
+				c.rgb = ((s.Albedo * ramp * _LightColor0.rgb + _LightColor0.rgb * spec) * (atten * 2));
 				return c;
 			}
 
 			void surf(Input IN, inout SurfaceOutput o)
 			{
-				o.Albedo = tex2D(_MainTex, IN.uv_MainTex).rgb;
-				o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_MainTex));
-				float3 specGloss = tex2D(_SpecularTex, IN.uv_MainTex).rgb;
-				o.Specular = specGloss.r;
-				o.Gloss = specGloss.g;
-				_Color.rgb *= 2;
+				o.Albedo = _Color.rgb;
 
-				half3 rim = pow(max(0, dot(float3(0, 1, 0), WorldNormalVector(IN, o.Normal))), _RimPower) * _RimColor.rgb * _RimColor.a * specGloss.b;
+				half3 rim = pow(max(0, dot(float3(0, 1, 0), WorldNormalVector(IN, o.Normal))), _RimPower) * _RimColor.rgb * _RimColor.a;
 				o.Emission = rim;
 			}
 
@@ -117,7 +109,6 @@
 				float cameraVertDist = length(mul(UNITY_MATRIX_MV, v.vertex).xyz);
 				float f = cameraVertDist * unity_FogDensity;
 				o.fogFactor = saturate(1 / pow(2.71828, f * f));
-
 				return o;
 			}
 		ENDCG

@@ -22,18 +22,18 @@ public class ManageScores : MonoBehaviour {
     
 	
 	// Update is called once per frame
-	void Update () {
+	void OnEnable () {
 
         MemoryScoreText.GetComponent<TextMeshPro>().text = "Memory Game: " + MemoryUI.finalScore.ToString();
         SimonDNAScoreText.GetComponent<TextMeshPro>().text = "Simon DNA: " + SimonSays.finalScore.ToString();
         cGAMPScoreText.GetComponent<TextMeshPro>().text = "cGAMP Snatcher: " + Storebullets.finalScore.ToString();
-        DodgeScoreText.GetComponent<TextMeshPro>().text = "Dodge Antibodies: " + MovingCamera.finalScore.ToString();  _TGameController.finalATPScore.ToString();
+        DodgeScoreText.GetComponent<TextMeshPro>().text = "Dodge Antibodies: " + MovingCamera.finalScore.ToString();
         VirusScoreText.GetComponent<TextMeshPro>().text = "Fight Virus: " + Player.BestScoreForFightVirus.ToString();
         CellScoreText.GetComponent<TextMeshPro>().text = "Destroy Cell: " + VirusPlayer.FinalScore.ToString();
-        StrategyScoreText.GetComponent<TextMeshPro>().text = "";
+        StrategyScoreText.GetComponent<TextMeshPro>().text = "Strategy Game: " + StrategyCellManagerScript.finalScore.ToString();
         ATPScoreText.GetComponent<TextMeshPro>().text = "ATP/GTP Shooter: " + _TGameController.finalATPScore.ToString();
 
-        FBscript.GlobalScore = ((int)MemoryUI.finalScore + (int)Storebullets.finalScore + (int)_TGameController.finalATPScore) % 1000;
+        FBscript.GlobalScore = ((int)MemoryUI.finalScore + (int)Storebullets.finalScore + (int)_TGameController.finalATPScore + (int)SimonSays.finalScore + (int)MovingCamera.finalScore + (int)Player.BestScoreForFightVirus + (int)VirusPlayer.FinalScore + StrategyCellManagerScript.finalScore);
 
     }
 }
