@@ -68,7 +68,7 @@ public class Arc : MonoBehaviour {
             }
         for (; i < LineSegmentCount; i++)
         {
-            LineSegments.transform.GetChild(i).transform.position = Vector3.zero;
+            LineSegments.transform.GetChild(i).transform.position = new Vector3(0, -20, 0);
             //LineSegments.transform.GetChild(i).gameObject.SetActive(false);
         }
     }

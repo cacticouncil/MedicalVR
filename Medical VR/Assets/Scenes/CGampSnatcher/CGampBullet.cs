@@ -41,10 +41,6 @@ public class CGampBullet : MonoBehaviour
             Destroy(gameObject);
             Storebullets.amount -= 1;
         }
-
-
-
-
     }
     public void HandleTimeInput()
     {

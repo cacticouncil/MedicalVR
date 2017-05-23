@@ -28,6 +28,7 @@ public class BloodVesselScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            SoundManager.PlaySFX("wall");
             other.gameObject.GetComponent<MovingCamera>().LoseResetPos();
             Effects.GetComponent<ParticleSystem>().Stop();
             Effects.GetComponent<ParticleSystem>().Play();
