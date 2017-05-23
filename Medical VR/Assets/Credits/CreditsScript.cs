@@ -62,7 +62,6 @@ public class CreditsScript : MonoBehaviour
 
     void Update()
     {
-        //BannerScript.UnlockTrophy("")
         if (!text)
             OptimizedStuff();
     }
