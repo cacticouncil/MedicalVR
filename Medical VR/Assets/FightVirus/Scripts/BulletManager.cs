@@ -35,7 +35,7 @@ public class BulletManager : MonoBehaviour
         {
             //Bullet Delay
             Time += UnityEngine.Time.deltaTime;
-            if (isTriggered == true && Time >= .2f)
+            if (isTriggered == true && Time >= .5f)
             {
                 Time = 0.0f;
                 StartShooting();
@@ -89,6 +89,7 @@ public class BulletManager : MonoBehaviour
                 break;
         }
 
+        SoundManager.PlaySFX("Fight Virus Tutorial/Laser_Shoot20");
         ChangeProtein += 1;
 
         if (ChangeProtein >= 4)
