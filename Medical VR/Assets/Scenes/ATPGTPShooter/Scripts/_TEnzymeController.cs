@@ -5,9 +5,20 @@ public class _TEnzymeController : MonoBehaviour
 {
     public GameObject particles;
     public int pointsValue;
+    public AudioClip travelSound;
+   // public AudioClip attachSound;
+
+    float volLowRange = .5f;
+    float volHighRange = 1.0f;
+    private AudioSource source;
 
     [HideInInspector]
     public bool hasATP = false, hasGTP = false;
+
+    private void Awake()
+    {
+        source = GetComponent<AudioSource>();
+    }
 
     public void SetATP()
     {
@@ -25,6 +36,9 @@ public class _TEnzymeController : MonoBehaviour
     {
         if (hasGTP && hasATP)
         {
+            if(source.enabled)
+                source.PlayOneShot(travelSound);
+
             if (particles)
                 Instantiate(particles, transform.position, transform.rotation, transform);
 
