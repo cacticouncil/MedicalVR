@@ -53,7 +53,7 @@ public class BannerScript : MonoBehaviour {
         {
             ShowUp();
             PlayerPrefs.SetInt(name, 1);
-            SoundManager.PlaySFX("MenuEnter");
+            SoundManager.PlaySFX("MENU A_Select");
         }
     }
     public static void LockTrophy(string name)
