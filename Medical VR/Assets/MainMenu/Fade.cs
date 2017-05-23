@@ -6,6 +6,8 @@ public class Fade : MonoBehaviour
     private static Fade localInstance;
     public static Fade fade { get { return localInstance; } }
 
+    public static UnityEngine.EventSystems.EventSystem eventSystem;
+
     private void Awake()
     {
         if (localInstance != null && localInstance != this)
@@ -18,7 +20,6 @@ public class Fade : MonoBehaviour
         }
     }
 
-
     public static void FadeIn(GameObject @in)
     {
         if (fade == null)
@@ -27,10 +28,7 @@ public class Fade : MonoBehaviour
             localInstance = o.AddComponent<Fade>();
         }
 
-        foreach (Transform item in @in.GetComponentsInChildren<Transform>(true))
-        {
-            item.gameObject.SetActive(true);
-        }
+        @in.SetActive(true);
         foreach (Renderer item in @in.GetComponentsInChildren<Renderer>(true))
         {
             if (item.material.HasProperty("_Color"))
@@ -40,10 +38,14 @@ public class Fade : MonoBehaviour
         {
             fade.StartCoroutine(fade.FadeInText(item));
         }
+
+        fade.Invoke("EnableEventSystem", 1.0f);
     }
 
     public static void FadeOut(GameObject @out, GameObject @in)
     {
+        eventSystem = UnityEngine.EventSystems.EventSystem.current;
+        UnityEngine.EventSystems.EventSystem.current.enabled = false;
         if (fade == null)
         {
             GameObject o = new GameObject("Fade");
@@ -67,6 +69,8 @@ public class Fade : MonoBehaviour
 
     public void FadeOut(OutIn outin)
     {
+        eventSystem = UnityEngine.EventSystems.EventSystem.current;
+        UnityEngine.EventSystems.EventSystem.current.enabled = false;
         if (fade == null)
         {
             GameObject o = new GameObject("Fade");
@@ -88,127 +92,23 @@ public class Fade : MonoBehaviour
         fade.StartCoroutine(fade.TurnOff(outin.@out, outin.@in));
     }
 
+    public void EnableEventSystem()
+    {
+        if (eventSystem)
+            eventSystem.enabled = true;
+    }
+
     #region Enumerators
-    IEnumerator Draw(GameObject @in)
-    {
-        foreach (Transform item in @in.GetComponentsInChildren<Transform>(true))
-        {
-            item.gameObject.SetActive(true);
-        }
-
-        TMPro.TextMeshPro[] texts = GetComponentsInChildren<TMPro.TextMeshPro>(true);
-        string[] org = new string[texts.Length];
-        for (int i = 0; i < texts.Length; i++)
-        {
-            org[i] = texts[i].text;
-        }
-
-        string[] strs = new string[texts.Length];
-
-        for (int i = 0; i < texts.Length; i++)
-        {
-            strs[i] = "_";
-        }
-
-        int left = texts.Length;
-
-        while (left > 0)
-        {
-            for (int i = 0; i < texts.Length; i++)
-            {
-                texts[i].text = strs[i];
-            }
-
-            yield return new WaitForSeconds(GlobalVariables.textDelay);
-
-            left = texts.Length;
-            for (int i = 0; i < texts.Length; i++)
-            {
-                if (strs[i].Length - 1 == org[i].Length)
-                {
-                    strs[i] = strs[i].Remove(strs[i].Length - 1);
-                }
-                else if (strs[i] == org[i])
-                {
-                    left--;
-                }
-                else
-                {
-                    strs[i] = strs[i].Insert(strs[i].Length - 1, org[i][strs[i].Length - 1].ToString());
-                }
-            }
-        }
-    }
-
-    IEnumerator Erase(GameObject @out, GameObject @in)
-    {
-        TMPro.TextMeshPro[] texts = @out.GetComponentsInChildren<TMPro.TextMeshPro>(true);
-        string[] strs = new string[texts.Length];
-        string[] org = new string[texts.Length];
-        for (int i = 0; i < texts.Length; i++)
-        {
-            strs[i] = texts[i].text;
-            org[i] = texts[i].text;
-        }
-
-        for (int i = 0; i < texts.Length; i++)
-        {
-            strs[i] = strs[i] + "_";
-        }
-
-        int left = texts.Length;
-
-        while (left > 0)
-        {
-            for (int i = 0; i < texts.Length; i++)
-            {
-                texts[i].text = strs[i];
-            }
-
-            yield return new WaitForSeconds(GlobalVariables.textDelay * .5f);
-
-            left = texts.Length;
-            for (int i = 0; i < texts.Length; i++)
-            {
-                if (strs[i].Length > 1)
-                {
-                    strs[i] = strs[i].Remove(strs[i].Length - 2, 1);
-                }
-                else
-                {
-                    left--;
-                }
-            }
-        }
-
-        foreach (Transform item in @out.GetComponentsInChildren<Transform>(true))
-        {
-            item.gameObject.SetActive(false);
-        }
-
-        for (int i = 0; i < texts.Length; i++)
-        {
-            texts[i].text = org[i];
-        }
-
-        StartCoroutine(Draw(@in));
-    }
-
-    IEnumerator TurnOff(GameObject o, GameObject @in)
+    IEnumerator TurnOff(GameObject @out, GameObject @in)
     {
         yield return new WaitForSeconds(.5f);
-        foreach (Transform item in o.GetComponentsInChildren<Transform>(true))
-        {
-            item.gameObject.SetActive(false);
-        }
+        @out.SetActive(false);
 
         FadeIn(@in);
     }
 
-
     IEnumerator FadeInObject(Renderer g)
     {
-        g.gameObject.SetActive(true);
         if (g.material.HasProperty("_Color"))
         {
             Color c = g.material.color;
@@ -243,9 +143,7 @@ public class Fade : MonoBehaviour
             c.a = 1.0f;
             g.material.color = c;
         }
-        g.gameObject.SetActive(false);
     }
-
 
     IEnumerator FadeInText(TMPro.TextMeshPro text)
     {
@@ -278,7 +176,6 @@ public class Fade : MonoBehaviour
         }
         c.a = 1.0f;
         text.color = c;
-        text.gameObject.SetActive(false);
     }
     #endregion
 }
