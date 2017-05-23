@@ -57,6 +57,7 @@ public class VirusPlayer : MonoBehaviour
         if (GlobalVariables.tutorial == false)
         {
             StartCoroutine(DisplayText("Target the Cell Receptors" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
+            IsCellDoneIdling = true;
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
         }
 
@@ -234,7 +235,7 @@ public class VirusPlayer : MonoBehaviour
             if (WhatToRead == 7 && WaveManager.GetComponent<WaveManager>().AntiViralProteinList.Count == 0)
                 StopInput = false;
 
-            if (WhatToRead == 9 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0 && WaveManager.GetComponent<WaveManager>().DoneSpawningCellReceptors == true)  
+            if (WhatToRead == 9 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0 && WaveManager.GetComponent<WaveManager>().DoneSpawningCellReceptors == true)
                 StopInput = false;
         }
     }
