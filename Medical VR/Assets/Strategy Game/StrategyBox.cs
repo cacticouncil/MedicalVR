@@ -5,14 +5,11 @@ using System.Collections.Generic;
 public class StrategyBox : MonoBehaviour
 {
     public StrategyCellManagerScript cellmanager;
-
     public List<StrategyItem> items = new List<StrategyItem>();
     public List<TMPro.TextMeshPro> text = new List<TMPro.TextMeshPro>();
-
     public int actionsMax;
     public int actionsLeft;
     public TMPro.TextMeshPro actionText;
-
     public GameObject boxTab;
     public Hilighter AHighlighter;
     public GameObject animationTab;
