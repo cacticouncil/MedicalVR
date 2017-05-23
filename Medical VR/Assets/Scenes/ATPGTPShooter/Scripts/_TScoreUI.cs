@@ -7,17 +7,20 @@ public class _TScoreUI : MonoBehaviour
 {
     private Camera cam;
     public GameObject gameController;
-
-    private const string DISPLAY_TEXT_FORMAT = "Score\n{0}";
-  //  private TextMesh textField;
-
+    private string DISPLAY_TEXT_FORMAT;
     private TMPro.TextMeshPro tmPro;
 
     void Awake()
     {
-    //    textField = GetComponent<TextMesh>();
+        if (GlobalVariables.arcadeMode)
+        {
+            DISPLAY_TEXT_FORMAT = "Score\n{0}";
+        }
+        else
+        {
+            DISPLAY_TEXT_FORMAT = "Score\n{0} / " + gameController.GetComponent<_TGameController>().winScore.ToString();
+        }
         tmPro = GetComponent<TextMeshPro>();
- //       TextMeshPro
     }
 
     void Start()
@@ -29,15 +32,12 @@ public class _TScoreUI : MonoBehaviour
 
         if (cam != null)
         {
-            // Tie this to the camera, and do not keep the local orientation.
             transform.SetParent(cam.GetComponent<Transform>(), true);
         }
     }
 
     void LateUpdate()
     {
-        // currentShot = (ShotNumber)player.GetComponent<_TPlayerController>().GetShotNumber();
-     //   textField.text = string.Format(DISPLAY_TEXT_FORMAT, gameController.GetComponent<_TGameController>().score);
         tmPro.text = string.Format(DISPLAY_TEXT_FORMAT, gameController.GetComponent<_TGameController>().score);
     }
 }
