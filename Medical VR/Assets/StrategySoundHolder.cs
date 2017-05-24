@@ -41,7 +41,7 @@ public class StrategySoundHolder : MonoBehaviour
         int loopCount = 0;
         for (int i = Random.Range(0, clips.Count); loopCount < clips.Count; i++)
         {
-            if (i > clips.Count)
+            if (i >= clips.Count)
             {
                 i = 0;
             }
@@ -50,7 +50,7 @@ public class StrategySoundHolder : MonoBehaviour
             {
                 sus.PlayOneShot(clips[i]);
                 timeLeft[i] = clips[i].length;
-                playTime = clips[i].length * .5f;
+                playTime = clips[i].length * Random.Range(.2f, .75f);
                 break;
             }
 
@@ -63,7 +63,7 @@ public class StrategySoundHolder : MonoBehaviour
         int loopCount = 0;
         for (int i = Random.Range(0, clips.Count); loopCount < clips.Count; i++)
         {
-            if (i > clips.Count)
+            if (i >= clips.Count)
             {
                 i = 0;
             }

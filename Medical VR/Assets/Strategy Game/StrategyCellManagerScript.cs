@@ -438,6 +438,10 @@ public class StrategyCellManagerScript : MonoBehaviour
                 "\nAt this point you can continue in sandbox mode, retry, or return to the main menu.";
             Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
             SetSelected(victoryIndex);
+
+            if(difficulty == 2)
+                BannerScript.UnlockTrophy("Cell");
+
             ShowScore();
         }
         else if (virNum > cellNum && !defeat && victoryObject)

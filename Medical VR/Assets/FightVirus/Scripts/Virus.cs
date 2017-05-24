@@ -240,6 +240,7 @@ public class Virus : MonoBehaviour
         }
     }
 
+
     void OnDestroy()
     {
         if (transform.tag == "Virus" && EnteredZone == true)
@@ -257,7 +258,10 @@ public class Virus : MonoBehaviour
                 GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
         }
 
-        SoundManager.PlaySFX("Fight Virus Tutorial/Hit_Hurt12");
+        if (GlobalVariables.tutorial == false)
+            FightVirusPlayer.GetComponent<Player>().IncrementKill++;
+        
+        SoundManager.PlaySFX("Fight Virus Tutorial/sfx_deathscream_android7");
     }
 
     void SpawnSmallViruses()

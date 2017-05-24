@@ -89,7 +89,7 @@ public class BulletManager : MonoBehaviour
                 break;
         }
 
-        SoundManager.PlaySFX("Fight Virus Tutorial/Laser_Shoot20");
+        SoundManager.PlaySFX("Fight Virus Tutorial/sfx_sounds_interaction16");
         ChangeProtein += 1;
 
         if (ChangeProtein >= 4)

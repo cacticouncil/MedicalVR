@@ -25,11 +25,8 @@ public class StrategyVirusHostScript : StrategyVirusScript
                 target.Treproduction = target.reproductionReset + target.Treproduction;
             }
         }
-        if (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 90)
-        {
-            StartCoroutine(Die());
-        }
-        else if (target.protein == Proteins.RNase_L || target.protein == Proteins.PKR)
+
+        if (target.protein == Proteins.RNase_L || target.protein == Proteins.PKR)
         {
             parent.KillCell(target.key);
             StartCoroutine(Die());

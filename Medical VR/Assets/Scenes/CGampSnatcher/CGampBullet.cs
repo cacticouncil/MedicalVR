@@ -36,7 +36,7 @@ public class CGampBullet : MonoBehaviour
             }
         }
 
-        if(cameras.GetComponent<Storebullets>().finish == true || timer > 30)
+        if(cameras.GetComponent<Storebullets>().fin == true || timer > 30)
         {
             Destroy(gameObject);
             Storebullets.amount -= 1;
