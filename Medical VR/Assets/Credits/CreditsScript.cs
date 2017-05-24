@@ -16,7 +16,7 @@ public class CreditsScript : MonoBehaviour
     public int MoveText = 0;
 
     private bool text = false, finish = false;
-    const int size = 32;
+    const int size = 24;
     private string[] TextList = new string[size];
 
 
@@ -26,36 +26,29 @@ public class CreditsScript : MonoBehaviour
         UniversityLogo.SetActive(false);
         int x = 0;
         TextList[x++] = "Vir-ed";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "Virus Story Mode:"       + "\n" + "Josue Cortes";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "Cell Story Mode:"        + "\n" + "Josue Cortes";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "SimonDNA:"               + "\n" + "Josue Cortes"            + "\n" + "Jayson Levario";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "Dodge Antibodies:"       + "\n" + "Josue Cortes"            + "\n" + "Jayson Levario";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "Trophy Room:"            + "\n" + "Josue Cortes"            + "\n" + "Jayson Levario";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "cGamp Snatcher:"         + "\n" + "Sebastian Diaz Portillo" + "\n" + "Michael Toronto";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "Memory Game :"           + "\n" + "Sebastian Diaz Portillo" + "\n" + "Jordan Sanderson";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "Main Menu:"              + "\n" + "Sebastian Diaz Portillo" + "\n" + "Jordan Sanderson";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "ATP/GTP Shooter:"        + "\n" + "Michael Toronto";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "Fight Virus:"            + "\n" + "Jayson Levario";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "Destroy Cell:"           + "\n" + "Jayson Levario";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "Strategy Game:"          + "\n" + "Jordan Sanderson";
-        TextList[x++] = "Level / Scenario Design"           + "\n\n" + "Main Menu:"              + "\n" + "Sebastian Diaz Portillo" + "\n" + "Jordan Sanderson";
-        TextList[x++] = "Writing / Dialogue / Story"        + "\n\n" + "Josue Cortes"            + "\n" + "Robert Gregg"            + "\n" + "Jason Shoemaker";
-        TextList[x++] = "Research"                          + "\n\n" + "Jason Shoemaker"         + "\n" + "Robert Gregg";
-        TextList[x++] = "Programming"                       + "\n\n" + "Sebastian Diaz Portillo" + "\n" + "Josue Cortes"            + "\n" + "Jordan Sanderson" + "\n" + "Jayson Levario" + "\n" + "Michael Toronto";
-        TextList[x++] = "3D / Shaders Programming"          + "\n\n" + "Jordan Sanderson";
-        TextList[x++] = "Music / Sound Programming"         + "\n\n" + "Sebastian Diaz Portillo";
-        TextList[x++] = "Facebook API Programming"          + "\n\n" + "Sebastian Diaz Portillo";
-        TextList[x++] = "Google Cardboard API Programming"  + "\n\n" + "Jordan Sanderson"        + "\n" + "Sebastian Diaz Portillo";
-        TextList[x++] = "Graphics / Artwork"                + "\n\n" + "Alexandre Thorpe";
-        TextList[x++] = "Animation"                         + "\n\n" + "Sebastian Diaz Portillo" + "\n" + "Josue Cortes"            + "\n" + "Jordan Sanderson" + "\n" + "Jayson Levario" + "\n" + "Michael Toronto";
-        TextList[x++] = "3D Modeling"                       + "\n\n" + "Alexandre Thorpe";
-        TextList[x++] = "Music"                             + "\n\n" + "Tommy Ascough"           + "\n" + "Dwight Gifford";
-        TextList[x++] = "Sound"                             + "\n\n" + "Eric Nethery"            + "\n" + "Armin Munoz";
-        TextList[x++] = "Acting / Voiceovers"               + "\n\n" + "Josue Cortes";
-        TextList[x++] = "Producers"                         + "\n\n" + "Jason Hinders"           + "\n" + "Haifa Maamar"            + "\n" + "Jason Shoemaker"  + "\n" + "Robert Gregg";
+        TextList[x++] = "Josue Cortes"            + "\n\n" + "Writing / Dialogue / Story" + "\n" + "Virus Story Mode" + "\n" + "Cell Story Mode" + "\n" + "SimonDNA" + "\n" + "Dodge Antibodies" + "\n" + "Trophy Room" + "\n" + "Programming" + "\n" + "Animation" + "\n" + "Acting / Voiceovers";
+        TextList[x++] = "Jayson Levario"          + "\n\n" + "SimonDNA" + "\n" + "Dodge Antibodies" + "\n" + "Trophy Room" + "\n" + "Fight Virus" + "\n" + "Destroy Cell"  + "\n" + "Programming" + "\n" + "Animation";
+        TextList[x++] = "Sebastian Diaz Portillo" + "\n\n" + "cGamp Snatcher" + "\n" + "Main Menu" + "\n" + " DNA Memory Game" + "\n" + "Programming" + "\n" + "Music / Sound Programming" + "\n" + "Facebook API Programming" + "\n" + "GVR Programming" + "\n" + "Animation";
+        TextList[x++] = "Michael Toronto"         + "\n\n" + "cGamp Snatcher" + "\n" + "ATP/GTP Shooter" + "\n" + "Programming" + "\n" + "Animation" + "\n" + "Facebook API Programming";
+        TextList[x++] = "Jordan Sanderson"        + "\n\n" + "cGamp Snatcher" + "\n" + "Main Menu" + "\n" + "Cell Colony" + "\n" + " DNA Memory Game" + "\n" + "Programming" + "\n" + "3D / Shaders Programming" + "\n" + "GVR API Programming" + "\n" + "Animation";
+        TextList[x++] =  "Robert Gregg"           + "\n\n" + "Writing / Dialogue / Story" + "\n" + "Research" + "\n" + "Producer";
+        TextList[x++] = "Jason Shoemaker"         + "\n\n" + "Writing / Dialogue / Story" + "\n" + "Research" + "\n" + "Producer";
+        TextList[x++] = "Alexandre Thorpe"        + "\n\n" + "Graphics / Artwork" + "\n" + "3D Modeling";
+        TextList[x++] = "Tommy Ascough"           + "\n\n" + "Music";
+        TextList[x++] = "Dwight Gifford"          + "\n\n" + "Music";
+        TextList[x++] = "Eric Nethery"            + "\n\n" + "Sound";
+        TextList[x++] = "Armin Munoz"             + "\n\n" + "Sound";
+        TextList[x++] = "Haifa Maamar"            + "\n\n" + "Producer";
+        TextList[x++] = "Jason Hinders"           + "\n\n" + "Producer";
+        TextList[x++] = "Kris Docote"            + "\n\n" + "Producer";
+        TextList[x++] = "Jeffrey Malesky" + "\n\n" + "UX Lab Testing";
+        TextList[x++] = "Brian Vazquez" + "\n\n" + "UX Lab Testing";
+        TextList[x++] = "Cody Felts" + "\n\n" + "Expo UX Testing";
         TextList[x++] = "No Viruses or Cells got harmed during the making of this game...";
         TextList[x++] = "     ";
         TextList[x++] = "     ";
+        TextList[x++] = "     ";
+
 
     }
     bool isInit = false;
@@ -87,19 +80,19 @@ public class CreditsScript : MonoBehaviour
         text = true;
         CenterScreenObj.text = " ";
 
-            if (index == 29)
+            if (index == 20)
             {
                 LabLogo.SetActive(true);
                 UniversityLogo.SetActive(false);
             }
 
-        if (index == 30)
+        if (index == 21)
         {
             LabLogo.SetActive(false);
             UniversityLogo.SetActive(true);
         }
 
-        if( index == 31)
+        if( index == 23)
          {
              SceneManager.LoadScene("MainMenu");
          }

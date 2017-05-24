@@ -26,6 +26,8 @@ public class AttackVirus : MonoBehaviour
             if (transform.position == target.transform.position)
             {
                 target.GetComponent<CellReceptors>().Health--;
+                SoundManager.PlaySFX("Fight Virus Tutorial/sfx_deathscream_android7");
+
                 if (target.GetComponent<CellReceptors>().Health <= 0)
                     Destroy(target);
                 CanLeaveCell = true;
