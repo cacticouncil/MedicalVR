@@ -13,7 +13,6 @@ public class Storebullets : MonoBehaviour
     public static int amount;
     public static int stingamount;
 
-
     public GameObject EventSystem;
     public GameObject CGAMPspawnSystem;
     public GameObject StingspawnSystem;
@@ -25,13 +24,14 @@ public class Storebullets : MonoBehaviour
     public GameObject Username, ProfilePic;
 
     public GameObject theLives;
-    public GameObject CenterScreenObj;
+    public TextMeshPro subtitles;
     public static float finalScore = 0;
     public float score = 0;
     public float ReturnScore() { return score; }
     public void AddToScore(float _score) { score += _score; }
     public static int lives = 3;
     int level = 1;
+    public bool fin;
 
     public GameObject shotSpawn;
 
@@ -39,9 +39,20 @@ public class Storebullets : MonoBehaviour
     public float fireRate;
     public GameObject bullet;
 
-    public bool finish;
 
+
+    private string[] texts =
+        {
+        "Welcome to cGAMP Snatcher",
+        "Your objective is to grab cGAMP and guide them towards the STING molecules on the Endoplasmic Recticulum.",
+        "This is how your cells communicate that a virus has been detected!",
+        "If you look around there are cGAMPs all around.",
+        "Look at them and to grab them. Try to get 10",
+
+        };
     private float nextFire;
+    private bool last = false, text = false, finish = false;
+
     public static void LoseresetPos()
     {
         if (GlobalVariables.arcadeMode == true)
@@ -55,7 +66,7 @@ public class Storebullets : MonoBehaviour
     }
     void ShowScore()
     {
-        finish = true;
+        fin = true;
         if (score > finalScore)
             finalScore = score;
         if (finalScore > PlayerPrefs.GetFloat("CGampScore"))
@@ -88,7 +99,7 @@ public class Storebullets : MonoBehaviour
 
         amount = 0;
         stingamount = 0;
-        finish = false;
+        fin = false;
         score = 0;
         bulletamount = 0;
         BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + bulletamount;
@@ -111,171 +122,19 @@ public class Storebullets : MonoBehaviour
         //Set up how turtorial will show players basic gameplay
         else if (GlobalVariables.tutorial == true)
         {
-            switch (WhatToRead)
+            bool held = Input.GetButton("Fire1");
+            if (held && !last)
             {
-                case 0:
-                    TutorialTimer += Time.deltaTime;
-                    EventSystem.SetActive(false);
-                    if (TutorialTimer <= 2.0f)
-                    {
-                        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-001") == false)
-                            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-001");
-                        
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Welcome to cGAMP Snatcher";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 1:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
-                    {
-                        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-002") == false)
-                            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-002");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Your objective is to grab cGAMP and guide them towards the STING molecules on the Endoplasmic Recticulum.";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-                case 2:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "This is how your cells communicate that a virus has been detected!";
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 3:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "If you look around there are cGAMPs all around.";
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 4:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Look at them and to grab them. Try to get 10";
-                    else
-                    {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "";
-                    }
-                    EventSystem.SetActive(true);
-
-
-                    if (bulletamount >= 10)
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 5:
-                    TutorialTimer += Time.deltaTime;
-
-                    if (TutorialTimer <= 3.0f)
-                    {
-                        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004") == false)
-                            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Perfect!" + "\n" + "Now help them reach the STING molecules by shooting them pressing the button.";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 6:
-                    TutorialTimer += Time.deltaTime;
-
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Make sure they don't collide with other objects.";
-                    else
-                    {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "";
-                    }
-
-                    if (numberofstingsdone >= 10)
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 7:
-                    TutorialTimer += Time.deltaTime;
-
-                    if (TutorialTimer <= 4.0f)
-                    {
-                        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005") == false)
-                            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Awesome!" + "\n" + "Remember that cGAMP can spawn behind you";
-                    }
-
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-
-                    break;
-
-                default:
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = " ";
-                    break;
-            }
-        }
-
-        //For tutorial only it will either transition to story mode or only play once
-        if (WhatToRead >= 8)
-        {
-            BeatGameTimer += Time.deltaTime;
-            if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-007") == false)
-                SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-007");
-            CenterScreenObj.GetComponent<TextMeshPro>().text = "Awesome! Now your ready to play.";
-
-            if (BeatGameTimer >= 3.5)
-            {
-                //if ()
-                //{
-                //Story mode verion will play after completing
-
-                //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
-                GlobalVariables.tutorial = false;
-                if (GlobalVariables.arcadeMode == true)
+                if (text)
                 {
-                    GlobalVariables.arcadeMode = true;
-                    SceneManager.LoadScene("CGampSnatcher");
-
+                    finish = true;
                 }
                 else
                 {
-                    GlobalVariables.arcadeMode = false;
-                    SceneManager.LoadScene("CGampSnatcher");
+                    Click();
                 }
-
-                //}
-
-                //    else if ()
-                //    {
-                //        //Just play tutorial once and go back to main menu
-                //    }
             }
+            last = held;
         }
 
         BulletAmount.GetComponent<TMPro.TextMeshPro>().text = "CGamp: " + Storebullets.bulletamount;
@@ -294,7 +153,6 @@ public class Storebullets : MonoBehaviour
     }
     void FixedUpdate()
     {
-
         if(score >= 1000 )
         {
             BannerScript.UnlockTrophy("Endoplasmic reticulum");
@@ -333,6 +191,175 @@ public class Storebullets : MonoBehaviour
         }
     }
 
+    void Click()
+    {
+        switch (WhatToRead)
+        {
+            //case 0:
+            //    TutorialTimer += Time.deltaTime;
+            //    EventSystem.SetActive(false);
+            //    if (TutorialTimer <= 2.0f)
+            //    {
+            //        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-001") == false)
+            //            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-001");
+
+            //        subtitles.text = ;
+            //    }
+            //    else
+            //    {
+            //        TutorialTimer = 0.0f;
+            //        WhatToRead += 1;
+            //    }
+            //    break;
+
+            //case 1:
+            //    TutorialTimer += Time.deltaTime;
+            //    if (TutorialTimer <= 4.0f)
+            //    {
+            //        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-002") == false)
+            //            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-002");
+            //        subtitles.text = ;
+            //    }
+            //    else
+            //    {
+            //        TutorialTimer = 0.0f;
+            //        WhatToRead += 1;
+            //    }
+            //    break;
+            //case 2:
+            //    TutorialTimer += Time.deltaTime;
+            //    if (TutorialTimer <= 4.0f)
+            //        subtitles.text = ;
+            //    else
+            //    {
+            //        TutorialTimer = 0.0f;
+            //        WhatToRead += 1;
+            //    }
+            //    break;
+
+            //case 3:
+            //    TutorialTimer += Time.deltaTime;
+            //    if (TutorialTimer <= 4.0f)
+            //        subtitles.text = ;
+            //    else
+            //    {
+            //        TutorialTimer = 0.0f;
+            //        WhatToRead += 1;
+            //    }
+            //    break;
+
+            //case 4:
+            //    TutorialTimer += Time.deltaTime;
+            //    if (TutorialTimer <= 4.0f)
+            //        subtitles.text = ;
+            //    else
+            //    {
+            //        subtitles.text = "";
+            //    }
+            //    EventSystem.SetActive(true);
+
+
+                //if (bulletamount >= 10)
+                //{
+                //    TutorialTimer = 0.0f;
+                //    WhatToRead += 1;
+                //}
+                //break;
+
+            case 5:
+                TutorialTimer += Time.deltaTime;
+
+                if (TutorialTimer <= 3.0f)
+                {
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004") == false)
+                        SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004");
+                    subtitles.text = "Perfect!" + "\n" + "Now help them reach the STING molecules by shooting them pressing the button.";
+                }
+                else
+                {
+                    TutorialTimer = 0.0f;
+                    WhatToRead += 1;
+                }
+                break;
+
+            case 6:
+                TutorialTimer += Time.deltaTime;
+
+                if (TutorialTimer <= 4.0f)
+                    subtitles.text = "Make sure they don't collide with other objects.";
+                else
+                {
+                    subtitles.text = "";
+                }
+
+                if (numberofstingsdone >= 10)
+                {
+                    TutorialTimer = 0.0f;
+                    WhatToRead += 1;
+                }
+                break;
+
+            case 7:
+                TutorialTimer += Time.deltaTime;
+
+                if (TutorialTimer <= 4.0f)
+                {
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005") == false)
+                        SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005");
+                    subtitles.text = "Awesome!" + "\n" + "Remember that cGAMP can spawn behind you";
+                }
+
+                else
+                {
+                    TutorialTimer = 0.0f;
+                    WhatToRead += 1;
+                }
+
+                break;
+
+            default:
+                subtitles.text = " ";
+                break;
+        }
+
+        //For tutorial only it will either transition to story mode or only play once
+        if (WhatToRead >= 8)
+        {
+            BeatGameTimer += Time.deltaTime;
+            if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-007") == false)
+                SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-007");
+            subtitles.text = "Awesome! Now your ready to play.";
+
+            if (BeatGameTimer >= 3.5)
+            {
+                //if ()
+                //{
+                //Story mode verion will play after completing
+
+                //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO STORY MODE
+                GlobalVariables.tutorial = false;
+                if (GlobalVariables.arcadeMode == true)
+                {
+                    GlobalVariables.arcadeMode = true;
+                    SceneManager.LoadScene("CGampSnatcher");
+
+                }
+                else
+                {
+                    GlobalVariables.arcadeMode = false;
+                    SceneManager.LoadScene("CGampSnatcher");
+                }
+
+                //}
+
+                //    else if ()
+                //    {
+                //        //Just play tutorial once and go back to main menu
+                //    }
+            }
+        }
+    }
+
     private void shootCGamp()
     {
         if (bullet)
@@ -349,5 +376,32 @@ public class Storebullets : MonoBehaviour
         }
     }
 
+    #region Text
+    IEnumerator TurnTextOn(int index)
+    {
+        while (text)
+            yield return 0;
+
+        text = true;
+        subtitles.text = "_";
+
+        while (subtitles.text != texts[index] && !finish)
+        {
+            yield return new WaitForSeconds(GlobalVariables.textDelay);
+
+            if (subtitles.text.Length == texts[index].Length)
+            {
+                subtitles.text = texts[index];
+            }
+            else
+            {
+                subtitles.text = subtitles.text.Insert(subtitles.text.Length - 1, texts[index][subtitles.text.Length - 1].ToString());
+            }
+        }
+        subtitles.text = texts[index];
+        finish = false;
+        text = false;
+    }
+    #endregion
 }
 
