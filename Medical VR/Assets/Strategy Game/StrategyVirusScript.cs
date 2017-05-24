@@ -113,6 +113,7 @@ public class StrategyVirusScript : MonoBehaviour
                     return;
                 }
             }
+            GetComponent<Collider>().isTrigger = true;
             target.hosted = true;
             target.virus = gameObject;
         }
@@ -139,6 +140,20 @@ public class StrategyVirusScript : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision collision)
+    {
+        if (target && collision.transform.parent && collision.transform.parent.transform.GetComponent<StrategyCellScript>() && collision.transform.parent.transform.GetComponent<StrategyCellScript>().key == target.key)
+        {
+            collision.transform.GetComponent<Rotate>().enabled = false;
+            transform.GetChild(1).GetComponent<Rotate>().enabled = false;
+            nextPosition = transform.position;
+            transform.parent = collision.transform;
+            StopCoroutine(Move());
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().isKinematic = true;
+        }
+    }
+
+    void OnTriggerEnter(Collider collision)
     {
         if (target && collision.transform.parent && collision.transform.parent.transform.GetComponent<StrategyCellScript>() && collision.transform.parent.transform.GetComponent<StrategyCellScript>().key == target.key)
         {
@@ -226,7 +241,6 @@ public class StrategyVirusScript : MonoBehaviour
             else
                 powerup.color = Color.white;
         }
-        GetComponent<Collider>().enabled = b;
         selected = b;
         transform.GetChild(0).gameObject.SetActive(b);
     }

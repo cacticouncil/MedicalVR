@@ -9,7 +9,7 @@ public static class GlobalVariables
     {
         get
         {
-            return PlayerPrefs.GetInt("Subtitles");
+            return PlayerPrefs.GetInt("Subtitles", 1);
         }
         set
         {
@@ -21,7 +21,7 @@ public static class GlobalVariables
     {
         get
         {
-            return PlayerPrefs.GetFloat("TextDelay");
+            return PlayerPrefs.GetFloat("TextDelay", .05f);
         }
         set
         {
@@ -33,7 +33,7 @@ public static class GlobalVariables
     {
         get
         {
-            return PlayerPrefs.GetFloat("TextSize");
+            return PlayerPrefs.GetFloat("TextSize", 1.0f);
         }
         set
         {
@@ -45,7 +45,7 @@ public static class GlobalVariables
     {
         get
         {
-            return PlayerPrefs.GetInt("VirusComplete");
+            return PlayerPrefs.GetInt("VirusComplete", 0);
         }
         set
         {
@@ -57,7 +57,7 @@ public static class GlobalVariables
     {
         get
         {
-            return PlayerPrefs.GetInt("CellComplete");
+            return PlayerPrefs.GetInt("CellComplete", 0);
         }
         set
         {
@@ -69,7 +69,7 @@ public static class GlobalVariables
     {
         get
         {
-            return PlayerPrefs.GetFloat("InitialSFXVolume");
+            return PlayerPrefs.GetFloat("InitialSFXVolume", .5f);
         }
         set
         {
@@ -81,7 +81,7 @@ public static class GlobalVariables
     {
         get
         {
-            return PlayerPrefs.GetFloat("InitialBGMVolume");
+            return PlayerPrefs.GetFloat("InitialBGMVolume", .5f);
         }
         set
         {
