@@ -9,7 +9,7 @@ public class LooseLifesER : MonoBehaviour {
     {
         if (collision.transform.tag == "CBullet")
         {
-            if (SoundManager.IsJordanPlaying("341633__padsterpat__karplus-strong") == false)
+            //if (SoundManager.IsJordanPlaying("341633__padsterpat__karplus-strong") == false)
                 SoundManager.PlayJordanVoice("341633__padsterpat__karplus-strong");
             
             Storebullets.LoseresetPos();
