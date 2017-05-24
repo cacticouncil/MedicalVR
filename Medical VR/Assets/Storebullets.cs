@@ -116,7 +116,7 @@ public class Storebullets : MonoBehaviour
                 case 0:
                     TutorialTimer += Time.deltaTime;
                     EventSystem.SetActive(false);
-                    if (TutorialTimer <= 2.0f)
+                    if (TutorialTimer <= 2.18f)
                     {
                         if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-001") == false)
                             SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-001");
@@ -132,11 +132,11 @@ public class Storebullets : MonoBehaviour
 
                 case 1:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 6.01f)
                     {
                         if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-002") == false)
                             SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-002");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Your objective is to grab cGAMP and guide them towards the STING molecules on the Endoplasmic Recticulum.";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Your objective is to grab cGAMP and direct them towards the STING molecules on the Endoplasmic Recticulum.";
                     }
                     else
                     {
@@ -146,8 +146,12 @@ public class Storebullets : MonoBehaviour
                     break;
                 case 2:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
+                    if (TutorialTimer <= 3.0f)
+                    {
+                        if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-003") == false)
+                            SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-003");
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "This is how your cells communicate that a virus has been detected!";
+                    }
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -157,8 +161,8 @@ public class Storebullets : MonoBehaviour
 
                 case 3:
                     TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "If you look around there are cGAMPs all around.";
+                    if (TutorialTimer <= 5.0f)
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "If you look around there are cGAMP molecules in the area.";
                     else
                     {
                         TutorialTimer = 0.0f;
@@ -169,7 +173,7 @@ public class Storebullets : MonoBehaviour
                 case 4:
                     TutorialTimer += Time.deltaTime;
                     if (TutorialTimer <= 4.0f)
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Look at them and to grab them. Try to get 10";
+                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Just look at them and to pick them up. Try to get 10";
                     else
                     {
                         CenterScreenObj.GetComponent<TextMeshPro>().text = "";
@@ -187,7 +191,7 @@ public class Storebullets : MonoBehaviour
                 case 5:
                     TutorialTimer += Time.deltaTime;
 
-                    if (TutorialTimer <= 3.0f)
+                    if (TutorialTimer <= 4.0f)
                     {
                         if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004") == false)
                             SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004");
