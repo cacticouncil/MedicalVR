@@ -17,6 +17,7 @@ public class StrategyCellManagerScript : MonoBehaviour
     private GameObject virusPrefab3;
     public GameObject transporter;
     public GameObject particleToTarget;
+    public GameObject eventSystem;
     public StrategySoundHolder soundSource;
     [Space(2)]
 
@@ -35,6 +36,8 @@ public class StrategyCellManagerScript : MonoBehaviour
     public UnityEngine.UI.Image profilePicture;
     public static int finalScore;
 
+    //Automatically not shown in inspector
+    public StrategyEvents nextEvent;
     //Automatically not shown in inspector
     public static int difficulty = 0;
     //Automatically not shown in inspector
@@ -59,8 +62,6 @@ public class StrategyCellManagerScript : MonoBehaviour
     public int eventTurns = 50;
     [System.NonSerialized]
     public string lastEvent = "None";
-
-    public StrategyEvents nextEvent;
 
     private Vector2 mysteryBoxIndex = new Vector2(500, 500), victoryIndex = new Vector2(-500, -500), virusIndex = new Vector2(-500, 500);
     private GameObject virus1, virus2, virus3;
@@ -348,6 +349,11 @@ public class StrategyCellManagerScript : MonoBehaviour
     {
         soundSource.PlayRandomSound();
         StartCoroutine(TurnUpdate());
+    }
+
+    private void EnableCollider(Collider c)
+    {
+        c.enabled = true;
     }
 
     IEnumerator TurnUpdate()

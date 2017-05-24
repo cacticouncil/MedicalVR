@@ -50,7 +50,6 @@
 		fixed4 c;
 		c.rgb = ((s.Albedo * _Color.rgb * ramp * _LightColor0.rgb + _LightColor0.rgb * spec) * (atten * 2));
 		c.a = s.Alpha * _Color.a;
-
 		return c;
 	}
 
