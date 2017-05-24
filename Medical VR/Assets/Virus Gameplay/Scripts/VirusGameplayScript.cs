@@ -10,7 +10,7 @@ public class VirusGameplayScript : MonoBehaviour
     public List<Transform> rotationTargets;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna, parent;
     public bool disableMovement = false;
-    public static int loadCase = 0;
+    public static int loadCase = 1;
     // Use this for initialization
     delegate void Func();
     Func doAction;
@@ -285,17 +285,20 @@ public class VirusGameplayScript : MonoBehaviour
                         SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-024");
                 break;
             case (227):
+                SoundManager.StopVirusVoice("Medical_VR_Game_VO_Line-024");
+                if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-025") == false)
+                    SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-025");
                 disableMovement = true;
                 doAction = NullFunction;
                 I = 5;
                 moveSpeed = .5f;
                 break;
-            case (236):
+            case (232):
                 parent.GetComponent<CameraMovement_VirusGameplay>().speed = 5f;
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-026") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-026");
                 break;
-            case (246):
+            case (244):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-027") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-027");
                 break;

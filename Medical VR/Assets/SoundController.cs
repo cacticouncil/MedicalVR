@@ -4,7 +4,7 @@ using System.Collections;
 
 public class SoundController : MonoBehaviour
 {
-    public string MainMenu, Options, Memory, Minigame, Dodge, Simon, ATP, Throphy, DestroyCell, DestroyVirus, Cgamp, Strategy, credits;
+    public string MainMenu, CellStory, Memory, VirusStory, Dodge, Simon, ATP, Throphy, DestroyCell, DestroyVirus, Cgamp, Strategy, credits;
     public int Samples;
 
     void Start()
@@ -42,10 +42,10 @@ public class SoundController : MonoBehaviour
                     SoundManager.FadeInBGM(MainMenu);
                 }
                 break;
-            case "OptionsMenu":
-                if (Options != null)
+            case "CellGameplay":
+                if (CellStory != null)
                 {
-                    SoundManager.FadeInBGM(Options);
+                    SoundManager.FadeInBGM(CellStory);
                 }
                 break;
             case "DestroyTheCell":
@@ -72,10 +72,10 @@ public class SoundController : MonoBehaviour
                     SoundManager.FadeInBGM(Memory);
                 }
                 break;
-            case "MinigameMenu":
-                if (Minigame != null)
+            case "VirusGameplay":
+                if (VirusStory != null)
                 {
-                    SoundManager.FadeInBGM(Minigame);
+                    SoundManager.FadeInBGM(VirusStory);
                 }
                 break;
             case "SimonDNA":

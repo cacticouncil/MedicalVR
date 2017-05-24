@@ -14,6 +14,7 @@ public class SimonSays : MonoBehaviour
     public GameObject green;
     public GameObject sign, UI, scoreBoard, theScore, theLives, polyLeft, GO, gameTimer, Username, ProfilePic;
 
+    public List<AudioClip> sounds;
     public int score = 0, polys = 0, polysDone;
     Color cY, cR, cB, cG;
 
@@ -187,6 +188,8 @@ public class SimonSays : MonoBehaviour
             default:
                 break;
         }
+
+        SoundManager.PlaySFX(sounds[0].name);
         sign.GetComponent<MeshRenderer>().enabled = true;
         shownSign++;
     }
@@ -195,6 +198,7 @@ public class SimonSays : MonoBehaviour
     {
         if (buttonPressed)
         {
+            SoundManager.PlaySFX(sounds[0].name);
             GO.SetActive(false);
             switch (selectedColor)
             {
@@ -293,6 +297,7 @@ public class SimonSays : MonoBehaviour
     }
     void SignalIncorrect()
     {
+        SoundManager.PlaySFX(sounds[2].name);
         yellow.GetComponent<Renderer>().material.color = Color.black;
         red.GetComponent<Renderer>().material.color = Color.black;
         blue.GetComponent<Renderer>().material.color = Color.black;
@@ -315,6 +320,7 @@ public class SimonSays : MonoBehaviour
     }
     void TurnOnLights()
     {
+        SoundManager.PlaySFX(sounds[1].name);
         yellow.GetComponent<Renderer>().material.color = Color.yellow;
         red.GetComponent<Renderer>().material.color = Color.red;
         blue.GetComponent<Renderer>().material.color = Color.blue;

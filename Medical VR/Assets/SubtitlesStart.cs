@@ -10,5 +10,6 @@ public class SubtitlesStart : MonoBehaviour
             GetComponent<TMPro.TextMeshPro>().enabled = false;
         }
         GetComponent<TMPro.TextMeshPro>().fontSize = GlobalVariables.textSize;
+        GetComponent<RectTransform>().sizeDelta = new Vector2(1, 0);
     }
 }

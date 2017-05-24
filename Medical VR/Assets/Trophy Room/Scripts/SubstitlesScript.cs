@@ -21,7 +21,7 @@ public class SubstitlesScript : MonoBehaviour
     string theText = "";
     int textIdx = 0;
     int i = 0;
-    bool stop = false, done = false;
+    bool stop = false, done = false, skip = true;
     void Start()
     {
         textSpeed = GlobalVariables.textDelay;
@@ -79,49 +79,58 @@ public class SubstitlesScript : MonoBehaviour
 
             if (theTimer >= theSubtitles[i].start)
             {
-                if (Input.GetButton("Fire1") && stopTime == true)
+                if(theTimer <= theSubtitles[i].end)
                 {
-                    Next();
+                    if (Input.GetButton("Fire1") && stopTime == true)
+                    {
+                        Next();
+                    }
+                    else
+                    {
+                        textTimer += Time.deltaTime;
+                        if (textTimer > textSpeed)
+                        {
+                            textTimer = 0;
+
+                            if (textIdx < theSubtitles[i].text.Length)
+                            {
+                                theText = theText + theSubtitles[i].text[textIdx];
+                                textIdx++;
+                            }
+
+                            else if (theTimer >= theSubtitles[i].end - 0.1)
+                            {
+                                stopTime = true;
+                                skip = false;
+                            }
+                            if (stopTime == true)
+                            {
+                                if (voiceTimer >= 0.01)
+                                {
+                                    if (voice != null)
+                                    {
+                                        if (voice.isPlaying == true && pressToContiue.activeSelf == false)
+                                            Next();
+                                    }
+                                    else
+                                    {
+                                        if (pressToContiue != null)
+                                            pressToContiue.SetActive(true);
+                                    }
+                                }
+                                voiceTimer += Time.deltaTime;
+                            }
+                            GetComponent<TMPro.TextMeshPro>().text = theText;
+                        }
+
+                    }
                 }
                 else
                 {
-                    textTimer += Time.deltaTime;
-                    if (textTimer > textSpeed)
-                    {
-                        textTimer = 0;
-
-                        if (textIdx < theSubtitles[i].text.Length)
-                        {
-                            theText = theText + theSubtitles[i].text[textIdx];
-                            textIdx++;
-                        }
-
-                        else if (theTimer >= theSubtitles[i].end - 0.1)
-                        {
-                            stopTime = true;
-
-                        }
-                        if (stopTime == true)
-                        {
-                            if (voiceTimer >= 0.01)
-                            {
-                                if (voice != null)
-                                {
-                                    if (voice.isPlaying == true && pressToContiue.activeSelf == false)
-                                        Next();
-                                }
-                                else
-                                {
-                                    if (pressToContiue != null)
-                                        pressToContiue.SetActive(true);
-                                }
-                            }
-                            voiceTimer += Time.deltaTime;
-                        }
-                        GetComponent<TMPro.TextMeshPro>().text = theText;
-                    }
-
+                    if (skip == true)
+                        i++;
                 }
+               
             }
             else
                 GetComponent<TMPro.TextMeshPro>().text = "";
@@ -134,6 +143,7 @@ public class SubstitlesScript : MonoBehaviour
 
     void Next()
     {
+        skip = true;
         if (pressToContiue != null)
             pressToContiue.SetActive(false);
         i++;

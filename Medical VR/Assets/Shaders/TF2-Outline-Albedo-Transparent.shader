@@ -44,13 +44,14 @@
  
                 fixed4 c;
                 c.rgb = ((s.Albedo * _Color.rgb * ramp * _LightColor0.rgb) * (atten * 2));
-				c.a = _Color.a;
+				c.a = _Color.a * s.Alpha;
                 return c;
             }
    
             void surf (Input IN, inout SurfaceOutput o)
             {
                 o.Albedo = tex2D(_MainTex, IN.uv_MainTex).rgb;
+				o.Alpha = tex2D(_MainTex, IN.uv_MainTex).a;
 				_Color.rgb *= 2;
  
                 half3 rim = pow(max(0, dot(float3(0, 1, 0), WorldNormalVector (IN, o.Normal))), _RimPower) * _RimColor.rgb * _RimColor.a;
