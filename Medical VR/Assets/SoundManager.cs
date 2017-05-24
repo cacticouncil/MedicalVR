@@ -84,15 +84,20 @@ public static class SoundManager
         // Manually add the loop information beause configuration files are hard.
         if (!Loops.ContainsKey("AMBIANCE"))
         {
-            Loops.Add("AMBIANCE", new LoopData(782664, 1940833));
-            Loops.Add("DRUMS", new LoopData(317732, 2570388));
-            Loops.Add("SYNTHS", new LoopData(709131, 2515920));
+            Loops.Add("AMBIANCE", new LoopData(0, 1940833));
+            Loops.Add("DRUMS", new LoopData(0, 2570388));
+            Loops.Add("SYNTHS", new LoopData(0, 2515920));
             Loops.Add("WEIRD N BASS", new LoopData(0, 2094594));
-            Loops.Add("J_Game_Amb_Bright_loop_01", new LoopData(194755, 2404985));
-            Loops.Add("J_Game_Amb_Dark_loop_02", new LoopData(351905, 1056500));
-            Loops.Add("J_Game_Amb_Energy_1", new LoopData(990062, 2227651));
+            Loops.Add("J_Game_Amb_Bright_loop_01", new LoopData(0, 2404985));
+            Loops.Add("J_Game_Amb_Dark_loop_02", new LoopData(0, 1056500));
+            Loops.Add("J_Game_Amb_Energy_1", new LoopData(0, 2227651));
             Loops.Add("nullsound", new LoopData(0, 1834968));
-            Loops.Add("Pause", new LoopData(0, 1321853));
+            Loops.Add("J_Game_Amb_Smooth", new LoopData(0, 1321853));
+            Loops.Add("J_Game_Energyzz_4", new LoopData(0, 1940833));
+            Loops.Add("J_Game_Oouuhh", new LoopData(0, 2570388));
+            Loops.Add("J_Game_Starrs", new LoopData(0, 2515920));
+            Loops.Add("J_Game_Strohvi", new LoopData(0, 2094594));
+            Loops.Add("J_Game_Utterance", new LoopData(0, 2404985));
         }
     }
 
