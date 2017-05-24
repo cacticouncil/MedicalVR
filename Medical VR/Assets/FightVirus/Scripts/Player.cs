@@ -34,9 +34,14 @@ public class Player : MonoBehaviour
     private string[] TextList = new string[8];
     private bool last = false, text = false, finish = false;
 
+    public int IncrementKill;
+    public int SeeValue;
     void Start()
     {
         BannerScript.LockTrophy("Virus Trophy");
+        BannerScript.LockTrophy("Virus Capsid");
+        VirusKillCount = 0;
+
         isGameOver = false;
         SetFacebook();
 
@@ -62,6 +67,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        SeeValue = PlayerPrefs.GetInt("VirusTotalCount");
         if (GlobalVariables.tutorial == false)
         {
             if (GlobalVariables.arcadeMode)
@@ -108,10 +114,26 @@ public class Player : MonoBehaviour
                     if (VirusLeaveCount == 0 && BeatBoss == true)
                         BannerScript.UnlockTrophy("Virus Trophy");
                 }
+
+                //Check to see if player killed enough viruses
+                if (IncrementKill > 0)
+                {
+                    VirusKillCount = IncrementKill;
+                    IncrementKill = 0;
+                }
+
+                if (VirusKillCount == 50)
+                    BannerScript.UnlockTrophy("Virus Capsid");
             }
 
             else
             {
+                if (EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0 && EnemyManger.GetComponent<VirusManager>().DoneSpawning == true)
+                {
+                    EnemyManger.GetComponent<VirusManager>().DoneSpawning = false;
+                    TextForArcade();
+                }
+
                 //If you lose story mode keep making them play until they beat it
                 if (VirusLeaveCount == 5)
                 {
@@ -358,7 +380,25 @@ public class Player : MonoBehaviour
     void StoryMode()
     {
         GlobalVariables.tutorial = false;
-        GlobalVariables.arcadeMode = true;
+        GlobalVariables.arcadeMode = false;
         SceneManager.LoadScene("FightVirus");
+    }
+
+    public static int VirusKillCount
+    {
+        get
+        {
+            return PlayerPrefs.GetInt("VirusTotalCount");
+        }
+
+        //set
+        //{
+        //    PlayerPrefs.SetInt("VirusTotalCount", PlayerPrefs.GetInt("VirusTotalCount") + value);
+        //}
+
+        set
+        {
+            PlayerPrefs.SetInt("VirusTotalCount", 0);
+        }
     }
 }

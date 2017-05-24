@@ -48,8 +48,15 @@ public class VirusPlayer : MonoBehaviour
     private string[] TextList = new string[9];
     private bool last = false, text = false, finish = false;
 
+
+    public int IncrementKill;
+    public int SeeValue;
     void Start()
     {
+        BannerScript.LockTrophy("Protein");
+        BannerScript.LockTrophy("Receptor");
+        CellReceptorKillCount = 0;
+
         currSpeed = baseSpeed;
         Lives = 3;
         SetFacebook();
@@ -77,6 +84,8 @@ public class VirusPlayer : MonoBehaviour
 
     void Update()
     {
+        SeeValue = PlayerPrefs.GetInt("ReceptorTotalCount");
+
         //For arcade and story mode
         if (GlobalVariables.tutorial == false)
         {
@@ -169,6 +178,9 @@ public class VirusPlayer : MonoBehaviour
 
                         ScoreBoard.SetActive(true);
                         ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
+
+                        if (Lives == 3)
+                            BannerScript.UnlockTrophy("Protein");
                     }
                 }
 
@@ -199,6 +211,15 @@ public class VirusPlayer : MonoBehaviour
                     }
                 }
             }
+
+            if (IncrementKill > 0)
+            {
+                CellReceptorKillCount = IncrementKill;
+                IncrementKill = 0;
+            }
+
+            if (CellReceptorKillCount == 50)
+                BannerScript.UnlockTrophy("Receptor");
         }
 
         else if (GlobalVariables.tutorial == true)
@@ -427,6 +448,24 @@ public class VirusPlayer : MonoBehaviour
     {
         VirusGameplayScript.loadCase = 3;
         SceneManager.LoadScene("VirusGameplay");
+    }
+
+    public static int CellReceptorKillCount
+    {
+        get
+        {
+            return PlayerPrefs.GetInt("ReceptorTotalCount");
+        }
+
+        //set
+        //{
+        //    PlayerPrefs.SetInt("ReceptorTotalCount", PlayerPrefs.GetInt("ReceptorTotalCount") + value);
+        //}
+
+        set
+        {
+            PlayerPrefs.SetInt("ReceptorTotalCount", 0);
+        }
     }
 }
 

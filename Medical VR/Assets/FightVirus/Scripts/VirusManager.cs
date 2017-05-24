@@ -76,7 +76,7 @@ public class VirusManager : MonoBehaviour
 
                     else if (GlobalVariables.arcadeMode == false)
                     {
-                        EnemyCount = 10;
+                        EnemyCount = 7;
                         SmallVirusSpeed = 0.003f;
                         SmallVirusHealth = 40;
                         BigVirusSpeed = 0.002f;
@@ -96,8 +96,8 @@ public class VirusManager : MonoBehaviour
 
                     else if (GlobalVariables.arcadeMode == false)
                     {
-                        EnemyCount = 15;
-                        SmallVirusSpeed = 0.004f;
+                        EnemyCount = 10;
+                        SmallVirusSpeed = 0.003f;
                         SmallVirusHealth = 60;
                         BigVirusSpeed = 0.003f;
                         BigVirusHealth = 60;

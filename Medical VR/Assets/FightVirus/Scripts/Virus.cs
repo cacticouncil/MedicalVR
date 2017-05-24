@@ -258,6 +258,9 @@ public class Virus : MonoBehaviour
                 GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
         }
 
+        if (GlobalVariables.tutorial == false)
+            FightVirusPlayer.GetComponent<Player>().IncrementKill++;
+        
         SoundManager.PlaySFX("Fight Virus Tutorial/sfx_deathscream_android7");
     }
 
