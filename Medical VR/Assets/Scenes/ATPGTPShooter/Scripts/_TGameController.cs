@@ -346,9 +346,14 @@ public class _TGameController : MonoBehaviour
         CellGameplayScript.loadCase = 1;
         SceneManager.LoadScene("CellGameplay");
     }
+
+    public void StartHAzards()
+    {
+        StartCoroutine("SpawnHazards");
+
+    }
     void StartScene()
     {
-        //    shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
         GlobalVariables.tutorial = false;
         StartCoroutine("SpawnWaves");
         StartCoroutine("SpawnHazards");
@@ -361,13 +366,6 @@ public class _TGameController : MonoBehaviour
         }
 
         shrinkStuff.listOfLines.SetActive(true);
-        //shrinkStuff.listOfLines.GetComponent<_TCreateObjects>().Initialize();
-        //foreach(Transform obj in shrinkStuff.listOfLines.transform)
-        //{
-        //    obj.GetComponent<_TSizeChange>().Inititalize();
-        //    obj.GetComponent<_TSizeChange>().ResetToSmall();
-        //    obj.GetComponent<_TSizeChange>().StartGrow();
-        //}
         foreach (GameObject obj in uiElements)
         {
             _TSizeChange sc = obj.GetComponent<_TSizeChange>();
@@ -377,8 +375,6 @@ public class _TGameController : MonoBehaviour
             }
         }
         shrinkStuff.Player.GetComponent<_TPlayerController>().SetActiveShooting(true);
-
-        //    Invoke("TurnOnUILights", 1);
     }
 
     void TurnOnUILights()
@@ -387,7 +383,6 @@ public class _TGameController : MonoBehaviour
     }
     public void runGameState(float time)
     {
-        //    Debug.Log("current Time is" + Time.time);
         if (isArcade)
             gameState = GameState.arcadePlay;
         else

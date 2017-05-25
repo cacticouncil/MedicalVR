@@ -8,9 +8,12 @@ public class _TTutorialATPGTP : MonoBehaviour
     enum TutorialState { dispEnzyme, dispATP, moveATP, dispGTP, moveGTP, pointsDesc, startGame, wait }
     enum TextChild { Top, Right, Left, Bottom }
 
+    public GameObject player;
+
     public float displayTime = 4;
     public float rotationSpeed = 1;
 
+    public AudioClip[] voiceSounds;
     public GameObject nucleus;
     public GameObject enzyme;
     public GameObject ATP;
@@ -22,14 +25,19 @@ public class _TTutorialATPGTP : MonoBehaviour
 
     float startGameTime;
 
+    int curAudioClip = 0;
     private TutorialState tState;
     bool run;
     private float speed = 3;
+    private AudioSource source;
     bool isInit = false;
 
-    void Start()
+    void Awake()
     {
-        // Initialize();
+        if (player)
+            source = player.GetComponent<AudioSource>();
+        else
+            Debug.Log("Falied to load Audio Source");
     }
 
     public void Initialize()
@@ -47,7 +55,6 @@ public class _TTutorialATPGTP : MonoBehaviour
             obj.GetComponent<_TSizeChange>().Inititalize();
             obj.GetComponent<_TSizeChange>().ResetToSmall();
         }
-
     }
 
     void Update()
@@ -110,7 +117,7 @@ public class _TTutorialATPGTP : MonoBehaviour
             case TutorialState.startGame:
                 StartCoroutine(StartGame(startGameTime));
                 Debug.Log("current Time is" + Time.time);
-                
+
                 ChangeTutorialState(TutorialState.wait);
                 break;
             case TutorialState.wait:
@@ -156,7 +163,7 @@ public class _TTutorialATPGTP : MonoBehaviour
     IEnumerator StartGame(float startTime)
     {
         yield return new WaitForSeconds(startTime + 1);
-        GetComponent<_TGameController>().runGameState(0);        
+        GetComponent<_TGameController>().runGameState(0);
     }
 
     void DispEnzyme()
@@ -169,7 +176,7 @@ public class _TTutorialATPGTP : MonoBehaviour
         rb.angularVelocity = new Vector3(0, rotateSpeed, 0);
         rb.velocity = Vector3.zero;
         rb.constraints = RigidbodyConstraints.FreezePosition;
-        
+
         enz.GetComponent<_TSizeChange>().startSmall = true;
 
         enz.GetComponent<_TSizeChange>().Inititalize();
@@ -180,14 +187,15 @@ public class _TTutorialATPGTP : MonoBehaviour
         float initTime = 1.0f;
 
         ChangeTutorialState(TutorialState.dispATP);
+
         string text = "This is the enzyme cGas.";
 
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1, voiceSounds[curAudioClip++]));
 
         initTime += displayTime;
         text = "This cGas detects Viral DNA.";
 
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1, voiceSounds[curAudioClip++]));
     }
     void DispATP()
     {
@@ -206,11 +214,11 @@ public class _TTutorialATPGTP : MonoBehaviour
         float initTime = 1.0f;
 
         string text = "This is ATP.";
-        StartCoroutine(DisplayText(text, TextChild.Right, initTime, displayTime - 1));
-        initTime += displayTime;
+        StartCoroutine(DisplayText(text, TextChild.Right, initTime, displayTime - 2, voiceSounds[curAudioClip++]));
+        initTime += displayTime - 1;
 
         text = "Attach the ATP to the Enzyme binding pocket.";
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime, voiceSounds[curAudioClip++]));
     }
     void DispGTP()
     {
@@ -229,52 +237,52 @@ public class _TTutorialATPGTP : MonoBehaviour
         float initTime = 1.0f;
 
         string text = "This is GTP.";
-        StartCoroutine(DisplayText(text, TextChild.Left, initTime, displayTime - 1));
-        initTime += displayTime;
+        StartCoroutine(DisplayText(text, TextChild.Left, initTime, displayTime - 2, voiceSounds[curAudioClip++]));
+        initTime += displayTime - 1;
 
         text = "Attach the GTP to the Enzyme binding pocket.";
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime, voiceSounds[curAudioClip++]));
     }
     void ScoreDescription()
     {
         float initTime = 1.0f;
 
         string text = "cGas will then move to the Endoplasmic Reticulum";
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1));
-        initTime += displayTime;
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime, voiceSounds[curAudioClip++]));
+        initTime += displayTime + 1;
 
         text = "You will get 3 rounds of ATP";
-        StartCoroutine(DispMol(ATP, initTime, displayTime));
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime));
-        initTime += displayTime + 1;
+        StartCoroutine(DispMol(ATP, initTime, displayTime - 1));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1, voiceSounds[curAudioClip++]));
+        initTime += displayTime;
 
         text = "You will then get 3 rounds of GTP";
-        StartCoroutine(DispMol(GTP, initTime, displayTime));
-        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime));
-        initTime += displayTime + 1;
+        StartCoroutine(DispMol(GTP, initTime, displayTime - 1));
+        StartCoroutine(DisplayText(text, TextChild.Top, initTime, displayTime - 1, voiceSounds[curAudioClip++]));
+        initTime += displayTime;
 
         // float timePerEnzyme = GetComponent<_TGameController>().timePerEnzyme;
 
         text = "When the cGas is Completed you get 10 points.";
-        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime, voiceSounds[curAudioClip++]));
         initTime += displayTime + 1;
 
         text = "The Timer will also increase.";
-        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
-        initTime += displayTime + 1;
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime - 1, voiceSounds[curAudioClip++]));
+        initTime += displayTime;
 
         text = "Build as many cGas as you can before time runs out.";
-        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime));
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, displayTime, voiceSounds[curAudioClip++]));
         initTime += displayTime + 1;
 
         text = "Ready!";
         float oldSize = tutorialStuff.transform.GetChild(0).transform.GetChild((int)TextChild.Bottom).gameObject.GetComponent<TextMeshPro>().fontSize;
         StartCoroutine(ChangeTextSize(48, TextChild.Bottom, initTime));
-        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 1));
-        initTime += 2;
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, .5f, voiceSounds[curAudioClip++]));
+        initTime += 1.5f;
 
         text = "Begin!";
-        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, 1));
+        StartCoroutine(DisplayText(text, TextChild.Bottom, initTime, .5f, voiceSounds[curAudioClip++]));
 
         startGameTime += initTime + 1;
         ChangeTutorialState(TutorialState.startGame);
@@ -284,8 +292,9 @@ public class _TTutorialATPGTP : MonoBehaviour
         yield return new WaitForSeconds(startTime);
         tutorialStuff.transform.GetChild(0).transform.GetChild((int)childNum).gameObject.GetComponent<TextMeshPro>().fontSize = 36.0f;
     }
-    IEnumerator DisplayText(string text, TextChild childNum, float startText, float displayDuration)
+    IEnumerator DisplayText(string text, TextChild childNum, float startText, float displayDuration, AudioClip vo = null)
     {
+        float startVO = 0.5f;
         GameObject obj = tutorialStuff.transform.GetChild(0).transform.GetChild((int)childNum).gameObject;
         obj.GetComponent<_TSizeChange>().startSmall = true;
         obj.GetComponent<_TSizeChange>().Inititalize();
@@ -296,11 +305,15 @@ public class _TTutorialATPGTP : MonoBehaviour
         obj.SetActive(true);
         obj.GetComponent<TextMeshPro>().text = text;
         obj.GetComponent<_TSizeChange>().StartGrow();
+        yield return new WaitForSeconds(startVO);
 
-        yield return new WaitForSeconds(displayDuration);
+        if (vo)
+            source.PlayOneShot(vo);
+        else
+            Debug.Log("No Audio Clip");
+
+        yield return new WaitForSeconds(displayDuration - startVO);
 
         obj.GetComponent<_TSizeChange>().StartShrink();
-
-        yield return new WaitForSeconds(3);
     }
 }
