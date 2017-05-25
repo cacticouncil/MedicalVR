@@ -108,11 +108,11 @@ public class CellReceptors : MonoBehaviour
 
     void OnDestroy()
     {
-        WaveManager.GetComponent<WaveManager>().CellReceptorCount -= 1;
-        WaveManager.GetComponent<WaveManager>().CellReceptorsList.Remove(transform.gameObject);
-
         if (GlobalVariables.tutorial == false)
             Player.GetComponent<VirusPlayer>().IncrementKill++;
+
+        WaveManager.GetComponent<WaveManager>().CellReceptorCount -= 1;
+        WaveManager.GetComponent<WaveManager>().CellReceptorsList.Remove(transform.gameObject);
 
         Player.GetComponent<VirusPlayer>().CurrentScore += 200;
     }

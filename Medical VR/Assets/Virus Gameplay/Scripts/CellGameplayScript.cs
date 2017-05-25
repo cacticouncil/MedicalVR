@@ -9,7 +9,7 @@ public class CellGameplayScript : MonoBehaviour
     public List<Transform> places = new List<Transform>();
     public List<GameObject> Sceneries = new List<GameObject>();
     public List<Transform> rotationTargets = new List<Transform>();
-    public GameObject subtitles, blackCurtain, virus, rna;
+    public GameObject subtitles, blackCurtain, virus, rna, reticle;
     public static int loadCase = 0;
     public float moveSpeed;
 
@@ -23,6 +23,7 @@ public class CellGameplayScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        reticle.SetActive(false);
         orgAmb = RenderSettings.ambientLight;
         GlobalVariables.tutorial = true;
         doAction = NullFunction;
@@ -188,9 +189,13 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case (44):
                 if (t >= 44.5)
+                {
+                    reticle.SetActive(true);
                     subtitles.GetComponent<SubstitlesScript>().Stop();
+                }
                 break;
             case 46:
+                reticle.SetActive(false);
                 cGAS_pic.SetActive(false);
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line05") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line05");
@@ -249,8 +254,10 @@ public class CellGameplayScript : MonoBehaviour
                 break;
             case 129:
                 sting_pic.SetActive(true);
+                reticle.SetActive(true);
                 break;
             case 131:
+                reticle.SetActive(false);
                 sting_pic.SetActive(false);
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_Cell_VO_Line14") == false)
                     SoundManager.PlayCellVoice("Medical_VR_Cell_VO_Line14");
