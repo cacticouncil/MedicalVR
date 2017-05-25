@@ -27,6 +27,7 @@ public class MovingCamera : MonoBehaviour
 
         if (GlobalVariables.arcadeMode == false && GlobalVariables.tutorial == true)
         {
+            gameObject.GetComponent<LookCamera>().enabled = true;
             subtitles.SetActive(true);
             UI.SetActive(false);
             speed = 0;

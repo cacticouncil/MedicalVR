@@ -12,7 +12,7 @@ public class SimonSays : MonoBehaviour
     public GameObject red;
     public GameObject blue;
     public GameObject green;
-    public GameObject sign, UI, scoreBoard, theScore, theLives, polyLeft, GO, gameTimer, Username, ProfilePic;
+    public GameObject sign, UI, scoreBoard, theScore, theLives, polyLeft, GO, gameTimer, Username, ProfilePic, cam;
 
     public List<AudioClip> sounds;
     public int score = 0, polys = 0, polysDone;
@@ -59,6 +59,10 @@ public class SimonSays : MonoBehaviour
             polyLeft.SetActive(true);
             polyLeft.GetComponent<TMPro.TextMeshPro>().text = "Nucleids Done: " + polysDone.ToString();
             theScore.GetComponent<TMPro.TextMeshPro>().text = "Goal: " + polys.ToString();
+        }
+        if(GlobalVariables.tutorial == true)
+        {
+            cam.GetComponent<LookCamera>().enabled = true;
         }
     }
 	
