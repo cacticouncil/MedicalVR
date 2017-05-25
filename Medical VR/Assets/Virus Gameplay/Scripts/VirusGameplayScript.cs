@@ -8,9 +8,9 @@ public class VirusGameplayScript : MonoBehaviour
     public List<GameObject> places;
     public List<GameObject> Sceneries;
     public List<Transform> rotationTargets;
-    public GameObject subtitles, blackCurtain, theCamera, virus, rna, parent;
+    public GameObject subtitles, blackCurtain, theCamera, virus, rna, parent, reticle;
     public bool disableMovement = false;
-    public static int loadCase = 1;
+    public static int loadCase = 0;
     // Use this for initialization
     delegate void Func();
     Func doAction;
@@ -20,6 +20,8 @@ public class VirusGameplayScript : MonoBehaviour
     Color orgAmb;
     void Start()
     {
+       // reticle.GetComponent<MeshRenderer>().enabled =(false);
+        reticle.SetActive(false);
         orgAmb = RenderSettings.ambientLight;
         GlobalVariables.tutorial = true;
         doAction = NullFunction;
@@ -146,9 +148,11 @@ public class VirusGameplayScript : MonoBehaviour
                 break;
             case (35):
                 doAction = NullFunction;
+                reticle.SetActive(true);
                 subtitles.GetComponent<SubstitlesScript>().Stop();
                 break;
             case (36):
+                reticle.SetActive(false);
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-004") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-004");
                 break;
@@ -165,12 +169,14 @@ public class VirusGameplayScript : MonoBehaviour
                 doAction = NullFunction;
                 if (virus.activeSelf == false)
                 {
+                    reticle.SetActive(true);
                     virus.SetActive(true);
 
                     subtitles.GetComponent<SubstitlesScript>().Stop();
                 }
                 break;
             case (66):
+                reticle.SetActive(false);
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-007") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-007");
                 break;
