@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ImmunityParticles : MonoBehaviour
 {
+    public static List<ImmunityParticles> list = new List<ImmunityParticles>();
+
+    public ParticleSystem p;
     public Transform target;
     public float immunity;
     public float startSpeed = 15.0f;
 
-    ParticleSystem p;
     ParticleSystem.Particle[] particles;
     private float lifetime;
     private float threshHold = .99f;
@@ -40,7 +43,6 @@ public class ImmunityParticles : MonoBehaviour
         float delay = 1.0f / Mathf.CeilToInt(immunity);
         while (immunity > 0)
         {
-
             var emitParams = new ParticleSystem.EmitParams();
             emitParams.startSize = Mathf.Lerp(.1f, 1f, immunity);
             p.Emit(emitParams, 1);
@@ -117,6 +119,7 @@ public class ImmunityParticles : MonoBehaviour
 
             yield return 0;
         }
+        list.Remove(this);
         Destroy(gameObject);
         //this.enabled = false;
     }

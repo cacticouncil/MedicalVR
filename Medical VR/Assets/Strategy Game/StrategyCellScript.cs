@@ -15,9 +15,20 @@ public enum Proteins
 
 public class StrategyCellScript : MonoBehaviour
 {
+    //Statics
+    public static int reproductionReset = 50;
+    private static Color
+        proteinYellow = new Color32(200, 200, 0, 255),
+        proteinRed = new Color32(215, 25, 25, 255),
+        proteinBlue = new Color32(30, 30, 150, 255),
+        proteinPurple = new Color32(135, 45, 135, 255);
+    public static float rBonus = 15, dBonus = 5, iBonus = 10;
+    public static int powerupDuration = 25;
+
     //In inspector
     public float reproduction = 0, defense = 0, immunity = 0;
     public Proteins protein = Proteins.None;
+    public Renderer proteinRen;
     public Renderer render;
     public GameObject itemWhiteBloodCellPrefab;
     public ParticleSystem deathParticles;
@@ -30,19 +41,13 @@ public class StrategyCellScript : MonoBehaviour
     [System.NonSerialized]
     public float Treproduction = 50;
     [System.NonSerialized]
-    public int reproductionReset = 50;
+    public int RDur = 0, I2Dur = 0;
     [System.NonSerialized]
-    public float rBonus = 15, dBonus = 5, iBonus = 10;
-    [System.NonSerialized]
-    public int powerupDuration = 25, RDur = 0, I2Dur = 0;
-    [System.NonSerialized]
-    public GameObject virus;
+    public StrategyVirusScript virus;
     [System.NonSerialized]
     public int turnSpawned = 0, childrenSpawned = 0;
     [System.NonSerialized]
     public float immunitySpread = 0, startSpeed = 15.0f;
-    [System.NonSerialized]
-    public StrategyCellManagerScript parent;
 
     //Private
     private float tImmunity, camOffset = 1.5f, scaledDistance = 1.3f;
@@ -63,13 +68,14 @@ public class StrategyCellScript : MonoBehaviour
 
     void Start()
     {
-        turnSpawned = parent.turnNumber;
-        parent.cells.Add(this);
-        parent.cellsSpawned++;
+        turnSpawned = StrategyCellManagerScript.instance.turnNumber;
+        StrategyCellManagerScript.instance.cells.Add(this);
+        StrategyCellManagerScript.instance.cellsSpawned++;
         r.text = "Reproduction: " + reproduction;
         d.text = "Defense: " + defense;
         i.text = "Immunity: " + (int)immunity;
         p.text = "Protein: " + protein.ToString();
+        ChangeProteinColor();
         startSpeed = Random.Range(1.0f, 30.0f);
         tImmunity = immunity;
     }
@@ -80,22 +86,15 @@ public class StrategyCellScript : MonoBehaviour
         if (!hosted)
         {
             reproduction++;
-            if (r)
+            if (RDur > 0)
             {
-                if (RDur > 0)
-                {
-                    r.text = "Reproduction: " + (reproduction + rBonus);
-                }
-                else
-                {
-                    r.text = "Reproduction: " + reproduction;
-                }
+                r.text = "Reproduction: " + (reproduction + rBonus);
             }
             else
             {
-                Debug.Log("Error! Reproduction TextMesh not instantiated. Key: " + key.x + "_" + key.y);
+                r.text = "Reproduction: " + reproduction;
             }
-            parent.ActionPreformed();
+            StrategyCellManagerScript.instance.ActionPreformed();
         }
     }
 
@@ -104,29 +103,15 @@ public class StrategyCellScript : MonoBehaviour
         if (!hosted)
         {
             defense++;
-            if (d)
-            {
-                d.text = "Defense: " + defense;
-            }
-            else
-            {
-                Debug.Log("Error! Defense TextMesh not instantiated. Key: " + key.x + "_" + key.y);
-            }
-            parent.ActionPreformed();
+            d.text = "Defense: " + defense;
+            StrategyCellManagerScript.instance.ActionPreformed();
         }
     }
 
     public void IncreaseDefenseGreatly()
     {
         defense += dBonus;
-        if (d)
-        {
-            d.text = "Defense: " + defense;
-        }
-        else
-        {
-            Debug.Log("Error! Defense TextMesh not instantiated. Key: " + key.x + "_" + key.y);
-        }
+        d.text = "Defense: " + defense;
     }
 
     //Called from cell's UI
@@ -138,18 +123,11 @@ public class StrategyCellScript : MonoBehaviour
             if (protein == Proteins.None && immunity >= 10f)
             {
                 protein = (Proteins)Random.Range(1, 7);
+                ChangeProteinColor();
                 p.text = "Protein: " + protein.ToString();
-                Debug.Log("Cell gained protein " + protein.ToString());
             }
-            if (i)
-            {
-                i.text = "Immunity: " + (int)immunity;
-            }
-            else
-            {
-                Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
-            }
-            parent.ActionPreformed();
+            i.text = "Immunity: " + (int)immunity;
+            StrategyCellManagerScript.instance.ActionPreformed();
         }
     }
     //Called from cell manager
@@ -159,16 +137,10 @@ public class StrategyCellScript : MonoBehaviour
         if (protein == Proteins.None && immunity >= 10f)
         {
             protein = (Proteins)Random.Range(1, 7);
+            ChangeProteinColor();
             p.text = "Protein: " + protein.ToString();
         }
-        if (i)
-        {
-            i.text = "Immunity: " + (int)immunity;
-        }
-        else
-        {
-            Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
-        }
+        i.text = "Immunity: " + (int)immunity;
     }
 
     public void IncreaseImmunityGreatly()
@@ -177,16 +149,10 @@ public class StrategyCellScript : MonoBehaviour
         if (protein == Proteins.None && immunity >= 10f)
         {
             protein = (Proteins)Random.Range(1, 7);
+            ChangeProteinColor();
             p.text = "Protein: " + protein.ToString();
         }
-        if (i)
-        {
-            i.text = "Immunity: " + (int)immunity;
-        }
-        else
-        {
-            Debug.Log("Error! Immunity TextMesh not instantiated. Key: " + key.x + "_" + key.y);
-        }
+        i.text = "Immunity: " + (int)immunity;
     }
     #endregion
 
@@ -194,9 +160,9 @@ public class StrategyCellScript : MonoBehaviour
     public void UseR()
     {
         //check for item
-        if (parent.inventory[0].count > 0)
+        if (StrategyCellManagerScript.instance.inventory[0].count > 0)
         {
-            parent.inventory[0].count--;
+            StrategyCellManagerScript.instance.inventory[0].count--;
             RDur += powerupDuration;
             r.color = Color.blue;
             r.text = "Reproduction: " + (reproduction + rBonus);
@@ -206,20 +172,20 @@ public class StrategyCellScript : MonoBehaviour
     public void UseR2()
     {
         //check for item
-        if (parent.inventory[1].count > 0)
+        if (StrategyCellManagerScript.instance.inventory[1].count > 0)
         {
-            parent.inventory[1].count--;
-            parent.duplicate = true;
-            parent.SelectCellSpawn(key);
+            StrategyCellManagerScript.instance.inventory[1].count--;
+            StrategyCellManagerScript.instance.duplicate = true;
+            StrategyCellManagerScript.instance.SelectCellSpawn(key);
             RefreshUI();
         }
     }
     public void UseD()
     {
         //check for item
-        if (parent.inventory[2].count > 0)
+        if (StrategyCellManagerScript.instance.inventory[2].count > 0)
         {
-            parent.inventory[2].count--;
+            StrategyCellManagerScript.instance.inventory[2].count--;
             IncreaseDefenseGreatly();
             RefreshUI();
         }
@@ -227,9 +193,9 @@ public class StrategyCellScript : MonoBehaviour
     public void UseI()
     {
         //check for item
-        if (parent.inventory[3].count > 0)
+        if (StrategyCellManagerScript.instance.inventory[3].count > 0)
         {
-            parent.inventory[3].count--;
+            StrategyCellManagerScript.instance.inventory[3].count--;
             IncreaseImmunityGreatly();
             RefreshUI();
         }
@@ -237,9 +203,9 @@ public class StrategyCellScript : MonoBehaviour
     public void UseI2()
     {
         //check for item
-        if (parent.inventory[4].count > 0)
+        if (StrategyCellManagerScript.instance.inventory[4].count > 0)
         {
-            parent.inventory[4].count--;
+            StrategyCellManagerScript.instance.inventory[4].count--;
             I2Dur += powerupDuration;
             i.color = Color.red;
             RefreshUI();
@@ -248,14 +214,15 @@ public class StrategyCellScript : MonoBehaviour
     public void UseP()
     {
         //check for item
-        if (protein != Proteins.None && parent.inventory[5].count > 0)
+        if (protein != Proteins.None && StrategyCellManagerScript.instance.inventory[5].count > 0)
         {
-            parent.inventory[5].count--;
+            StrategyCellManagerScript.instance.inventory[5].count--;
             Proteins prev = protein;
             while (protein == prev)
             {
                 protein = (Proteins)Random.Range(1, 7);
             }
+            ChangeProteinColor();
             p.text = "Protein: " + protein.ToString();
             RefreshUI();
         }
@@ -263,9 +230,9 @@ public class StrategyCellScript : MonoBehaviour
     public void UseV()
     {
         //check for item
-        if (hosted && parent.inventory[6].count > 0)
+        if (hosted && StrategyCellManagerScript.instance.inventory[6].count > 0)
         {
-            parent.inventory[6].count--;
+            StrategyCellManagerScript.instance.inventory[6].count--;
             ToggleUI(false);
             Vector3 camPos = Camera.main.GetComponent<Transform>().position;
             Vector3 dir = camPos - transform.position;
@@ -278,7 +245,7 @@ public class StrategyCellScript : MonoBehaviour
     void SpawnW()
     {
         GameObject w = Instantiate(itemWhiteBloodCellPrefab, Camera.main.GetComponent<Transform>().position, Quaternion.identity, transform.parent) as GameObject;
-        w.GetComponent<StrategyItemWhiteBloodCell>().target = virus.GetComponent<StrategyVirusScript>();
+        w.GetComponent<StrategyItemWhiteBloodCell>().target = virus;
         w.GetComponent<StrategyItemWhiteBloodCell>().enabled = true;
     }
     #endregion
@@ -286,15 +253,15 @@ public class StrategyCellScript : MonoBehaviour
     #region Tutorials
     public void Reproduction()
     {
-        parent.str.enabled = true;
+        StrategyCellManagerScript.instance.str.enabled = true;
     }
     public void Defense()
     {
-        parent.std.enabled = true;
+        StrategyCellManagerScript.instance.std.enabled = true;
     }
     public void Immunity()
     {
-        parent.sti.enabled = true;
+        StrategyCellManagerScript.instance.sti.enabled = true;
     }
     #endregion
 
@@ -317,7 +284,7 @@ public class StrategyCellScript : MonoBehaviour
             while (Treproduction <= 0)
             {
                 //reproduce
-                parent.SelectCellSpawn(key);
+                StrategyCellManagerScript.instance.SelectCellSpawn(key);
                 childrenSpawned++;
                 Treproduction = reproductionReset + Treproduction;
             }
@@ -334,7 +301,7 @@ public class StrategyCellScript : MonoBehaviour
                 float im = tImmunity * .01f;
                 if (I2Dur > 0)
                 {
-                    immunitySpread += parent.SpreadImmunity(key, im * 2.0f);
+                    immunitySpread += StrategyCellManagerScript.instance.SpreadImmunity(key, im * 2.0f);
                     I2Dur--;
                     if (I2Dur == 0)
                     {
@@ -343,24 +310,17 @@ public class StrategyCellScript : MonoBehaviour
                 }
                 else
                 {
-                    immunitySpread += parent.SpreadImmunity(key, im);
+                    immunitySpread += StrategyCellManagerScript.instance.SpreadImmunity(key, im);
                 }
             }
         }
 
         if (hosted || targeted)
         {
-            if (render)
+            if (render.material.color != Color.black)
             {
-                if (render.material.color != Color.black)
-                {
-                    StopCoroutine("ChangeColorOverTime");
-                    StartCoroutine(ChangeColorOverTime(Color.black));
-                }
-            }
-            else
-            {
-                Debug.Log("Cell " + gameObject.name + " does not have a renderer.");
+                StopCoroutine("ChangeColorOverTime");
+                StartCoroutine(ChangeColorOverTime(render.material, Color.black));
             }
         }
         else
@@ -368,7 +328,7 @@ public class StrategyCellScript : MonoBehaviour
             if (render.material.color != Color.grey)
             {
                 StopCoroutine("ChangeColorOverTime");
-                StartCoroutine(ChangeColorOverTime(Color.grey));
+                StartCoroutine(ChangeColorOverTime(render.material, Color.grey));
             }
         }
 
@@ -393,8 +353,8 @@ public class StrategyCellScript : MonoBehaviour
     {
         for (int i = 0; i < 7; i++)
         {
-            texts[i].text = parent.inventory[i].count.ToString();
-            if (parent.inventory[i].count > 0)
+            texts[i].text = StrategyCellManagerScript.instance.inventory[i].count.ToString();
+            if (StrategyCellManagerScript.instance.inventory[i].count > 0)
             {
                 texts[i].color = Color.white;
             }
@@ -409,7 +369,7 @@ public class StrategyCellScript : MonoBehaviour
             {
                 text.color = Color.red;
             }
-            if (parent.inventory[6].count > 0)
+            if (StrategyCellManagerScript.instance.inventory[6].count > 0)
             {
                 texts[6].color = Color.white;
             }
@@ -417,23 +377,56 @@ public class StrategyCellScript : MonoBehaviour
     }
     #endregion
 
-    IEnumerator ChangeColorOverTime(Color c)
+    private void ChangeProteinColor()
+    {
+        switch (protein)
+        {
+            case Proteins.None:
+                if (StrategyCellManagerScript.instance.selected == key)
+                    StartCoroutine(ChangeColorOverTime(proteinRen.material, proteinYellow));
+                else
+                    proteinRen.material.color = proteinYellow;
+                break;
+            case Proteins.RNase_L:
+            case Proteins.PKR:
+                if (StrategyCellManagerScript.instance.selected == key)
+                    StartCoroutine(ChangeColorOverTime(proteinRen.material, proteinRed));
+                else
+                    proteinRen.material.color = proteinRed;
+                break;
+            case Proteins.TRIM22:
+            case Proteins.IFIT:
+                if (StrategyCellManagerScript.instance.selected == key)
+                    StartCoroutine(ChangeColorOverTime(proteinRen.material, proteinPurple));
+                else
+                    proteinRen.material.color = proteinPurple;
+                break;
+            case Proteins.CH25H:
+            case Proteins.Mx1:
+                if (StrategyCellManagerScript.instance.selected == key)
+                    StartCoroutine(ChangeColorOverTime(proteinRen.material, proteinBlue));
+                else
+                    proteinRen.material.color = proteinBlue;
+                break;
+        }
+    }
+
+    IEnumerator ChangeColorOverTime(Material material, Color c)
     {
         float startTime = Time.time;
         float t = Time.time - startTime;
-        Color start = render.material.color;
+        Color start = material.color;
         while (t < 1.0f)
         {
             t = Time.time - startTime;
-            render.material.color = Color.Lerp(start, c, t);
+            material.color = Color.Lerp(start, c, t);
             yield return 0;
         }
     }
 
-
     public void MoveTo()
     {
-        if ((parent.viewingStats && parent.selected != transform.GetComponent<StrategyCellScript>().key) || (!parent.viewingStats && parent.selected == transform.GetComponent<StrategyCellScript>().key))
+        if ((StrategyCellManagerScript.instance.viewingStats && StrategyCellManagerScript.instance.selected != key) || (!StrategyCellManagerScript.instance.viewingStats && StrategyCellManagerScript.instance.selected == key))
         {
             Vector3 direction = Camera.main.transform.forward;
             direction.y = 0;
@@ -450,23 +443,23 @@ public class StrategyCellScript : MonoBehaviour
 
             //This is the new target position
             Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(finalPos);
-            parent.SetSelected(transform.GetComponent<StrategyCellScript>().key);
-            gameObject.GetComponent<StrategyCellScript>().ToggleUI(true);
-            parent.viewingStats = true;
+            StrategyCellManagerScript.instance.SetSelected(key);
+            ToggleUI(true);
+            StrategyCellManagerScript.instance.viewingStats = true;
         }
-        else if (!parent.viewingStats)
+        else if (!StrategyCellManagerScript.instance.viewingStats)
         {
             Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
-            parent.SetSelected(transform.GetComponent<StrategyCellScript>().key);
-            parent.viewingStats = false;
+            StrategyCellManagerScript.instance.SetSelected(key);
+            StrategyCellManagerScript.instance.viewingStats = false;
         }
     }
 
     public void Back()
     {
         Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
-        parent.SetSelected(transform.GetComponent<StrategyCellScript>().key);
-        parent.viewingStats = false;
+        StrategyCellManagerScript.instance.SetSelected(key);
+        StrategyCellManagerScript.instance.viewingStats = false;
     }
 
     public IEnumerator Die()

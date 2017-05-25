@@ -4,7 +4,6 @@ using System.Collections;
 
 public class DetailsText : MonoBehaviour
 {
-
     public StrategyCellScript cell;
     public TMPro.TextMeshPro t;
 
@@ -31,7 +30,7 @@ public class DetailsText : MonoBehaviour
         {
             if (rd > 0)
             {
-                tr -= cell.rBonus;
+                tr -= StrategyCellScript.rBonus;
                 rd--;
             }
 
@@ -46,7 +45,7 @@ public class DetailsText : MonoBehaviour
             "\nTurns To Reproduce: " + turnsToReproduce +
             "\nChildren Spawned: " + childrenSpawned +
             "\nImmunity Spread: " + immunitySpread +
-            "\nCells Alive: " + cell.parent.cellNum +
-            "\nViruses Alive: " + cell.parent.virNum;
+            "\nCells Alive: " + StrategyCellManagerScript.instance.cellNum +
+            "\nViruses Alive: " + StrategyCellManagerScript.instance.virNum;
     }
 }

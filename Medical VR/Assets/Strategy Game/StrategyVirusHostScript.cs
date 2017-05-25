@@ -8,7 +8,7 @@ public class StrategyVirusHostScript : StrategyVirusScript
     {
         if (target.protein == Proteins.RNase_L || target.protein == Proteins.PKR)
         {
-            parent.KillCell(target.key);
+            StrategyCellManagerScript.instance.KillCell(target.key);
             StartCoroutine(Die());
             return;
         }
@@ -17,10 +17,10 @@ public class StrategyVirusHostScript : StrategyVirusScript
         if (target.Treproduction <= 0)
         {
             //reproduce
-            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
+            StrategyCellManagerScript.instance.SpawnVirusSingleAdjacent(target.key, transform.position);
             if (target.RDur > 0)
             {
-                target.Treproduction -= target.rBonus;
+                target.Treproduction -= StrategyCellScript.rBonus;
                 target.RDur--;
                 if (target.RDur == 0)
                 {
@@ -29,7 +29,7 @@ public class StrategyVirusHostScript : StrategyVirusScript
             }
             else
             {
-                target.Treproduction = target.reproductionReset + target.Treproduction;
+                target.Treproduction = StrategyCellScript.reproductionReset + target.Treproduction;
             }
         }
     }
