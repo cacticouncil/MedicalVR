@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class CellGameplayScript : MonoBehaviour
 {
+    public ProteinCollectorScript PCS;
     public GameObject cGAS_pic, sting_pic;
     public List<Transform> places = new List<Transform>();
     public List<GameObject> Sceneries = new List<GameObject>();
@@ -172,6 +173,7 @@ public class CellGameplayScript : MonoBehaviour
                 }
                 Sceneries[1].SetActive(false);
                 Sceneries[2].SetActive(true);
+                PCS.StartHazards();
                 I = 3;
                 RenderSettings.fogDensity = 0;
                 RenderSettings.ambientLight = Color.black;
