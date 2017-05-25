@@ -113,6 +113,8 @@ public class CellReceptors : MonoBehaviour
 
         if (GlobalVariables.tutorial == false)
             Player.GetComponent<VirusPlayer>().IncrementKill++;
+
+        Player.GetComponent<VirusPlayer>().CurrentScore += 200;
     }
 }
 
