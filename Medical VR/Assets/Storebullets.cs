@@ -8,7 +8,6 @@ using TMPro;
 public class Storebullets : MonoBehaviour
 {
     int WhatToRead = 0;
-    float BeatGameTimer = 0.0f;
     public static int amount;
     public static int stingamount;
 
