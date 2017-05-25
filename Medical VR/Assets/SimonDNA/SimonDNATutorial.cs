@@ -36,11 +36,10 @@ public class SimonDNATutorial : MonoBehaviour
             UI.SetActive(false);
 
             TextList[0] = "Listen closely human, here is your objective. ";
-            TextList[1] = "Nucleotides will pop up on the screen in a certain order.";
-            TextList[2] = "You will always have four nucleotides around you which represent all the types of nucleotides that could pop up.";
-            TextList[3] = "Once the GO! sign appears, use the four nucleotides to press them in the same order that the previous nucleotides showed up.";
-            TextList[4] = "Get it correct to build up the messenger RNA, getting it incorrect will cancel out the part you are building.";
-            TextList[5] = "Build a RNA Messenger witht the amount of nucleotides displayed on the goal to complete the messeger, Good Luck!.";
+            TextList[1] = "Nucleotides will pop up on the screen in a certain order, you will always have four nucleotides around you which represent all the types of nucleotides that could pop up.";
+            TextList[2] = "Once the GO! sign appears, use the four nucleotides to press them in the same order that the previous nucleotides showed up.";
+            TextList[3] = "Get it correct to build up the messenger RNA, getting it incorrect will cancel out the part you are building.";
+            TextList[4] = "Build a RNA Messenger witht the amount of nucleotides displayed on the goal to complete the messeger, Good Luck!.";
             TextForTutorial();
         }
         else
@@ -90,7 +89,7 @@ public class SimonDNATutorial : MonoBehaviour
         }
 
 
-        if (MoveText == 6)
+        if (MoveText == 5)
         {
             AnimationTimer += Time.deltaTime;
 
@@ -143,10 +142,13 @@ public class SimonDNATutorial : MonoBehaviour
         switch (MoveText)
         {
             case 0:
+                SoundManager.PlaySFX("SimonDNA/Medical_VR_Tutorial_VO_Simon_DNA-001");
                 StartCoroutine(TurnTextOn(0));
                 break;
 
             case 1:
+                SoundManager.stopSFX("SimonDNA/Medical_VR_Tutorial_VO_Simon_DNA-001");
+                SoundManager.PlaySFX("SimonDNA/Medical_VR_Tutorial_VO_Simon_DNA-002");
                 StartCoroutine(TurnTextOn(1));
                 break;
 
@@ -154,26 +156,28 @@ public class SimonDNATutorial : MonoBehaviour
                 break;
 
             case 3:
+                SoundManager.stopSFX("SimonDNA/Medical_VR_Tutorial_VO_Simon_DNA-002");
+                SoundManager.PlaySFX("SimonDNA/Medical_VR_Tutorial_VO_Simon_DNA-003");
+                Player.GetComponent<SimonSays>().GO.SetActive(true);
                 StartCoroutine(TurnTextOn(2));
                 break;
 
             case 4:
-                Player.GetComponent<SimonSays>().GO.SetActive(true);
+                SoundManager.stopSFX("SimonDNA/Medical_VR_Tutorial_VO_Simon_DNA-003");
+                SoundManager.PlaySFX("SimonDNA/Medical_VR_Tutorial_VO_Simon_DNA-004");
                 StartCoroutine(TurnTextOn(3));
                 break;
 
             case 5:
-                StartCoroutine(TurnTextOn(4));
                 break;
 
             case 6:
+                SoundManager.stopSFX("SimonDNA/Medical_VR_Tutorial_VO_Simon_DNA-004");
+                SoundManager.PlaySFX("SimonDNA/Medical_VR_Tutorial_VO_Simon_DNA-005");
+                StartCoroutine(TurnTextOn(4));
                 break;
 
             case 7:
-                StartCoroutine(TurnTextOn(5));
-                break;
-
-            case 8:
                 VirusGameplayScript.loadCase = 2;
                 GlobalVariables.tutorial = false;
                 GlobalVariables.arcadeMode = prevState;

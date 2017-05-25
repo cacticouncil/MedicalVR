@@ -9,7 +9,9 @@ public class VirusPlayer : MonoBehaviour
 {
 
     //Variables for Game
-    public TextMeshPro LivesGameobject;
+    public TextMeshPro ScoreGameOjbect;
+    public TextMeshPro LivesGameObject;
+    public ProteinCollectorScript PCS;
     public GameObject Spawn;
     public GameObject WaveManager;
     public GameObject BlackCurtain;
@@ -36,7 +38,7 @@ public class VirusPlayer : MonoBehaviour
     float DelayTimer = 0.0f;
     float BeatGameTimer = 0.0f;
 
-    float CurrentScore = 0.0f;
+    public int CurrentScore = 0;
     public static float FinalScore;
     public static float BestScoreForDestroyCell;
 
@@ -51,6 +53,12 @@ public class VirusPlayer : MonoBehaviour
 
     public int IncrementKill;
     public int SeeValue;
+
+    void Awake()
+    {
+        PCS.StartHazards();
+    }
+
     void Start()
     {
         BannerScript.LockTrophy("Protein");
@@ -91,7 +99,8 @@ public class VirusPlayer : MonoBehaviour
         {
             if (GlobalVariables.arcadeMode)
             {
-                LivesGameobject.text = "           Lives: " + Lives.ToString();
+                ScoreGameOjbect.text = "Score: " + CurrentScore.ToString();
+                LivesGameObject.text = "Lives: " + Lives.ToString();
             }
 
             //Display wave text
@@ -167,6 +176,8 @@ public class VirusPlayer : MonoBehaviour
                     }
                     else
                     {
+                        Respawn();
+
                         if (CurrentScore > FinalScore)
                             FinalScore = CurrentScore;
 
@@ -202,6 +213,8 @@ public class VirusPlayer : MonoBehaviour
                     //For arcade mode once you beat it will bring up scoreboard 
                     else
                     {
+                        Respawn();
+
                         ScoreBoard.SetActive(true);
 
                         if (CurrentScore > BestScoreForDestroyCell)

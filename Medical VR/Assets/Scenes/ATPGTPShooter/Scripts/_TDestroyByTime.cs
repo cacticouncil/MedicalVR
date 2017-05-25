@@ -34,5 +34,6 @@ public class _TDestroyByTime : MonoBehaviour
     void DestroyMe()
     {
         Destroy(gameObject);
+        Storebullets.amount -= 1;
     }
 }
