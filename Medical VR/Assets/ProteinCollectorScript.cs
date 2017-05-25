@@ -12,6 +12,7 @@ public class ProteinCollectorScript : MonoBehaviour
     public Boundary spawnValues;
     public int hazardCount;
     public int maxNumHazards;
+    public GameObject spawnLocation;
 
     IEnumerator SpawnHazards()
     {
@@ -27,8 +28,17 @@ public class ProteinCollectorScript : MonoBehaviour
                         Random.Range(spawnValues.yMin, spawnValues.yMax),
                         Random.Range(spawnValues.zMin, spawnValues.zMax));
                     Quaternion spawnRotation = Quaternion.identity;
-                    // GameObject haz = Instantiate(obsticles[Random.Range(0, obsticles.Length - 1)], spawnPosition, spawnRotation, hazardCollector.transform) as GameObject;
-                    Instantiate(obsticles[Random.Range(0, obsticles.Length)], spawnPosition, spawnRotation, hazardCollector.transform);
+
+                    GameObject haz;
+
+                    if (spawnLocation)
+                    {
+                        haz = Instantiate(obsticles[Random.Range(0, obsticles.Length)], spawnPosition, spawnRotation, spawnLocation.transform) as GameObject;
+                        haz.transform.parent = hazardCollector.transform;
+                    }
+                    else
+                        haz = Instantiate(obsticles[Random.Range(0, obsticles.Length)], spawnPosition, spawnRotation, hazardCollector.transform) as GameObject;
+                    // Instantiate(obsticles[Random.Range(0, obsticles.Length)], spawnPosition, spawnRotation, hazardCollector.transform);
                 }
 
                 yield return new WaitForSeconds(spawnWait);

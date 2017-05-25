@@ -21,6 +21,8 @@ public class VirusPlayer : MonoBehaviour
 
     public GameObject VirusAttack;
 
+    public GameObject PressToContinue;
+
     [System.NonSerialized]
     public float baseSpeed = 1;
     public float currSpeed;
@@ -251,26 +253,44 @@ public class VirusPlayer : MonoBehaviour
                         finish = true;
 
                     else
+                    {
+                        PressToContinue.SetActive(false);
                         TextForTutorial();
+                    }
                 }
                 last = held;
             }
 
             //Checking for events
             if (WhatToRead == 2 && IsCellDoneIdling == true)
+            {
                 StopInput = false;
+                PressToContinue.SetActive(true);
+            }
 
             if (WhatToRead == 4 && IsCellDoneMoving == true)
+            {
                 StopInput = false;
+                PressToContinue.SetActive(true);
+            }
 
             if (WhatToRead == 5 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0)
+            {
                 StopInput = false;
+                PressToContinue.SetActive(true);
+            }
 
             if (WhatToRead == 7 && WaveManager.GetComponent<WaveManager>().AntiViralProteinList.Count == 0)
+            {
                 StopInput = false;
+                PressToContinue.SetActive(true);
+            }
 
             if (WhatToRead == 9 && WaveManager.GetComponent<WaveManager>().CellReceptorsList.Count == 0 && WaveManager.GetComponent<WaveManager>().DoneSpawningCellReceptors == true)
+            {
                 StopInput = false;
+                PressToContinue.SetActive(true);
+            }
         }
     }
 
@@ -428,6 +448,7 @@ public class VirusPlayer : MonoBehaviour
         Text.text = TextList[index];
         finish = false;
         text = false;
+        PressToContinue.SetActive(true);
         WhatToRead++;
     }
 

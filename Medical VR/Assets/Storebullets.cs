@@ -7,6 +7,7 @@ using TMPro;
 
 public class Storebullets : MonoBehaviour
 {
+    public GameObject press;
     int WhatToRead = 0;
     public static int amount;
     public static int stingamount;
@@ -131,6 +132,7 @@ public class Storebullets : MonoBehaviour
                 }
                 else
                 {
+                    press.SetActive(false);
                     if ((WhatToRead != 4 && WhatToRead != 6))
                         Click();
                 }
@@ -303,6 +305,7 @@ IEnumerator TurnTextOn(int index)
     subtitles.text = texts[index];
     finish = false;
     text = false;
-}
+        press.SetActive(true);
+    }
     #endregion
 }
