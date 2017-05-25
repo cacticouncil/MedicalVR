@@ -13,32 +13,27 @@ public class StrategyTutorial : MonoBehaviour
     public GameObject ui;
     public GameObject[] cells = new GameObject[7];
     public GameObject[] viruses = new GameObject[3];
+    public AudioClip[] voices = new AudioClip[15];
 
     private string[] texts =
         {
-        "Hello, Human." ,
-        "This will be your final challenge." ,
+        "Hello, Human. This will be your final challenge." ,
         "Your goal is to raise a colony of 50 red blood cells against attacking viruses." ,
         "This is one of your cells." ,
         "Each cell has 3 stats that benefit itself and the colony." ,
         "These stats are Reproduction, Defense, and Immunity." ,
-        "Each stat can be infinitely increased." ,
-        "Increasing a stat will advance you forward a turn." ,
+        "Each stat can be infinitely increased. Increasing a stat will advance you forward a turn." ,
         "Cells can reproduce and spread immunity on each turn." ,
         "Viruses can also spawn and attack cells on each turn." ,
         "For more insight on each stat, activate its respective tutorial button." ,
-        "Random events will also occur." ,
-        "These events can increase cells' stats as well as the viruses'." ,
+        "Random events will also occur. These events can increase cells' stats as well as the viruses'." ,
         "You can learn more about it by clicking on the Events tab." ,
-        "This is the Strategy Box." ,
-        "Using it also advances turns." ,
-        "And you can receive a random power-up." ,
+        "This is the Strategy Box. Using it advances turns and gives you a random power-up." ,
         "These power-ups can give large stat boosts or defend your cell." ,
         "Check your inventory at the Strategy Box to learn more." ,
-        "That's all I have for you human. I leave this cell in your hands." ,
-        "Good luck and have fun."
+        "That's all I have for you human. I leave this cell in your hands. Good luck and have fun."
         };
-    private int cNum = -1;
+    private int cNum = 0;
     private bool last = false, text = false, finish = false;
     private Vector3 cellPosition = new Vector3(1, 0, 0);
     private List<Vector3> nextPos = new List<Vector3>();
@@ -80,12 +75,14 @@ public class StrategyTutorial : MonoBehaviour
     {
         switch (cNum)
         {
-            case -1:
-                //Hello, Human.
+            //Cells
+            case 0:
+                //Hello, Human. This will be your final challenge.
                 StartCoroutine(TurnTextOn(0));
+                StrategySoundHolder.PlayVoice(voices[0]);
                 stop.Add(StartCoroutine(SpawnObject(cells[0], objects.transform.position)));
                 break;
-            case 0:
+            case 1:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -94,14 +91,10 @@ public class StrategyTutorial : MonoBehaviour
                 cells[0].transform.position = nextPos[0];
                 nextPos.Clear();
                 cells[0].transform.localScale = Vector3.one;
-                //This will be your final challenge.
-                StartCoroutine(TurnTextOn(1));
-                break;
 
-            //Cells
-            case 1:
                 //Your goal is to raise a colony of 50 red blood cells against attacking viruses.
-                StartCoroutine(TurnTextOn(2));
+                StartCoroutine(TurnTextOn(1));
+                StrategySoundHolder.PlayVoice(voices[1]);
                 stop.Add(StartCoroutine(SpawnCells()));
                 break;
             case 2:
@@ -112,7 +105,8 @@ public class StrategyTutorial : MonoBehaviour
                 stop.Clear();
                 nextPos.Clear();
                 //This is one of your cells.
-                StartCoroutine(TurnTextOn(3));
+                StartCoroutine(TurnTextOn(2));
+                StrategySoundHolder.PlayVoice(voices[2]);
                 stop.Add(StartCoroutine(ShrinkCells()));
                 break;
             case 3:
@@ -129,7 +123,8 @@ public class StrategyTutorial : MonoBehaviour
                 cells[6].SetActive(false);
                 //Each cell has 3 stats that benefit itself and the colony.
                 stop.Add(StartCoroutine(SpawnObject(ui, objects.transform.position)));
-                StartCoroutine(TurnTextOn(4));
+                StartCoroutine(TurnTextOn(3));
+                StrategySoundHolder.PlayVoice(voices[3]);
                 break;
             case 4:
                 foreach (Coroutine co in stop)
@@ -141,56 +136,55 @@ public class StrategyTutorial : MonoBehaviour
                 nextPos.Clear();
                 ui.transform.localScale = Vector3.one;
                 //These stats are Reproduction, Defense, and Immunity.
-                StartCoroutine(TurnTextOn(5));
+                StartCoroutine(TurnTextOn(4));
+                StrategySoundHolder.PlayVoice(voices[4]);
                 break;
             case 5:
-                //Each stat can be infinitely increased.
-                StartCoroutine(TurnTextOn(6));
+                //Each stat can be infinitely increased. Increasing a stat will advance you forward a turn.
+                StartCoroutine(TurnTextOn(5));
+                StrategySoundHolder.PlayVoice(voices[5]);
                 break;
             case 6:
-                //Increasing a stat will advance you forward a turn.
-                StartCoroutine(TurnTextOn(7));
+                //Cells can reproduce and spread immunity on each turn.
+                StartCoroutine(TurnTextOn(6));
+                StrategySoundHolder.PlayVoice(voices[6]);
                 break;
             case 7:
-                //Cells can reproduce and spread immunity on each turn.
-                StartCoroutine(TurnTextOn(8));
+                //Viruses can also spawn and attack cells on each turn.
+                StartCoroutine(TurnTextOn(7));
+                StrategySoundHolder.PlayVoice(voices[7]);
                 break;
             case 8:
-                //Viruses can also spawn and attack cells on each turn.
-                StartCoroutine(TurnTextOn(9));
+                //For more insight on each stat, activate its respective tutorial button.
+                StartCoroutine(TurnTextOn(8));
+                StrategySoundHolder.PlayVoice(voices[8]);
                 break;
             case 9:
-                //For more insight on each stat, activate its respective tutorial button.
-                StartCoroutine(TurnTextOn(10));
+                //Random events will also occur. These events can increase cells' stats as well as the viruses'.
+                StartCoroutine(TurnTextOn(9));
+                StrategySoundHolder.PlayVoice(voices[9]);
                 break;
             case 10:
-                //Random events will also occur.
-                StartCoroutine(TurnTextOn(11));
-                break;
-            case 11:
-                //These events can increase cells' stats as well as the viruses'.
-                StartCoroutine(TurnTextOn(12));
-                break;
-            case 12:
                 //You can learn more about it by clicking on the Events tab.
-                StartCoroutine(TurnTextOn(13));
+                StartCoroutine(TurnTextOn(10));
+                StrategySoundHolder.PlayVoice(voices[10]);
                 break;
-
             //Strategy Box
-            case 13:
+            case 11:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
                 }
                 stop.Clear();
 
-                //This is the Strategy Box.
-                StartCoroutine(TurnTextOn(14));
+                //This is the Strategy Box. Using it advances turns and gives you a random power-up.
+                StartCoroutine(TurnTextOn(11));
+                StrategySoundHolder.PlayVoice(voices[11]);
                 ui.gameObject.SetActive(false);
                 stop.Add(StartCoroutine(SpawnObject(strategyBoxMesh, strategyBox.transform.position)));
                 stop.Add(StartCoroutine(MoveObject(cells[0], cellPosition)));
                 break;
-            case 14:
+            case 12:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -201,40 +195,30 @@ public class StrategyTutorial : MonoBehaviour
                 strategyBoxMesh.transform.localScale = Vector3.one;
                 cells[0].transform.position = cellPosition;
 
-                //Using it also advances turns.
-                StartCoroutine(TurnTextOn(15));
-                break;
-            case 15:
-                //And you can receive a random power-up.
-                StartCoroutine(TurnTextOn(16));
-                break;
-            case 16:
                 //These power-ups can give large stat boosts or defend your cell.
-                StartCoroutine(TurnTextOn(17));
+                StartCoroutine(TurnTextOn(12));
+                StrategySoundHolder.PlayVoice(voices[12]);
                 break;
-            case 17:
+            case 13:
                 //Check your inventory at the Strategy Box to learn more.
-                StartCoroutine(TurnTextOn(18));
+                StartCoroutine(TurnTextOn(13));
+                StrategySoundHolder.PlayVoice(voices[13]);
                 break;
-            case 18:
-                //That's all I have for you human. I leave this cell in your hands.
-                StartCoroutine(TurnTextOn(19));
+            case 14:
+                //That's all I have for you human. I leave this cell in your hands. Good luck and have fun."
+                StartCoroutine(TurnTextOn(14));
+                StrategySoundHolder.PlayVoice(voices[14]);
                 stop.Add(StartCoroutine(MoveObject(strategyBoxMesh, strategyBox.transform.position)));
                 strategyBoxMesh.transform.GetChild(0).gameObject.SetActive(false);
                 break;
-
-            case 19:
-                //Good luck and have fun.  
-                StartCoroutine(TurnTextOn(20));
+            //Clean Up 
+            case 15:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
                 }
                 stop.Clear();
                 strategyBoxMesh.transform.position = strategyBox.transform.position;
-                break;
-            //Clean Up 
-            case 20:
                 subtitles.text = "";
                 StopAllCoroutines();
                 reticle.SetActive(true);

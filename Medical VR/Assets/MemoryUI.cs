@@ -9,10 +9,9 @@ using TMPro;
 
 public class MemoryUI : MonoBehaviour
 {
-    float TutorialTimer = 0.0f;
+    public GameObject press;
     int WhatToRead = 0;
-    float BeatGameTimer = 0.0f;
-    public GameObject CenterScreenObj;
+    public TextMeshPro CenterScreenObj;
     public GameObject EventSystem;
 
     public GameObject theScore, theLives, theLevels, scoreBoard, UI, Spheres, Timer, Capsules;
@@ -26,6 +25,30 @@ public class MemoryUI : MonoBehaviour
     public float startTime = 60.0f;
     public bool finnished = false;
     public float timeRemaining = 60.0f;
+
+    private void Start()
+    {
+        if( GlobalVariables.tutorial== true)
+        {
+            Click();
+        }
+    }
+
+    private string[] texts =
+    {
+        "Welcome to the DNA Memory Game",
+        "Nucleic acids construct DNA pairs in very specific ways. Your objective is to select three capsules that are the correct pairing to the DNA code given above.",
+        "The pairing is as follows: G binds to C, C binds to G, A binds to U, and T binds to A.",
+        "Pair the correct ones and they will turn green, pair a wrong one and it will turn red. Make sure you don't get 5 wrong or you will have to restart.",
+        //(After CLICKING ONE CORRECT CAPSULE)
+        " Perfect \n Now get the others!",
+        //(IF Arcade Mode)
+        "Make sure you do it before the timer ends.",
+        //(If 3 correct Capsules)
+        "Awesome! Now your ready to play."
+        //(end)
+        };
+    private bool last = false, text = false, finish = false;
 
     public void LoseresetPos()
     {
@@ -81,230 +104,30 @@ public class MemoryUI : MonoBehaviour
         else if (GlobalVariables.tutorial == true)
         {
 
-            switch (WhatToRead)
+            if ((WhatToRead == 5 && Randomsphere.correct == 1) ||  (WhatToRead == 8 && Randomsphere.correct == 3))
+                Click();
+
+            bool held = Input.GetButton("Fire1");
+            if (held && !last)
             {
-                case 0:
-                    TutorialTimer += Time.deltaTime;
-                    EventSystem.SetActive(false);
-                    if (TutorialTimer <= 2.0f)
-                    {
-                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-001") == false)
-                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-001");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Welcome to the DNA Memory Game";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 1:
-                    TutorialTimer += Time.deltaTime;
-                    EventSystem.SetActive(false);
-                    if (TutorialTimer <= 4.0f)
-                    {
-                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-002") == false)
-                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-002");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Nucleic acids construct DNA pairs in very specific ways";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 2:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 7.0f)
-                    {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Your objective is to select three capsules that are the correct pairing to the DNA code given above";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-                case 3:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 2.0f)
-                    {
-                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-003") == false)
-                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-003");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "The pairing is as follows:";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 4:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 2.0f)
-                    {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "G binds to C,";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 5:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 2.0f)
-                    {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "C binds to G,";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 6:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 2.0f)
-                    {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "A binds to U,";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 7:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 2.0f)
-                    {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "and T binds to A.";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 8:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 3.0f)
-                    {
-                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-004") == false)
-                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-004");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Pair the correct ones and they will turn green,";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 9:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 2.0f)
-                    {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "pair a wrong one and it will turn red.";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 10:
-                    TutorialTimer += Time.deltaTime;
-                    if (TutorialTimer <= 3.0f)
-                    {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Make sure you don't get 5 wrong or you will have to restart";
-                    }
-                    else
-                    {
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "";
-                        EventSystem.SetActive(true);
-                    }
-                    if (Randomsphere.correct == 1)
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 11:
-                    TutorialTimer += Time.deltaTime;
-
-                    if (TutorialTimer <= 2.0f)
-                    {
-                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-005") == false)
-                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-005");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = " Perfect " + "\n" + " Now get the others!";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                case 12:
-                    TutorialTimer += Time.deltaTime;
-
-                    if (TutorialTimer <= 2.0f && GlobalVariables.arcadeMode == true)
-                    {
-                        if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-006") == false)
-                            SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-006");
-                        CenterScreenObj.GetComponent<TextMeshPro>().text = "Make sure you do it before the timer ends";
-                    }
-                    else
-                    {
-                        TutorialTimer = 0.0f;
-                        WhatToRead += 1;
-                    }
-                    break;
-
-                default:
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = " ";
-                    break;
-            }
-        }
-
-        //For tutorial only it will either transition to story mode or only play once
-        if (WhatToRead >= 13 && (Randomsphere.correct == 3))
-        {
-            BeatGameTimer += Time.deltaTime;
-            if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-007") == false)
-                SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-007");
-            CenterScreenObj.GetComponent<TextMeshPro>().text = "Awesome! Now your ready to play.";
-
-            if (BeatGameTimer >= 2.5)
-            {
-                //FOR NOW IF YOU COMPLETE TUTORIAL PROCEED TO Game
-                GlobalVariables.tutorial = false;
-                if (GlobalVariables.arcadeMode == true)
+                if (text)
                 {
-                    GlobalVariables.arcadeMode = true;
-                    SceneManager.LoadScene("MemoryGame");
-
+                    finish = true;
                 }
                 else
                 {
-                    GlobalVariables.arcadeMode = false;
-                    SceneManager.LoadScene("MemoryGame");
+                    press.SetActive(false);
+                    if ((WhatToRead != 5 && WhatToRead != 8))
+                        Click();
                 }
             }
+            last = held;
+
+            
         }
 
-        AvoidBack();
+
+        //AvoidBack();
 
         if (finnished)
             return;
@@ -375,4 +198,123 @@ public class MemoryUI : MonoBehaviour
         if (transform.rotation.eulerAngles.y < -90)
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, -90, transform.rotation.eulerAngles.z);
     }
+
+    private void Click()
+    {
+        switch (WhatToRead)
+        {
+
+            case 0:
+                {
+                    EventSystem.SetActive(false);
+                    SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-001");
+                    StartCoroutine(TurnTextOn(0));
+                }
+                break;
+            case 1:
+                {
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-001"))
+                        SoundManager.StopCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-001");
+                    SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-002");
+                    StartCoroutine(TurnTextOn(1));
+                }
+                break;         
+            case 2:
+                {
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-002"))
+                        SoundManager.StopCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-002");
+                    SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-003");
+                    StartCoroutine(TurnTextOn(2));
+                }
+                break;
+            case 3:
+                {
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-003"))
+                        SoundManager.StopCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-003");
+                    SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-004");
+                    StartCoroutine(TurnTextOn(3));
+                }
+                break;
+            case 4:
+                if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-004"))
+                    SoundManager.StopCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-004");
+                EventSystem.SetActive(true);
+                CenterScreenObj.text = " ";
+                break;
+            case 5:            
+                SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-005");
+                StartCoroutine(TurnTextOn(4));
+                EventSystem.SetActive(false);
+                break;
+            case 6:
+                if (GlobalVariables.arcadeMode == true)
+                {
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-005"))
+                        SoundManager.StopCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-005");
+                    SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-006");
+                    StartCoroutine(TurnTextOn(5));
+                }
+                else { WhatToRead++; }
+                break;
+            case 7:
+                if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-006"))
+                    SoundManager.StopCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-006");
+                EventSystem.SetActive(true);
+                CenterScreenObj.text = " ";
+                break;
+            case 8:
+                SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-007");
+                StartCoroutine(TurnTextOn(6));
+                EventSystem.SetActive(false);
+                break;
+            default:
+                EventSystem.SetActive(true);
+                CenterScreenObj.text = "";
+                GlobalVariables.tutorial = false;
+                if (GlobalVariables.arcadeMode == true)
+                {
+                    GlobalVariables.arcadeMode = true;
+                    SceneManager.LoadScene("MemoryGame");
+
+                }
+                else
+                {
+                    GlobalVariables.arcadeMode = false;
+                    SceneManager.LoadScene("MemoryGame");
+                }
+                break;
+        }
+        WhatToRead++;
+    }
+
+
+
+    #region Text
+    IEnumerator TurnTextOn(int index)
+    {
+        while (text)
+            yield return 0;
+
+        text = true;
+        CenterScreenObj.text = "_";
+
+        while (CenterScreenObj.text != texts[index] && !finish)
+        {
+            yield return new WaitForSeconds(GlobalVariables.textDelay);
+
+            if (CenterScreenObj.text.Length == texts[index].Length)
+            {
+                CenterScreenObj.text = texts[index];
+            }
+            else
+            {
+                CenterScreenObj.text = CenterScreenObj.text.Insert(CenterScreenObj.text.Length - 1, texts[index][CenterScreenObj.text.Length - 1].ToString());
+            }
+        }
+        CenterScreenObj.text = texts[index];
+        finish = false;
+        text = false;
+        press.SetActive(true);
+    }
+    #endregion
 }

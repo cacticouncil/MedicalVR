@@ -7,14 +7,23 @@ public class StrategySoundHolder : MonoBehaviour
     public List<AudioClip> clips = new List<AudioClip>();
     [System.NonSerialized]
     public List<float> timeLeft = new List<float>();
-    public AudioSource sus;
+    public static AudioSource bgmsus, sfxsus;
 
     private float playTime = 0;
+
+    void Awake()
+    {
+        AudioSource[] suses = GetComponents<AudioSource>();
+        bgmsus = suses[0];
+        sfxsus = suses[1];
+    }
 
     // Use this for initialization
     void Start()
     {
-        sus.volume = GlobalVariables.bgmVolume;
+        bgmsus.volume = GlobalVariables.bgmVolume;
+        sfxsus.volume = GlobalVariables.sfxVolume;
+
         timeLeft.Capacity = clips.Count;
         for (int i = 0; i < clips.Count; i++)
         {
@@ -48,9 +57,9 @@ public class StrategySoundHolder : MonoBehaviour
 
             if (timeLeft[i] == 0)
             {
-                sus.PlayOneShot(clips[i]);
+                bgmsus.PlayOneShot(clips[i]);
                 timeLeft[i] = clips[i].length;
-                playTime = clips[i].length * Random.Range(.2f, .75f);
+                playTime = clips[i].length * Random.Range(.25f, .75f);
                 break;
             }
 
@@ -70,12 +79,18 @@ public class StrategySoundHolder : MonoBehaviour
 
             if (timeLeft[i] == 0)
             {
-                sus.PlayOneShot(clips[i]);
+                sfxsus.PlayOneShot(clips[i]);
                 timeLeft[i] = clips[i].length;
                 break;
             }
 
             loopCount++;
         }
+    }
+
+    public static void PlayVoice(AudioClip a)
+    {
+        sfxsus.clip = a;
+        sfxsus.Play();
     }
 }
