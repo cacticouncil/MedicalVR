@@ -18,6 +18,7 @@ public class StrategyTutorialDefense : MonoBehaviour
     public GameObject @base;
     public GameObject[] cells = new GameObject[7];
     public GameObject[] viruses = new GameObject[4];
+    public AudioClip[] voices = new AudioClip[12];
 
     private string[] texts =
         {
@@ -25,21 +26,18 @@ public class StrategyTutorialDefense : MonoBehaviour
         "When a virus spawns, it targets a random cell.",
         "When a cell is targeted, it turns black.",
         "Once the virus reaches the cell it attempts to penetrate the cell's membrane.",
-        "You can't upgrade the cell while it is defending itself.",
-        "But, other cells can spread immunity to it.",
+        "You can't upgrade the cell while it is defending itself. But, other cells can spread immunity to it.",
         "During this time immunity is received at twice the value.",
-        "Defense is also the only stat that is copied to the child.",
-        "Due to this, it is highly advised that you invest into this stat early on.",
+        "Defense is also the only stat that is copied to the child. Due to this, it is highly advised that you invest into this stat early on.",
         "Alternatively, you could put points into a cell when it becomes targeted by a virus.",
         "The Fuzeon power-up permanently increases defense by 5.",
-        "If you are lucky enough you can get the Defense event.",
-        "It raises all your cells defense to the max defense in your colony +5.",
+        "If you are lucky enough you can get the Defense event. It raises all your cells defense to the max defense in your colony + 5.",
         "Be careful, different viruses have different attack values.",
-        "The attack values will also increase as the game continues.",
+        "The attack values will also increase as the game continues."
         };
     private Vector3 prevPos;
     private Quaternion prevRotation;
-    private int index = 1;
+    private int index = 0;
     private bool last = false, text = false, finish = false, clickable = false;
     private List<Coroutine> stop = new List<Coroutine>();
     private Color c;
@@ -55,7 +53,7 @@ public class StrategyTutorialDefense : MonoBehaviour
         prevRotation = lc.transform.rotation;
         //Fade In
         fade.GetComponent<FadeIn>().enabled = true;
-        index = 1;
+        index = 0;
         Invoke("Click", 1);
     }
 
@@ -81,7 +79,7 @@ public class StrategyTutorialDefense : MonoBehaviour
     {
         switch (index)
         {
-            case 1:
+            case 0:
                 //Fade Out
                 objects.SetActive(true);
                 reticle.SetActive(false);
@@ -93,9 +91,10 @@ public class StrategyTutorialDefense : MonoBehaviour
                 fade.GetComponent<FadeOut>().enabled = true;
                 Invoke("Click", 1);
                 break;
-            case 2:
+            case 1:
                 //The Defense stat delays viruses from killing your cells.
                 StartCoroutine(TurnTextOn(0));
+                StrategySoundHolder.PlayVoice(voices[0]);
                 stop.Add(StartCoroutine(GrowInObject(cells[0])));
                 foreach (Transform item in @base.GetComponentsInChildren<Transform>(true))
                 {
@@ -112,7 +111,7 @@ public class StrategyTutorialDefense : MonoBehaviour
                 }
                 clickable = true;
                 break;
-            case 3:
+            case 2:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -135,10 +134,11 @@ public class StrategyTutorialDefense : MonoBehaviour
 
                 //When a virus spawns, it targets a random cell.
                 StartCoroutine(TurnTextOn(1));
+                StrategySoundHolder.PlayVoice(voices[1]);
                 viruses[0].transform.position = cells[0].transform.position + new Vector3(0, 2, 0);
                 stop.Add(StartCoroutine(GrowInObject(viruses[0])));
                 break;
-            case 4:
+            case 3:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -149,9 +149,10 @@ public class StrategyTutorialDefense : MonoBehaviour
 
                 //When a cell is targeted, it turns black.
                 StartCoroutine(TurnTextOn(2));
+                StrategySoundHolder.PlayVoice(voices[2]);
                 stop.Add(StartCoroutine(PaintItBlack(cells[0])));
                 break;
-            case 5:
+            case 4:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -161,9 +162,10 @@ public class StrategyTutorialDefense : MonoBehaviour
 
                 //Once the virus reaches the cell it attempts to penetrate the cell's membrane.
                 StartCoroutine(TurnTextOn(3));
+                StrategySoundHolder.PlayVoice(voices[3]);
                 stop.Add(StartCoroutine(MoveVirus()));
                 break;
-            case 6:
+            case 5:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -173,12 +175,9 @@ public class StrategyTutorialDefense : MonoBehaviour
                 cells[0].GetComponent<Rotate>().enabled = false;
                 viruses[0].transform.position = cells[0].transform.position + new Vector3(0, .9f, 0);
 
-                //You can't upgrade the cell while it is defending itself.
+                //You can't upgrade the cell while it is defending itself. But, other cells can spread immunity to it.
                 StartCoroutine(TurnTextOn(4));
-                break;
-            case 7:
-                //But, other cells can spread immunity to it.
-                StartCoroutine(TurnTextOn(5));
+                StrategySoundHolder.PlayVoice(voices[4]);
                 stop.Add(StartCoroutine(GrowInObject(cells[1])));
                 stop.Add(StartCoroutine(GrowInObject(cells[2])));
                 stop.Add(StartCoroutine(GrowInObject(cells[3])));
@@ -186,7 +185,7 @@ public class StrategyTutorialDefense : MonoBehaviour
                 stop.Add(StartCoroutine(GrowInObject(cells[5])));
                 stop.Add(StartCoroutine(GrowInObject(cells[6])));
                 break;
-            case 8:
+            case 6:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -198,7 +197,8 @@ public class StrategyTutorialDefense : MonoBehaviour
                 }
 
                 //During this time immunity is received at twice the value.
-                StartCoroutine(TurnTextOn(6));
+                StartCoroutine(TurnTextOn(5));
+                StrategySoundHolder.PlayVoice(voices[5]);
                 for (int i = 1; i < 7; i++)
                 {
                     GameObject p = Instantiate(immunityParticles, cells[i].transform.position, Quaternion.LookRotation(cells[0].transform.position - cells[i].transform.position), cells[0].transform) as GameObject;
@@ -207,32 +207,36 @@ public class StrategyTutorialDefense : MonoBehaviour
                     p.GetComponent<ImmunityParticles>().startSpeed = 15;
                     p.GetComponent<ImmunityParticles>().enabled = true;
                 }
-                Invoke("Immunity12", 1);
+                stop.Add(StartCoroutine(IncreaseImmunity()));
                 break;
-            case 9:
+            case 7:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
                 immDes.text = "Immunity: 12";
 
-                //Defense is also the only stat that is copied to the child.
-                StartCoroutine(TurnTextOn(7));
+                //Defense is also the only stat that is copied to the child. Due to this, it is highly advised that you invest into this stat early on.
+                StartCoroutine(TurnTextOn(6));
+                StrategySoundHolder.PlayVoice(voices[6]);
                 break;
-            case 10:
-                //Due to this, it is highly advised that you invest into this stat early on. 
-                StartCoroutine(TurnTextOn(8));
-                break;
-            case 11:
+            case 8:
                 //Alternatively, you could put points into a cell when it becomes targeted by a virus.
-                StartCoroutine(TurnTextOn(9));
+                StartCoroutine(TurnTextOn(7));
+                StrategySoundHolder.PlayVoice(voices[7]);
                 break;
-            case 12:
+            case 9:
                 //The Fuzeon power-up permanently increases defense by 5.
-                StartCoroutine(TurnTextOn(10));
+                StartCoroutine(TurnTextOn(8));
+                StrategySoundHolder.PlayVoice(voices[8]);
                 stop.Add(StartCoroutine(FadeInObject(fuzeon)));
                 stop.Add(StartCoroutine(UnPaintItBlack(cells[0])));
                 cells[0].GetComponent<Rotate>().enabled = true;
                 stop.Add(StartCoroutine(ShrinkOutObject(viruses[0])));
                 defDes.text = "Defense: 5";
                 break;
-            case 13:
+            case 10:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -244,11 +248,13 @@ public class StrategyTutorialDefense : MonoBehaviour
                 cells[0].GetComponent<Renderer>().material.color = Color.grey;
                 viruses[0].SetActive(false);
 
-                //If you are lucky enough you can get the Defense event.
-                StartCoroutine(TurnTextOn(11));
+                //If you are lucky enough you can get the Defense event. It raises all your cells defense to the max defense in your colony + 5.
+                StartCoroutine(TurnTextOn(9));
+                StrategySoundHolder.PlayVoice(voices[9]);
                 stop.Add(StartCoroutine(FadeOutObject(fuzeon)));
+                defDes.text = "Defense: 10";
                 break;
-            case 14:
+            case 11:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -258,13 +264,9 @@ public class StrategyTutorialDefense : MonoBehaviour
                 fuzeon.GetComponent<Renderer>().material.color = Color.green;
                 fuzeon.GetComponent<Renderer>().material.SetColor("_OutlineColor", Color.black);
 
-                //It raises all your cells defense to the max defense in your colony +5.
-                StartCoroutine(TurnTextOn(12));
-                defDes.text = "Defense: 10";
-                break;
-            case 15:
                 //Be careful, different viruses have different attack values.
-                StartCoroutine(TurnTextOn(13));
+                StartCoroutine(TurnTextOn(10));
+                StrategySoundHolder.PlayVoice(voices[10]);
                 foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
                 {
                     if (item.material.HasProperty("_Color"))
@@ -282,7 +284,7 @@ public class StrategyTutorialDefense : MonoBehaviour
                 stop.Add(StartCoroutine(FadeInObject(viruses[2].GetComponent<Renderer>())));
                 stop.Add(StartCoroutine(FadeInObject(viruses[3].GetComponent<Renderer>())));
                 break;
-            case 16:
+            case 12:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -310,16 +312,17 @@ public class StrategyTutorialDefense : MonoBehaviour
                 viruses[3].GetComponent<Renderer>().material.SetColor("_OutlineColor", Color.black);
 
                 //The attack values will also increase as the game continues.
-                StartCoroutine(TurnTextOn(14));
+                StartCoroutine(TurnTextOn(11));
+                StrategySoundHolder.PlayVoice(voices[11]);
                 break;
-            case 17:
+            case 13:
                 //Fade In
                 fade.GetComponent<FadeIn>().enabled = true;
                 subtitles.text = "";
                 clickable = false;
                 Invoke("Click", 1);
                 break;
-            case 18:
+            case 14:
                 //Fade Out
                 reticle.SetActive(true);
                 cam.position = prevPos;
@@ -327,7 +330,7 @@ public class StrategyTutorialDefense : MonoBehaviour
                 fade.GetComponent<FadeOut>().enabled = true;
                 Invoke("Click", 1);
                 break;
-            case 19:
+            case 15:
                 foreach (GameObject cell in viruses)
                 {
                     cell.SetActive(false);
@@ -530,8 +533,14 @@ public class StrategyTutorialDefense : MonoBehaviour
     }
     #endregion
 
-    void Immunity12()
+
+    IEnumerator IncreaseImmunity()
     {
+        for (int imm = 0; imm < 12; imm += 2)
+        {
+            immDes.text = "Immunity: " + imm;
+            yield return new WaitForSeconds(.3f);
+        }
         immDes.text = "Immunity: 12";
     }
 }

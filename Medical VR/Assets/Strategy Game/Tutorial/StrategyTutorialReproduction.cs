@@ -17,19 +17,16 @@ public class StrategyTutorialReproduction : MonoBehaviour
     public GameObject details;
     public GameObject[] cells;
     public GameObject[] viruses;
+    public AudioClip[] voices = new AudioClip[9];
 
     private string[] texts =
         {
-        "The Reproduction stat is vital to growing your colony.",
-        "While it can be upgraded infinitely, each upgrade benefits less than the previous.",
-        "At 0 Reproduction, it takes 50 turns to reproduce.",
-        "At 5 Reproduction, it takes 7 turns to reproduce.",
-        "At 10 Reproduction, it takes 5 turns to reproduce.",
+        "The Reproduction stat is vital to growing your colony. While it can be upgraded infinitely, each upgrade benefits less than the previous.",
+        "At 0 Reproduction, it takes 50 turns to reproduce. At 5 Reproduction, it takes 7 turns to reproduce. At 10 Reproduction, it takes 5 turns to reproduce.",
         "You can view how many turns are left to reproduce in the cell's details tab.",
         "Proteins in your body change how quickly a cell reproduces.",
         "CDKs (cyclin-dependent kinase) and TGF (transforming growth factor beta 1) both modulate cell reproduction.",
         "The CDK power-up adds 5 extra stat points for 25 turns.",
-        "These points aren't depreciated in value.",
         "The TGF power-up forces a cell to immediately reproduce.",
         "The child will also have the exact same stats.",
         "Be careful, purple viruses use the cell's reproduction to reproduce more viruses."
@@ -39,7 +36,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
     private bool last = false, text = false, finish = false, clickable = false;
     private List<Vector3> nextPos = new List<Vector3>();
     private List<Coroutine> stop = new List<Coroutine>();
-    private int index = 1;
+    private int index = 0;
     private Color c;
 
     void OnEnable()
@@ -53,7 +50,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
         prevRotation = lc.transform.rotation;
         //Fade In
         fade.GetComponent<FadeIn>().enabled = true;
-        index = 1;
+        index = 0;
         Invoke("Click", 1);
     }
 
@@ -79,7 +76,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
     {
         switch (index)
         {
-            case 1:
+            case 0:
                 //Fade Out
                 objects.SetActive(true);
                 reticle.SetActive(false);
@@ -90,14 +87,14 @@ public class StrategyTutorialReproduction : MonoBehaviour
                 fade.GetComponent<FadeOut>().enabled = true;
                 Invoke("Click", 1);
                 break;
-            case 2:
-                //The Reproduction stat is vital to growing your colony. 
+            case 1:
+                //The Reproduction stat is vital to growing your colony. While it can be upgraded infinitely, each upgrade benefits less than the previous.
                 StartCoroutine(TurnTextOn(0));
+                StrategySoundHolder.PlayVoice(voices[0]);
                 stop.Add(StartCoroutine(SpawnObject(cells[0], cells[0].transform.position)));
                 clickable = true;
                 break;
-
-            case 3:
+            case 2:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -107,16 +104,12 @@ public class StrategyTutorialReproduction : MonoBehaviour
                 cells[0].transform.localScale = Vector3.one;
                 nextPos.Clear();
 
-                //While it can be upgraded infinitely, each upgrade benefits less than the previous.
+                //At 0 Reproduction, it takes 50 turns to reproduce. At 5 Reproduction, it takes 7 turns to reproduce. At 10 Reproduction, it takes 5 turns to reproduce. 
                 StartCoroutine(TurnTextOn(1));
-                break;
-            case 4:
-                //At 0 Reproduction, it takes 50 turns to reproduce. 
-                StartCoroutine(TurnTextOn(2));
-                foreach (Transform item in @base.GetComponentsInChildren<Transform>(true))
-                {
-                    item.gameObject.SetActive(true);
-                }
+                StrategySoundHolder.PlayVoice(voices[1]);
+                stop.Add(StartCoroutine(IncreaseReproduction()));
+                stop.Add(StartCoroutine(SpawnCells()));
+                @base.SetActive(true);
                 foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
                 {
                     if (item.material.HasProperty("_Color"))
@@ -126,9 +119,8 @@ public class StrategyTutorialReproduction : MonoBehaviour
                 {
                     stop.Add(StartCoroutine(FadeInText(item)));
                 }
-                stop.Add(StartCoroutine(SpawnObject(cells[1], cells[0].transform.position)));
                 break;
-            case 5:
+            case 3:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -147,42 +139,33 @@ public class StrategyTutorialReproduction : MonoBehaviour
                 {
                     item.color = Color.black;
                 }
-                cells[1].transform.position = nextPos[0];
-                cells[1].transform.localScale = Vector3.one;
-                nextPos.Clear();
-
-                //At 5 Reproduction, it takes 7 turns to reproduce.
-                StartCoroutine(TurnTextOn(3));
-                repDes.text = "Reproduction: 5";
-                stop.Add(StartCoroutine(SpawnObject(cells[2], cells[0].transform.position)));
-                break;
-            case 6:
-                foreach (Coroutine co in stop)
+                if (cells[1].activeSelf)
                 {
-                    StopCoroutine(co);
+                    cells[1].transform.position = nextPos[0];
+                    cells[1].transform.localScale = Vector3.one;
                 }
-                stop.Clear();
-                cells[2].transform.position = nextPos[0];
-                cells[2].transform.localScale = Vector3.one;
+                else
+                    cells[1].SetActive(true);
+                if (cells[2].activeSelf)
+                {
+                    cells[2].transform.position = nextPos[1];
+                    cells[2].transform.localScale = Vector3.one;
+                }
+                else
+                    cells[2].SetActive(true);
+                if (cells[3].activeSelf)
+                {
+                    cells[3].transform.position = nextPos[2];
+                    cells[3].transform.localScale = Vector3.one;
+                }
+                else
+                    cells[3].SetActive(true);
                 nextPos.Clear();
-
-                //At 10 Reproduction, it takes 5 turns to reproduce.
-                StartCoroutine(TurnTextOn(4));
                 repDes.text = "Reproduction: 10";
-                stop.Add(StartCoroutine(SpawnObject(cells[3], cells[0].transform.position)));
-                break;
-            case 7:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                cells[3].transform.position = nextPos[0];
-                cells[3].transform.localScale = Vector3.one;
-                nextPos.Clear();
 
                 //You can view how many turns are left to reproduce in the cell's details tab.
-                StartCoroutine(TurnTextOn(5));
+                StartCoroutine(TurnTextOn(2));
+                StrategySoundHolder.PlayVoice(voices[2]);
                 foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
                 {
                     if (item.material.HasProperty("_Color"))
@@ -206,7 +189,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
                     stop.Add(StartCoroutine(FadeInText(item)));
                 }
                 break;
-            case 8:
+            case 4:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -231,7 +214,8 @@ public class StrategyTutorialReproduction : MonoBehaviour
                 }
 
                 //Proteins in your body change how quickly a cell reproduces.
-                StartCoroutine(TurnTextOn(6));
+                StartCoroutine(TurnTextOn(3));
+                StrategySoundHolder.PlayVoice(voices[3]);
                 foreach (Renderer item in details.GetComponentsInChildren<Renderer>(true))
                 {
                     if (item.material.HasProperty("_Color"))
@@ -255,7 +239,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
                     stop.Add(StartCoroutine(FadeInText(item)));
                 }
                 break;
-            case 9:
+            case 5:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -280,11 +264,12 @@ public class StrategyTutorialReproduction : MonoBehaviour
                 }
 
                 //CDKs (cyclin-dependent kinase) and TGF (transforming growth factor beta 1) both modulate cell reproduction.
-                StartCoroutine(TurnTextOn(7));
+                StartCoroutine(TurnTextOn(4));
+                StrategySoundHolder.PlayVoice(voices[4]);
                 stop.Add(StartCoroutine(FadeInObject(cdk)));
                 stop.Add(StartCoroutine(FadeInObject(tgf)));
                 break;
-            case 10:
+            case 6:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -300,30 +285,21 @@ public class StrategyTutorialReproduction : MonoBehaviour
                 tgf.material.SetColor("_OutlineColor", Color.black);
 
                 //The CDK power-up adds 5 extra stat points for 25 turns.
-                StartCoroutine(TurnTextOn(8));
+                StartCoroutine(TurnTextOn(5));
+                StrategySoundHolder.PlayVoice(voices[5]);
                 repDes.text = "Reproduction: 15";
                 repDes.color = Color.blue;
                 stop.Add(StartCoroutine(FadeOutObject(tgf)));
                 break;
-            case 11:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                tgf.gameObject.SetActive(false);
-
-                //These points aren't depreciated in value.
-                StartCoroutine(TurnTextOn(9));
-                break;
-            case 12:
+            case 7:
                 //The TGF power-up forces a cell to immediately reproduce.
-                StartCoroutine(TurnTextOn(10));
+                StartCoroutine(TurnTextOn(6));
+                StrategySoundHolder.PlayVoice(voices[6]);
                 stop.Add(StartCoroutine(FadeOutObject(cdk)));
                 stop.Add(StartCoroutine(FadeInObject(tgf)));
                 stop.Add(StartCoroutine(SpawnObject(cells[4], cells[0].transform.position)));
                 break;
-            case 13:
+            case 8:
                 foreach (Coroutine co in stop)
                 {
                     StopCoroutine(co);
@@ -338,65 +314,18 @@ public class StrategyTutorialReproduction : MonoBehaviour
                 cdk.gameObject.SetActive(false);
 
                 //The child will also have the exact same stats.
-                StartCoroutine(TurnTextOn(11));
+                StartCoroutine(TurnTextOn(7));
+                StrategySoundHolder.PlayVoice(voices[7]);
                 break;
-            case 14:
+            case 9:
                 //Be careful, purple viruses use the cell's reproduction to reproduce more viruses.
-                StartCoroutine(TurnTextOn(12));
+                StartCoroutine(TurnTextOn(8));
+                StrategySoundHolder.PlayVoice(voices[8]);
                 stop.Add(StartCoroutine(FadeOutObject(tgf)));
                 stop.Add(StartCoroutine(PaintItBlack(cells[0])));
-                stop.Add(StartCoroutine(SpawnObject(viruses[0], cells[0].transform.position + new Vector3(0, 10, 0))));
+                stop.Add(StartCoroutine(SpawnViruses()));
                 cells[0].GetComponent<Rotate>().enabled = false;
                 viruses[0].GetComponent<Rotate>().enabled = false;
-                break;
-            case 15:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                tgf.gameObject.SetActive(false);
-                cells[0].GetComponent<Renderer>().material.color = Color.black;
-                viruses[0].transform.position = nextPos[0];
-                nextPos.Clear();
-                viruses[0].transform.localScale = Vector3.one;
-
-                stop.Add(StartCoroutine(SpawnObject(viruses[1], cells[0].transform.position)));
-                break;
-            case 16:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                viruses[1].transform.position = nextPos[0];
-                nextPos.Clear();
-                viruses[1].transform.localScale = Vector3.one;
-
-                stop.Add(StartCoroutine(SpawnObject(viruses[2], cells[0].transform.position)));
-                break;
-            case 17:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                viruses[2].transform.position = nextPos[0];
-                nextPos.Clear();
-                viruses[2].transform.localScale = Vector3.one;
-
-                stop.Add(StartCoroutine(SpawnObject(viruses[3], cells[0].transform.position)));
-                break;
-            case 18:
-                foreach (Coroutine co in stop)
-                {
-                    StopCoroutine(co);
-                }
-                stop.Clear();
-                viruses[3].transform.position = nextPos[0];
-                nextPos.Clear();
-                viruses[3].transform.localScale = Vector3.one;
-
                 foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
                 {
                     if (item.material.HasProperty("_Color"))
@@ -407,14 +336,50 @@ public class StrategyTutorialReproduction : MonoBehaviour
                     stop.Add(StartCoroutine(FadeOutText(item)));
                 }
                 break;
-            case 19:
+            case 10:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                tgf.gameObject.SetActive(false);
+                cells[0].GetComponent<Renderer>().material.color = Color.black;
+                if (viruses[0].activeSelf)
+                {
+                    viruses[0].transform.position = nextPos[0];
+                    viruses[0].transform.localScale = Vector3.one;
+                }
+                else
+                    viruses[0].SetActive(true);
+                if (viruses[1].activeSelf)
+                {
+                    viruses[1].transform.position = nextPos[1];
+                    viruses[1].transform.localScale = Vector3.one;
+                }
+                else
+                    viruses[1].SetActive(true);
+                if (viruses[2].activeSelf)
+                {
+                    viruses[2].transform.position = nextPos[2];
+                    viruses[2].transform.localScale = Vector3.one;
+                }
+                else
+                    viruses[2].SetActive(true);
+                if (viruses[3].activeSelf)
+                {
+                    viruses[3].transform.position = nextPos[3];
+                    viruses[3].transform.localScale = Vector3.one;
+                }
+                else
+                    viruses[3].SetActive(true);
+
                 //Fade In
                 fade.GetComponent<FadeIn>().enabled = true;
                 subtitles.text = "";
                 clickable = false;
                 Invoke("Click", 1);
                 break;
-            case 20:
+            case 11:
                 //Fade Out
                 reticle.SetActive(true);
                 cam.position = prevPos;
@@ -422,7 +387,7 @@ public class StrategyTutorialReproduction : MonoBehaviour
                 fade.GetComponent<FadeOut>().enabled = true;
                 Invoke("Click", 1);
                 break;
-            case 21:
+            case 12:
                 foreach (GameObject cell in cells)
                 {
                     cell.SetActive(false);
@@ -502,9 +467,9 @@ public class StrategyTutorialReproduction : MonoBehaviour
     IEnumerator SpawnObject(GameObject g, Vector3 startPos)
     {
         g.SetActive(true);
+        nextPos.Add(g.transform.position);
         float startTime = Time.time;
         float t = 0;
-        nextPos.Add(g.transform.position);
         int index = nextPos.Count - 1;
         while (t < 1.0f)
         {
@@ -589,6 +554,36 @@ public class StrategyTutorialReproduction : MonoBehaviour
             yield return 0;
         }
         text.gameObject.SetActive(false);
+    }
+
+    IEnumerator IncreaseReproduction()
+    {
+        for (int rep = 0; rep < 10; rep++)
+        {
+            repDes.text = "Reproduction: " + rep;
+            yield return new WaitForSeconds(.3f);
+        }
+        repDes.text = "Reproduction: 10";
+    }
+
+    IEnumerator SpawnCells()
+    {
+        stop.Add(StartCoroutine(SpawnObject(cells[1], cells[0].transform.position)));
+        yield return new WaitForSeconds(1.0f);
+        stop.Add(StartCoroutine(SpawnObject(cells[2], cells[0].transform.position)));
+        yield return new WaitForSeconds(1.0f);
+        stop.Add(StartCoroutine(SpawnObject(cells[3], cells[0].transform.position)));
+    }
+
+    IEnumerator SpawnViruses()
+    {
+        stop.Add(StartCoroutine(SpawnObject(viruses[0], cells[0].transform.position + new Vector3(0, 10, 0))));
+        yield return new WaitForSeconds(1.0f);
+        stop.Add(StartCoroutine(SpawnObject(viruses[1], cells[0].transform.position)));
+        yield return new WaitForSeconds(1.0f);
+        stop.Add(StartCoroutine(SpawnObject(viruses[2], cells[0].transform.position)));
+        yield return new WaitForSeconds(1.0f);
+        stop.Add(StartCoroutine(SpawnObject(viruses[3], cells[0].transform.position)));
     }
     #endregion
 }
