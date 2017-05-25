@@ -153,12 +153,10 @@ public class AntiViralProtein : MonoBehaviour
             Destroy(gameObject);
             Player.GetComponent<VirusPlayer>().Lives -= 1;
             Player.GetComponent<VirusPlayer>().Respawn();
-        }
+            Player.GetComponent<VirusPlayer>().CurrentScore -= 300;
 
-        //Possibly colliding with the wall so maybe make it head the opposite way
-        else
-        {
-
+            if (Player.GetComponent<VirusPlayer>().CurrentScore <= 0)
+                Player.GetComponent<VirusPlayer>().CurrentScore = 0;
         }
     }
 }
