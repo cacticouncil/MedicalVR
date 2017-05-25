@@ -9,9 +9,8 @@ using TMPro;
 
 public class MemoryUI : MonoBehaviour
 {
-    float TutorialTimer = 0.0f;
+    public GameObject press;
     int WhatToRead = 0;
-    float BeatGameTimer = 0.0f;
     public TextMeshPro CenterScreenObj;
     public GameObject EventSystem;
 
@@ -117,6 +116,7 @@ public class MemoryUI : MonoBehaviour
                 }
                 else
                 {
+                    press.SetActive(false);
                     if ((WhatToRead != 5 && WhatToRead != 8))
                         Click();
                 }
@@ -244,6 +244,7 @@ public class MemoryUI : MonoBehaviour
             case 5:            
                 SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-005");
                 StartCoroutine(TurnTextOn(4));
+                EventSystem.SetActive(false);
                 break;
             case 6:
                 if (GlobalVariables.arcadeMode == true)
@@ -258,13 +259,16 @@ public class MemoryUI : MonoBehaviour
             case 7:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-006"))
                     SoundManager.StopCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-006");
+                EventSystem.SetActive(true);
                 CenterScreenObj.text = " ";
                 break;
             case 8:
                 SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-007");
                 StartCoroutine(TurnTextOn(6));
+                EventSystem.SetActive(false);
                 break;
             default:
+                EventSystem.SetActive(true);
                 CenterScreenObj.text = "";
                 GlobalVariables.tutorial = false;
                 if (GlobalVariables.arcadeMode == true)
@@ -310,6 +314,7 @@ public class MemoryUI : MonoBehaviour
         CenterScreenObj.text = texts[index];
         finish = false;
         text = false;
+        press.SetActive(true);
     }
     #endregion
 }

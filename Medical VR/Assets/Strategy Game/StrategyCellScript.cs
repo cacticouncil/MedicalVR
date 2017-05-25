@@ -390,16 +390,16 @@ public class StrategyCellScript : MonoBehaviour
             case Proteins.RNase_L:
             case Proteins.PKR:
                 if (StrategyCellManagerScript.instance.selected == key)
-                    StartCoroutine(ChangeColorOverTime(proteinRen.material, proteinRed));
+                    StartCoroutine(ChangeColorOverTime(proteinRen.material, proteinPurple));
                 else
-                    proteinRen.material.color = proteinRed;
+                    proteinRen.material.color = proteinPurple;
                 break;
             case Proteins.TRIM22:
             case Proteins.IFIT:
                 if (StrategyCellManagerScript.instance.selected == key)
-                    StartCoroutine(ChangeColorOverTime(proteinRen.material, proteinPurple));
+                    StartCoroutine(ChangeColorOverTime(proteinRen.material, proteinRed));
                 else
-                    proteinRen.material.color = proteinPurple;
+                    proteinRen.material.color = proteinRed;
                 break;
             case Proteins.CH25H:
             case Proteins.Mx1:

@@ -8,6 +8,7 @@ public class SmartPause : MonoBehaviour
     public GameObject mainMenu;
     public GameObject resume;
     public GameObject fade;
+    public TMPro.TextMeshPro[] ui = new TMPro.TextMeshPro[0];
     [System.NonSerialized]
     public bool isPaused = false;
 
@@ -26,6 +27,11 @@ public class SmartPause : MonoBehaviour
                 buttonHeldTimer += Time.deltaTime;
                 if (buttonHeldTimer >= 1.5f)
                 {
+                    foreach (TMPro.TextMeshPro item in ui)
+                    {
+                        item.enabled = false;
+                    }
+
                     buttonHeldTimer = 0.0f;
                     buttons.SetActive(true);
                     transform.position = player.transform.position + player.transform.forward * .90f;
@@ -42,6 +48,10 @@ public class SmartPause : MonoBehaviour
                 if (Vector3.Angle(player.transform.forward, resume.transform.position - player.transform.position) < angle)
                 {
                     Resume();
+                    foreach (TMPro.TextMeshPro item in ui)
+                    {
+                        item.enabled = true;
+                    }
                 }
                 else if (Vector3.Angle(player.transform.forward, mainMenu.transform.position - player.transform.position) < angle)
                 {
