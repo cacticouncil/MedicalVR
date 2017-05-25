@@ -4,7 +4,7 @@
         _RimColor ("Rim Color", Color) = (0.97,0.88,1,0.75)
         _RimPower ("Rim Power", Range(0.5,8.0)) = 3.0
         _OutlineColor ("Outline Color", Color) = (0,0,0,1)
-        _Outline ("Outline Width", Range (.002, 0.03)) = .005
+        _Outline ("Outline Width", Range (.0001, 0.03)) = .005
         _MainTex ("Texture", 2D) = "white" {}
         _BumpMap ("Normal Map", 2D) = "bump" {}
         _SpecularTex ("Specular Map", 2D) = "gray" {}

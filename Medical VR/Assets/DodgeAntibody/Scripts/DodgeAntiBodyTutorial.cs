@@ -92,9 +92,12 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
         {
             case 0:
                 StartCoroutine(TurnTextOn(0));
+                SoundManager.PlaySFX("DodgeAntibodies/Medical_VR_Tutorial_VO_Dodge_Antibodies-001");
                 break;
 
             case 1:
+                SoundManager.stopSFX("DodgeAntibodies/Medical_VR_Tutorial_VO_Dodge_Antibodies-001");
+                SoundManager.PlaySFX("DodgeAntibodies/Medical_VR_Tutorial_VO_Dodge_Antibodies-002");
                 StartCoroutine(TurnTextOn(1));
                 break;
 
@@ -104,6 +107,8 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                 break;
 
             case 3:
+                SoundManager.stopSFX("DodgeAntibodies/Medical_VR_Tutorial_VO_Dodge_Antibodies-002");
+                SoundManager.PlaySFX("DodgeAntibodies/Medical_VR_Tutorial_VO_Dodge_Antibodies-003");
                 StartCoroutine(TurnTextOn(2));
                 break;
 
@@ -113,6 +118,8 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                 break;
 
             case 5:
+                SoundManager.stopSFX("DodgeAntibodies/Medical_VR_Tutorial_VO_Dodge_Antibodies-003");
+                SoundManager.PlaySFX("DodgeAntibodies/Medical_VR_Tutorial_VO_Dodge_Antibodies-004");
                 StartCoroutine(TurnTextOn(3));
                 break;
 
@@ -122,14 +129,12 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
                 break;
 
             case 7:
+                SoundManager.stopSFX("DodgeAntibodies/Medical_VR_Tutorial_VO_Dodge_Antibodies-004");
+                SoundManager.PlaySFX("DodgeAntibodies/Medical_VR_Tutorial_VO_Dodge_Antibodies-005");
                 StartCoroutine(TurnTextOn(4));
                 break;
 
             case 8:
-                StartCoroutine(TurnTextOn(5));
-                break;
-
-            case 9:
                 Text.text = "";
                 Player.GetComponent<MovingCamera>().speed = 5.0f;
                 Player.GetComponent<MovingCamera>().stopMoving = false;
