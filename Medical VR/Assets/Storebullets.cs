@@ -174,7 +174,7 @@ public class Storebullets : MonoBehaviour
         if (GlobalVariables.arcadeMode == true)
         {
             theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
-            if (lives < 1)
+            if (lives < 1 && GlobalVariables.arcadeMode != false)
             {
                 ShowScore();
             }
