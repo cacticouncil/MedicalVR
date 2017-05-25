@@ -17,7 +17,7 @@ public class MemoryUI : MonoBehaviour
 
     public GameObject theScore, theLives, theLevels, scoreBoard, UI, Spheres, Timer, Capsules;
     public GameObject Username, ProfilePic;
-    
+
     // Use this for initialization
     public float score = 0;
     public static float finalScore = 0;
@@ -26,10 +26,11 @@ public class MemoryUI : MonoBehaviour
     public float startTime = 60.0f;
     public bool finnished = false;
     public float timeRemaining = 60.0f;
+
     public void LoseresetPos()
     {
-            lives--;
-            theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+        lives--;
+        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
     }
 
     void ShowScore()
@@ -50,8 +51,8 @@ public class MemoryUI : MonoBehaviour
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
         Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
-        if(FacebookManager.Instance.ProfilePic != null)
-        ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
+        if (FacebookManager.Instance.ProfilePic != null)
+            ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
     public void RestartGame()
     {
@@ -310,10 +311,13 @@ public class MemoryUI : MonoBehaviour
 
         if (GlobalVariables.arcadeMode == true && GlobalVariables.tutorial == false)
         {
-            if(!(Randomsphere.correct == 3))
-            timeRemaining -= Time.deltaTime;
+            if (!(Randomsphere.correct == 3))
+                timeRemaining -= Time.deltaTime;
 
-            string minutes = ((int)timeRemaining / 60).ToString();
+            int minutesint = ((int)timeRemaining / 60);
+            if (minutesint < 0)
+                minutesint = 0;
+            string minutes = minutesint.ToString();
             string seconds = (timeRemaining % 60).ToString("f2");
             Timer.GetComponent<TMPro.TextMeshPro>().text = "Timer: " + minutes + ":" + seconds;
         }
@@ -330,13 +334,21 @@ public class MemoryUI : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (Level >= 20)
+        {
+            BannerScript.UnlockTrophy("RNA");
+        }
+        if (timeRemaining < 0)
+        {
+            BannerScript.UnlockTrophy("Ribosome");
+        }
         if ((lives < 1 || timeRemaining < 0) && GlobalVariables.arcadeMode != false)
         {
             ShowScore();
         }
         else
         {
-            if(lives < 1 || timeRemaining < 0)
+            if (lives < 1 || timeRemaining < 0)
             {
                 GlobalVariables.arcadeMode = false;
                 SceneManager.LoadScene("MemoryGame");
@@ -353,8 +365,8 @@ public class MemoryUI : MonoBehaviour
             }
             theLevels.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + Level.ToString();
         }
-    }   
-    
+    }
+
     void AvoidBack()
     {
         if (transform.rotation.eulerAngles.y > 90)
