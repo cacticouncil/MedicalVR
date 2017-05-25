@@ -164,10 +164,15 @@ public class SubstitlesScript : MonoBehaviour
     {
         if (stop == true)
         {
+            skip = true;
+            textTimer = 0;
+            textIdx = 0;
+            theText = "";
             stop = false;
             done = false;
             i = 0;
             theTimer = 0;
+            GetComponent<TMPro.TextMeshPro>().text = "";
         }
     }
     public void Stop()

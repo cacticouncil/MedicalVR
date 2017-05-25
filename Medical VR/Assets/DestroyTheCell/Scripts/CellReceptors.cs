@@ -15,7 +15,6 @@ public class CellReceptors : MonoBehaviour
     private float SpeedForTutorial = .01f;
     public float TutorialCellReceptorTimer = 0.0f;
     bool DontCheckAgain = false;
-    Vector3 SavedLocation;
 
     void Start()
     {
@@ -24,8 +23,6 @@ public class CellReceptors : MonoBehaviour
 
         if (!GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber != 1)
             GetComponent<Rigidbody>().AddForce(new Vector3(100, 100, 100));
-
-        SavedLocation = WaveManager.GetComponent<WaveManager>().TutorialLocationEnd.transform.position;
     }
 
     void FixedUpdate()
