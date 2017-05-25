@@ -6,14 +6,21 @@ public class StrategyVirusHostScript : StrategyVirusScript
     //This virus takes over the cell it is attacking using the cell's reproduction to make viruses instead of cells
     public override void Attack()
     {
+        if (target.protein == Proteins.RNase_L || target.protein == Proteins.PKR)
+        {
+            StrategyCellManagerScript.instance.KillCell(target.key);
+            StartCoroutine(Die());
+            return;
+        }
+
         target.Treproduction -= target.reproduction;
         if (target.Treproduction <= 0)
         {
             //reproduce
-            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
+            StrategyCellManagerScript.instance.SpawnVirusSingleAdjacent(target.key, transform.position);
             if (target.RDur > 0)
             {
-                target.Treproduction -= target.rBonus;
+                target.Treproduction -= StrategyCellScript.rBonus;
                 target.RDur--;
                 if (target.RDur == 0)
                 {
@@ -22,14 +29,8 @@ public class StrategyVirusHostScript : StrategyVirusScript
             }
             else
             {
-                target.Treproduction = target.reproductionReset + target.Treproduction;
+                target.Treproduction = StrategyCellScript.reproductionReset + target.Treproduction;
             }
-        }
-
-        if (target.protein == Proteins.RNase_L || target.protein == Proteins.PKR)
-        {
-            parent.KillCell(target.key);
-            StartCoroutine(Die());
         }
     }
 }

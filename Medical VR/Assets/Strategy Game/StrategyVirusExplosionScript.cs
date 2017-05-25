@@ -10,12 +10,10 @@ public class StrategyVirusExplosionScript : StrategyVirusScript
         if (target.protein != Proteins.TRIM22 && target.protein != Proteins.IFIT)
         {
             spawned = true;
-            parent.SpawnVirusAllAdjacent(target.key, transform.position);
+            StrategyCellManagerScript.instance.SpawnVirusAllAdjacent(target.key, transform.position);
         }
-        if (spawned ||
-            target.protein == Proteins.TRIM22 ||
-            (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 75))
-            parent.KillCell(target.key);
+        if (spawned || target.protein == Proteins.TRIM22 || (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) < 20))
+            StrategyCellManagerScript.instance.KillCell(target.key);
         StartCoroutine(Die());
     }
 }

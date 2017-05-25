@@ -42,11 +42,9 @@ public class Storebullets : MonoBehaviour
         {
         "Welcome to CGamp Snatcher",
         "Your objective is to grab cGAMP and direct them towards the STING molecules on the Endoplasmic Recticulum.",
-        "This is how your cells communicate that a virus has been detected.",
-        "If you look around, there are CGamp molecules in the area. Just look at them to pick them up. Try to get 10.",
+        "This is how your cells communicate that a virus has been detected. If you look around, there are CGamp molecules in the area. Just look at them to pick them up. Try to get 10.",
         //(After the user gets 10 Cgamps)
-        "Perfect! Now help them reach the STING molecules by shooting them.",
-        "Press the button to shoot and make sure they don't collide with other objects. ",
+        "Perfect! Now help them reach the STING molecules by shooting them. Press the button to shoot and make sure they don't collide with other objects.",
         //(After hitting 10 stings)
         "Awesome! Remember that CGamp can spawn behind you.",
         //(end)
@@ -150,7 +148,7 @@ public class Storebullets : MonoBehaviour
 
         if (bPressed && Time.time > nextFire)
         {
-            if (SoundManager.IsJordanPlaying("28860__junggle__btn050") == false)
+           // if (SoundManager.IsJordanPlaying("28860__junggle__btn050") == false)
                 SoundManager.PlayJordanVoice("28860__junggle__btn050");
             shootCGamp();
         }
@@ -241,35 +239,43 @@ public class Storebullets : MonoBehaviour
                 }
                 break;
             case 3:
-                if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-003"))
-                    SoundManager.StopCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-003");
-                SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004");
-                StartCoroutine(TurnTextOn(3));
                 EventSystem.SetActive(true);
+                subtitles.text = " ";              
                 break;
-
             case 4:
+                {
+                    if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-003"))
+                        SoundManager.StopCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-003");
+                    SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004");
+                    StartCoroutine(TurnTextOn(3));
+                }
+                break;
+            case 5:
+                //Turn off shooting here
+                subtitles.text = " ";
+                
+                break;
+            case 6:
                 //Turn off shooting here
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004"))
                     SoundManager.StopCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004");
                 SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005");
                 StartCoroutine(TurnTextOn(4));
                 break;
+            //case 6:
+            //    if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005"))
+            //        SoundManager.StopCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005");
+            //    SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-006");
+            //    StartCoroutine(TurnTextOn(5));
+            //    //Turn on shooting here
+            //    break;
 
-            case 5:
-                if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005"))
-                    SoundManager.StopCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005");
-                SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-006");
-                StartCoroutine(TurnTextOn(5));
-                //Turn on shooting here
-                break;
-
-            case 6:
-                if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-006"))
-                    SoundManager.StopCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-006");
-                SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-007");
-                StartCoroutine(TurnTextOn(6));
-                break;
+            //case 7:
+            //    if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-006"))
+            //        SoundManager.StopCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-006");
+            //    SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-007");
+            //    StartCoroutine(TurnTextOn(6));
+            //    break;
 
             default:
                 subtitles.text = "";

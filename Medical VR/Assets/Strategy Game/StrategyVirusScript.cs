@@ -10,8 +10,6 @@ public class StrategyVirusScript : MonoBehaviour
     public TMPro.TextMeshPro attack, speed, immunity, powerup;
 
     [System.NonSerialized]
-    public StrategyCellManagerScript parent;
-    [System.NonSerialized]
     public float turnSpeed = .1f, attackValue = .5f, attackDuration = 0, immunityToKill = 15.0f, percentTraveled = 0.0f;
     [System.NonSerialized]
     public bool standby = false, targeted = false, selected = false;
@@ -38,7 +36,6 @@ public class StrategyVirusScript : MonoBehaviour
             distance = .001f;
             standby = true;
         }
-        parent.viruses.Add(this);
         startTime = Time.time;
     }
 
@@ -74,7 +71,7 @@ public class StrategyVirusScript : MonoBehaviour
         trav = false;
         if (standby)
         {
-            target = parent.FindVirusNewTarget(gameObject);
+            target = StrategyCellManagerScript.instance.FindVirusNewTarget(this);
             if (standby)
             {
                 if (percentTraveled < 1f - turnSpeed)
@@ -86,7 +83,7 @@ public class StrategyVirusScript : MonoBehaviour
                     percentTraveled = 1f - turnSpeed;
                 }
 
-                nextPosition = Vector3.Lerp(prevPosition, parent.RandomPositionAboveHex(), percentTraveled);
+                nextPosition = Vector3.Lerp(prevPosition, StrategyCellManagerScript.instance.RandomPositionAboveHex(), percentTraveled);
                 prevPosition = transform.position;
                 distance = Mathf.Max(Vector3.Distance(prevPosition, nextPosition), .001f);
                 startTime = Time.time;
@@ -109,13 +106,13 @@ public class StrategyVirusScript : MonoBehaviour
                 if (Random.Range(0.0f, 100.0f) < 90)
                 {
                     target.targeted = false;
-                    target = parent.FindVirusNewTarget(gameObject);
+                    target = StrategyCellManagerScript.instance.FindVirusNewTarget(this);
                     return;
                 }
             }
             GetComponent<Collider>().isTrigger = true;
             target.hosted = true;
-            target.virus = gameObject;
+            target.virus = this;
         }
 
         if (percentTraveled > 1.0f)
@@ -139,9 +136,9 @@ public class StrategyVirusScript : MonoBehaviour
         StartCoroutine(Move());
     }
 
-    void OnCollisionEnter(Collision collision)
+    void CheckCollision(Transform collision)
     {
-        if (target && collision.transform.parent && collision.transform.parent.transform.GetComponent<StrategyCellScript>() && collision.transform.parent.transform.GetComponent<StrategyCellScript>().key == target.key)
+        if (target && collision.transform.GetInstanceID() == target.render.transform.GetInstanceID())
         {
             collision.transform.GetComponent<Rotate>().enabled = false;
             transform.GetChild(1).GetComponent<Rotate>().enabled = false;
@@ -153,56 +150,45 @@ public class StrategyVirusScript : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        CheckCollision(collision.transform);
+    }
+
     void OnTriggerEnter(Collider collision)
     {
-        if (target && collision.transform.parent && collision.transform.parent.transform.GetComponent<StrategyCellScript>() && collision.transform.parent.transform.GetComponent<StrategyCellScript>().key == target.key)
-        {
-            collision.transform.GetComponent<Rotate>().enabled = false;
-            transform.GetChild(1).GetComponent<Rotate>().enabled = false;
-            nextPosition = transform.position;
-            transform.parent = collision.transform;
-            StopCoroutine(Move());
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-            GetComponent<Rigidbody>().isKinematic = true;
-        }
+        CheckCollision(collision.transform);
     }
 
     public void MoveTo()
     {
         if (!selected)
         {
-            //Get the direction of the player from the cell
-            Vector3 heading = Camera.main.transform.position - transform.position;
-            //Don't change y value
-            heading.y = 0;
-            //Find normalized direction
-            float distance = Mathf.Max(heading.magnitude, .001f);
-            Vector3 direction = heading / distance;
-            if (direction.magnitude < 0.01f)
-            {
-                direction = new Vector3(0.0f, 0.0f, 1.0f);
-            }
-            //Scale it to 1.5
+            Vector3 direction = Camera.main.transform.forward;
+            direction.y = 0;
+            direction.Normalize();
             direction *= scaledDistance;
-
-            Vector3 finalPos = new Vector3(transform.position.x + direction.x, transform.position.y, transform.position.z + direction.z);
-
+            if (direction.magnitude == 0)
+            {
+                direction = new Vector3(1.3f, 0, 0);
+            }
+            Vector3 finalPos = transform.position - direction;
             transform.GetChild(0).transform.LookAt(finalPos);
 
             //This is the new target position
             Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(finalPos);
-            parent.SetSelected(key);
+            StrategyCellManagerScript.instance.SetSelected(key);
             ToggleUI(true);
-            parent.viewingStats = true;
+            StrategyCellManagerScript.instance.viewingStats = true;
         }
     }
 
     public void UseV()
     {
         //check for item
-        if (parent.inventory[6].count > 0)
+        if (StrategyCellManagerScript.instance.inventory[6].count > 0)
         {
-            parent.inventory[6].count--;
+            StrategyCellManagerScript.instance.inventory[6].count--;
             ToggleUI(false);
             Vector3 camPos = Camera.main.GetComponent<Transform>().position;
             Vector3 dir = camPos - transform.position;
@@ -235,8 +221,8 @@ public class StrategyVirusScript : MonoBehaviour
             attack.text = "Attack: " + (int)(attackValue * 10) * .1f;
             speed.text = "Speed: " + (int)(turnSpeed * 10) * .1f;
             immunity.text = "Immunity To Kill: " + Mathf.CeilToInt(immunityToKill);
-            powerup.text = parent.inventory[6].count.ToString();
-            if (parent.inventory[6].count < 1)
+            powerup.text = StrategyCellManagerScript.instance.inventory[6].count.ToString();
+            if (StrategyCellManagerScript.instance.inventory[6].count < 1)
                 powerup.color = Color.red;
             else
                 powerup.color = Color.white;
@@ -249,18 +235,14 @@ public class StrategyVirusScript : MonoBehaviour
     public virtual void Attack()
     {
         bool spawned = false;
-        if (target.protein == Proteins.None || target.protein == Proteins.CH25H || target.protein == Proteins.Mx1)
+        if (target.protein != Proteins.TRIM22 && target.protein != Proteins.IFIT)
         {
             spawned = true;
-            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
-            parent.SpawnVirusSingleAdjacent(target.key, transform.position);
+            StrategyCellManagerScript.instance.SpawnVirusSingleAdjacent(target.key, transform.position);
+            StrategyCellManagerScript.instance.SpawnVirusSingleAdjacent(target.key, transform.position);
         }
-        if (spawned ||
-            target.protein == Proteins.RNase_L ||
-            target.protein == Proteins.PKR ||
-            target.protein == Proteins.TRIM22 ||
-            (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) > 75))
-            parent.KillCell(target.key);
+        if (spawned || target.protein == Proteins.TRIM22 || (target.protein == Proteins.IFIT && Random.Range(0.0f, 100.0f) < 20))
+            StrategyCellManagerScript.instance.KillCell(target.key);
         StartCoroutine(Die());
     }
 
@@ -273,11 +255,10 @@ public class StrategyVirusScript : MonoBehaviour
             target.transform.GetChild(1).GetComponent<Rotate>().enabled = true;
             target = null;
         }
-        if (parent)
+        if (StrategyCellManagerScript.instance)
         {
-            parent.virusKills++;
-            parent.viruses.Remove(this);
-            parent = null;
+            StrategyCellManagerScript.instance.virusKills++;
+            StrategyCellManagerScript.instance.viruses.Remove(this);
         }
 
         float startTime = Time.time;

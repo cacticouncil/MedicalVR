@@ -5,44 +5,43 @@ public class StrategyTransporter : MonoBehaviour
 {
     public Vector3 destination;
 
-    private Vector3 startPos;
-    private float startTime;
-    // Use this for initialization
+    private Transform passenger;
+    private Vector3 startPos, direction;
+    private float t = 0.0f;
+
     void Start()
     {
         startPos = transform.position;
-        startTime = Time.time;
+        passenger = transform.GetChild(0);
+        direction = (startPos - destination) * .02f;
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        float t = Time.time - startTime;
-        transform.position = Vector3.Lerp(startPos, destination, t);
+        t += .02f;
+        transform.position += direction;
         transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t);
         if (t >= 1.0f)
         {
-            if (transform.childCount > 0)
+            if (passenger)
             {
-                if (transform.GetChild(0).GetComponent<StrategyVirusScript>())
+                if (passenger.GetComponent<StrategyVirusScript>())
+                    passenger.GetComponent<Collider>().isTrigger = false;
+                else if (passenger.GetComponent<Collider>())
                 {
-                    transform.GetChild(0).GetComponent<StrategyVirusScript>().enabled = true;
+                    passenger.GetComponent<Collider>().enabled = true;
                 }
-                if (transform.GetChild(0).GetComponent<Collider>())
+                if (passenger.transform.childCount > 0)
                 {
-                    transform.GetChild(0).GetComponent<Collider>().enabled = true;
-                }
-                if (transform.GetChild(0).transform.childCount > 0)
-                {
-                    for (int i = 0; i < transform.GetChild(0).transform.childCount; i++)
+                    for (int i = 0; i < passenger.childCount; i++)
                     {
-                        if (transform.GetChild(0).transform.GetChild(i).GetComponent<Collider>())
+                        if (passenger.GetChild(i).GetComponent<Collider>())
                         {
-                            transform.GetChild(0).transform.GetChild(i).GetComponent<Collider>().enabled = true;
+                            passenger.GetChild(i).GetComponent<Collider>().enabled = true;
                         }
                     }
                 }
-                transform.GetChild(0).parent = transform.parent;
+                passenger.parent = transform.parent;
             }
             Destroy(gameObject);
         }
