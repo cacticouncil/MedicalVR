@@ -156,7 +156,7 @@ public class Storebullets : MonoBehaviour
         if (bPressed && Time.time > nextFire)
         {
            // if (SoundManager.IsJordanPlaying("28860__junggle__btn050") == false)
-                SoundManager.PlayJordanVoice("28860__junggle__btn050");
+                SoundManager.PlayJordanVoice("link3");
             shootCGamp();
         }
     }
