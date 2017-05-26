@@ -96,8 +96,7 @@ public class TimeInputObject : MonoBehaviour
 
         if (correct)
         {
-            if (SoundManager.IsJordanPlaying("180278__rodny5__surreal-bell") == false)
-                SoundManager.PlayJordanVoice("180278__rodny5__surreal-bell");
+                SoundManager.PlayJordanVoice("link4");
             memoryui.GetComponent<MemoryUI>().score += 50;
             GetComponent<Renderer>().material.color = Color.green;
             sphere.Correct();
@@ -105,7 +104,6 @@ public class TimeInputObject : MonoBehaviour
         }
         else
         {
-            if (SoundManager.IsJordanPlaying("341633__padsterpat__karplus-strong") == false)
                 SoundManager.PlayJordanVoice("341633__padsterpat__karplus-strong");
             GetComponent<Renderer>().material.color = Color.red;
             memoryui.GetComponent<MemoryUI>().LoseresetPos();

@@ -5,8 +5,6 @@ using System;
 public class CGampBullet : MonoBehaviour
 {
     public GameObject Trial;
-    
-   
     public GameObject cameras;
     bool isgrabbed = false;
     float timer = 0;
@@ -16,6 +14,7 @@ public class CGampBullet : MonoBehaviour
         Instantiate(Trial, transform.position, transform.rotation, transform);
         Trial.GetComponent<ParticleSystem>().Play();
     }
+
     private void Update()
     {
         timer += Time.deltaTime;
@@ -23,10 +22,9 @@ public class CGampBullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
-        if(isgrabbed == true)
+        if (isgrabbed == true)
         {
-            transform.position = Vector3.MoveTowards(transform.position, cameras.transform.position + new Vector3(0,0,1), 0.3f);
+            transform.position = Vector3.MoveTowards(transform.position, cameras.transform.position + new Vector3(0, 0, 1), 0.3f);
 
             if (transform.position == cameras.transform.position + new Vector3(0, 0, 1))
             {
@@ -36,16 +34,16 @@ public class CGampBullet : MonoBehaviour
             }
         }
 
-        if(cameras.GetComponent<Storebullets>().fin == true || timer > 30)
+        if (cameras.GetComponent<Storebullets>().fin == true || timer > 30)
         {
             Destroy(gameObject);
             Storebullets.amount -= 1;
         }
     }
+
     public void HandleTimeInput()
     {
-        if (SoundManager.IsJordanPlaying("50565__broumbroum__sf3-sfx-menu-validate") == false)
-            SoundManager.PlayJordanVoice("50565__broumbroum__sf3-sfx-menu-validate");
+        SoundManager.PlayJordanVoice("50565__broumbroum__sf3-sfx-menu-validate");
         isgrabbed = true;
     }
 }
