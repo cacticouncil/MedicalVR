@@ -26,7 +26,7 @@ public class TrophyScript : MonoBehaviour {
         pedestalTarget = trophyPos.transform.position;
     }
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         if(inPedestal == false)
         {
@@ -57,6 +57,15 @@ public class TrophyScript : MonoBehaviour {
             else if (transform.rotation.eulerAngles.z == 90)
             {
                 transform.Rotate(rotationSpeed * Time.deltaTime, 0, 0);
+            }
+            if(GetComponent<AudioSource>().isPlaying == true)
+            {
+                if (sub.GetComponent<SubstitlesScript>().stopTime == true)
+                    GetComponent<AudioSource>().Pause();
+            }
+            else if(sub.GetComponent<SubstitlesScript>().stopTime == false && sub.GetComponent<SubstitlesScript>().theTimer != 0)
+            {
+                GetComponent<AudioSource>().UnPause();
             }
         }
     }

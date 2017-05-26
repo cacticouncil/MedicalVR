@@ -25,7 +25,7 @@ public class GetpointsER : MonoBehaviour
     IEnumerator MoveTo()
     {
         //if (SoundManager.IsJordanPlaying("180278__rodny5__surreal-bell") == false)
-            SoundManager.PlayJordanVoice("180278__rodny5__surreal-bell");
+            SoundManager.PlayJordanVoice("link4");
         int x = 0;
         while (true)
         {

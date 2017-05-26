@@ -7,8 +7,9 @@ using TMPro;
 
 public class Storebullets : MonoBehaviour
 {
+    public ProteinCollectorScript PCS;
+    public GameObject press;
     int WhatToRead = 0;
-    float BeatGameTimer = 0.0f;
     public static int amount;
     public static int stingamount;
 
@@ -50,6 +51,11 @@ public class Storebullets : MonoBehaviour
         //(end)
         };
     private bool last = false, text = false, finish = false;
+
+    void Awake()
+    {
+        PCS.StartHazards();
+    }
 
     public static void LoseresetPos()
     {
@@ -132,6 +138,7 @@ public class Storebullets : MonoBehaviour
                 }
                 else
                 {
+                    press.SetActive(false);
                     if ((WhatToRead != 4 && WhatToRead != 6))
                         Click();
                 }
@@ -149,7 +156,7 @@ public class Storebullets : MonoBehaviour
         if (bPressed && Time.time > nextFire)
         {
            // if (SoundManager.IsJordanPlaying("28860__junggle__btn050") == false)
-                SoundManager.PlayJordanVoice("28860__junggle__btn050");
+                SoundManager.PlayJordanVoice("link3");
             shootCGamp();
         }
     }
@@ -304,6 +311,7 @@ IEnumerator TurnTextOn(int index)
     subtitles.text = texts[index];
     finish = false;
     text = false;
-}
+        press.SetActive(true);
+    }
     #endregion
 }

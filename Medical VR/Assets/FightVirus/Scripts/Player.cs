@@ -7,9 +7,7 @@ using System;
 
 public class Player : MonoBehaviour
 {
-    public GameObject ScoreObj;
-    public GameObject VirusCount;
-    public GameObject CenterScreenObj;
+    public GameObject PressToContinue;
     public GameObject EnemyManger;
     public GameObject BulletSpawn;
     public GameObject BlackCurtain;
@@ -30,12 +28,15 @@ public class Player : MonoBehaviour
     //For text
     bool StopInput = false;
     public int WhatToRead = 0;
+    public TextMeshPro ScoreObj;
+    public TextMeshPro VirusCount;
     public TextMeshPro Text;
     private string[] TextList = new string[8];
     private bool last = false, text = false, finish = false;
 
     public int IncrementKill;
     public int SeeValue;
+
     void Start()
     {
         BannerScript.LockTrophy("Virus Trophy");
@@ -86,7 +87,7 @@ public class Player : MonoBehaviour
                 {
                     isGameOver = true;
                     ScoreBoard.SetActive(true);
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "You lose arcade mode";
+                    Text.text = "You lose arcade mode";
 
                     if (CurrentScore > BestScoreForFightVirus)
                         BestScoreForFightVirus = CurrentScore;
@@ -99,7 +100,7 @@ public class Player : MonoBehaviour
                 {
                     isGameOver = true;
                     ScoreBoard.SetActive(true);
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "You win arcade mode";
+                    Text.text = "You win arcade mode";
 
                     if (CurrentScore > BestScoreForFightVirus)
                         BestScoreForFightVirus = CurrentScore;
@@ -138,7 +139,7 @@ public class Player : MonoBehaviour
                 if (VirusLeaveCount == 5)
                 {
                     isGameOver = true;
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "You lose story mode";
+                    Text.text = "You lose story mode";
                     SceneManager.LoadScene("FightVirus");
                 }
 
@@ -146,7 +147,7 @@ public class Player : MonoBehaviour
                 if (EnemyManger.GetComponent<VirusManager>().WaveNumber == 4 && EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0)
                 {
                     isGameOver = true;
-                    CenterScreenObj.GetComponent<TextMeshPro>().text = "You win story mode";
+                    Text.text = "You win story mode";
                     BeatGameTimer += Time.deltaTime;
 
                     float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
@@ -181,7 +182,10 @@ public class Player : MonoBehaviour
                         finish = true;
 
                     else
+                    {
+                        PressToContinue.SetActive(false);
                         TextForTutorial();
+                    }
                 }
                 last = held;
             }
@@ -190,12 +194,14 @@ public class Player : MonoBehaviour
             if (VirusLeaveCount == 1 && WhatToRead == 5)
             {
                 StopInput = false;
+                PressToContinue.SetActive(true);
                 WhatToRead += 1;
             }
 
             if (EnemyManger.GetComponent<VirusManager>().VirusList.Count == 0 && EnemyManger.GetComponent<VirusManager>().WaveNumber == 3 && WhatToRead == 9)
             {
                 StopInput = false;
+                PressToContinue.SetActive(true);
                 WhatToRead++;
             }
         }
@@ -307,7 +313,7 @@ public class Player : MonoBehaviour
                 break;
 
             default:
-                CenterScreenObj.GetComponent<TextMeshPro>().text = " ";
+                Text.text = " ";
                 break;
         }
     }
@@ -322,10 +328,10 @@ public class Player : MonoBehaviour
 
     IEnumerator DisplayText(string message, float duration)
     {
-        CenterScreenObj.GetComponent<TextMeshPro>().enabled = true;
-        CenterScreenObj.GetComponent<TextMeshPro>().text = message;
+        Text.enabled = true;
+        Text.text = message;
         yield return new WaitForSeconds(duration);
-        CenterScreenObj.GetComponent<TextMeshPro>().enabled = false;
+        Text.enabled = false;
 
         if (WhatToRead == 0)
         {
@@ -362,6 +368,7 @@ public class Player : MonoBehaviour
         Text.text = TextList[index];
         finish = false;
         text = false;
+        PressToContinue.SetActive(true);
         WhatToRead++;
     }
 
