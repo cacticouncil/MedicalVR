@@ -355,7 +355,7 @@ public class SimonSays : MonoBehaviour
        
     }
    public void selectYellow()
-    {   if(makeInput)
+    {   if(makeInput && Time.timeScale != 0)
         {
             selectedColor = theColors.YELLOW;
             buttonPressed = true;
@@ -365,7 +365,7 @@ public class SimonSays : MonoBehaviour
 
     public void selectRed()
     {
-        if (makeInput)
+        if (makeInput && Time.timeScale != 0)
         {
             selectedColor = theColors.RED;
             buttonPressed = true;
@@ -375,7 +375,7 @@ public class SimonSays : MonoBehaviour
 
     public void selectBlue()
     {
-        if (makeInput)
+        if (makeInput && Time.timeScale != 0)
         {
             selectedColor = theColors.BLUE;
             buttonPressed = true;
@@ -385,7 +385,7 @@ public class SimonSays : MonoBehaviour
 
     public void selectGreen()
     {
-        if (makeInput)
+        if (makeInput && Time.timeScale != 0)
         {
             selectedColor = theColors.GREEN;
             buttonPressed = true;
