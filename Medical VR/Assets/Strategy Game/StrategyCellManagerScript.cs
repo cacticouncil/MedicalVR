@@ -250,9 +250,9 @@ public class StrategyCellManagerScript : MonoBehaviour
                     t.key = new Vector2(0, 0);
                     AddToDictionary(t);
                     t.name = "Cell0_0";
-                    t.reproduction = 5;
-                    t.defense = 5;
-                    t.immunity = 5;
+                    t.reproduction = 1;
+                    t.defense = 1;
+                    t.immunity = 1;
                     t.enabled = true;
                     t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
                 }
@@ -293,9 +293,9 @@ public class StrategyCellManagerScript : MonoBehaviour
                     t.key = new Vector2(0, 0);
                     AddToDictionary(t);
                     t.name = "Cell0_0";
-                    t.reproduction = 5;
-                    t.defense = 5;
-                    t.immunity = 5;
+                    t.reproduction = 0;
+                    t.defense = 0;
+                    t.immunity = 0;
                     t.enabled = true;
                     t.transform.GetChild(1).transform.GetComponent<Collider>().enabled = true;
                 }

@@ -7,6 +7,7 @@ using TMPro;
 
 public class Storebullets : MonoBehaviour
 {
+    public ProteinCollectorScript PCS;
     public GameObject press;
     int WhatToRead = 0;
     public static int amount;
@@ -50,6 +51,11 @@ public class Storebullets : MonoBehaviour
         //(end)
         };
     private bool last = false, text = false, finish = false;
+
+    void Awake()
+    {
+        PCS.StartHazards();
+    }
 
     public static void LoseresetPos()
     {
@@ -150,7 +156,7 @@ public class Storebullets : MonoBehaviour
         if (bPressed && Time.time > nextFire)
         {
            // if (SoundManager.IsJordanPlaying("28860__junggle__btn050") == false)
-                SoundManager.PlayJordanVoice("28860__junggle__btn050");
+                SoundManager.PlayJordanVoice("link3");
             shootCGamp();
         }
     }

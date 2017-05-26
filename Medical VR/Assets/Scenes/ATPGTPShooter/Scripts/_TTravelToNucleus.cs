@@ -16,6 +16,7 @@ public class _TTravelToNucleus : MonoBehaviour
     public bool hasATP, hasGTP;
     [HideInInspector]
     public float waitTime = 0;
+    bool moving = false;
 
     private nucleusPathChild targetPath;
    // private GameObject nearestPath;
@@ -56,10 +57,16 @@ public class _TTravelToNucleus : MonoBehaviour
         Invoke("RunTravel", waitTime);
     }
 
+    public void MoveNow()
+    {
+        RunTravel();
+    }
+
     void RunTravel()
     {
-        if (!nucleus)
+        if (!nucleus || moving)
             return;
+        moving = true;
         Vector3 farPoint = nucleus.transform.GetChild((int)nucleusChild.MovementPath).GetChild((int)nucleusPathChild.FarPoint).transform.position;
         Vector3 nearPoint = nucleus.transform.GetChild((int)nucleusChild.MovementPath).GetChild((int)nucleusPathChild.EnterOne).transform.position;
         float farDist = Vector3.Distance(transform.position, farPoint);
