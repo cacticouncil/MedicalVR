@@ -7,10 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class VirusPlayer : MonoBehaviour
 {
-
-    //Variables for Game
-    public TextMeshPro ScoreGameOjbect;
-    public TextMeshPro LivesGameObject;
+    public GameObject PressToContinue;
     public ProteinCollectorScript PCS;
     public GameObject Spawn;
     public GameObject WaveManager;
@@ -20,8 +17,6 @@ public class VirusPlayer : MonoBehaviour
     public FacebookStuff FB;
 
     public GameObject VirusAttack;
-
-    public GameObject PressToContinue;
 
     [System.NonSerialized]
     public float baseSpeed = 1;
@@ -48,6 +43,8 @@ public class VirusPlayer : MonoBehaviour
     public bool TutorialModeCompleted = false;
     bool StopInput = false;
     public int WhatToRead = 0;
+    public TextMeshPro ScoreGameOjbect;
+    public TextMeshPro LivesGameObject;
     public TextMeshPro Text;
     private string[] TextList = new string[9];
     private bool last = false, text = false, finish = false;
