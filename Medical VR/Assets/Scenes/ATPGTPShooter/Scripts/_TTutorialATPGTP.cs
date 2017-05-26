@@ -1,19 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 using TMPro;
 
+
 public class _TTutorialATPGTP : MonoBehaviour
 {
+    public float testQuanterneon;
+
     enum TutorialState { dispEnzyme, dispATP, moveATP, dispGTP, moveGTP, pointsDesc, startGame, wait }
     enum TextChild { Top, Right, Left, Bottom }
+    enum CurrentMolecule { ATP, GTP, None }
+
+    CurrentMolecule curMol = CurrentMolecule.None;
+
+    bool last = false;
+    bool text = false;
+    bool finish = false;
 
     public GameObject player;
 
     public float displayTime = 4;
     public float rotationSpeed = 1;
 
-    public AudioClip[] voiceSounds;
+    private int cNum = 0;
+
     public GameObject nucleus;
     public GameObject enzyme;
     public GameObject ATP;
@@ -24,6 +36,13 @@ public class _TTutorialATPGTP : MonoBehaviour
     GameObject gtp;
 
     float startGameTime;
+    float enzymeTime;
+    bool moveEnzyme = false;
+    bool hold = false;
+
+    public AudioClip[] voiceSounds;
+    public string[] texts;
+    private List<Coroutine> stop = new List<Coroutine>();
 
     int curAudioClip = 0;
     private TutorialState tState;
@@ -54,6 +73,9 @@ public class _TTutorialATPGTP : MonoBehaviour
             obj.GetComponent<_TSizeChange>().startSmall = true;
             obj.GetComponent<_TSizeChange>().Inititalize();
             obj.GetComponent<_TSizeChange>().ResetToSmall();
+            /////////////////
+            //      obj.GetComponent<_TSizeChange>().ResetToNaturalSize();
+            /////////////////
         }
     }
 
@@ -61,7 +83,10 @@ public class _TTutorialATPGTP : MonoBehaviour
     {
         if (!run)
             return;
+        //    TutorialMode2();
         TutorialMode();
+
+
     }
 
     #region Set Tutorial State
@@ -83,6 +108,109 @@ public class _TTutorialATPGTP : MonoBehaviour
         tmpTutState = TutorialState.wait;
     }
     #endregion
+
+    void TutorialMode2()
+    {
+
+        bool held = Input.GetButton("Fire1");
+
+        switch (curMol)
+        {
+            case CurrentMolecule.None:
+                if (held && !last && !hold)
+                {
+                    if (text)
+                    {
+                        finish = true;
+                    }
+                    else
+                    {
+                        SwitchMode();
+                    }
+                }
+                break;
+            case CurrentMolecule.ATP:
+                hold = false;
+                if (enz.transform.rotation.eulerAngles.y > 170 && enz.transform.rotation.eulerAngles.y < 225)
+                    moveEnzyme = true;
+                if (moveEnzyme)
+                    if (MoveToEnzyme(atp))
+                    {
+                        moveEnzyme = false;
+                        curMol = CurrentMolecule.None;
+                    }
+                break;
+            case CurrentMolecule.GTP:
+                hold = false;
+                if (enz.transform.rotation.eulerAngles.y < 170 && enz.transform.rotation.eulerAngles.y > 115)
+                    moveEnzyme = true;
+                if (moveEnzyme)
+                    if (MoveToEnzyme(gtp))
+                    {
+                        moveEnzyme = false;
+                        curMol = CurrentMolecule.None;
+                    }
+                break;
+        }
+        last = held;
+    }
+
+    void SwitchMode()
+    {
+
+        switch (cNum)
+        {
+            case 0:
+                DispEnzyme2();
+                StartCoroutine(TurnTextOn(cNum++, TextChild.Top, 1f));
+                break;
+            case 1:
+                StartCoroutine(TurnTextOn(cNum++, TextChild.Top));
+                break;
+            case 2:
+                ClearText();
+                DispATP2();
+                stop.Add(StartCoroutine(TurnTextOn(cNum++, TextChild.Right, 1f)));
+                break;
+            case 3:
+                hold = true;
+                Invoke("PrepareATPmove", 1);
+                StopCurrentTexts();
+                StartCoroutine(TurnTextOn(cNum++, TextChild.Top));
+                break;
+            case 4:
+                ClearText();
+                DispGTP2();
+                stop.Add(StartCoroutine(TurnTextOn(cNum++, TextChild.Left, 1f)));
+                break;
+            case 5:
+                hold = true;
+                Invoke("PrepareGTPmove", 1);
+                StopCurrentTexts();
+                StartCoroutine(TurnTextOn(cNum++, TextChild.Top));
+                break;
+            case 6:
+                hold = true;
+
+                ClearText();
+                StartCoroutine(TurnTextOn(cNum++, TextChild.Top));
+                break;
+            case 7:
+                ClearText();
+                StartCoroutine(TurnTextOn(cNum++, TextChild.Top));
+                break;
+        }
+    }
+
+    void StopCurrentTexts()
+    {
+        foreach (Coroutine co in stop)
+        {
+            StopCoroutine(co);
+        }
+        stop.Clear();
+        ClearText();
+    }
 
     void TutorialMode()
     {
@@ -124,6 +252,15 @@ public class _TTutorialATPGTP : MonoBehaviour
                 break;
         }
     }
+
+    void PrepareATPmove()
+    {
+        curMol = CurrentMolecule.ATP;
+    }
+    void PrepareGTPmove()
+    {
+        curMol = CurrentMolecule.GTP;
+    }
     bool MoveToEnzyme(GameObject mol)
     {
         float step = speed * Time.deltaTime;
@@ -164,6 +301,61 @@ public class _TTutorialATPGTP : MonoBehaviour
     {
         yield return new WaitForSeconds(startTime + 1);
         GetComponent<_TGameController>().runGameState(0);
+    }
+
+    void DispEnzyme2()
+    {
+        float rotateSpeed = rotationSpeed * 0.9f;
+        float moveEnzymeTime = displayTime;
+        enz = Instantiate(enzyme, new Vector3(0, 1, 4), Quaternion.identity) as GameObject;
+        enz.GetComponent<_TRandomRotator>().enabled = false;
+        Rigidbody rb = enz.GetComponent<Rigidbody>();
+        rb.angularVelocity = new Vector3(0, rotateSpeed, 0);
+        rb.velocity = Vector3.zero;
+        rb.constraints = RigidbodyConstraints.FreezePosition;
+
+        enz.GetComponent<_TSizeChange>().startSmall = true;
+
+        enz.GetComponent<_TSizeChange>().Inititalize();
+        enz.GetComponent<_TSizeChange>().StartGrow();
+        enz.GetComponent<_TTravelToNucleus>().nucleus = nucleus;
+        enz.GetComponent<_TTravelToNucleus>().waitTime = moveEnzymeTime;
+    }
+    void DispATP2()
+    {
+        enzymeTime = Time.time;
+        atp = Instantiate(ATP, new Vector3(2, 1, 4), Quaternion.identity) as GameObject;
+        Rigidbody rb = atp.GetComponent<Rigidbody>();
+        rb.useGravity = false;
+
+        atp.GetComponent<_TSizeChange>().startSmall = true;
+
+        atp.GetComponent<_TSizeChange>().Inititalize();
+        atp.GetComponent<_TSizeChange>().StartGrow();
+        atp.GetComponent<_TMover>().enabled = false;
+        atp.GetComponent<_TDestroyByTime>().CancelDestroy();
+    }
+
+    void DispGTP2()
+    {
+        gtp = Instantiate(GTP, new Vector3(-2, 1, 4), Quaternion.identity) as GameObject;
+        Rigidbody rb = gtp.GetComponent<Rigidbody>();
+        rb.useGravity = false;
+
+        gtp.GetComponent<_TSizeChange>().startSmall = true;
+
+        gtp.GetComponent<_TSizeChange>().Inititalize();
+        gtp.GetComponent<_TSizeChange>().StartGrow();
+        gtp.GetComponent<_TMover>().enabled = false;
+        gtp.GetComponent<_TDestroyByTime>().CancelDestroy();
+    }
+
+    void ClearText()
+    {
+        foreach (Transform child in tutorialStuff.transform.GetChild(0).transform)
+        {
+            child.GetComponent<TextMeshPro>().text = "";
+        }
     }
 
     void DispEnzyme()
@@ -315,5 +507,38 @@ public class _TTutorialATPGTP : MonoBehaviour
         yield return new WaitForSeconds(displayDuration - startVO);
 
         obj.GetComponent<_TSizeChange>().StartShrink();
+    }
+
+    IEnumerator TurnTextOn(int index, TextChild childNum, float waitTime = 0)
+    {
+        while (text)
+            yield return 0;
+
+        yield return new WaitForSeconds(waitTime);
+
+        text = true;
+
+        TextMeshPro tmp = tutorialStuff.transform.GetChild(0).transform.GetChild((int)childNum).gameObject.GetComponent<TextMeshPro>();
+        tutorialStuff.transform.GetChild(0).transform.GetChild((int)childNum).gameObject.SetActive(true);
+        source.PlayOneShot(voiceSounds[index]);
+
+        tmp.text = "_";
+
+        while (tmp.text != texts[index] && !finish)
+        {
+            yield return new WaitForSeconds(GlobalVariables.textDelay);
+
+            if (tmp.text.Length == texts[index].Length)
+            {
+                tmp.text = texts[index];
+            }
+            else
+            {
+                tmp.text = tmp.text.Insert(tmp.text.Length - 1, texts[index][tmp.text.Length - 1].ToString());
+            }
+        }
+        tmp.text = texts[index];
+        finish = false;
+        text = false;
     }
 }
