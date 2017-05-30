@@ -9,7 +9,6 @@ public class AntiViralProtein : MonoBehaviour
     GameObject WaveManager;
     GameObject Player;
     bool AlwaysChasePlayer;
-    bool FlashScreen;
     bool isRotating;
     float RotateTimer;
     float MoveTimer;
@@ -26,7 +25,6 @@ public class AntiViralProtein : MonoBehaviour
         Player = WaveManager.GetComponent<WaveManager>().Player;
         M = (Movements)Random.Range(0, 7);
         AlwaysChasePlayer = false;
-        FlashScreen = false;
         isRotating = false;
         RotateTimer = 0.0f;
         MoveTimer = 0.0f;
@@ -135,11 +133,9 @@ public class AntiViralProtein : MonoBehaviour
 
     public bool CheckFOV()
     {
-        if (Vector3.Angle(Player.transform.position - transform.position, transform.forward) <= 35 && FlashScreen == false && Vector3.Distance(transform.position, Player.transform.position) <= 5.0f)
+        if (Player != null && Vector3.Angle(Player.transform.position - transform.position, transform.forward) <= 35 && Vector3.Distance(transform.position, Player.transform.position) <= 5.0f)
         {
-            Debug.Log("Can See Player");
             AlwaysChasePlayer = true;
-            FlashScreen = true;
             return true;
         }
 

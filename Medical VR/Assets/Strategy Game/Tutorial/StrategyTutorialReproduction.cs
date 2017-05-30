@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class StrategyTutorialReproduction : MonoBehaviour
 {
     public Transform cam;
-    public GameObject fade;
     public LookCamera lc;
+    public GameObject fade;
     public GameObject reticle;
     public GameObject eventSystem;
     public GameObject objects;

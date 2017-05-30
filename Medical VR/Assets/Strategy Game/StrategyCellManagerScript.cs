@@ -74,8 +74,8 @@ public class StrategyCellManagerScript : MonoBehaviour
     private float p2Modifier = 1, p3Modifier = .5f;
     private bool victory = false, defeat = false;
     private float virusReset = 50, virusTurn = 50, virusTurnMod = 2.5f;
-    private float xOffset = 2.0f;
-    private float yOffset = 2.0f;
+    private float xOffset = 2.2f;
+    private float yOffset = 2.2f;
     #endregion
 
     #region VariablesWithGets&Sets
@@ -441,7 +441,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 "\nYou spread " + (int)immunitySpread + " immunity." +
                 "\nYou killed " + virusKills + " viruses." +
                 "\nAt this point you can continue in sandbox mode, retry, or return to the main menu.";
-            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
+            MoveCamera.instance.SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
             SetSelected(victoryIndex);
 
             if (difficulty == 2)
@@ -461,7 +461,7 @@ public class StrategyCellManagerScript : MonoBehaviour
                 "\nYou spawned " + cellsSpawned + " cells." +
                 "\nYou spread " + (int)immunitySpread + " immunity." +
                 "\nYou killed " + virusKills + " viruses.";
-            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
+            MoveCamera.instance.SetDestination(new Vector3(victoryObject.transform.position.x, victoryObject.transform.position.y, victoryObject.transform.position.z - 1.5f));
             SetSelected(victoryIndex);
             ShowScore();
         }

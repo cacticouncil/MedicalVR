@@ -3,11 +3,26 @@ using System.Collections;
 
 public class MoveCamera : MonoBehaviour
 {
-    public float speed;
+    private static MoveCamera localInstance;
+    public static MoveCamera instance { get { return localInstance; } }
+
+    private float speed = 10;
     private float startTime;
     private float distance;
     private Vector3 startPosition;
     private Vector3 endPosition;
+
+    private void Awake()
+    {
+        if (localInstance != null && localInstance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            localInstance = this;
+        }
+    }
 
     // Use this for initialization
     void Start()
