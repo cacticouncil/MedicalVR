@@ -38,7 +38,7 @@ public class RnaMessengerScript : MonoBehaviour
         }
     }
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if(chain.Count >= 45)
         {

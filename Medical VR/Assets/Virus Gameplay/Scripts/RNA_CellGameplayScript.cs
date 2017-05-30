@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class RNA_CellGameplayScript : MonoBehaviour
 {
-    public Transform target;
+    public Transform target, cam;
     public GameObject subtitltes;
-    private float moveSpeed = .006f;
+    private float moveSpeed = .012f;
 
     private float vComparer = .01f;
     private bool moved = true;
@@ -44,6 +44,7 @@ public class RNA_CellGameplayScript : MonoBehaviour
             case (213):
                 if (moved)
                 {
+                    transform.position = new Vector3(cam.position.x + 5, cam.position.y + 1, cam.position.z + 2);
                     moved = false;
                     StartCoroutine(MoveTo(target));
                 }
