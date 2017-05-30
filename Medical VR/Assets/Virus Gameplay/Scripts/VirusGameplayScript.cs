@@ -205,7 +205,7 @@ public class VirusGameplayScript : MonoBehaviour
 
                 doAction = NullFunction;
                 I = 1;
-                moveSpeed = .8f;
+                moveSpeed = .8f/10f;
                 break;
             case (116):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-012") == false)
@@ -235,7 +235,7 @@ public class VirusGameplayScript : MonoBehaviour
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-015") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-015");
                 I = 3;
-                moveSpeed = .2f;
+                moveSpeed = .2f/10f;
                 break;
             case (158):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-016") == false)
@@ -299,7 +299,7 @@ public class VirusGameplayScript : MonoBehaviour
                 disableMovement = true;
                 doAction = NullFunction;
                 I = 5;
-                moveSpeed = .5f;
+                moveSpeed = .5f/10f;
                 break;
             case (232):
                 parent.GetComponent<CameraMovement_VirusGameplay>().speed = 5f;
@@ -326,7 +326,7 @@ public class VirusGameplayScript : MonoBehaviour
                 parent.GetComponent<LookCamera>().enabled = false;
                 doAction = NullFunction;
                 I = 7;
-                moveSpeed = .1f;
+                moveSpeed = .1f/10f;
                 break;
             case (257):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-029") == false)
@@ -383,7 +383,7 @@ public class VirusGameplayScript : MonoBehaviour
             case (297):
                 parent.GetComponent<LookCamera>().enabled = false;
                 I = 9;
-                moveSpeed = .5f;
+                moveSpeed = .5f/10f;
                 break;
             case (303):
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-035") == false)

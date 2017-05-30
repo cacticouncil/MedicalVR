@@ -4,12 +4,12 @@ using System.Collections;
 public class MovingCellsScript : MonoBehaviour
 {
     public GameObject Cam;
-    public float speed = .1f;
+   float speed = 5/10f;
 
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(transform.position, Cam.transform.position) < 800)
+        if (Vector3.Distance(transform.position, Cam.transform.position) < 800/10f)
         {
             if (GetComponent<Renderer>())
             {

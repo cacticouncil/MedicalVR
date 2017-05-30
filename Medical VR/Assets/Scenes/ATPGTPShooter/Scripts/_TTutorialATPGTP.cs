@@ -36,7 +36,7 @@ public class _TTutorialATPGTP : MonoBehaviour
     GameObject gtp;
 
     float startGameTime;
-    float enzymeTime;
+    //float enzymeTime;
     bool moveEnzyme = false;
     bool hold = false;
 
@@ -323,7 +323,7 @@ public class _TTutorialATPGTP : MonoBehaviour
     }
     void DispATP2()
     {
-        enzymeTime = Time.time;
+    //    enzymeTime = Time.time;
         atp = Instantiate(ATP, new Vector3(2, 1, 4), Quaternion.identity) as GameObject;
         Rigidbody rb = atp.GetComponent<Rigidbody>();
         rb.useGravity = false;

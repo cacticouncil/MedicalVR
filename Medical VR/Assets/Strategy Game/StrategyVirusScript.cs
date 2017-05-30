@@ -176,7 +176,7 @@ public class StrategyVirusScript : MonoBehaviour
             transform.GetChild(0).transform.LookAt(finalPos);
 
             //This is the new target position
-            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(finalPos);
+            MoveCamera.instance.SetDestination(finalPos);
             StrategyCellManagerScript.instance.SetSelected(key);
             ToggleUI(true);
             StrategyCellManagerScript.instance.viewingStats = true;
@@ -193,7 +193,7 @@ public class StrategyVirusScript : MonoBehaviour
             Vector3 camPos = Camera.main.GetComponent<Transform>().position;
             Vector3 dir = camPos - transform.position;
             dir.Normalize();
-            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(camPos + dir);
+            MoveCamera.instance.SetDestination(camPos + dir);
             Invoke("SpawnW", .5f);
         }
     }
