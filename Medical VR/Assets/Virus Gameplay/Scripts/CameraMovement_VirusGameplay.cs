@@ -14,6 +14,6 @@ public class CameraMovement_VirusGameplay : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        GetComponent<Rigidbody>().velocity = cam.transform.forward*speed *10;
+        GetComponent<Rigidbody>().velocity = cam.transform.forward*speed *1;
     }
 }
