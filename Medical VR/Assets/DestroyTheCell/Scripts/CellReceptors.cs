@@ -4,24 +4,24 @@ using System;
 
 public class CellReceptors : MonoBehaviour
 {
-    GameObject Player;
-    GameObject WaveManager;
     public GameObject VirusAttack;
-
     public bool AmITargeted = false;
-    private bool NeverTargetAgain = false;
-
     public int Health = 4;
-    private float SpeedForTutorial = .01f;
     public float TutorialCellReceptorTimer = 0.0f;
+
+
+    private VirusPlayer Player;
+    private WaveManager WaveManager;
+    private bool NeverTargetAgain = false;
+    private float SpeedForTutorial = .01f;
     bool DontCheckAgain = false;
 
     void Start()
     {
-        WaveManager = gameObject.transform.parent.gameObject;
-        Player = WaveManager.GetComponent<WaveManager>().Player;
+        WaveManager = gameObject.transform.parent.GetComponent<WaveManager>();
+        Player = WaveManager.Player.GetComponent<VirusPlayer>();
 
-        if (!GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber != 1)
+        if (!GlobalVariables.tutorial == true && WaveManager.WaveNumber != 1)
             GetComponent<Rigidbody>().AddForce(new Vector3(100, 100, 100));
     }
 
@@ -30,39 +30,41 @@ public class CellReceptors : MonoBehaviour
         if (Input.GetButton("Fire1") && AmITargeted == true && NeverTargetAgain == false)
         {
             NeverTargetAgain = true;
-            Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
+            Player.currSpeed = Player.baseSpeed;
             StartCoroutine(FireAttackVirus(4, .3f));
         }
 
-        if (Player.GetComponent<VirusPlayer>().isGameover)
-            Destroy(this.gameObject);
+        if (Player.isGameover)
+        {
+            Destroy(gameObject);
+        }
 
-        if (GlobalVariables.tutorial == true && WaveManager.GetComponent<WaveManager>().WaveNumber == 1 && DontCheckAgain == false)
+        if (GlobalVariables.tutorial == true && WaveManager.WaveNumber == 1 && DontCheckAgain == false)
         {
             AmITargeted = false;
 
             TutorialCellReceptorTimer += Time.deltaTime;
 
-            if (Player.GetComponent<VirusPlayer>().IsCellDoneIdling == false)
+            if (Player.IsCellDoneIdling == false)
             {
                 if (TutorialCellReceptorTimer >= 3.5f)
                 {
-                    Player.GetComponent<VirusPlayer>().IsCellDoneIdling = true;
+                    Player.IsCellDoneIdling = true;
                     TutorialCellReceptorTimer = 0;
                 }
             }
 
-            else if (Player.GetComponent<VirusPlayer>().IsCellDoneIdling == true && Player.GetComponent<VirusPlayer>().WhatToRead == 4)
+            else if (Player.IsCellDoneIdling == true && Player.WhatToRead == 4)
             {
                 if (TutorialCellReceptorTimer <= 6.5f)
                 {
-                    transform.LookAt(Player.GetComponent<VirusPlayer>().transform.position);
+                    transform.LookAt(Player.transform.position);
                     transform.position -= transform.forward * SpeedForTutorial;
                 }
 
                 if (TutorialCellReceptorTimer >= 6.5f)
                 {
-                    Player.GetComponent<VirusPlayer>().IsCellDoneMoving = true;
+                    Player.IsCellDoneMoving = true;
                     DontCheckAgain = true;
                 }
             }
@@ -72,25 +74,25 @@ public class CellReceptors : MonoBehaviour
 
     public void OnGazeEnter()
     {
-        if (AmITargeted == false && NeverTargetAgain == false && Player.GetComponent<VirusPlayer>().IsCellDoneIdling == true)
+        if (AmITargeted == false && NeverTargetAgain == false && Player.IsCellDoneIdling == true)
         {
-            Player.GetComponent<VirusPlayer>().currSpeed = 0;
+            Player.currSpeed = 0;
             AmITargeted = true;
         }
     }
 
     public void OnGazeExit()
     {
-        Player.GetComponent<VirusPlayer>().currSpeed = Player.GetComponent<VirusPlayer>().baseSpeed;
+        Player.currSpeed = Player.baseSpeed;
         AmITargeted = false;
     }
 
     public void SpawnAttackVirus()
     {
-        GameObject V = Instantiate(VirusAttack, Player.transform.position, Quaternion.identity) as GameObject;
-        V.GetComponent<AttackVirus>().MainCamera = Player;
-        V.GetComponent<AttackVirus>().target = gameObject;
-        V.GetComponent<AttackVirus>().enabled = true;
+        AttackVirus V = Instantiate(VirusAttack, Player.transform.position, Quaternion.identity).GetComponent<AttackVirus>();
+        V.Player = Player;
+        V.target = this;
+        V.enabled = true;
     }
 
     IEnumerator FireAttackVirus(int num, float duration)
@@ -106,12 +108,10 @@ public class CellReceptors : MonoBehaviour
     void OnDestroy()
     {
         if (GlobalVariables.tutorial == false)
-            Player.GetComponent<VirusPlayer>().IncrementKill++;
+            Player.IncrementKill++;
 
-        WaveManager.GetComponent<WaveManager>().CellReceptorCount -= 1;
-        WaveManager.GetComponent<WaveManager>().CellReceptorsList.Remove(transform.gameObject);
-
-        Player.GetComponent<VirusPlayer>().CurrentScore += 200;
+        WaveManager.CellReceptorCount -= 1;
+        WaveManager.CellReceptorsList.Remove(transform.gameObject);
     }
 }
 

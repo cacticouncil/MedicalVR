@@ -11,7 +11,7 @@ public class StrategyBox : MonoBehaviour
     public int actionsLeft;
     public TMPro.TextMeshPro actionText;
     public GameObject boxTab;
-    public Hilighter AHighlighter;
+    public Highlighter AHighlighter;
     public GameObject animationTab;
     public GameObject anim;
     public TMPro.TextMeshPro animationText;
