@@ -262,7 +262,7 @@ public class VirusGameplayScript : MonoBehaviour
                 parent.GetComponent<LookCamera>().enabled = true;
                 Sceneries[1].SetActive(false);
                 Sceneries[2].SetActive(true);
-                PCS.StartHazards();
+                //PCS.StartHazards();
                 I = 4;
                 RenderSettings.fogDensity = 0;
                 RenderSettings.ambientLight = Color.black;
