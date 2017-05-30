@@ -11,7 +11,7 @@ public class VirusGameplayScript : MonoBehaviour
     public List<Transform> rotationTargets;
     public GameObject subtitles, blackCurtain, theCamera, virus, rna, parent, reticle;
     public bool disableMovement = false;
-    public static int loadCase = 1;
+    public static int loadCase = 0;
     // Use this for initialization
     delegate void Func();
     Func doAction;
