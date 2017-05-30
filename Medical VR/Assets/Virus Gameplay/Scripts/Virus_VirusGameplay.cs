@@ -72,18 +72,18 @@ public class Virus_VirusGameplay : MonoBehaviour
         {
             case (105):
                 I = 1;
-                moveSpeed = .9f;
+                moveSpeed = .9f/10f;
                 break;
             case (151):
                 I = 3;
-                moveSpeed = .1f;
+                moveSpeed = .1f/10f;
                 break;
             case (173):
                 doAction = fadeEnvelope;
                 break;
             case (177):
                 I = 4;
-                moveSpeed = .1f;
+                moveSpeed = .1f/10f;
                 virusWithMesh.SetActive(false);
                 break;
             case (182):
@@ -98,12 +98,12 @@ public class Virus_VirusGameplay : MonoBehaviour
                 capsid.SetActive(false);
                 doAction = NullFunction;
                 I = 6;
-                moveSpeed = .1f;
+                moveSpeed = .1f/10f;
                 break;
             case (227):
                 doAction = NullFunction;
                 I = 7;
-                moveSpeed = .5f;
+                moveSpeed = .5f/10f;
                 break;
             case (249):
                 doAction = NullFunction;
@@ -113,12 +113,12 @@ public class Virus_VirusGameplay : MonoBehaviour
             case (252):
                 doAction = NullFunction;
                 I = 9;
-                moveSpeed = .1f;
+                moveSpeed = .1f/10f;
                 break;
             case (256):
                 doAction = RotateTo;
                 I = 10;
-                moveSpeed = .1f;
+                moveSpeed = .1f/10f;
                 break;
             case (323):
                 virions.SetActive(true);

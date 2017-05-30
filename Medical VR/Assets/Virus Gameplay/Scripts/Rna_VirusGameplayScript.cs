@@ -7,8 +7,8 @@ public class Rna_VirusGameplayScript : MonoBehaviour
     public List<Transform> places = new List<Transform>();
     public GameObject subtitltes;
 
-    private float moveSpeed = .5f;
-    private float vComparer = .01f;
+    private float moveSpeed = .5f/10f;
+    private float vComparer = .01f/10f;
     private bool moved = true;
 
     IEnumerator MoveTo(Transform t)
