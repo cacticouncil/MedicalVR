@@ -5,10 +5,10 @@ using System.Collections.Generic;
 public class StrategyTutorialImmunity : MonoBehaviour
 {
     public Transform cam;
-    public GameObject eventSystem;
-    public GameObject fade;
     public LookCamera lc;
+    public GameObject fade;
     public GameObject reticle;
+    public GameObject eventSystem;
     public GameObject immunityParticles;
     public GameObject objects;
     public GameObject virus;
@@ -17,7 +17,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
     public TMPro.TextMeshPro immDes;
     public TMPro.TextMeshPro proDes;
     public TMPro.TextMeshPro subtitles;
-    public Renderer antigen, interferon, protein;
+    public Renderer protein, antigen, interferon, proteinPowerup;
     public GameObject @base;
     public GameObject[] cells;
     public AudioClip[] voices = new AudioClip[14];
@@ -92,6 +92,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 lc.enabled = true;
                 immDes.text = "Immunity: 0";
                 proDes.text = "Protein: None";
+                protein.GetComponent<Renderer>().material.color = StrategyCellScript.proteinYellow;
                 fade.GetComponent<FadeOut>().enabled = true;
                 Invoke("Click", 1);
                 break;
@@ -191,7 +192,8 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 StartCoroutine(TurnTextOn(4));
                 StrategySoundHolder.PlayVoice(voices[4]);
                 immDes.text = "Immunity: 10";
-                proDes.text = "Protein: RNase L";
+                proDes.text = "Protein: RNase_L";
+                stop.Add(StartCoroutine(ChangeColorOverTime(protein.material, StrategyCellScript.proteinPurple)));
                 break;
             case 7:
                 //Most stop the virus from replicating when it kills the cell.
@@ -202,21 +204,42 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 proDes.text = "Protein: PKR";
                 break;
             case 9:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+
                 proDes.text = "Protein: TRIM22";
+                stop.Add(StartCoroutine(ChangeColorOverTime(protein.material, StrategyCellScript.proteinRed)));
                 break;
             case 10:
                 proDes.text = "Protein: IFIT";
                 break;
             case 11:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+
                 //But, you can get some that attempt to stop the virus before it kills the cell.
                 StartCoroutine(TurnTextOn(6));
                 StrategySoundHolder.PlayVoice(voices[6]);
                 proDes.text = "Protein: CH25H";
+                stop.Add(StartCoroutine(ChangeColorOverTime(protein.material, StrategyCellScript.proteinBlue)));
                 break;
             case 13:
                 proDes.text = "Protein: Mx1";
                 break;
             case 14:
+                foreach (Coroutine co in stop)
+                {
+                    StopCoroutine(co);
+                }
+                stop.Clear();
+                protein.material.color = StrategyCellScript.proteinBlue;
+
                 //You can click on the Protein tab to see the list of proteins and what each does.
                 StartCoroutine(TurnTextOn(7));
                 StrategySoundHolder.PlayVoice(voices[7]);
@@ -249,6 +272,10 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 stop.Clear();
                 virus.SetActive(false);
                 virusImm.SetActive(false);
+                foreach (Transform item in @base.GetComponentsInChildren<Transform>(true))
+                {
+                    item.gameObject.SetActive(true);
+                }
                 foreach (Renderer item in @base.GetComponentsInChildren<Renderer>(true))
                 {
                     if (item.material.HasProperty("_Color"))
@@ -322,7 +349,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 StartCoroutine(TurnTextOn(12));
                 StrategySoundHolder.PlayVoice(voices[12]);
                 stop.Add(StartCoroutine(FadeOutObject(interferon)));
-                stop.Add(StartCoroutine(FadeInObject(protein)));
+                stop.Add(StartCoroutine(FadeInObject(proteinPowerup)));
                 proDes.text = "Protein: RNase L";
                 break;
             case 21:
@@ -333,14 +360,14 @@ public class StrategyTutorialImmunity : MonoBehaviour
                 stop.Clear();
 
                 interferon.gameObject.SetActive(false);
-                c = protein.GetComponent<Renderer>().material.color;
+                c = proteinPowerup.GetComponent<Renderer>().material.color;
                 c.a = 1;
-                protein.GetComponent<Renderer>().material.color = c;
+                proteinPowerup.GetComponent<Renderer>().material.color = c;
 
                 //Immunity is a very versatile stat and should be leveled in a variety of situations.
                 StartCoroutine(TurnTextOn(13));
                 StrategySoundHolder.PlayVoice(voices[13]);
-                stop.Add(StartCoroutine(FadeOutObject(protein)));
+                stop.Add(StartCoroutine(FadeOutObject(proteinPowerup)));
                 break;
             case 22:
                 foreach (Coroutine co in stop)
@@ -348,7 +375,7 @@ public class StrategyTutorialImmunity : MonoBehaviour
                     StopCoroutine(co);
                 }
                 stop.Clear();
-                protein.gameObject.SetActive(false);
+                proteinPowerup.gameObject.SetActive(false);
 
                 //Fade In
                 fade.GetComponent<FadeIn>().enabled = true;
@@ -585,5 +612,18 @@ public class StrategyTutorialImmunity : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         stop.Add(StartCoroutine(UnPaintItBlack(cells[0])));
         stop.Add(StartCoroutine(SubtractImmunity()));
+    }
+
+    IEnumerator ChangeColorOverTime(Material material, Color c)
+    {
+        float startTime = Time.time;
+        float t = Time.time - startTime;
+        Color start = material.color;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            material.color = Color.Lerp(start, c, t);
+            yield return 0;
+        }
     }
 }

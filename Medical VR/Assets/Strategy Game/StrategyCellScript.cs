@@ -17,11 +17,15 @@ public class StrategyCellScript : MonoBehaviour
 {
     //Statics
     public static int reproductionReset = 50;
-    private static Color
+    public static Color
+        //None
         proteinYellow = new Color32(200, 200, 0, 255),
+        //RNase_L, PKR
+        proteinPurple = new Color32(135, 45, 135, 255),
+        //TRIM22, IFIT
         proteinRed = new Color32(215, 25, 25, 255),
-        proteinBlue = new Color32(30, 30, 150, 255),
-        proteinPurple = new Color32(135, 45, 135, 255);
+        //CH25H, MX1
+        proteinBlue = new Color32(30, 30, 150, 255);
     public static float rBonus = 15, dBonus = 5, iBonus = 10;
     public static int powerupDuration = 25;
 
@@ -237,7 +241,7 @@ public class StrategyCellScript : MonoBehaviour
             Vector3 camPos = Camera.main.GetComponent<Transform>().position;
             Vector3 dir = camPos - transform.position;
             dir.Normalize();
-            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(camPos + dir);
+            MoveCamera.instance.SetDestination(camPos + dir);
             Invoke("SpawnW", .5f);
         }
     }
@@ -351,7 +355,7 @@ public class StrategyCellScript : MonoBehaviour
 
     public void RefreshUI()
     {
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 6; i++)
         {
             texts[i].text = StrategyCellManagerScript.instance.inventory[i].count.ToString();
             if (StrategyCellManagerScript.instance.inventory[i].count > 0)
@@ -363,16 +367,13 @@ public class StrategyCellScript : MonoBehaviour
                 texts[i].color = Color.red;
             }
         }
-        if (hosted)
+        if (hosted && StrategyCellManagerScript.instance.inventory[6].count > 0)
         {
-            foreach (TMPro.TextMeshPro text in texts)
-            {
-                text.color = Color.red;
-            }
-            if (StrategyCellManagerScript.instance.inventory[6].count > 0)
-            {
-                texts[6].color = Color.white;
-            }
+            texts[6].color = Color.white;
+        }
+        else
+        {
+            texts[6].color = Color.red;
         }
     }
     #endregion
@@ -442,14 +443,14 @@ public class StrategyCellScript : MonoBehaviour
             transform.GetChild(0).transform.LookAt(finalPos);
 
             //This is the new target position
-            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(finalPos);
+            MoveCamera.instance.SetDestination(finalPos);
             StrategyCellManagerScript.instance.SetSelected(key);
             ToggleUI(true);
             StrategyCellManagerScript.instance.viewingStats = true;
         }
         else if (!StrategyCellManagerScript.instance.viewingStats)
         {
-            Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
+            MoveCamera.instance.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
             StrategyCellManagerScript.instance.SetSelected(key);
             StrategyCellManagerScript.instance.viewingStats = false;
         }
@@ -457,7 +458,7 @@ public class StrategyCellScript : MonoBehaviour
 
     public void Back()
     {
-        Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
+        MoveCamera.instance.SetDestination(new Vector3(transform.position.x, transform.position.y + camOffset, transform.position.z));
         StrategyCellManagerScript.instance.SetSelected(key);
         StrategyCellManagerScript.instance.viewingStats = false;
     }

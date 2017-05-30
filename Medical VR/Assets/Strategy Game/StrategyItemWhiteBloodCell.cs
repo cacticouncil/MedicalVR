@@ -44,7 +44,7 @@ public class StrategyItemWhiteBloodCell : MonoBehaviour
         Vector3 camPos = Camera.main.GetComponent<Transform>().position;
         Vector3 dir = transform.position - camPos;
         dir.Normalize();
-        Camera.main.transform.parent.GetComponent<MoveCamera>().SetDestination(camPos + dir);
+        MoveCamera.instance.SetDestination(camPos + dir);
 
         if (transform.parent.GetComponent<StrategyCellManagerScript>().selected == cell.key)
             cell.ToggleUI(true);
