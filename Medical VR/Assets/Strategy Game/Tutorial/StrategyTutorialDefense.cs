@@ -5,13 +5,15 @@ using System.Collections.Generic;
 public class StrategyTutorialDefense : MonoBehaviour
 {
     public Transform cam;
-    public GameObject eventSystem;
-    public GameObject fade;
     public LookCamera lc;
+    public GameObject fade;
     public GameObject reticle;
+    public GameObject eventSystem;
     public GameObject immunityParticles;
     public GameObject objects;
     public Renderer fuzeon;
+    public Renderer protein;
+    public TMPro.TextMeshPro proDes;
     public TMPro.TextMeshPro defDes;
     public TMPro.TextMeshPro immDes;
     public TMPro.TextMeshPro subtitles;
@@ -88,6 +90,7 @@ public class StrategyTutorialDefense : MonoBehaviour
                 lc.enabled = true;
                 defDes.text = "Defense: 0";
                 immDes.text = "Immunity: 0";
+                protein.GetComponent<Renderer>().material.color = StrategyCellScript.proteinYellow;
                 fade.GetComponent<FadeOut>().enabled = true;
                 Invoke("Click", 1);
                 break;
@@ -216,6 +219,8 @@ public class StrategyTutorialDefense : MonoBehaviour
                 }
                 stop.Clear();
                 immDes.text = "Immunity: 12";
+                proDes.text = "RNase_L";
+                protein.material.color = StrategyCellScript.proteinPurple;
 
                 //Defense is also the only stat that is copied to the child. Due to this, it is highly advised that you invest into this stat early on.
                 StartCoroutine(TurnTextOn(6));
@@ -539,8 +544,26 @@ public class StrategyTutorialDefense : MonoBehaviour
         for (int imm = 0; imm < 12; imm += 2)
         {
             immDes.text = "Immunity: " + imm;
+            if (imm == 10)
+            {
+                proDes.text = "RNase_L";
+                stop.Add(StartCoroutine(ChangeColorOverTime(protein.material, StrategyCellScript.proteinPurple)));
+            }
             yield return new WaitForSeconds(.3f);
         }
         immDes.text = "Immunity: 12";
+    }
+
+    IEnumerator ChangeColorOverTime(Material material, Color c)
+    {
+        float startTime = Time.time;
+        float t = Time.time - startTime;
+        Color start = material.color;
+        while (t < 1.0f)
+        {
+            t = Time.time - startTime;
+            material.color = Color.Lerp(start, c, t);
+            yield return 0;
+        }
     }
 }
