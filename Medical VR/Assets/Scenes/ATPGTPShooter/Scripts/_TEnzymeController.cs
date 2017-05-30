@@ -8,8 +8,8 @@ public class _TEnzymeController : MonoBehaviour
     public AudioClip travelSound;
    // public AudioClip attachSound;
 
-    float volLowRange = .5f;
-    float volHighRange = 1.0f;
+//    float volLowRange = .5f;
+//    float volHighRange = 1.0f;
     private AudioSource source;
 
     [HideInInspector]
