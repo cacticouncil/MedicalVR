@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Hilighter : MonoBehaviour {
+public class Highlighter : MonoBehaviour
+{
+    private Color baseColor;
 
-    public Color baseColor;
     void Start()
     {
         baseColor = GetComponent<Renderer>().material.color;
