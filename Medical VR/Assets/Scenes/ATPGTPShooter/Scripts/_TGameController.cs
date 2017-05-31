@@ -130,7 +130,7 @@ public class _TGameController : MonoBehaviour
         GetComponent<_TTutorialATPGTP>().Initialize();
         shrinkStuff.Player.GetComponent<_TPlayerController>().Initialize();
         gvrReticle.SetActive(false);
-        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
+        //shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartScene();
     }
 
     private void Update()
@@ -180,16 +180,6 @@ public class _TGameController : MonoBehaviour
         if (remainingTime <= 0 && !hasWon)
         {
             StopGameObjects();
-            if (scoreBoard && gameCamera)
-            {
-                scoreBoard.SetActive(true);
-                scoreBoard.GetComponent<_TSizeChange>().Inititalize();
-                scoreBoard.GetComponent<_TSizeChange>().ResetToSmall();
-                //       scoreBoard.GetComponent<_TSizeChange>().StartGrow();
-                scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
-                fbManager.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
-
-            }
 
             Invoke("DisplayScore", 3);
             if (finalATPScore < score)
@@ -207,6 +197,16 @@ public class _TGameController : MonoBehaviour
                 finalATPScore = PlayerPrefs.GetFloat("ATPScore");
             }
             gvrReticle.SetActive(true);
+            if (scoreBoard && gameCamera)
+            {
+                scoreBoard.SetActive(true);
+                scoreBoard.GetComponent<_TSizeChange>().Inititalize();
+                scoreBoard.GetComponent<_TSizeChange>().ResetToSmall();
+                //       scoreBoard.GetComponent<_TSizeChange>().StartGrow();
+                scoreBoard.transform.position = new Vector3(gameCamera.transform.position.x, gameCamera.transform.position.y, gameCamera.transform.position.z + 5);
+                fbManager.userName.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
+
+            }
         }
     }
 
@@ -349,8 +349,8 @@ public class _TGameController : MonoBehaviour
             }
         }
 
-        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().enabled = true;
-        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartBlackScreen();
+        //shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().enabled = true;
+        //shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartBlackScreen();
     }
     IEnumerator ReloadGame(float waitTime)
     {
@@ -413,7 +413,7 @@ public class _TGameController : MonoBehaviour
     }
     public void FadeScreen()
     {
-        shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartBlackScreen();
+        //shrinkStuff.fadeScreen.GetComponent<_TFadeScreen>().StartBlackScreen();
         FadeStuff();
     }
 }

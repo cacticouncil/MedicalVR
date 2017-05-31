@@ -170,10 +170,7 @@ public class Randomsphere : MonoBehaviour
                     clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
                 }
                 break;
-
             default:
-                CellGameplayScript.loadCase = 3;
-                SceneManager.LoadScene("CellGameplay");
                 break;
         }
     }
@@ -337,7 +334,7 @@ public class Randomsphere : MonoBehaviour
                 break;
             default:
                 CellGameplayScript.loadCase = 3;
-                SceneManager.LoadScene("CellGameplay");
+                Set.SetAndEnterStatic(15);
                 break;
         }
 

@@ -16,6 +16,7 @@ public class RnaMessengerScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        blackCurtain.SetActive(true);
         tmpScore = simon.GetComponent<SimonSays>().score;
         tmpLives = simon.GetComponent<SimonSays>().lives;
         if (GlobalVariables.arcadeMode == false)
@@ -33,7 +34,7 @@ public class RnaMessengerScript : MonoBehaviour
         }
         else
         {
-            blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+            //blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
 
         }
     }
@@ -83,10 +84,7 @@ public class RnaMessengerScript : MonoBehaviour
             //    subtitles.GetComponent<SubstitlesScript>().Continue();
             //}
 
-            float a = blackCurtain.GetComponent<Renderer>().material.color.a;
-            if (a > 255)
-                a = 255;
-            blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
+            
         }
         else if (simon.GetComponent<SimonSays>().polys == simon.GetComponent<SimonSays>().polysDone)
         {
@@ -100,10 +98,8 @@ public class RnaMessengerScript : MonoBehaviour
             if (timer2 > 1.5f)
             {
                 simon.GetComponent<SimonSays>().sign.SetActive(false);
-                float a = blackCurtain.GetComponent<Renderer>().material.color.a;
-                if (a < 0)
-                    a = 0;
-                blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
+                blackCurtain.GetComponent<FadeOut>().enabled = false;
+                blackCurtain.GetComponent<FadeIn>().enabled = true;
             }
 
         }

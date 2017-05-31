@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class FadeIn : MonoBehaviour
 {
+    private static FadeIn localInstance;
+    public static FadeIn instance { get { return localInstance; } }
+
+    private void Awake()
+    {
+        if (localInstance != null && localInstance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            localInstance = this;
+        }
+    }
+
     // Use this for initialization
     void OnEnable()
     {

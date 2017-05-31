@@ -66,7 +66,6 @@ public class VirusPlayer : MonoBehaviour
 
         currSpeed = baseSpeed;
         Lives = 3;
-        SetFacebook();
 
         if (GlobalVariables.tutorial == false)
         {
@@ -185,6 +184,7 @@ public class VirusPlayer : MonoBehaviour
                         else
                             FinalScore = PlayerPrefs.GetFloat("DestroyCellScore");
 
+                        SetFacebook();
 
                         ScoreBoard.SetActive(true);
                         ScoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 5);
@@ -213,7 +213,7 @@ public class VirusPlayer : MonoBehaviour
                     else
                     {
                         Respawn();
-
+                        SetFacebook();
                         ScoreBoard.SetActive(true);
 
                         if (CurrentScore > BestScoreForDestroyCell)

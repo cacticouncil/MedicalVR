@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class SmartPause : MonoBehaviour
 {
@@ -8,14 +9,15 @@ public class SmartPause : MonoBehaviour
     public GameObject mainMenu;
     public GameObject resume;
     public GameObject fade;
-    public TMPro.TextMeshPro[] ui = new TMPro.TextMeshPro[0];
+    //public GameObject reticle;
+    public GameObject[] ui = new GameObject[0];
     [System.NonSerialized]
     public bool isPaused = false;
 
     private float buttonHeldTimer = 0.0f;
     private float angle = 10;
 
-    private bool last = false;
+    private bool last = false; //lastRet;
 
     void Update()
     {
@@ -27,9 +29,18 @@ public class SmartPause : MonoBehaviour
                 buttonHeldTimer += Time.deltaTime;
                 if (buttonHeldTimer >= 1.5f)
                 {
-                    foreach (TMPro.TextMeshPro item in ui)
+                    //if (reticle)
+                    //{
+                       //lastRet = reticle.activeSelf;
+                       //reticle.SetActive(true);
+                       //reticle.GetComponent<GvrReticlePointer>().enabled = false;
+                       //reticle.GetComponent<Renderer>().material.SetFloat("_InnerDiameter", 0);
+                       //reticle.GetComponent<Renderer>().material.SetFloat("_OuterDiameter", .09f);
+                       //reticle.GetComponent<Renderer>().material.SetFloat("_DistanceInMeters", 10);
+                    //}
+                    foreach (GameObject item in ui)
                     {
-                        item.enabled = false;
+                        item.SetActive(false);
                     }
 
                     buttonHeldTimer = 0.0f;
@@ -39,7 +50,7 @@ public class SmartPause : MonoBehaviour
                     transform.Rotate(new Vector3(0, 180, 0));
                     isPaused = true;
                     Time.timeScale = 0;
-                    SoundManager.Pause();
+                    //SoundManager.Pause();
                     SoundManager.PauseSFX();
                 }
             }
@@ -48,9 +59,15 @@ public class SmartPause : MonoBehaviour
                 if (Vector3.Angle(player.transform.forward, resume.transform.position - player.transform.position) < angle)
                 {
                     Resume();
-                    foreach (TMPro.TextMeshPro item in ui)
+                    //if (reticle)
+                    //{
+                    //    reticle.SetActive(lastRet);
+                    //    reticle.GetComponent<GvrReticlePointer>().enabled = true;
+                    //}
+                    foreach (GameObject item in ui)
                     {
-                        item.enabled = true;
+                        if (item != null)
+                        item.SetActive(true);
                     }
                 }
                 else if (Vector3.Angle(player.transform.forward, mainMenu.transform.position - player.transform.position) < angle)
@@ -63,7 +80,9 @@ public class SmartPause : MonoBehaviour
                         StartCoroutine(Delay());
                     }
                     else
+                    {
                         ChangeScene.EnterEvent();
+                    }
                 }
             }
         }
@@ -79,7 +98,7 @@ public class SmartPause : MonoBehaviour
         buttons.SetActive(false);
         isPaused = false;
         Time.timeScale = 1;
-        SoundManager.Resume();
+        //SoundManager.Resume();
         SoundManager.UnPauseSFX();
     }
 

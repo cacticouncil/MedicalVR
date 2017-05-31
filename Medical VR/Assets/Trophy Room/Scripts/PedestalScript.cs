@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PedestalScript : MonoBehaviour
 {
-    public TrophyRoomScript theCamera;
+    public GameObject theCamera;
     public GameObject station, camPos, selectedTrophy, descButton;
     public int speed;
     public bool inUse, isSoundPlaying;
@@ -77,25 +77,25 @@ public class PedestalScript : MonoBehaviour
         //}
     }
 
-    public void FirstClick()
-    {
-        if (theCamera.MoveText == 4 && FirstClickOnly == false)
-        {
-            theCamera.MoveText += 1;
-            theCamera.CanIRead = true;
-            FirstClickOnly = true;
-        }
-    }
+    //public void FirstClick()
+    //{
+    //    if (theCamera.MoveText == 4 && FirstClickOnly == false)
+    //    {
+    //        theCamera.MoveText += 1;
+    //        theCamera.CanIRead = true;
+    //        FirstClickOnly = true;
+    //    }
+    //}
 
-    public void SecondClick()
-    {
-        if (theCamera.MoveText == 5 && SecondClickOnly == false)
-        {
-            theCamera.MoveText += 1;
-            theCamera.CanIRead = true;
-            SecondClickOnly = true;
-        }
-    }
+    //public void SecondClick()
+    //{
+    //    if (theCamera.MoveText == 5 && SecondClickOnly == false)
+    //    {
+    //        theCamera.MoveText += 1;
+    //        theCamera.CanIRead = true;
+    //        SecondClickOnly = true;
+    //    }
+    //}
 
     public void DoButtonAction()
     {

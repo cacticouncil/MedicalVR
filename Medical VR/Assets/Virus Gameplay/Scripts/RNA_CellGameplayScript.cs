@@ -44,7 +44,8 @@ public class RNA_CellGameplayScript : MonoBehaviour
             case (213):
                 if (moved)
                 {
-                    transform.position = new Vector3(cam.position.x + 5, cam.position.y + 1, cam.position.z + 2);
+                    transform.localScale = new Vector3(transform.localScale.x / 5, transform.localScale.y / 5, transform.localScale.z / 5);
+                    transform.position = new Vector3(cam.position.x + 2, cam.position.y + 1, cam.position.z + 2);
                     moved = false;
                     StartCoroutine(MoveTo(target));
                 }

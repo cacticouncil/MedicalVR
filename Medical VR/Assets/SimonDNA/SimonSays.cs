@@ -60,7 +60,7 @@ public class SimonSays : MonoBehaviour
             polyLeft.GetComponent<TMPro.TextMeshPro>().text = "Nucleids Done: " + polysDone.ToString();
             theScore.GetComponent<TMPro.TextMeshPro>().text = "Goal: " + polys.ToString();
         }
-        if(GlobalVariables.tutorial == true)
+        //if(GlobalVariables.tutorial == true)
         {
             cam.GetComponent<LookCamera>().enabled = true;
         }

@@ -47,7 +47,7 @@ public class GvrReticlePointer : MonoBehaviour {
     GvrPointerManager.Pointer = reticlePointerImpl;
   }
 
-  private void CreateReticleVertices() {
+  public void CreateReticleVertices() {
     Mesh mesh = new Mesh();
     gameObject.AddComponent<MeshFilter>();
     GetComponent<MeshFilter>().mesh = mesh;

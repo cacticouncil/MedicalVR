@@ -10,7 +10,7 @@ public class MovingCamera : MonoBehaviour
     public GameObject subtitles, cam;
     public float speed;
     public float orgSpeed;
-    public GameObject theScore, theLives, scoreBoard, UI, Username, ProfilePic;
+    public GameObject theScore, theLives, scoreBoard, UI, Username, ProfilePic, facingTarget;
     public float score = 0;
     public Color fogColor;
     public Vector3 orgPos;
@@ -24,10 +24,18 @@ public class MovingCamera : MonoBehaviour
         orgPos = transform.position;
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
         orgSpeed = speed;
-
-        if (GlobalVariables.arcadeMode == false && GlobalVariables.tutorial == true)
+        if(GlobalVariables.tutorial == true)
         {
             gameObject.GetComponent<LookCamera>().enabled = true;
+        }
+        else
+        {
+            gameObject.GetComponent<LookCamera>().target = facingTarget.transform;
+        }
+        gameObject.GetComponent<LookCamera>().enabled = true;
+        if (GlobalVariables.arcadeMode == false && GlobalVariables.tutorial == true)
+        {
+            
             subtitles.SetActive(true);
             UI.SetActive(false);
             speed = 0;

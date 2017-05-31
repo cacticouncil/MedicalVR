@@ -54,7 +54,7 @@ public class BulletManager : MonoBehaviour
         else if (GlobalVariables.tutorial == true && CanIShoot == true)
         {
             Time += UnityEngine.Time.deltaTime;
-            if (isTriggered == true && Time >= .2f)
+            if (isTriggered == true && Time >= .5f)
             {
                 Time = 0.0f;
                 StartShooting();

@@ -116,7 +116,7 @@
 
 				float cameraVertDist = length(mul(UNITY_MATRIX_MV, v.vertex).xyz);
 				float f = cameraVertDist * unity_FogDensity;
-				o.fogFactor = saturate(1 / pow(2.71828, f * f));
+				o.fogFactor = saturate(1 / pow(2.71828, f * f)) * 1.5f;
 
 				return o;
 			}

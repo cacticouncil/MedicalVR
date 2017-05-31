@@ -25,10 +25,12 @@ public class RedCellScript : MonoBehaviour
         if (fade)
         {
             timer += Time.deltaTime;
-            float a = blackCurtain.GetComponent<Renderer>().material.color.a;
-            if (a < 0)
-                a = 0;
-            blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
+            //float a = blackCurtain.GetComponent<Renderer>().material.color.a;
+            //if (a < 0)
+            //    a = 0;
+            //blackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
+            blackCurtain.GetComponent<FadeIn>().enabled = true;
+            blackCurtain.GetComponent<FadeOut>().enabled = false;
             if (timer > 1)
             {
                 //For tutorial and story mode

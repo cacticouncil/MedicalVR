@@ -216,7 +216,7 @@ public static class SoundManager
             return;
         }
         PausedAudio = SaveBGM();
-        CrossFadeBGM("Pause");
+        //CrossFadeBGM("Pause");
     }
 
     public static void Resume()

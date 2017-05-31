@@ -141,7 +141,7 @@ public class MemoryUI : MonoBehaviour
             if (minutesint < 0)
                 minutesint = 0;
             string minutes = minutesint.ToString();
-            string seconds = (timeRemaining % 60).ToString("f2");
+            string seconds = (timeRemaining % 60).ToString("f0");
             Timer.GetComponent<TMPro.TextMeshPro>().text = "Timer: " + minutes + ":" + seconds;
         }
         else
@@ -254,7 +254,7 @@ public class MemoryUI : MonoBehaviour
                     SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-006");
                     StartCoroutine(TurnTextOn(5));
                 }
-                else { WhatToRead++; }
+                
                 break;
             case 7:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-006"))

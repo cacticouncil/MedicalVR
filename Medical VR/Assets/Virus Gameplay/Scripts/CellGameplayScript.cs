@@ -173,7 +173,7 @@ public class CellGameplayScript : MonoBehaviour
                 }
                 Sceneries[1].SetActive(false);
                 Sceneries[2].SetActive(true);
-                PCS.StartHazards();
+                //PCS.StartHazards();
                 I = 3;
                 RenderSettings.fogDensity = 0;
                 RenderSettings.ambientLight = Color.black;

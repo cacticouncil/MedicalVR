@@ -4,8 +4,23 @@ using UnityEngine;
 
 public class Set : MonoBehaviour
 {
+    private static Set localInstance;
+    public static Set instance { get { return localInstance; } }
+
     public GameObject fade;
     public float fadeWaitDelay = 1.0f;
+
+    private void Awake()
+    {
+        if (localInstance != null && localInstance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            localInstance = this;
+        }
+    }
 
     public void SetDifficulty(int i)
     {
@@ -22,6 +37,16 @@ public class Set : MonoBehaviour
         ChangeScene.index = i;
     }
 
+    public static void EnterSceneStatic()
+    {
+        SoundManager.PlaySFX("MenuEnter");
+        if (FadeIn.instance)
+        {
+            FadeIn.instance.enabled = true;
+        }
+        instance.StartCoroutine(instance.EnterDelay());
+    }
+
     public void EnterScene()
     {
         SoundManager.PlaySFX("MenuEnter");
@@ -30,6 +55,17 @@ public class Set : MonoBehaviour
             fade.GetComponent<FadeIn>().enabled = true;
         }
         StartCoroutine(EnterDelay());
+    }
+
+    public static void SetAndEnterStatic(int i)
+    {
+        SoundManager.PlaySFX("MenuEnter");
+        ChangeScene.index = i;
+        if (FadeIn.instance)
+        {
+            FadeIn.instance.enabled = true;
+        }
+        instance.StartCoroutine(instance.EnterDelay());
     }
 
     public void SetAndEnter(int i)

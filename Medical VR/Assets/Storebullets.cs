@@ -126,7 +126,7 @@ public class Storebullets : MonoBehaviour
         //Set up how turtorial will show players basic gameplay
         else if (GlobalVariables.tutorial == true)
         {
-            if ((WhatToRead == 4 && bulletamount >= 10) || (WhatToRead == 6 && numberofstingsdone >= 10))
+            if ((WhatToRead == 4 && bulletamount >= 10) || (WhatToRead == 6 && numberofstingsdone >= 1))
                 Click();
                 
             bool held = Input.GetButton("Fire1");
