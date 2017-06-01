@@ -54,7 +54,7 @@ public class SoundController : MonoBehaviour
                     SoundManager.FadeInBGM(DestroyCell);
                 }
                 break;
-            case "DodgeAnitbodies":
+            case "DodgeAntibodies":
                 if (Dodge != null)
                 {
                     SoundManager.FadeInBGM(Dodge);

@@ -140,7 +140,7 @@ public class _TGvrReticle : GvrReticlePointer
         outerRadius = 2.0f * Mathf.Tan(max_inner_angle_radians);
     }
 
-    private void CreateReticleVertices()
+    private new void CreateReticleVertices()
     {
         Mesh mesh = new Mesh();
         gameObject.AddComponent<MeshFilter>();

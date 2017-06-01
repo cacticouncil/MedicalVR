@@ -469,7 +469,7 @@ public class StrategyCellManagerScript : MonoBehaviour
 
     void ShowScore()
     {
-        int score = (int)((cellsSpawned * .01f + immunitySpread * .00001f + virusKills * .1f) / turnNumber * ((difficulty + 1.0f) * 2.0f));
+        int score = (int)((cellsSpawned * .1f + immunitySpread * .01f + virusKills * 1f) / ((turnNumber + 1) * .01) * ((difficulty + 1.0f) * 2.0f));
         if (defeat && !victory)
             score = Mathf.Max(100, score);
         if (score > finalScore)

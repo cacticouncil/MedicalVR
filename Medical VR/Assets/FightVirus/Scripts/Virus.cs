@@ -166,12 +166,12 @@ public class Virus : MonoBehaviour
         else if (GlobalVariables.tutorial == true)
         {
             if (transform.tag == "Virus")
-                transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[0].Pos.transform.position, Speed);
+                transform.position = Vector3.MoveTowards(transform.position, GoTo.GetComponent<VirusLocations>().VirusLocationList[0].Pos.transform.position, Speed * 2.0f);
 
             else if (transform.tag == "BigVirus")
             {
                 transform.LookAt(FightVirusPlayer.transform.position);
-                transform.position -= transform.forward * Speed;
+                transform.position -= transform.forward * Speed * 2.0f;
             }
         }
     }
@@ -186,8 +186,27 @@ public class Virus : MonoBehaviour
 
                 if (Health == 0)
                 {
+                    if (GlobalVariables.tutorial == false)
+                        FightVirusPlayer.GetComponent<Player>().IncrementKill++;
+                    SoundManager.PlaySFX("Fight Virus Tutorial/sfx_deathscream_android7");
                     FightVirusPlayer.GetComponent<Player>().CurrentScore += 100;
                     VirusManager.GetComponent<VirusManager>().VirusList.Remove(gameObject);
+
+                    if (transform.tag == "Virus" && EnteredZone == true)
+                    {
+                        if (GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Contains(transform.gameObject))
+                            GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Remove(transform.gameObject);
+
+                        else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Contains(transform.gameObject))
+                            GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Remove(transform.gameObject);
+
+                        else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Contains(transform.gameObject))
+                            GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Remove(transform.gameObject);
+
+                        else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Contains(transform.gameObject))
+                            GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
+                    }
+
                     Destroy(gameObject);
                 }
             }
@@ -197,14 +216,16 @@ public class Virus : MonoBehaviour
                 if (BossCanTakeDamage == true)
                 {
                     Health -= col.GetComponent<BulletScript>().Damage;
-
                     if (Health == 0)
                     {
+                        if (GlobalVariables.tutorial == false)
+                            FightVirusPlayer.GetComponent<Player>().IncrementKill++;
+                        SoundManager.PlaySFX("Fight Virus Tutorial/sfx_deathscream_android7");
                         VirusManager.GetComponent<VirusManager>().VirusList.Remove(gameObject);
-                        Destroy(gameObject);
                         FightVirusPlayer.GetComponent<Player>().CurrentScore += 100;
                         FightVirusPlayer.GetComponent<Player>().isGameOver = true;
                         FightVirusPlayer.GetComponent<Player>().BeatBoss = true;
+                        Destroy(gameObject);
                     }
                 }
             }
@@ -238,30 +259,6 @@ public class Virus : MonoBehaviour
 
             EnteredZone = true;
         }
-    }
-
-
-    void OnDestroy()
-    {
-        if (transform.tag == "Virus" && EnteredZone == true)
-        {
-            if (GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Contains(transform.gameObject))
-                GoTo.GetComponent<VirusLocations>().VirusLocationList[0].VirusList.Remove(transform.gameObject);
-
-            else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Contains(transform.gameObject))
-                GoTo.GetComponent<VirusLocations>().VirusLocationList[1].VirusList.Remove(transform.gameObject);
-
-            else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Contains(transform.gameObject))
-                GoTo.GetComponent<VirusLocations>().VirusLocationList[2].VirusList.Remove(transform.gameObject);
-
-            else if (GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Contains(transform.gameObject))
-                GoTo.GetComponent<VirusLocations>().VirusLocationList[3].VirusList.Remove(transform.gameObject);
-        }
-
-        if (GlobalVariables.tutorial == false)
-            FightVirusPlayer.GetComponent<Player>().IncrementKill++;
-        
-        SoundManager.PlaySFX("Fight Virus Tutorial/sfx_deathscream_android7");
     }
 
     void SpawnSmallViruses()

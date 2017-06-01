@@ -16,6 +16,8 @@ public class BulletManager : MonoBehaviour
     int ChangeProtein;
     public bool CanIShoot = false;
 
+    private bool last = false;
+
     void Start()
     {
         isTriggered = true;
@@ -31,6 +33,7 @@ public class BulletManager : MonoBehaviour
 
     void Update()
     {
+        bool held = Input.GetButton("Fire1");
         if (GlobalVariables.tutorial == false)
         {
             //Bullet Delay
@@ -42,7 +45,7 @@ public class BulletManager : MonoBehaviour
             }
 
             //Checking for button input
-            if (GvrViewer.Instance.Triggered)
+            if (held && !last)
                 isTriggered = !isTriggered;
 
             //Gameover stop shooting
@@ -51,7 +54,7 @@ public class BulletManager : MonoBehaviour
         }
 
         //For tutorial mode dont have them shoot unless directed to
-        else if (GlobalVariables.tutorial == true && CanIShoot == true)
+        else if (CanIShoot == true)
         {
             Time += UnityEngine.Time.deltaTime;
             if (isTriggered == true && Time >= .5f)
@@ -60,9 +63,10 @@ public class BulletManager : MonoBehaviour
                 StartShooting();
             }
 
-            if (GvrViewer.Instance.Triggered)
+            if (held && !last)
                 isTriggered = !isTriggered;
         }
+        last = held;
     }
 
     void StartShooting()

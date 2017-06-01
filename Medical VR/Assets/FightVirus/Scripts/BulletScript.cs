@@ -3,8 +3,11 @@ using System.Collections;
 
 public class BulletScript : MonoBehaviour
 {
+    [System.NonSerialized]
     public float LifeSpan;
+    [System.NonSerialized]
     public float Speed;
+    [System.NonSerialized]
     public int Damage;
 
 	void Start ()

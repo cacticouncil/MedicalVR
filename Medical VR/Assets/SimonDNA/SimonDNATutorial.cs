@@ -5,7 +5,7 @@ using TMPro;
 
 public class SimonDNATutorial : MonoBehaviour
 {
-    public GameObject Subtitles, RNA, press;
+    public GameObject RNA, press;
     public GameObject Player;
     public GameObject UI;
 
@@ -19,8 +19,8 @@ public class SimonDNATutorial : MonoBehaviour
     //For text
     public int MoveText = 0;
     public bool CanIRead = true;
-    public TextMeshPro Text;
-    private string[] TextList = new string[10];
+    public TextMeshPro subtitles;
+    private string[] texts = new string[10];
     private bool last = false, text = false, finish = false;
 
     void Start()
@@ -30,16 +30,15 @@ public class SimonDNATutorial : MonoBehaviour
         {
             prevState = GlobalVariables.arcadeMode;
             GlobalVariables.arcadeMode = false;
-            Subtitles.SetActive(true);
             Player.GetComponent<SimonSays>().GO.SetActive(false);
             Player.GetComponent<SimonSays>().lives = 0;
             UI.SetActive(false);
 
-            TextList[0] = "Listen closely human, here is your objective. ";
-            TextList[1] = "Nucleotides will pop up on the screen in a certain order, you will always have four nucleotides around you which represent all the types of nucleotides that could pop up.";
-            TextList[2] = "Once the GO! sign appears, use the four nucleotides to press them in the same order that the previous nucleotides showed up.";
-            TextList[3] = "Get it correct to build up the messenger RNA, getting it incorrect will cancel out the part you are building.";
-            TextList[4] = "Build a RNA Messenger witht the amount of nucleotides displayed on the goal to complete the messeger, Good Luck!.";
+            texts[0] = "Listen closely human, here is your objective. ";
+            texts[1] = "Nucleotides will pop up on the screen in a certain order, you will always have four nucleotides around you which represent all the types of nucleotides that could pop up.";
+            texts[2] = "Once the GO! sign appears, use the four nucleotides to press them in the same order that the previous nucleotides showed up.";
+            texts[3] = "Get it correct to build up the messenger RNA, getting it incorrect will cancel out the part you are building.";
+            texts[4] = "Build a RNA Messenger witht the amount of nucleotides displayed on the goal to complete the messeger, Good Luck!.";
             TextForTutorial();
         }
         else
@@ -187,31 +186,32 @@ public class SimonDNATutorial : MonoBehaviour
             default:
                 break;
         }
+        MoveText++;
     }
-
+    
     IEnumerator TurnTextOn(int index)
     {
         while (text)
             yield return 0;
 
         text = true;
-        Text.text = " ";
+        subtitles.text = "_";
 
-        while (Text.text != TextList[index] && !finish)
+        while (subtitles.text != texts[index] && !finish)
         {
             yield return new WaitForSeconds(GlobalVariables.textDelay);
 
-            if (Text.text.Length == TextList[index].Length)
-                Text.text = TextList[index];
-
+            if (subtitles.text.Length == texts[index].Length)
+            {
+                subtitles.text = texts[index];
+            }
             else
-                Text.text = Text.text.Insert(Text.text.Length - 1, TextList[index][Text.text.Length - 1].ToString());
+            {
+                subtitles.text = subtitles.text.Insert(subtitles.text.Length - 1, texts[index][subtitles.text.Length - 1].ToString());
+            }
         }
-
-        Text.text = TextList[index];
+        subtitles.text = texts[index];
         finish = false;
         text = false;
-        press.SetActive(true);
-        MoveText += 1;
     }
 }

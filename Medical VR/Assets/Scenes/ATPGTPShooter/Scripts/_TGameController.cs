@@ -365,7 +365,7 @@ public class _TGameController : MonoBehaviour
         FadeStuff();
         yield return new WaitForSeconds(2);
         CellGameplayScript.loadCase = 1;
-        SceneManager.LoadScene("CellGameplay");
+        Set.SetAndEnterStatic(15);
     }
 
     public void StartHAzards()

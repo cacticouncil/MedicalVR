@@ -60,8 +60,8 @@ public class VirusPlayer : MonoBehaviour
 
     void Start()
     {
-        BannerScript.LockTrophy("Protein");
-        BannerScript.LockTrophy("Receptor");
+        //BannerScript.LockTrophy("Protein");
+        //BannerScript.LockTrophy("Receptor");
         CellReceptorKillCount = 0;
 
         currSpeed = baseSpeed;
@@ -72,6 +72,7 @@ public class VirusPlayer : MonoBehaviour
             StartCoroutine(DisplayText("Target the Cell Receptors" + "\n" + "Evade the Anti Viral Proteins", 3.0f));
             IsCellDoneIdling = true;
             BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+            PressToContinue.GetComponent<TextMeshPro>().text = null;
         }
 
         else
@@ -352,6 +353,7 @@ public class VirusPlayer : MonoBehaviour
                 break;
 
             case 8:
+              //  PressToContinue.GetComponent<TextMeshPro>().text = "";
                 Text.text = " ";
                 CanIMove = true;
                 currSpeed = baseSpeed;
@@ -364,6 +366,7 @@ public class VirusPlayer : MonoBehaviour
                 break;
 
             case 9:
+               // PressToContinue.GetComponent<TextMeshPro>().text = "Press To Continue";
                 StartCoroutine(TurnTextOn(7));
                 SoundManager.stopSFX("Destroy the Cell Tutorial/Medical_VR_Destroy_the_Cell_Tutorial_Lines-006");
                 SoundManager.PlaySFX("Fight Virus Tutorial/Medical_VR_VO_Great_Now_Youre_Ready_to_Play");
@@ -478,7 +481,7 @@ public class VirusPlayer : MonoBehaviour
     void ContinuePlayThrough()
     {
         VirusGameplayScript.loadCase = 3;
-        SceneManager.LoadScene("VirusGameplay");
+        Set.SetAndEnterStatic(14);
     }
 
     public static int CellReceptorKillCount
