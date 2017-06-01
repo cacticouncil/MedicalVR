@@ -28,7 +28,10 @@ public class VirusLocations : MonoBehaviour
                 for (int j = 0; j < VirusManager.GetComponent<VirusManager>().VirusList.Count; j++)
                 {
                     if (VirusLocationList[i].VirusList.Contains(VirusManager.GetComponent<VirusManager>().VirusList[j]) && VirusManager.GetComponent<VirusManager>().VirusList[j].gameObject.tag == "Virus")
+                    {
+                        VirusLocationList[i].VirusList.Remove(VirusManager.GetComponent<VirusManager>().VirusList[j]);
                         Destroy(VirusManager.GetComponent<VirusManager>().VirusList[j]);
+                    }
                 }
 
                 VirusLocationList[i].SmallVirusCount = 0;

@@ -59,7 +59,10 @@ public class DodgeAntiBodyTutorial : MonoBehaviour
         }
 
         else
+        {
             enabled = false;
+            press.GetComponent<TextMeshPro>().text = null;
+        }
     }
 
     void Update()

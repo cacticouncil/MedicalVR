@@ -37,13 +37,17 @@ public class MovingCamera : MonoBehaviour
         {
             
             subtitles.SetActive(true);
+            UI.transform.parent = null;
             UI.SetActive(false);
+            UI.transform.position = new Vector3(10000, 10000, 10000);
             speed = 0;
         }
 
         if (GlobalVariables.arcadeMode == false)
         {
+            UI.transform.parent = null;
             UI.SetActive(false);
+            UI.transform.position = new Vector3(10000, 10000, 10000);
         }
     }
 

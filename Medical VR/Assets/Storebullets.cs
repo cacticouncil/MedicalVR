@@ -29,7 +29,7 @@ public class Storebullets : MonoBehaviour
     public float score = 0;
     public float ReturnScore() { return score; }
     public void AddToScore(float _score) { score += _score; }
-    public static int lives = 3;
+    private int lives = 3;
     int level = 1;
 
     public GameObject shotSpawn;
@@ -57,7 +57,7 @@ public class Storebullets : MonoBehaviour
         PCS.StartHazards();
     }
 
-    public static void LoseresetPos()
+    public void LoseresetPos()
     {
         if (GlobalVariables.arcadeMode == true)
         {
@@ -119,16 +119,13 @@ public class Storebullets : MonoBehaviour
 
     void Update()
     {
-        if (GlobalVariables.tutorial == false)
-        {
-        }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set up how turtorial will show players basic gameplay
-        else if (GlobalVariables.tutorial == true)
+        if (GlobalVariables.tutorial == true)
         {
             if ((WhatToRead == 4 && bulletamount >= 10) || (WhatToRead == 6 && numberofstingsdone >= 1))
                 Click();
-                
+
             bool held = Input.GetButton("Fire1");
             if (held && !last)
             {
@@ -151,12 +148,10 @@ public class Storebullets : MonoBehaviour
         //     bool bHeld = Input.GetButton("Fire1");
         //     bool bUp = Input.GetButtonUp("Fire1");
 
-
-
         if (bPressed && Time.time > nextFire)
         {
-           // if (SoundManager.IsJordanPlaying("28860__junggle__btn050") == false)
-                SoundManager.PlayJordanVoice("link3");
+            // if (SoundManager.IsJordanPlaying("28860__junggle__btn050") == false)
+            SoundManager.PlayJordanVoice("link3");
             shootCGamp();
         }
     }
@@ -174,16 +169,23 @@ public class Storebullets : MonoBehaviour
             if (numberofstingsdone >= 20)
             {
                 CellGameplayScript.loadCase = 2;
-                SceneManager.LoadScene("CellGameplay");
+                Set.SetAndEnterStatic(15);
             }
         }
 
         if (GlobalVariables.arcadeMode == true)
         {
             theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
-            if (lives < 1 && GlobalVariables.arcadeMode != false)
+            if (lives < 1)
             {
-                ShowScore();
+                if (GlobalVariables.tutorial)
+                {
+                    Set.SetAndEnterStatic(5);
+                }
+                else
+                {
+                    ShowScore();
+                }
             }
             if (numberofstingsdone >= neededstings)
             {
@@ -198,7 +200,6 @@ public class Storebullets : MonoBehaviour
             theScore.GetComponent<TMPro.TextMeshPro>().text = "";
             TheLevel.GetComponent<TMPro.TextMeshPro>().text = "";
             theLives.GetComponent<TMPro.TextMeshPro>().text = "";
-
         }
     }
 
@@ -249,7 +250,7 @@ public class Storebullets : MonoBehaviour
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-003"))
                     SoundManager.StopCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-003");
                 EventSystem.SetActive(true);
-                subtitles.text = " ";              
+                subtitles.text = " ";
                 break;
             case 4:
                 {
@@ -261,7 +262,7 @@ public class Storebullets : MonoBehaviour
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004"))
                     SoundManager.StopCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-004");
                 subtitles.text = " ";
-                
+
                 break;
             case 6:
                 SoundManager.PlayCellVoice("Medical_VR_CGAMP_Snatcher_Tutorial_Line-005");
@@ -286,31 +287,31 @@ public class Storebullets : MonoBehaviour
         WhatToRead++;
     }
 
-#region Text
-IEnumerator TurnTextOn(int index)
-{
-    while (text)
-        yield return 0;
-
-    text = true;
-    subtitles.text = "_";
-
-    while (subtitles.text != texts[index] && !finish)
+    #region Text
+    IEnumerator TurnTextOn(int index)
     {
-        yield return new WaitForSeconds(GlobalVariables.textDelay);
+        while (text)
+            yield return 0;
 
-        if (subtitles.text.Length == texts[index].Length)
+        text = true;
+        subtitles.text = "_";
+
+        while (subtitles.text != texts[index] && !finish)
         {
-            subtitles.text = texts[index];
+            yield return new WaitForSeconds(GlobalVariables.textDelay);
+
+            if (subtitles.text.Length == texts[index].Length)
+            {
+                subtitles.text = texts[index];
+            }
+            else
+            {
+                subtitles.text = subtitles.text.Insert(subtitles.text.Length - 1, texts[index][subtitles.text.Length - 1].ToString());
+            }
         }
-        else
-        {
-            subtitles.text = subtitles.text.Insert(subtitles.text.Length - 1, texts[index][subtitles.text.Length - 1].ToString());
-        }
-    }
-    subtitles.text = texts[index];
-    finish = false;
-    text = false;
+        subtitles.text = texts[index];
+        finish = false;
+        text = false;
         press.SetActive(true);
     }
     #endregion

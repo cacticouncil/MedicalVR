@@ -12,9 +12,6 @@ public class PedestalScript : MonoBehaviour
     //Vector3 target;
     Color orgButtonColor;
 
-    bool FirstClickOnly = false;
-    bool SecondClickOnly = false;
-
     void Start()
     {
         if (descButton != null)
@@ -64,38 +61,7 @@ public class PedestalScript : MonoBehaviour
     public void MoveToPedestal()
     {
         inMove = true;
-        //switch ((int)station.transform.rotation.eulerAngles.y)
-        //{
-        //    case 0:
-        //        target = new Vector3(transform.position.x + 1, theCamera.transform.position.y, transform.position.z);
-        //        break;
-        //    case 180:
-        //        target = new Vector3(transform.position.x - 1, theCamera.transform.position.y, transform.position.z);
-        //        break;
-        //    default:
-        //        break;
-        //}
     }
-
-    //public void FirstClick()
-    //{
-    //    if (theCamera.MoveText == 4 && FirstClickOnly == false)
-    //    {
-    //        theCamera.MoveText += 1;
-    //        theCamera.CanIRead = true;
-    //        FirstClickOnly = true;
-    //    }
-    //}
-
-    //public void SecondClick()
-    //{
-    //    if (theCamera.MoveText == 5 && SecondClickOnly == false)
-    //    {
-    //        theCamera.MoveText += 1;
-    //        theCamera.CanIRead = true;
-    //        SecondClickOnly = true;
-    //    }
-    //}
 
     public void DoButtonAction()
     {

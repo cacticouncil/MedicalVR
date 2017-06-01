@@ -66,13 +66,19 @@ public static class ChangeScene
                 LoadScene("DestroyTheCell");
                 break;
             case 14:
-                VirusGameplayScript.loadCase = 0;
-                GlobalVariables.arcadeMode = false;
+                if (SceneManager.GetActiveScene().name.Contains("MainMenu"))
+                {
+                    VirusGameplayScript.loadCase = 0;
+                    GlobalVariables.arcadeMode = false;
+                }
                 LoadScene("VirusGameplay");
                 break;
             case 15:
-                CellGameplayScript.loadCase = 0;
-                GlobalVariables.arcadeMode = false;
+                if (SceneManager.GetActiveScene().name.Contains("MainMenu"))
+                {
+                    CellGameplayScript.loadCase = 0;
+                    GlobalVariables.arcadeMode = false;
+                }
                 LoadScene("CellGameplay");
                 break;
         }

@@ -9,9 +9,8 @@ public class Player : MonoBehaviour
 {
     public GameObject PressToContinue;
     public GameObject EnemyManger;
-    public GameObject BulletSpawn;
-    public GameObject BlackCurtain;
-
+    public BulletManager BulletSpawn;
+    //public GameObject BlackCurtain;
     public GameObject ScoreBoard;
     public FacebookStuff FB;
 
@@ -40,8 +39,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         BestScoreForFightVirus = PlayerPrefs.GetFloat("FightVirusScore");
-        BannerScript.LockTrophy("Virus Trophy");
-        BannerScript.LockTrophy("Virus Capsid");
+        //BannerScript.LockTrophy("Virus Trophy");
+        //BannerScript.LockTrophy("Virus Capsid");
         VirusKillCount = 0;
 
         isGameOver = false;
@@ -49,18 +48,19 @@ public class Player : MonoBehaviour
 
         if (GlobalVariables.tutorial == false)
         {
-            BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+            //BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
             TextForArcade();
+            PressToContinue.GetComponent<TextMeshPro>().text = null;
         }
 
         else
         {
             TextList[0] = "Welcome to Fight Virus.";
-            TextList[1] = "Your objective is to " + "\n" + "prevent any viruses from leaving the cell.";
-            TextList[2] = "If you look around " + "\n" + "there are four zones to protect.";
+            TextList[1] = "Your objective is to prevent any viruses from leaving the cell.";
+            TextList[2] = "If you look around there are four zones to protect.";
             TextList[3] = "Don't let any virus get to these zones.";
-            TextList[4] = "If three of them meet up they " + "\n" + "will create bigger viruses, Don't let any leave.";
-            TextList[5] = "Click the button on the " + "\n" + "headset to destroy the viruses, press it again to stop.";
+            TextList[4] = "If three of them meet up, they will create bigger viruses. Don't let any leave.";
+            TextList[5] = "Click the button on the headset to destroy the viruses, press it again to stop.";
             TextList[6] = "Remember that viruses can spawn behind you.";
             TextList[7] = "Great now you're ready to play.";
             TextForTutorial();
@@ -159,15 +159,15 @@ public class Player : MonoBehaviour
                     Text.text = "You win story mode";
                     BeatGameTimer += Time.deltaTime;
 
-                    float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
-                    if (a < 0)
-                        a = 0;
-                    BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
+                    //float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
+                    //if (a < 0)
+                    //    a = 0;
+                    //BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a + (Time.deltaTime * 1.5f));
 
                     if (BeatGameTimer >= 2.0f)
                     {
                         CellGameplayScript.loadCase = 4;
-                        SceneManager.LoadScene("CellGameplay");
+                        Set.SetAndEnterStatic(15);
                     }
                 }
             }
@@ -178,8 +178,8 @@ public class Player : MonoBehaviour
         else if (GlobalVariables.tutorial == true)
         {
             //Need to fade in
-            float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
-            BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
+            //float a = BlackCurtain.GetComponent<Renderer>().material.color.a;
+            //BlackCurtain.GetComponent<Renderer>().material.color = new Color(0, 0, 0, a - (Time.deltaTime * 1.5f));
 
             //Player input to skip text
             if (StopInput == false)
@@ -221,7 +221,7 @@ public class Player : MonoBehaviour
         switch (WhatToRead)
         {
             case 0:
-                StartCoroutine(DisplayText("Prevent the Virus " + "\n" + "from leaving the cell", 2.0f));
+                StartCoroutine(DisplayText("Prevent the Virus from leaving the cell", 2.0f));
                 break;
 
             case 1:
@@ -294,7 +294,7 @@ public class Player : MonoBehaviour
 
             case 7:
                 //StopInput = false;
-                BulletSpawn.GetComponent<BulletManager>().CanIShoot = true;
+                BulletSpawn.CanIShoot = true;
                 WhatToRead++;
                 break;
 
@@ -406,11 +406,6 @@ public class Player : MonoBehaviour
         {
             return PlayerPrefs.GetInt("VirusTotalCount");
         }
-
-        //set
-        //{
-        //    PlayerPrefs.SetInt("VirusTotalCount", PlayerPrefs.GetInt("VirusTotalCount") + value);
-        //}
 
         set
         {

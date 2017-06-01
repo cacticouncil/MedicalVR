@@ -48,70 +48,66 @@ public class VirusManager : MonoBehaviour
                     if (GlobalVariables.arcadeMode == true)
                     {
                         EnemyCount = 10;
-                        SmallVirusSpeed = 0.003f;
+                        SmallVirusSpeed = 0.005f;
                         SmallVirusHealth = 20;
-                        BigVirusSpeed = 0.001f;
-                        BigVirusHealth = 40;
+                        BigVirusSpeed = 0.002f;
+                        BigVirusHealth = 50;
                     }
-
-                    else if (GlobalVariables.arcadeMode == false)
+                    //Story Mode
+                    else
                     {
                         EnemyCount = 5;
-                        SmallVirusSpeed = 0.003f;
+                        SmallVirusSpeed = 0.002f;
                         SmallVirusHealth = 20;
                         BigVirusSpeed = 0.001f;
                         BigVirusHealth = 40;
                     }
                     break;
-
                 case 2:
                     if (GlobalVariables.arcadeMode == true)
                     {
                         EnemyCount = 15;
-                        SmallVirusSpeed = 0.004f;
+                        SmallVirusSpeed = 0.0075f;
                         SmallVirusHealth = 40;
-                        BigVirusSpeed = 0.002f;
-                        BigVirusHealth = 50;
+                        BigVirusSpeed = 0.004f;
+                        BigVirusHealth = 100;
                     }
-
-                    else if (GlobalVariables.arcadeMode == false)
+                    //Story Mode
+                    else
                     {
                         EnemyCount = 7;
                         SmallVirusSpeed = 0.003f;
                         SmallVirusHealth = 40;
                         BigVirusSpeed = 0.002f;
-                        BigVirusHealth = 50;
+                        BigVirusHealth = 80;
                     }
                     break;
-
                 case 3:
                     if (GlobalVariables.arcadeMode == true)
                     {
                         EnemyCount = 20;
-                        SmallVirusSpeed = 0.009f;
+                        SmallVirusSpeed = 0.01f;
                         SmallVirusHealth = 60;
-                        BigVirusSpeed = 0.003f;
-                        BigVirusHealth = 60;
+                        BigVirusSpeed = 0.005f;
+                        BigVirusHealth = 150;
                     }
-
-                    else if (GlobalVariables.arcadeMode == false)
+                    //Story Mode
+                    else
                     {
                         EnemyCount = 10;
-                        SmallVirusSpeed = 0.003f;
+                        SmallVirusSpeed = 0.004f;
                         SmallVirusHealth = 60;
                         BigVirusSpeed = 0.003f;
                         BigVirusHealth = 60;
                     }
                     break;
-
                 case 4:
                     SpawnBoss = true;
-                    SmallVirusSpeed = 0.01f;
+                    SmallVirusSpeed = 0.0125f;
                     SmallVirusHealth = 20;
-                    BossVirusSpeed = 0.2f;
+                    BossVirusSpeed = 0.3f;
                     BossVirusHealth = 500;
                     break;
-
                 default:
                     break;
             }

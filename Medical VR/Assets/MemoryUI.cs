@@ -96,12 +96,9 @@ public class MemoryUI : MonoBehaviour
     {
         theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
 
-        if (GlobalVariables.tutorial == false)
-        {
-        }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set up how turtorial will show players basic gameplay
-        else if (GlobalVariables.tutorial == true)
+        if (GlobalVariables.tutorial == true)
         {
 
             if ((WhatToRead == 5 && Randomsphere.correct == 1) ||  (WhatToRead == 8 && Randomsphere.correct == 3))
@@ -122,8 +119,6 @@ public class MemoryUI : MonoBehaviour
                 }
             }
             last = held;
-
-            
         }
 
 
@@ -254,7 +249,6 @@ public class MemoryUI : MonoBehaviour
                     SoundManager.PlayCellVoice("Medical_VR_DNA_Minigame_Tutorial_Line-006");
                     StartCoroutine(TurnTextOn(5));
                 }
-                
                 break;
             case 7:
                 if (SoundManager.IsCellVoicePlaying("Medical_VR_DNA_Minigame_Tutorial_Line-006"))

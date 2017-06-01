@@ -53,6 +53,8 @@ public class VirusGameplayScript : MonoBehaviour
                 I = 7;
                 subtitles.GetComponent<SubstitlesScript>().theTimer = 287.5f;
                 parent.transform.position = places[I].transform.position;
+                parent.GetComponent<LookCamera>().target = rotationTargets[3];
+                parent.GetComponent<LookCamera>().enabled = true;
                 virus.SetActive(true);
                 virus.GetComponent<Virus_VirusGameplay>().dna.transform.position = virus.GetComponent<Virus_VirusGameplay>().places[10].transform.position;
                 virus.GetComponent<Virus_VirusGameplay>().dna.transform.rotation = virus.GetComponent<Virus_VirusGameplay>().places[10].transform.rotation;
@@ -355,8 +357,7 @@ public class VirusGameplayScript : MonoBehaviour
                     SceneManager.LoadScene("SimonDNA");
                 break;
             case (288):
-                parent.GetComponent<LookCamera>().target = rotationTargets[3];
-                parent.GetComponent<LookCamera>().enabled = true;
+               
                 if (SoundManager.IsVirusVoicePlaying("Medical_VR_Game_VO_Line-033") == false)
                     SoundManager.PlayVirusVoice("Medical_VR_Game_VO_Line-033");
                 rna.SetActive(true);
