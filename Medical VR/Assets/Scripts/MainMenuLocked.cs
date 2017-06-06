@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TMPro;
+
 public class MainMenuLocked : MonoBehaviour
 {
-    bool DisableAllScenes = false;
     public GameObject CellGameplayGameObject;
     public GameObject TrophyRoomGameObject;
 
@@ -13,13 +13,6 @@ public class MainMenuLocked : MonoBehaviour
 
 	void Awake ()
     {
-        //Debug to start the scenes locked or unlocked
-        if (DisableAllScenes == true)
-            Lock();
-
-        else if (DisableAllScenes == false)
-            Unlock();
-
         //Show that cell gameplay is locked 
         if (GlobalVariables.VirusGameplayCompleted == 0)
         {
@@ -31,8 +24,7 @@ public class MainMenuLocked : MonoBehaviour
             TrophyRoomGameObject.GetComponent<BoxCollider>().enabled = false;
             TrophyRoomGameObject.GetComponent<Renderer>().material.color = new Color32(31, 46, 77, 255);
         }
-
-        else if (GlobalVariables.VirusGameplayCompleted == 1)
+        else
         {
             CellGameplayGameObject.GetComponentInChildren<TextMeshPro>().text = "Cell Story Mode";
             TrophyRoomGameObject.GetComponentInChildren<TextMeshPro>().text = "Trophy Room";
@@ -53,24 +45,11 @@ public class MainMenuLocked : MonoBehaviour
             CreditGameObject.GetComponent<BoxCollider>().enabled = false;
             CreditGameObject.GetComponent<Renderer>().material.color = new Color32(31, 46, 77, 255);
         }
-
-        else if (GlobalVariables.CellGameplayCompleted == 1)
+        else
         {
             StrategyGameGameObject.GetComponentInChildren<TextMeshPro>().text = "Strategy Game";
             MiniGameGameObject.GetComponentInChildren<TextMeshPro>().text = "Minigames";
             CreditGameObject.GetComponentInChildren<TextMeshPro>().text = "Credits";
         }
-    }
-
-    void Lock()
-    {
-        GlobalVariables.VirusGameplayCompleted = 0;
-        GlobalVariables.CellGameplayCompleted = 0;
-    }
-
-    void Unlock()
-    {
-        GlobalVariables.VirusGameplayCompleted = 1;
-        GlobalVariables.CellGameplayCompleted = 1;
     }
 }

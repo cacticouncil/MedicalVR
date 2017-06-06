@@ -2,18 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class TrophyLoader : MonoBehaviour {
-
+public class TrophyLoader : MonoBehaviour
+{
     public List<GameObject> Trophies = new List<GameObject>();
     public GameObject unlockedText;
     public Material lockedMaterial;
     int numUnlocked = 0;
-	void Start ()
+
+    void Start()
     {
-       //LockAllTrophies();
         for (int i = 0; i < Trophies.Count; i++)
         {
-            if (PlayerPrefs.GetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text) == 1)
+            if (PlayerPrefs.GetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text, 0) == 1)
             {
                 numUnlocked++;
                 Trophies[i].GetComponent<TrophyScript>().unlock.SetActive(false);
@@ -32,22 +32,16 @@ public class TrophyLoader : MonoBehaviour {
                 Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text = "";
                 Trophies[i].GetComponent<TrophyScript>().unlock.SetActive(true);
             }
-                
         }
         unlockedText.GetComponent<TMPro.TextMeshPro>().text = "Unlocked: " + numUnlocked.ToString() + "/" + Trophies.Count.ToString();
     }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	
-	}
-    void LockAllTrophies()
-    {
-        for(int i = 0; i < Trophies.Count; i++)
-        {
-            PlayerPrefs.SetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text, -1);
-            //string tmp = Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text;
-        }
-    }
+
+    //void LockAllTrophies()
+    //{
+    //    for (int i = 0; i < Trophies.Count; i++)
+    //    {
+    //        PlayerPrefs.SetInt(Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text, -1);
+    //        //string tmp = Trophies[i].GetComponent<TrophyScript>().trophyName.GetComponent<TMPro.TextMeshPro>().text;
+    //    }
+    //}
 }

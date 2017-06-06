@@ -33,7 +33,7 @@ public static class GlobalVariables
     {
         get
         {
-            return PlayerPrefs.GetFloat("TextSize", 1.0f);
+            return PlayerPrefs.GetFloat("TextSize", .75f);
         }
         set
         {
