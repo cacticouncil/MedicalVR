@@ -106,7 +106,7 @@ public class _TTravelToNucleus : MonoBehaviour
     }
     void TurnOffColliders()
     {
-        transform.FindChild("Colliders").gameObject.SetActive(false);
-        transform.FindChild("Viral DNA").GetChild(0).GetComponent<CapsuleCollider>().enabled = false;
+        transform.Find("Colliders").gameObject.SetActive(false);
+        transform.Find("Viral DNA").GetChild(0).GetComponent<CapsuleCollider>().enabled = false;
     }
 }

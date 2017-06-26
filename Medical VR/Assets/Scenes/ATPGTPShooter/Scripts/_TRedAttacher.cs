@@ -26,7 +26,7 @@ public class _TRedAttacher : MonoBehaviour
 
     private void Start()
     {
-        colliders = transform.parent.FindChild("Colliders");
+        colliders = transform.parent.Find("Colliders");
         _debug = false;
     }
 
