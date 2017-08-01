@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class OptionsController : MonoBehaviour
 {
-    public string text;
     public TMPro.TextMeshPro subtitles;
     public Toggle subEnabled;
     public Slider textSpeed, textSize;
@@ -15,10 +14,12 @@ public class OptionsController : MonoBehaviour
     public Material reticleMaterial;
     public GameObject reticle;
 
+    private string text;
     float InitialSFXVolume, InitialBGMVolume;
 
     void OnEnable()
     {
+        text = subtitles.text;
         //Set initial text
         if (GlobalVariables.subtitles == 0)
         {

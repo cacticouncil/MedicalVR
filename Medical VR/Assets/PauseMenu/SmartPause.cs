@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,7 @@ public class SmartPause : MonoBehaviour
     public GameObject mainMenu;
     public GameObject resume;
     public GameObject fade;
+
     //public GameObject reticle;
     public GameObject[] ui = new GameObject[0];
     [System.NonSerialized]
@@ -18,6 +20,7 @@ public class SmartPause : MonoBehaviour
     private float angle = 10;
 
     private bool last = false; //lastRet;
+    private GameObject eventReference;
 
     void Update()
     {
@@ -29,6 +32,9 @@ public class SmartPause : MonoBehaviour
                 buttonHeldTimer += Time.deltaTime;
                 if (buttonHeldTimer >= 1.5f)
                 {
+                    eventReference = EventSystem.current.gameObject;
+                    if (eventReference)
+                    eventReference.SetActive(false);
                     //if (reticle)
                     //{
                        //lastRet = reticle.activeSelf;
@@ -95,6 +101,8 @@ public class SmartPause : MonoBehaviour
 
     public void Resume()
     {
+        if (eventReference)
+            eventReference.SetActive(true);
         buttons.SetActive(false);
         isPaused = false;
         Time.timeScale = 1;
