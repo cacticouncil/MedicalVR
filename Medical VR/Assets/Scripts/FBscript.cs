@@ -30,7 +30,8 @@ public class FBscript : MonoBehaviour
 
     void Awake()
     {
-        StartCoroutine(FacebookManager.Instance.InitFB(LoginFunction));
+        StartCoroutine(FacebookManager.Instance.InitFB(null));
+        DealWithFBMenus(false);
     }
 
     void SetInit()
