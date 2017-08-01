@@ -27,8 +27,9 @@ public class FacebookManager : MonoBehaviour
 
     public int GlobalScore { get; set; }
 
-    public string AppLinkURL { get; set; }
+    public string appLinkURL = "https://play.google.com/store/apps/details?id=com.VirtualVirus.MedicalVR&hl=en";
 
+    public string imgLinkURL = "https://lh3.googleusercontent.com/7ym7vFTY_7BWW0YtIx2zQyM0uVPfQSYKEnU1TazBlqKMVKmiYLs0_5isdwbjIw0M-u-J=w300-rw";
 
     //private List<object> scoresList = null;
 
@@ -75,7 +76,7 @@ public class FacebookManager : MonoBehaviour
     {
         FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
         FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
-        FB.GetAppLink(DealWithAppLink);
+        //FB.GetAppLink(DealWithAppLink);
     }
 
     public void DisplayUsername(IResult result)
@@ -92,28 +93,28 @@ public class FacebookManager : MonoBehaviour
             ProfilePic = Sprite.Create(result.Texture, new Rect(0, 0, 128, 128), new Vector2());
     }
 
-    void DealWithAppLink(IAppLinkResult result)
-    {
-        if (!String.IsNullOrEmpty(result.Url))
-        {
-            AppLinkURL = "" + result.Url + "";
-            Debug.Log(AppLinkURL);
-        }
-        else
-        {
-            AppLinkURL = new Uri("http://www.google.com").ToString();
-        }
-    }
+    //void DealWithAppLink(IAppLinkResult result)
+    //{
+    //    if (!String.IsNullOrEmpty(result.Url))
+    //    {
+    //        appLinkURL = "" + result.Url + "";
+    //        Debug.Log(appLinkURL);
+    //    }
+    //    else
+    //    {
+    //        appLinkURL = new Uri("https://play.google.com/store/apps/details?id=com.VirtualVirus.MedicalVR&hl=en").ToString();
+    //    }
+    //}
 
     public void Share()
     {
         FB.FeedShare(
             string.Empty,
-            new Uri(AppLinkURL),
-            "Hello this is the title",
+            new Uri(appLinkURL),
+            "Vir-ed",
             "This is the caption",
             "Check out this game",
-            new Uri("http://cdn3.dualshockers.com/wp-content/uploads/2016/06/6wLbbG7bRypiRHwb8v7HtA-970-80.jpg"),
+            new Uri(imgLinkURL),
             string.Empty,
             ShareCallBack);
     }
@@ -138,8 +139,8 @@ public class FacebookManager : MonoBehaviour
     public void Invite()
     {
         FB.Mobile.AppInvite(
-            new Uri(AppLinkURL),
-            new Uri("http://cdn3.dualshockers.com/wp-content/uploads/2016/06/6wLbbG7bRypiRHwb8v7HtA-970-80.jpg"),
+            new Uri(appLinkURL),
+            new Uri(imgLinkURL),
             InviteCallBack
             );
     }
