@@ -23,6 +23,7 @@ public class OptionsController : MonoBehaviour
         if (GlobalVariables.subtitles == 0)
         {
             subEnabled.isOn = false;
+            subtitles.gameObject.SetActive(false);
         }
         else
         {
@@ -39,7 +40,7 @@ public class OptionsController : MonoBehaviour
 
     void OnDisable()
     {
-        subtitles.gameObject.SetActive(false);
+        subtitles.text = text;
     }
 
     public void OnEnabledChanged()
