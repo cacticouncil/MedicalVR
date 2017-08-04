@@ -38,7 +38,7 @@ public class MemoryUI : MonoBehaviour
     {
         "Welcome to the DNA Memory Game",
         "Nucleic acids construct DNA pairs in very specific ways. Your objective is to select three capsules that are the correct pairing to the DNA code given above.",
-        "The pairing is as follows: G binds to C, C binds to G, A binds to U, and T binds to A.",
+        "The pairing is as follows: G binds to C, C binds to G, A binds to T, and T binds to A.",
         "Pair the correct ones and they will turn green, pair a wrong one and it will turn red. Make sure you don't get 5 wrong or you will have to restart.",
         //(After CLICKING ONE CORRECT CAPSULE)
         " Perfect \n Now get the others!",
@@ -53,7 +53,7 @@ public class MemoryUI : MonoBehaviour
     public void LoseresetPos()
     {
         lives--;
-        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+        theLives.GetComponent<TextMeshPro>().text = "LIVES: " + lives;
     }
 
     void ShowScore()
@@ -73,7 +73,7 @@ public class MemoryUI : MonoBehaviour
         Spheres.GetComponent<Randomsphere>().Getclonek().SetActive(false);
         scoreBoard.SetActive(true);
         scoreBoard.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 35);
-        Username.GetComponent<TMPro.TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
+        Username.GetComponent<TextMeshPro>().text = FacebookManager.Instance.ProfileName + ": " + score.ToString();
         if (FacebookManager.Instance.ProfilePic != null)
             ProfilePic.GetComponent<Image>().sprite = FacebookManager.Instance.ProfilePic;
     }
@@ -85,7 +85,7 @@ public class MemoryUI : MonoBehaviour
         lives = 5;
         score = 0;
         Level = 1;
-        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+        theLives.GetComponent<TextMeshPro>().text = "LIVES: " + lives;
         Spheres.GetComponent<Randomsphere>().Reset();
         startTime = 60.0f;
         timeRemaining = 60.0f;
@@ -94,7 +94,7 @@ public class MemoryUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        theLives.GetComponent<TMPro.TextMeshPro>().text = "LIVES: " + lives;
+        theLives.GetComponent<TextMeshPro>().text = "LIVES: " + lives;
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Set up how turtorial will show players basic gameplay
@@ -137,11 +137,11 @@ public class MemoryUI : MonoBehaviour
                 minutesint = 0;
             string minutes = minutesint.ToString();
             string seconds = (timeRemaining % 60).ToString("f0");
-            Timer.GetComponent<TMPro.TextMeshPro>().text = "Timer: " + minutes + ":" + seconds;
+            Timer.GetComponent<TextMeshPro>().text = "Timer: " + minutes + ":" + seconds;
         }
         else
         {
-            Timer.GetComponent<TMPro.TextMeshPro>().text = "";
+            Timer.GetComponent<TextMeshPro>().text = "";
         }
     }
 
@@ -174,14 +174,14 @@ public class MemoryUI : MonoBehaviour
             if (GlobalVariables.arcadeMode == true)
             {
                 int tmp = (int)score;
-                theScore.GetComponent<TMPro.TextMeshPro>().text = "SCORE: " + tmp.ToString();
+                theScore.GetComponent<TextMeshPro>().text = "SCORE: " + tmp.ToString();
             }
             else
             {
-                Timer.GetComponent<TMPro.TextMeshPro>().text = "";
-                theScore.GetComponent<TMPro.TextMeshPro>().text = "";
+                Timer.GetComponent<TextMeshPro>().text = "";
+                theScore.GetComponent<TextMeshPro>().text = "";
             }
-            theLevels.GetComponent<TMPro.TextMeshPro>().text = "LEVEL: " + Level.ToString();
+            theLevels.GetComponent<TextMeshPro>().text = "LEVEL: " + Level.ToString();
         }
     }
 
@@ -280,8 +280,6 @@ public class MemoryUI : MonoBehaviour
         }
         WhatToRead++;
     }
-
-
 
     #region Text
     IEnumerator TurnTextOn(int index)
