@@ -69,9 +69,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.GAC:
                 {
                     que = "GAC";
-                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -81,9 +81,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.ACT:
                 {
                     que = "ACT";
-                    clonei = Instantiate(Spheres[2], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[2], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -93,9 +93,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.GAC2:
                 {
                     que = "GAC";
-                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -105,9 +105,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.TCT:
                 {
                     que = "TCT";
-                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -117,9 +117,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.CGT:
                 {
                     que = "CGT";
-                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[1], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[1], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -129,9 +129,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.TAC:
                 {
                     que = "TAC";
-                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -141,9 +141,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.TCT2:
                 {
                     que = "TCT";
-                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -153,9 +153,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.GAC3:
                 {
                     que = "GAC";
-                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -165,9 +165,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.CAT:
                 {
                     que = "CAT";
-                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
             default:
@@ -175,13 +175,13 @@ public class Randomsphere : MonoBehaviour
         }
     }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Reset();
-        }
-    }
+    //public void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Q))
+    //    {
+    //        Reset();
+    //    }
+    //}
 
     public void Correct()
     {
@@ -231,9 +231,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.GAC:
                 {
                     que = "GAC";
-                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -243,9 +243,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.ACT:
                 {
                     que = "ACT";
-                    clonei = Instantiate(Spheres[2], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[2], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -255,9 +255,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.GAC2:
                 {
                     que = "GAC";
-                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -267,9 +267,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.TCT:
                 {
                     que = "TCT";
-                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -279,9 +279,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.CGT:
                 {
                     que = "CGT";
-                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[1], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[1], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -291,9 +291,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.TAC:
                 {
                     que = "TAC";
-                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -303,9 +303,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.TCT2:
                 {
                     que = "TCT";
-                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[3], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[0], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -315,9 +315,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.GAC3:
                 {
                     que = "GAC";
-                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[1], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[0], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
 
@@ -327,9 +327,9 @@ public class Randomsphere : MonoBehaviour
             case GNE.CAT:
                 {
                     que = "CAT";
-                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation) as GameObject;
-                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation) as GameObject;
+                    clonei = Instantiate(Spheres[0], new Vector3(-15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonej = Instantiate(Spheres[2], new Vector3(0, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
+                    clonek = Instantiate(Spheres[5], new Vector3(15, 26, 30), Spheres[0].transform.rotation, transform) as GameObject;
                 }
                 break;
             default:
