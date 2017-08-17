@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class SmartPause : MonoBehaviour
 {
@@ -13,14 +12,24 @@ public class SmartPause : MonoBehaviour
 
     //public GameObject reticle;
     public GameObject[] ui = new GameObject[0];
+
     [System.NonSerialized]
     public bool isPaused = false;
+
+    public delegate void OnPauseStateChange(bool isPaused);
+    public OnPauseStateChange onPSC;
 
     private float buttonHeldTimer = 0.0f;
     private float angle = 10;
 
     private bool last = false; //lastRet;
+    private bool[] previousStates;
     private GameObject eventReference;
+
+    void Start()
+    {
+        previousStates = new bool[ui.Length];
+    }
 
     void Update()
     {
@@ -32,32 +41,7 @@ public class SmartPause : MonoBehaviour
                 buttonHeldTimer += Time.deltaTime;
                 if (buttonHeldTimer >= 1.5f)
                 {
-                    eventReference = EventSystem.current.gameObject;
-                    if (eventReference)
-                    eventReference.SetActive(false);
-                    //if (reticle)
-                    //{
-                       //lastRet = reticle.activeSelf;
-                       //reticle.SetActive(true);
-                       //reticle.GetComponent<GvrReticlePointer>().enabled = false;
-                       //reticle.GetComponent<Renderer>().material.SetFloat("_InnerDiameter", 0);
-                       //reticle.GetComponent<Renderer>().material.SetFloat("_OuterDiameter", .09f);
-                       //reticle.GetComponent<Renderer>().material.SetFloat("_DistanceInMeters", 10);
-                    //}
-                    foreach (GameObject item in ui)
-                    {
-                        item.SetActive(false);
-                    }
-
-                    buttonHeldTimer = 0.0f;
-                    buttons.SetActive(true);
-                    transform.position = player.transform.position + player.transform.forward * .90f;
-                    transform.LookAt(player.transform.position);
-                    transform.Rotate(new Vector3(0, 180, 0));
-                    isPaused = true;
-                    Time.timeScale = 0;
-                    //SoundManager.Pause();
-                    SoundManager.PauseSFX();
+                    Pause();
                 }
             }
             else if (held != last)
@@ -70,10 +54,10 @@ public class SmartPause : MonoBehaviour
                     //    reticle.SetActive(lastRet);
                     //    reticle.GetComponent<GvrReticlePointer>().enabled = true;
                     //}
-                    foreach (GameObject item in ui)
+
+                    for (int i = 0; i < ui.Length; i++)
                     {
-                        if (item != null)
-                        item.SetActive(true);
+                        ui[i].SetActive(previousStates[i]);
                     }
                 }
                 else if (Vector3.Angle(player.transform.forward, mainMenu.transform.position - player.transform.position) < angle)
@@ -99,6 +83,43 @@ public class SmartPause : MonoBehaviour
         last = held;
     }
 
+    public void Pause()
+    {
+        if (EventSystem.current && EventSystem.current.gameObject)
+        {
+            eventReference = EventSystem.current.gameObject;
+            eventReference.SetActive(false);
+        }
+        //if (reticle)
+        //{
+        //lastRet = reticle.activeSelf;
+        //reticle.SetActive(true);
+        //reticle.GetComponent<GvrReticlePointer>().enabled = false;
+        //reticle.GetComponent<Renderer>().material.SetFloat("_InnerDiameter", 0);
+        //reticle.GetComponent<Renderer>().material.SetFloat("_OuterDiameter", .09f);
+        //reticle.GetComponent<Renderer>().material.SetFloat("_DistanceInMeters", 10);
+        //}
+        for (int i = 0; i < ui.Length; i++)
+        {
+            previousStates[i] = ui[i].activeSelf;
+            ui[i].SetActive(false);
+        }
+
+        buttonHeldTimer = 0.0f;
+        buttons.SetActive(true);
+        transform.position = player.transform.position + player.transform.forward * .90f;
+        transform.LookAt(player.transform.position);
+        transform.Rotate(new Vector3(0, 180, 0));
+        isPaused = true;
+        Time.timeScale = 0;
+        //SoundManager.Pause();
+        SoundManager.PauseSFX();
+
+        OnPauseStateChange t = onPSC;
+        if (t != null)
+            t(true);
+    }
+
     public void Resume()
     {
         if (eventReference)
@@ -108,6 +129,10 @@ public class SmartPause : MonoBehaviour
         Time.timeScale = 1;
         //SoundManager.Resume();
         SoundManager.UnPauseSFX();
+
+        OnPauseStateChange t = onPSC;
+        if (t != null)
+            t(false);
     }
 
     IEnumerator Delay()

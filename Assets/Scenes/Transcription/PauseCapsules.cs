@@ -1,26 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PauseCapsules : MonoBehaviour {
-    public GameObject pausemenu;
+public class PauseCapsules : MonoBehaviour
+{
+    public SmartPause pausemenu;
     public GameObject capsules;
+    public GameObject sphere;
     public GameObject victoryeffect;
-    // Use this for initialization
-    void Start () {
 
+    // Update is called once per frame
+    void Start()
+    {
+        pausemenu.onPSC += PSC;
+    }
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (pausemenu.GetComponent<SmartPause>().isPaused == true)
+    void PSC(bool isPaused)
+    {
+        if (victoryeffect.GetComponent<ParticleSystem>().isPlaying == false)
         {
-            capsules.SetActive(false);
+            capsules.SetActive(!isPaused);
+            sphere.SetActive(!isPaused);
         }
-        else if(pausemenu.GetComponent<SmartPause>().isPaused == false && victoryeffect.GetComponent<ParticleSystem>().isPlaying == false)
-        {
-            capsules.SetActive(true);
-        }
+    }
 
+    void OnDestroy()
+    {
+        if (pausemenu)
+        {
+            pausemenu.onPSC -= PSC;
+        }
     }
 }
